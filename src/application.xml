@@ -19,7 +19,7 @@
 			expression="org.springframework.web.bind.annotation.ControllerAdvice" />
 	</context:component-scan>
 	
-	<!-- <bean id="dataSource" destroy-method="close"
+	<bean id="dataSource" destroy-method="close"
 		class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName"
 			value="${jdbc.driverClassName}" />
@@ -30,8 +30,9 @@
         <property name= "timeBetweenEvictionRunsMillis" value="7200000" />  
         <property name= "numTestsPerEvictionRun" value="30" />  
         <property name="minEvictableIdleTimeMillis" value="7200000" />
-	</bean> -->
+	</bean>
 	
+	<!--
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
 		<property name="jdbcUrl" value="${jdbc.url}"></property>
 		<property name="driverClass" value="${jdbc.driverClassName}"></property>
@@ -48,12 +49,12 @@
 		<property name="breakAfterAcquireFailure" value="true"></property>
 		<property name="testConnectionOnCheckout" value="false"></property>
 	</bean>
-
+	-->
 	<bean id="sessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource"></property>
 		<property name="configLocation" value="classpath:hibernate.cfg.xml"></property>
-		<property name="packagesToScan" value="com.geariot.platform.fitness.entities"/>
+		<property name="packagesToScan" value="com.geariot.platform.freelycar.entities"/>
 	</bean>
 
 
