@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -23,6 +24,7 @@ public class Client {
 	private String recommendName;
 	private Date createDate;
 	private List<Car> car;
+	private List<Card> card;
 	public int getAge() {
 		return age;
 	}
@@ -30,8 +32,13 @@ public class Client {
 		return birthday;
 	}
 	@OneToMany(mappedBy="client")
-	public List<Car> getCars() {
+	public List<Car> getCar() {
 		return car;
+	}
+	@OneToMany
+	@JoinColumn(name="clientId")
+	public List<Card> getCard() {
+		return card;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -68,8 +75,11 @@ public class Client {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	public void setCars(List<Car> cars) {
-		this.car = cars;
+	public void setCar(List<Car> car) {
+		this.car = car;
+	}
+	public void setCard(List<Card> card) {
+		this.card = card;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;

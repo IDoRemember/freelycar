@@ -17,12 +17,16 @@ public class ConsumOrders {
 	private Client client;
 	private Card card;
 	private Project project;
+	private int projectPayMethod;	//项目费支付方式：0,1=付现金,扣卡次
 	private Program program;
 	private String parkingLocation;
 	private Date pickTime;
 	private List<Staff> staffs;
 	private List<ConsumExtraAccessoriesInfo> consumExtraAccessoriesInfo;
 	private int state;		//0,1,2,3=接,施,完,交
+	private float workingHour;
+	private float workingPricePerHousr;
+	private float totalPrice;
 	private int payState;	//0,1=未结算,已结算
 	private Date createDate;
 	@ManyToOne
@@ -67,6 +71,9 @@ public class ConsumOrders {
 	public Project getProject() {
 		return project;
 	}
+	public int getProjectPayMethod() {
+		return projectPayMethod;
+	}
 	@ManyToMany
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId")}, 
@@ -76,6 +83,15 @@ public class ConsumOrders {
 	}
 	public int getState() {
 		return state;
+	}
+	public float getTotalPrice() {
+		return totalPrice;
+	}
+	public float getWorkingHour() {
+		return workingHour;
+	}
+	public float getWorkingPricePerHousr() {
+		return workingPricePerHousr;
 	}
 	public void setCard(Card card) {
 		this.card = card;
@@ -107,10 +123,22 @@ public class ConsumOrders {
 	public void setProject(Project project) {
 		this.project = project;
 	}
+	public void setProjectPayMethod(int projectPayMethod) {
+		this.projectPayMethod = projectPayMethod;
+	}
 	public void setStaffs(List<Staff> staffs) {
 		this.staffs = staffs;
 	}
 	public void setState(int state) {
 		this.state = state;
+	}
+	public void setTotalPrice(float totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+	public void setWorkingHour(float workingHour) {
+		this.workingHour = workingHour;
+	}
+	public void setWorkingPricePerHousr(float workingPricePerHousr) {
+		this.workingPricePerHousr = workingPricePerHousr;
 	}
 }
