@@ -10,9 +10,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
-public class InvenroryOrders {
+public class InvenroryOrder {
 	private String id;
-	private List<InventoryOrderInfo> inventoryOrderInfo;
+	private List<InventoryOrderInfo> inventoryInfos;
 	private int type;	//0,1,2=入库,维修出库,美容出库
 	private float totalAmount;
 	private float totalPrice;
@@ -30,7 +30,7 @@ public class InvenroryOrders {
 	@OneToMany
 	@JoinColumn(name="inventoryOrderId")
 	public List<InventoryOrderInfo> getInventoryOrderInfo() {
-		return inventoryOrderInfo;
+		return inventoryInfos;
 	}
 	@ManyToOne
 	@JoinColumn(name="makerId")
@@ -56,7 +56,7 @@ public class InvenroryOrders {
 		this.id = id;
 	}
 	public void setInventoryOrderInfo(List<InventoryOrderInfo> inventoryOrderInfo) {
-		this.inventoryOrderInfo = inventoryOrderInfo;
+		this.inventoryInfos = inventoryOrderInfo;
 	}
 	public void setOrderMaker(Admin orderMaker) {
 		this.orderMaker = orderMaker;

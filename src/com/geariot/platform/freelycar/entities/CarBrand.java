@@ -13,7 +13,7 @@ import javax.persistence.OneToMany;
 public class CarBrand {
 	private int id;
 	private String name;
-	private List<CarType> carType;
+	private List<CarType> types;
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getId() {
@@ -24,7 +24,7 @@ public class CarBrand {
 	}
 	@OneToMany(mappedBy="brand", cascade={CascadeType.ALL})
 	public List<CarType> getTypes() {
-		return carType;
+		return types;
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -33,6 +33,11 @@ public class CarBrand {
 		this.name = name;
 	}
 	public void setTypes(List<CarType> types) {
-		this.carType = types;
+		this.types = types;
+	}
+	
+	@Override
+	public String toString() {
+		return "CarBrand [id=" + id + ", name=" + name + ", carType=" + types + "]";
 	}
 }

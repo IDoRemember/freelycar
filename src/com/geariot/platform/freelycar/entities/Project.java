@@ -18,7 +18,7 @@ public class Project {
 	private int referWorkTime;
 	private float pricePerUnit;
 	private String comment;
-	private List<ProjectAccessoriesInfo> projectAccessoriesInfo;
+	private List<ProjectInventoriesInfo> inventoryInfos;
 	private Date createDate;
 	public String getComment() {
 		return comment;
@@ -42,8 +42,8 @@ public class Project {
 	}
 	@OneToMany
 	@JoinColumn(name="projectId")
-	public List<ProjectAccessoriesInfo> getProjectAccessoriesInfos() {
-		return projectAccessoriesInfo;
+	public List<ProjectInventoriesInfo> getProjectAccessoriesInfos() {
+		return inventoryInfos;
 	}
 	public int getReferWorkTime() {
 		return referWorkTime;
@@ -66,8 +66,8 @@ public class Project {
 	public void setPricePerUnit(float pricePerUnit) {
 		this.pricePerUnit = pricePerUnit;
 	}
-	public void setProjectAccessoriesInfos(List<ProjectAccessoriesInfo> projectAccessoriesInfos) {
-		this.projectAccessoriesInfo = projectAccessoriesInfos;
+	public void setProjectAccessoriesInfos(List<ProjectInventoriesInfo> projectAccessoriesInfos) {
+		this.inventoryInfos = projectAccessoriesInfos;
 	}
 	public void setReferWorkTime(int referWorkTime) {
 		this.referWorkTime = referWorkTime;

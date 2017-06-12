@@ -23,6 +23,7 @@ public class Car {
 	private String engineNumber;
 	private Date licenseDate;
 	private boolean newCar;
+	private int lastMiles;
 	private int miles;
 	private Date createDate;
 	@ManyToOne
@@ -55,6 +56,9 @@ public class Car {
 	}
 	public Date getInsuranceStarttime() {
 		return insuranceStarttime;
+	}
+	public int getLastMiles() {
+		return lastMiles;
 	}
 	public Date getLicenseDate() {
 		return licenseDate;
@@ -99,6 +103,9 @@ public class Car {
 	}
 	public void setInsuranceStarttime(Date insuranceStarttime) {
 		this.insuranceStarttime = insuranceStarttime;
+	}
+	public void setLastMiles(int lastMiles) {
+		this.lastMiles = lastMiles;
 	}
 	public void setLicenseDate(Date licenseDate) {
 		this.licenseDate = licenseDate;

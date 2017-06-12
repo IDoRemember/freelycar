@@ -15,15 +15,15 @@ import javax.persistence.OneToMany;
 public class ConsumOrders {
 	private String id;
 	private Client client;
-	private Card card;
+	private Car car;
 	private Project project;
 	private int projectPayMethod;	//项目费支付方式：0,1=付现金,扣卡次
 	private Program program;
 	private String parkingLocation;
 	private Date pickTime;
 	private List<Staff> staffs;
-	private List<ConsumExtraAccessoriesInfo> consumExtraAccessoriesInfo;
-	private int state;		//0,1,2,3=接,施,完,交
+	private List<ConsumExtraInventoriesInfo> inventoryInfos;
+	private int state;		//0,1,2=接,完,交
 	private float workingHour;
 	private float workingPricePerHousr;
 	private float totalPrice;
@@ -31,8 +31,8 @@ public class ConsumOrders {
 	private Date createDate;
 	@ManyToOne
 	@JoinColumn(name="cardId")
-	public Card getCard() {
-		return card;
+	public Car getCar() {
+		return car;
 	}
 	@ManyToOne
 	@JoinColumn(name="clientId")
@@ -41,8 +41,8 @@ public class ConsumOrders {
 	}
 	@OneToMany
 	@JoinColumn(name="ConsumeOrdersIs")
-	public List<ConsumExtraAccessoriesInfo> getConsumExtraAccessoriesInfo() {
-		return consumExtraAccessoriesInfo;
+	public List<ConsumExtraInventoriesInfo> getConsumExtraAccessoriesInfo() {
+		return inventoryInfos;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -93,14 +93,14 @@ public class ConsumOrders {
 	public float getWorkingPricePerHousr() {
 		return workingPricePerHousr;
 	}
-	public void setCard(Card card) {
-		this.card = card;
+	public void setCar(Car car) {
+		this.car = car;
 	}
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	public void setConsumExtraAccessoriesInfo(List<ConsumExtraAccessoriesInfo> consumExtraAccessoriesInfo) {
-		this.consumExtraAccessoriesInfo = consumExtraAccessoriesInfo;
+	public void setConsumExtraAccessoriesInfo(List<ConsumExtraInventoriesInfo> consumExtraAccessoriesInfo) {
+		this.inventoryInfos = consumExtraAccessoriesInfo;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;

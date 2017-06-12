@@ -17,8 +17,8 @@ public class Card {
 	private Service service;
 	private Date payDate;
 	private Date expirationDate;
-	private PayMethod payMethod;
-	private List<CardProjectRemainingInfo> cardProjectRemainingInfo;
+	private int payMethod;
+	private List<CardProjectRemainingInfo> projectInfos;
 	private Admin orderMaker;
 	public Date getExpirationDate() {
 		return expirationDate;
@@ -36,15 +36,13 @@ public class Card {
 	public Date getPayDate() {
 		return payDate;
 	}
-	@ManyToOne
-	@JoinColumn(name="payMethodId")
-	public PayMethod getPayMethod() {
+	public int getPayMethod() {
 		return payMethod;
 	}
 	@OneToMany
 	@JoinColumn(name="cardId")
 	public List<CardProjectRemainingInfo> getRemainingInfos() {
-		return cardProjectRemainingInfo;
+		return projectInfos;
 	}
 	@ManyToOne
 	@JoinColumn(name="serviceId")
@@ -63,11 +61,11 @@ public class Card {
 	public void setPayDate(Date payDate) {
 		this.payDate = payDate;
 	}
-	public void setPayMethod(PayMethod payMethod) {
+	public void setPayMethod(int payMethod) {
 		this.payMethod = payMethod;
 	}
 	public void setRemainingInfos(List<CardProjectRemainingInfo> remainingInfos) {
-		this.cardProjectRemainingInfo = remainingInfos;
+		this.projectInfos = remainingInfos;
 	}
 	public void setService(Service service) {
 		this.service = service;

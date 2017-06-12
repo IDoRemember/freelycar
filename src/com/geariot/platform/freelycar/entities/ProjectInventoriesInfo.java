@@ -8,14 +8,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
-public class ConsumExtraAccessoriesInfo {
+public class ProjectInventoriesInfo {
 	private int id;
-	private Accessory accessory;
+	private Inventory inventory;
 	private float number;
 	@ManyToOne
-	@JoinColumn(name="accessoryId")
-	public Accessory getAccessory() {
-		return accessory;
+	@JoinColumn(name="inventoryId")
+	public Inventory getInventory() {
+		return inventory;
 	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -25,8 +25,8 @@ public class ConsumExtraAccessoriesInfo {
 	public float getNumber() {
 		return number;
 	}
-	public void setAccessory(Accessory accessory) {
-		this.accessory = accessory;
+	public void setInventory(Inventory inventory) {
+		this.inventory = inventory;
 	}
 	public void setId(int id) {
 		this.id = id;

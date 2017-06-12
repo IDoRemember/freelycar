@@ -15,6 +15,7 @@ public class Client {
 	private int id;
 	private String name;
 	private int age;
+	private String idNumber;
 	private String gender;
 	private String phone;
 	private Date birthday;
@@ -23,8 +24,8 @@ public class Client {
 	private int points;
 	private String recommendName;
 	private Date createDate;
-	private List<Car> car;
-	private List<Card> card;
+	private List<Car> cars;
+	private List<Card> cards;
 	public int getAge() {
 		return age;
 	}
@@ -33,12 +34,12 @@ public class Client {
 	}
 	@OneToMany(mappedBy="client")
 	public List<Car> getCar() {
-		return car;
+		return cars;
 	}
 	@OneToMany
 	@JoinColumn(name="clientId")
 	public List<Card> getCard() {
-		return card;
+		return cards;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -53,6 +54,9 @@ public class Client {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getId() {
 		return id;
+	}
+	public String getIdNumber() {
+		return idNumber;
 	}
 	public String getName() {
 		return name;
@@ -76,10 +80,10 @@ public class Client {
 		this.birthday = birthday;
 	}
 	public void setCar(List<Car> car) {
-		this.car = car;
+		this.cars = car;
 	}
 	public void setCard(List<Card> card) {
-		this.card = card;
+		this.cards = card;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -92,6 +96,9 @@ public class Client {
 	}
 	public void setId(int id) {
 		this.id = id;
+	}
+	public void setIdNumber(String idNumber) {
+		this.idNumber = idNumber;
 	}
 	public void setName(String name) {
 		this.name = name;

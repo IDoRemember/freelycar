@@ -17,7 +17,7 @@ public class Service {
 	private float price;
 	private int validTime;
 	private String comment;
-	private List<ServiceProjectInfo> serviceProjectInfo;
+	private List<ServiceProjectInfo> projectInfos;
 	public String getComment() {
 		return comment;
 	}
@@ -35,7 +35,7 @@ public class Service {
 	@OneToMany
 	@JoinColumn(name="serviceId")
 	public List<ServiceProjectInfo> getServiceProjectInfos() {
-		return serviceProjectInfo;
+		return projectInfos;
 	}
 	public int getType() {
 		return type;
@@ -56,7 +56,7 @@ public class Service {
 		this.price = price;
 	}
 	public void setServiceProjectInfos(List<ServiceProjectInfo> serviceProjectInfos) {
-		this.serviceProjectInfo = serviceProjectInfos;
+		this.projectInfos = serviceProjectInfos;
 	}
 	public void setType(int type) {
 		this.type = type;

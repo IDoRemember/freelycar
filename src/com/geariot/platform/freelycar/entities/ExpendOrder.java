@@ -1,42 +1,42 @@
 package com.geariot.platform.freelycar.entities;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
-public class CarType {
+public class ExpendOrder {
 	private int id;
-	private CarBrand brand;
 	private String type;
-	@ManyToOne
-	@JoinColumn(name="brandId")
-	public CarBrand getBrand() {
-		return brand;
+	private float amount;
+	private Date payDate;
+	public float getAmount() {
+		return amount;
 	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	public int getId() {
 		return id;
 	}
+	public Date getPayDate() {
+		return payDate;
+	}
 	public String getType() {
 		return type;
 	}
-	public void setBrand(CarBrand brand) {
-		this.brand = brand;
+	public void setAmount(float amount) {
+		this.amount = amount;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void setPayDate(Date payDate) {
+		this.payDate = payDate;
+	}
 	public void setType(String type) {
 		this.type = type;
-	}
-	
-	@Override
-	public String toString() {
-		return "CarType: id:" + this.id + ", type:" + this.type;
 	}
 }

@@ -8,7 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class AccessoryType {
+public class InventoryType {
 	private int id;
 	private String typeName;
 	private String comment;
