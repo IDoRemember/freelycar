@@ -70,13 +70,49 @@
 		<property name="maxInMemorySize" value="40960"></property>
 	</bean>
 
-<bean id="cacheManagerEhcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
+	<bean id="cacheManagerEhcache" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
         <property name="configLocation">
             <value>classpath:ehcache.xml</value>
         </property>
         <!-- 由于hibernate也使用了Ehcache, 保证双方都使用同一个缓存管理器 -->
         <property name="shared" value="true"/>
     </bean>
+    
+    <!-- shiro配置 -->
+    <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
+	    <property name="dataSource" ref="dataSource"/>
+	    <property name="authenticationQuery" value="SELECT password FROM admin WHERE account=?"/>
+	    <property name="userRolesQuery" value="SELECT roleName FROM role INNER JOIN admin WHERE account=?"/>
+	    <!-- 权限选择 
+	    <property name="permissionsQuery" value="select permission from roles_permissions where role_name = ?"/>
+	    -->
+	</bean>
+	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+	    <property name="realm" ref="jdbcRealm"/>
+	</bean>
+    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<property name="securityManager" ref="securityManager"/>
+    	<!-- override these for application-specific URLs if you like:-->
+    	<property name="loginUrl" value="/login.html"/>
+    	<property name="successUrl" value="/home.jsp"/>
+    	<property name="unauthorizedUrl" value="/unauthorized.html"/>
+    	<property name="filterChainDefinitions">
+        	<value>
+            	# some example chain definitions:
+            	/admin/** = authc, roles[admin]
+            	/docs/** = authc, perms[document:read]
+            	/** = authc
+            	# more URL-to-FilterChain definitions here
+        	</value>
+	    </property>
+	</bean>
+    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!-- <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor"/>  
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">  
+        <property name="securityManager" ref="securityManager"/>  
+    </bean>   -->
+    <!-- shiro配置结束 -->
+    
 	<tx:annotation-driven transaction-manager="transactionManager" />
 	<task:annotation-driven/>
 </beans>
