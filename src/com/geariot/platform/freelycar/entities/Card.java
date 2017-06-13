@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,12 +25,12 @@ public class Card {
 		return expirationDate;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
 	@ManyToOne
-	@JoinColumn(name="makerId")
+	@JoinColumn(name="makerId", foreignKey=@ForeignKey(name="none"))
 	public Admin getOrderMaker() {
 		return orderMaker;
 	}
@@ -40,12 +41,12 @@ public class Card {
 		return payMethod;
 	}
 	@OneToMany
-	@JoinColumn(name="cardId")
+	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
 	public List<CardProjectRemainingInfo> getRemainingInfos() {
 		return projectInfos;
 	}
 	@ManyToOne
-	@JoinColumn(name="serviceId")
+	@JoinColumn(name="serviceId", foreignKey=@ForeignKey(name="none"))
 	public Service getService() {
 		return service;
 	}

@@ -24,7 +24,7 @@ public class OtherExpendOrder {
 		return createDate;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

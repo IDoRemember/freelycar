@@ -4,11 +4,15 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Inventory {
@@ -27,7 +31,7 @@ public class Inventory {
 		return amount;
 	}
 	@ManyToOne
-	@JoinColumn(name="brandId")
+	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
 	public InventoryBrand getBrand() {
 		return brand;
 	}
@@ -38,7 +42,8 @@ public class Inventory {
 		return createDate;
 	}
 	@Id
-	// TODO Id生成器待确定
+	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
+	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}
@@ -53,8 +58,8 @@ public class Inventory {
 	}
 	@ManyToMany
 	@JoinTable(name="inventory_provider", 
-				joinColumns={@JoinColumn(name="inventoryId")}, 
-				inverseJoinColumns={@JoinColumn(name="providerId")})
+				joinColumns={@JoinColumn(name="inventoryId", foreignKey=@ForeignKey(name="none"))}, 
+				inverseJoinColumns={@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))})
 	public List<Provider> getProviders() {
 		return providers;
 	}
@@ -62,7 +67,7 @@ public class Inventory {
 		return standard;
 	}
 	@ManyToOne
-	@JoinColumn(name="typeId")
+	@JoinColumn(name="typeId", foreignKey=@ForeignKey(name="none"))
 	public InventoryType getType() {
 		return type;
 	}

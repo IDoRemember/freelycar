@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,12 +33,13 @@ public class Client {
 	public Date getBirthday() {
 		return birthday;
 	}
-	@OneToMany(mappedBy="client")
+	@OneToMany
+	@JoinColumn(name="cliendId", foreignKey=@ForeignKey(name="none"))
 	public List<Car> getCar() {
 		return cars;
 	}
 	@OneToMany
-	@JoinColumn(name="clientId")
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public List<Card> getCard() {
 		return cards;
 	}
@@ -51,7 +53,7 @@ public class Client {
 		return gender;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

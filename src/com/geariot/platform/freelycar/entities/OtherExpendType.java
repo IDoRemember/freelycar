@@ -10,7 +10,7 @@ public class OtherExpendType {
 	private int id;
 	private String name;
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

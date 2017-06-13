@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,7 +32,7 @@ public class Admin {
 		return createDate;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -42,11 +43,12 @@ public class Admin {
 		return password;
 	}
 	@ManyToOne
-	@JoinColumn(name="roleId")
+	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
 	public Role getRole() {
 		return role;
 	}
 	@OneToOne
+	@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))
 	public Staff getStaff() {
 		return staff;
 	}

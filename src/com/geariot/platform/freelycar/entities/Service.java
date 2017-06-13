@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.entities;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +23,7 @@ public class Service {
 		return comment;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -33,7 +34,7 @@ public class Service {
 		return price;
 	}
 	@OneToMany
-	@JoinColumn(name="serviceId")
+	@JoinColumn(name="serviceId", foreignKey=@ForeignKey(name="none"))
 	public List<ServiceProjectInfo> getServiceProjectInfos() {
 		return projectInfos;
 	}

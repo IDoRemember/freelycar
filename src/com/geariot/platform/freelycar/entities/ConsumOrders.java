@@ -4,12 +4,16 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class ConsumOrders {
@@ -30,17 +34,17 @@ public class ConsumOrders {
 	private int payState;	//0,1=未结算,已结算
 	private Date createDate;
 	@ManyToOne
-	@JoinColumn(name="cardId")
+	@JoinColumn(name="carId", foreignKey=@ForeignKey(name="none"))
 	public Car getCar() {
 		return car;
 	}
 	@ManyToOne
-	@JoinColumn(name="clientId")
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Client getClient() {
 		return client;
 	}
 	@OneToMany
-	@JoinColumn(name="ConsumeOrdersIs")
+	@JoinColumn(name="consumeOrdersId", foreignKey=@ForeignKey(name="none"))
 	public List<ConsumExtraInventoriesInfo> getConsumExtraAccessoriesInfo() {
 		return inventoryInfos;
 	}
@@ -48,7 +52,8 @@ public class ConsumOrders {
 		return createDate;
 	}
 	@Id
-	// TODO 生成器策略
+	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
+	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}
@@ -62,12 +67,12 @@ public class ConsumOrders {
 		return pickTime;
 	}
 	@ManyToOne
-	@JoinColumn(name="programId")
+	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
 	public Program getProgram() {
 		return program;
 	}
 	@ManyToOne
-	@JoinColumn(name="projectId")
+	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
 	public Project getProject() {
 		return project;
 	}
@@ -76,8 +81,8 @@ public class ConsumOrders {
 	}
 	@ManyToMany
 	@JoinTable(name="consumOrders_staff", 
-				joinColumns={@JoinColumn(name="consumOrdersId")}, 
-				inverseJoinColumns={@JoinColumn(name="staffId")})
+				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
+				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
 	public List<Staff> getStaffs() {
 		return staffs;
 	}

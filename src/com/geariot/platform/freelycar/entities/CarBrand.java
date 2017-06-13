@@ -4,9 +4,11 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -15,14 +17,15 @@ public class CarBrand {
 	private String name;
 	private List<CarType> types;
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
 	public String getName() {
 		return name;
 	}
-	@OneToMany(mappedBy="brand", cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
 	public List<CarType> getTypes() {
 		return types;
 	}

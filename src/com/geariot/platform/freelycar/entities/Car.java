@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -27,7 +28,7 @@ public class Car {
 	private int miles;
 	private Date createDate;
 	@ManyToOne
-	@JoinColumn(name="clientId")
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Client getClient() {
 		return client;
 	}
@@ -44,7 +45,7 @@ public class Car {
 		return frameNumber;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -70,7 +71,7 @@ public class Car {
 		return miles;
 	}
 	@ManyToOne
-	@JoinColumn(name="carTypeId")
+	@JoinColumn(name="carTypeId", foreignKey=@ForeignKey(name="none"))
 	public CarType getType() {
 		return type;
 	}

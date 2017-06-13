@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,12 +14,12 @@ public class CarType {
 	private CarBrand brand;
 	private String type;
 	@ManyToOne
-	@JoinColumn(name="brandId")
+	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
 	public CarBrand getBrand() {
 		return brand;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}

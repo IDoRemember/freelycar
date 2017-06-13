@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,12 +14,12 @@ public class CardProjectRemainingInfo {
 	private Project project;
 	private int remaining;
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
 	@ManyToOne
-	@JoinColumn(name="projectId")
+	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
 	public Project getProject() {
 		return project;
 	}

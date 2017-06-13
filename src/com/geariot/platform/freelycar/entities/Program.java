@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class Program {
 		return createDate;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -32,7 +33,7 @@ public class Program {
 		return name;
 	}
 	@OneToMany
-	@JoinColumn(name="programId")
+	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
 	public List<Project> getProjects() {
 		return project;
 	}

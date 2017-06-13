@@ -7,14 +7,13 @@
 
 		<property name="hibernate.show_sql">false</property>
 		<property name="hibernate.format_sql">true</property>
-
 		<property name="hibernate.hbm2ddl.auto">create</property>
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 		<!-- update -->
 
 		<!-- -->
 		<property name="hibernate.jdbc.batch_size">40</property>
 		
-
 		<property name="hibernate.cache.use_query_cache">true</property>
 		<!-- 开启二级缓存 -->
 		<property name="hibernate.cache.use_second_level_cache">true</property>

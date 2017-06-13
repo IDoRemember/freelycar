@@ -4,10 +4,14 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class InvenroryOrder {
@@ -23,17 +27,18 @@ public class InvenroryOrder {
 		return createDate;
 	}
 	@Id
-	// TODO 生成器策略
+	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
+	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}
 	@OneToMany
-	@JoinColumn(name="inventoryOrderId")
+	@JoinColumn(name="inventoryOrderId", foreignKey=@ForeignKey(name="none"))
 	public List<InventoryOrderInfo> getInventoryOrderInfo() {
 		return inventoryInfos;
 	}
 	@ManyToOne
-	@JoinColumn(name="makerId")
+	@JoinColumn(name="makerId", foreignKey=@ForeignKey(name="none"))
 	public Admin getOrderMaker() {
 		return orderMaker;
 	}
