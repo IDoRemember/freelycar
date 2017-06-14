@@ -14,15 +14,15 @@ const dateFormat = 'YYYY/MM/DD';
 
 //表格
 const columns = [{
-    title: 'Name',
+    title: '时间',
     dataIndex: 'name',
     render: text => <a href="#">{text}</a>,
 }, {
-    title: 'Cash Assets',
+    title: '实际金额',
     className: 'column-money',
     dataIndex: 'money',
 }, {
-    title: 'Address',
+    title: '实际支出',
     dataIndex: 'address',
 }];
 
@@ -97,7 +97,7 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实际收入">
-                                    <p>￥100</p>
+                                    <p><h1>￥100</h1></p>
                                     <p><Link to='#' activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
@@ -106,7 +106,7 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="实际支出">
-                                    <p>￥100</p>
+                                    <p><h1>￥100</h1></p>
                                     <p><Link to='#' activeClassName="active">详情</Link></p>
                                     
                                 </Card>
