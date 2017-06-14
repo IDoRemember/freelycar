@@ -13,6 +13,7 @@ import Page from './components/Page.jsx';
 import FixOrder from './components/consumption/FixOrder.jsx';
 import OrderDetail from './components/consumption/OrderDetail.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
+import OrderManage from './components/consumption/OrderManage.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -20,7 +21,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"beautyorder"} component={BeautyOrder} />
             <Route path={"fixorder"} component={FixOrder} />
             <Route path={"accountingcenter"} component={CostClose} />
-            <Route path={"ordermanage"} component={OrderDetail}>
+            <Route path={"ordermanage"} component={OrderManage}>
                 <Route path={":orderId"} component={OrderDetail} />
             </Route>
         </Route>
