@@ -59,7 +59,7 @@ class SiderCustom extends Component {
                 style={{ overflowY: 'auto' }}
             >
                 <div className="logo" >
-                    <img src={logo}/>
+                    <img src={logo} />
                     <span className="logo-text">小易爱车</span>
                 </div>
                 <Menu
@@ -86,8 +86,8 @@ class SiderCustom extends Component {
                         key="/app/incomeManage"
                         title={<span><Icon type="pay-circle-o" /><span className="nav-text">收支管理</span></span>}
                     >
-                        <Menu.Item key="/app/incomeManage/historyIncome"><Link to={'/app/incomeManage/historyIncome'}>历史收支查询</Link></Menu.Item>
                         <Menu.Item key="/app/incomeManage/incomeSearch"><Link to={'/app/incomeManage/incomeSearch'}>收支查询</Link></Menu.Item>
+                        <Menu.Item key="/app/incomeManage/historyIncome"><Link to={'/app/incomeManage/historyIncome'}>历史收支查询</Link></Menu.Item>
                         <Menu.Item key="/app/incomeManage/otherPay"><Link to={'/app/incomeManage/otherPay'}>其他支出</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu

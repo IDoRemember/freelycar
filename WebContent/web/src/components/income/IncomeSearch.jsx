@@ -128,7 +128,11 @@ class BeautyOrder extends React.Component {
                                         columns={columns}
                                         dataSource={data}
                                         bordered
+                                        className="accountTable"
                                     />
+                                    <div style={{marginTop:'10px',float:'right'}}>
+                                        <Link to="">更多>></Link>
+                                    </div>
                                 </Card>
                             </div>
                         </Col>

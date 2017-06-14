@@ -5,17 +5,19 @@ export default function( action, url, data, callback)  {
     xhr.open(action, url, true)
     xhr.withCredentials = true
     xhr.setRequestHeader("Content-type", "application/json");
+    //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhr.onreadystatechange = function(){
+
+        console.log(xhr.readyState == XMLHttpRequest.DONE);
         if ((xhr.readyState == XMLHttpRequest.DONE) && (xhr.status == 200)) {
             if(!!callback){
+                console.log(xhr.responseText);
                 const tempdata = JSON.parse(xhr.responseText)
-                if (!tempdata.errno && tempdata.message === "nologin") {
-                    window.location.href = "/account/login"
-                } else {
-                    callback(tempdata)
-                }
+                
             }
         }
     }
-    xhr.send(JSON.stringify(data))
+    console.log(JSON.stringify(data));
+
+    xhr.send(JSON.stringify(data));
 }
