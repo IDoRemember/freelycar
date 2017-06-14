@@ -97,7 +97,7 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实际收入">
-                                    <p><h1>￥100</h1></p>
+                                    <h1>￥100</h1>
                                     <p><Link to='#' activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
@@ -106,9 +106,8 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="实际支出">
-                                    <p><h1>￥100</h1></p>
+                                    <h1>￥100</h1>
                                     <p><Link to='#' activeClassName="active">详情</Link></p>
-                                    
                                 </Card>
                             </div>
                         </Col>
