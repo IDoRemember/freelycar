@@ -23,8 +23,26 @@ class CustomerInfo extends React.Component {
         }
     }
     componentDidMount() {
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
+        console.log('开始掉接口')
+        // let data = {
+        //     age:18,
+        //     name:'hah',
+        //     gender:'女',
+        //     list:[
+        //     {
+        //         clientId:12121
+        //     },{
+               
+        //         clientId:1221
+        //     }]
+        // }
+
+        let data = {'aa':'bb'};
+        
+        AjaxSend('POST', '/freelycar/api/client/add', 
+        data,(res) => {
+            // this.setState({ option: res.data })
+            console.log(res)
         })
     }
     handleChange = (value) => {
@@ -49,6 +67,7 @@ class CustomerInfo extends React.Component {
         });
     }
     render() {
+        console.log('haha')
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
