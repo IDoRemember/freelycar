@@ -47,7 +47,7 @@ class CustomerInfo extends React.Component {
         //     console.log(res)
         // })
 
-        axios.post('/freelycar/api/client/add', JSON.stringify({ aa: 'bbb' })).then((res) => {
+        axios.post('/fitness/api/sms/verification', {phone:'111'}).then((res) => {
             console.log(res);
         }).catch( (error)=> {
             console.log(error);
