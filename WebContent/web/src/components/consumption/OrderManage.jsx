@@ -2,69 +2,9 @@ import React from 'react';
 import { Row, Col, Card, Table, Select, InputNumber, Input, Button, DatePicker } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
+import OrderTable from './OrderTable.jsx'
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
-const columns = [
-    {
-        title: ' ', dataIndex: 'delete', key: 'delete', render: () => {
-            return <div><Icon type="delete" /></div>
-        }
-    },
-    { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber' },
-    { title: '单据时间', dataIndex: 'receiptTime', key: 'receiptTime' },
-    { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
-    { title: '客户名称', dataIndex: 'customerName', key: 'customerName' },
-    { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-    { title: '项目类别', dataIndex: 'itemClassification', key: 'itemClassification' },
-    { title: '车辆状态', dataIndex: 'carState', key: 'carState' },
-    { title: '停车位置', dataIndex: 'carPark', key: 'carPark' },
-    { title: '接车时间', dataIndex: 'receiveCarTime', key: 'receiveCarTime' },
-    { title: '交车时间', dataIndex: 'handCarTime', key: 'handCarTime' },
-    { title: '结算状态', dataIndex: 'closeState', key: 'closeState' },
-    {
-        title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
-            return <span>
-                <span style={{ marginRight: '10px' }}>
-                    <Link to="">
-                        查看
-                    </Link>
-                </span>
-
-            </span>
-        }
-    },
-]
-const data = [
-    {
-        key: 1,
-        serialNumber: '02933123334',
-        receiptNumber: '2017-05-24',
-        busNumber: '苏A2345',
-        customerName: '海蜇',
-        phoneNumber: '15251873222',
-        itemClassification: '洗车',
-        carState: '已接车', carPark: '  ',
-        receiveCarTime: '2017-05-24 14:00:00',
-        handCarTime: '  ',
-        closeState: '已结算',
-
-    },
-    {
-        key: 2,
-        serialNumber: '02933123335',
-        receiptNumber: '2017-05-24',
-        busNumber: '苏A12345',
-        customerName: 'JZW',
-        phoneNumber: '15251873232',
-        itemClassification: '维修',
-        carState: '已交车', carPark: '  ',
-        receiveCarTime: '2017-05-24 14:00:00',
-        handCarTime: '  ',
-        closeState: '已结算',
-
-    }
-
-];
 class OrderManage extends React.Component {
     constructor(props) {
         super(props)
@@ -163,7 +103,7 @@ class OrderManage extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-
+                 <OrderTable />
             </div>
         )
     }

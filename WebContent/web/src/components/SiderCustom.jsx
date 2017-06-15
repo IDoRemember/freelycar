@@ -87,7 +87,7 @@ class SiderCustom extends Component {
                         title={<span><Icon type="pay-circle-o" /><span className="nav-text">收支管理</span></span>}
                     >
                         <Menu.Item key="/app/incomeManage/incomeSearch"><Link to={'/app/incomeManage/incomeSearch'}>收支查询</Link></Menu.Item>
-                        <Menu.Item key="/app/incomeManage/historyIncome"><Link to={'/app/incomeManage/historyIncome'}>历史收支查询</Link></Menu.Item>
+                        <Menu.Item key="/app/incomeManage/historyAccount"><Link to={'/app/incomeManage/historyAccount'}>历史收支查询</Link></Menu.Item>
                         <Menu.Item key="/app/incomeManage/otherPay"><Link to={'/app/incomeManage/otherPay'}>其他支出</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu
