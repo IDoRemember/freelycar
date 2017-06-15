@@ -21,7 +21,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"beautyorder"} component={BeautyOrder} />
             <Route path={"fixorder"} component={FixOrder} />
             <Route path={"accountingcenter"} component={CostClose} />
-            <Route path={"ordermanage"} component={OrderManage}>
+            <Route path={"ordermanage"} component={OrderDetail}>
                 <Route path={":orderId"} component={OrderDetail} />
             </Route>
         </Route>

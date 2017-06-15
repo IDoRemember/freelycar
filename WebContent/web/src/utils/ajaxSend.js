@@ -3,9 +3,9 @@ export default function( action, url, data, callback)  {
 
     var xhr = new XMLHttpRequest()
     xhr.open(action, url, true)
-    xhr.withCredentials = true
-    xhr.setRequestHeader("Content-type", "application/json");
+    //xhr.withCredentials = true
     //xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhr.setRequestHeader("Content-type", "application/json");
     xhr.onreadystatechange = function(){
 
         console.log(xhr.readyState == XMLHttpRequest.DONE);
@@ -19,5 +19,5 @@ export default function( action, url, data, callback)  {
     }
     console.log(JSON.stringify(data));
 
-    xhr.send(JSON.stringify(data));
+    xhr.send(JSON.stringify({'aa':'uuuu'}));
 }

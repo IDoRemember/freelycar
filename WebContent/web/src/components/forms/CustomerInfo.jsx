@@ -5,6 +5,8 @@ import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal,
 import styled from "styled-components"
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import AjaxNative from '../../utils/ajaxNative'
+import axios from 'axios';
 const Option = Select.Option;
 const MemberButton = styled.div`
     display:inline-block;
@@ -32,18 +34,24 @@ class CustomerInfo extends React.Component {
         //     {
         //         clientId:12121
         //     },{
-               
+
         //         clientId:1221
         //     }]
         // }
 
-        let data = {'aa':'bb'};
-        
-        AjaxSend('POST', '/freelycar/api/client/add', 
-        data,(res) => {
-            // this.setState({ option: res.data })
-            console.log(res)
-        })
+        let data = { 'aa': 'bb' };
+
+        // AjaxSend('POST', '/freelycar/api/client/add', 
+        // data,(res) => {
+        //     // this.setState({ option: res.data })
+        //     console.log(res)
+        // })
+
+        axios.post('/freelycar/api/client/add', JSON.stringify({ aa: 'bbb' })).then((res) => {
+            console.log(res);
+        }).catch( (error)=> {
+            console.log(error);
+        });
     }
     handleChange = (value) => {
         console.log(`selected ${value}`)
