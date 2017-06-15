@@ -14,6 +14,8 @@ import FixOrder from './components/consumption/FixOrder.jsx';
 import OrderDetail from './components/consumption/OrderDetail.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
 import OrderManage from './components/consumption/OrderManage.jsx';
+import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
+import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -29,6 +31,8 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"incomeSearch"} component={IncomeSearch}/>
             <Route path={"incomeSearch/:incomeId"} component={IncomeDetail} />
             <Route path={"historyIncome"} component={AdvancedTable} />
+            <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
+            <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={AdvancedTable} />
         </Route>
         <Route path={"member"} >
