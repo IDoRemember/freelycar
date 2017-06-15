@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx';
 import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Row, Col, Card, Button, Input } from 'antd';
+import { Row, Col, Card, Button, Input ,Select} from 'antd';
 class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)

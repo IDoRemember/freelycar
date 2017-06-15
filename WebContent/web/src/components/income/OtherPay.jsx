@@ -178,7 +178,7 @@ class OtherPay extends React.Component {
                 </Card>
                 <Card>
                     <div className="table-operations">
-                        <Button onClick={this.setAgeSort}>新增</Button>
+                        <Button onClick={this.setAgeSort}>修改</Button>
                         <Button onClick={this.clearFilters}>删除</Button>
                     </div>
                     <Table bordered columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} pagination={pagination} >
