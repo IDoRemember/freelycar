@@ -25,7 +25,12 @@ import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 import ItemManage from './components/productManage/ItemManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
+<<<<<<< HEAD
+import PutInStorage from './components/buySellStock/PutInStorage.jsx'
+
+=======
 >>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
+>>>>>>> ff0a7f67f9c181fcb1a8b9ed0bb4488161d6afea
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -62,7 +67,7 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
-            <Route path={"buyProduct"} component={AdvancedTable} />
+            <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={AdvancedTable} />
             <Route path={"productReceipts"} component={AdvancedTable} />
             <Route path={"providerManage"} component={ProviderManage} />
