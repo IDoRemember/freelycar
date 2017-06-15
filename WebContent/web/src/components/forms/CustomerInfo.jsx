@@ -26,27 +26,7 @@ class CustomerInfo extends React.Component {
     }
     componentDidMount() {
         console.log('开始掉接口')
-        // let data = {
-        //     age:18,
-        //     name:'hah',
-        //     gender:'女',
-        //     list:[
-        //     {
-        //         clientId:12121
-        //     },{
-
-        //         clientId:1221
-        //     }]
-        // }
-
         let data = { 'aa': 'bb' };
-
-        // AjaxSend('POST', '/freelycar/api/client/add', 
-        // data,(res) => {
-        //     // this.setState({ option: res.data })
-        //     console.log(res)
-        // })
-
         axios.post('/fitness/api/sms/verification', {phone:'111'}).then((res) => {
             console.log(res);
         }).catch( (error)=> {

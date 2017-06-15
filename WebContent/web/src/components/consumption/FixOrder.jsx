@@ -1,7 +1,8 @@
 import React from 'react';
-import CustomerInfo from '../forms/EditCustomerInfo.jsx'
-import ServiceTable from '../tables/ServiceTable.jsx'
-import PartsDetail from '../tables/PartsDetail.jsx'
+import CustomerInfo from '../forms/EditCustomerInfo.jsx';
+import ServiceTable from '../tables/ServiceTable.jsx';
+import PartsDetail from '../tables/PartsDetail.jsx';
+import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Row, Col, Card, Button, Input } from 'antd';
 class BeautyOrder extends React.Component {
     constructor(props) {
@@ -13,6 +14,7 @@ class BeautyOrder extends React.Component {
 
     render() {
         return <div>
+            <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo MemberButton={true} />
             <Card style={{marginBottom:'10px'}}>
                 <span style={{fontSize:'18px'}}>故障描述：</span><Input type="textarea" rows={3} style={{display:'inline-block',marginBottom:'10px'}}/>
