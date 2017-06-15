@@ -15,6 +15,10 @@ import OrderDetail from './components/consumption/OrderDetail.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
 import PayDetail from './components/income/PayDetail.jsx';
 import OrderManage from './components/consumption/OrderManage.jsx';
+<<<<<<< HEAD
+import HistoricalAccount from './components/income/HistoricalAccount.jsx';
+import ClientInfo from './components/member/ClientInfo.jsx'
+=======
 import OtherPay from './components/income/OtherPay.jsx';
 import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
@@ -25,7 +29,16 @@ import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
 =======
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
+<<<<<<< HEAD
 >>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
+=======
+<<<<<<< HEAD
+import PutInStorage from './components/buySellStock/PutInStorage.jsx'
+
+=======
+>>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
+>>>>>>> ff0a7f67f9c181fcb1a8b9ed0bb4488161d6afea
+>>>>>>> ff70d09aae9113b87afbdc91b05dcbcb25021164
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -34,25 +47,35 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"fixorder"} component={FixOrder} />
             <Route path={"accountingcenter"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
+<<<<<<< HEAD
+            {/*<Route path={"ordermanage"} component={OrderDetail} />
+            <Route path={"ordermanage/:orderId"} component={OrderDetail} />*/}
+=======
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />
+>>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
             <Route path={"incomeSearch/income/:incomeId"} component={IncomeDetail} />
             <Route path={"incomeSearch/pay/:payId"} component = {PayDetail}/>
             <Route path={"historyIncome"} component={AdvancedTable} />
+<<<<<<< HEAD
+            <Route path={"otherPay"} component={AdvancedTable} />
+            <Route path={"historyAccount"} component={HistoricalAccount}/>
+=======
             <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
 
+>>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
         </Route>
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
-            <Route path={"customer"} component={AdvancedTable} />
+            <Route path={"customer"} component={ClientInfo} />
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
-            <Route path={"buyProduct"} component={AdvancedTable} />
+            <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={AdvancedTable} />
             <Route path={"productReceipts"} component={AdvancedTable} />
             <Route path={"providerManage"} component={ProviderManage} />
