@@ -35,7 +35,7 @@ class ProviderManage extends React.Component {
             >
                 {plateOptions}
             </Select>                  
-                <Button type="primary" style={{margin: '10px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
+                <Button type="primary" style={{margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
             </Card >
         </div >
     }
