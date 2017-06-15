@@ -10,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
+@Table
 public class Client {
 	private int id;
 	private String name;
@@ -117,4 +119,13 @@ public class Client {
 	public void setState(int state) {
 		this.state = state;
 	}
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", name=" + name + ", age=" + age + ", idNumber=" + idNumber + ", gender=" + gender
+				+ ", phone=" + phone + ", birthday=" + birthday + ", dirveLicense=" + dirveLicense + ", state=" + state
+				+ ", points=" + points + ", recommendName=" + recommendName + ", createDate=" + createDate + ", cars="
+				+ cars + ", cards=" + cards + "]";
+	}
+	
+	
 }
