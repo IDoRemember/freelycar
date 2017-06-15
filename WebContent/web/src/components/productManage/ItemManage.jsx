@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal } from 'antd';
 import moment from 'moment';
 
 import { Link } from 'react-router';
@@ -23,6 +23,7 @@ class BeautyOrder extends React.Component {
             sortedInfo: null,
             selectedRowKeys: [],
             loading: false,
+            visible: false
         }
     }
     handleChange = (pagination, filters, sorter) => {
@@ -54,6 +55,29 @@ class BeautyOrder extends React.Component {
     tabCallback = (key) => {
         console.log(key);
     }
+
+
+    // tab1模态框的处理函数
+
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+
+
 
     render() {
         let { sortedInfo, filteredInfo } = this.state;
@@ -105,10 +129,10 @@ class BeautyOrder extends React.Component {
             type: 32,
             price: 'New York No. 1 Lake Park',
             duration: 'New York No. 1 Lake Park',
-            durationPrice:'xx',
-            createTime:'fff',
-            remark:'xxx',
-            operation:'zz'
+            durationPrice: 'xx',
+            createTime: 'fff',
+            remark: 'xxx',
+            operation: 'zz'
 
 
         }, {
@@ -118,10 +142,10 @@ class BeautyOrder extends React.Component {
             type: 32,
             price: 'New York No. 1 Lake Park',
             duration: 'New York No. 1 Lake Park',
-            durationPrice:'xx',
-            createTime:'fff',
-            remark:'xxx',
-            operation:'zz'
+            durationPrice: 'xx',
+            createTime: 'fff',
+            remark: 'xxx',
+            operation: 'zz'
         }, {
             key: '3',
             index: '3',
@@ -129,10 +153,10 @@ class BeautyOrder extends React.Component {
             type: 32,
             price: 'New York No. 1 Lake Park',
             duration: 'New York No. 1 Lake Park',
-            durationPrice:'xx',
-            createTime:'fff',
-            remark:'xxx',
-            operation:'zz'
+            durationPrice: 'xx',
+            createTime: 'fff',
+            remark: 'xxx',
+            operation: 'zz'
         }, {
             key: '4',
             index: '4',
@@ -140,10 +164,10 @@ class BeautyOrder extends React.Component {
             type: 32,
             price: 'New York No. 1 Lake Park',
             duration: 'New York No. 1 Lake Park',
-            durationPrice:'xx',
-            createTime:'fff',
-            remark:'xxx',
-            operation:'zz'
+            durationPrice: 'xx',
+            createTime: 'fff',
+            remark: 'xxx',
+            operation: 'zz'
         }];
 
         // rowSelection object indicates the need for row selection
@@ -189,8 +213,39 @@ class BeautyOrder extends React.Component {
                                         <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
                                     </Col>
                                     <Col span={8}>
-                                        <Button type="primary">查询</Button>
+                                        <Button type="primary" onClick={this.showModal} >查询</Button>
                                     </Col>
+
+                                    {/*查询的模态框*/}
+                                    <Modal
+                                        title="Basic Modal"
+                                        visible={this.state.visible}
+                                        onOk={this.handleOk}
+                                        onCancel={this.handleCancel}
+                                        width = '80%'
+                                    >
+                                        <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
+                                            <Col span={2}>
+                                                <Button>新增项目</Button>
+                                            </Col>
+                                            <Col span={8}>
+                                                <Button>删除项目</Button>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col span={24}>
+                                                <Table
+                                                    rowSelection={rowSelection}
+                                                    columns={columns}
+                                                    dataSource={data}
+                                                    bordered
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Modal>
+
+
                                 </Row>
 
 

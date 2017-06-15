@@ -112,7 +112,7 @@ class SiderCustom extends Component {
                         key="/app/productManage"
                         title={<span><Icon type="appstore-o" /><span className="nav-text">产品管理</span></span>}
                     >
-                        <Menu.Item key="/app/productManage/projectManage"><Link to={'/app/productManage/projectManage'}>项目管理</Link></Menu.Item>
+                        <Menu.Item key="/app/productManage/projectManage"><Link to={'/app/productManage/itemManage'}>项目管理</Link></Menu.Item>
                         <Menu.Item key="/app/productManage/partsManage"><Link to={'/app/productManage/partsManage'}>配件管理</Link></Menu.Item>
                         <Menu.Item key="/app/productManage/cardManage"><Link to={'/app/productManage/cardManage'}>卡类管理</Link></Menu.Item>
                     </SubMenu>

@@ -20,6 +20,8 @@ import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 import ItemManage from './components/productManage/ItemManage.jsx';
+import PartsManage from './components/productManage/PartsManage.jsx';
+import CardManage from './components/productManage/CardManage.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -53,8 +55,8 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"productManage"} >
             <Route path={"itemManage"} component={ItemManage} />
-            <Route path={"partsManage"} component={AdvancedTable} />
-            <Route path={"cardManage"} component={AdvancedTable} />
+            <Route path={"partsManage"} component={PartsManage} />
+            <Route path={"cardManage"} component={CardManage} />
         </Route>
         <Route path={"dataTable"} >
             <Route path={"businessSummary"} component={AdvancedTable} />
