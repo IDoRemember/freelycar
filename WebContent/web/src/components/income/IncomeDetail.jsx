@@ -3,10 +3,8 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
-
 import { Link } from 'react-router';
 
 // 日期 format
@@ -105,6 +103,7 @@ class IncomeDetail extends React.Component {
                         <Button onClick={this.clearFilters}>本周</Button>
                         <Button onClick={this.clearAll}>本月</Button>
                     </div>
+                    <div style={{color:'red',margin:'30px 0',fontSize:'18px'}}>合计金额：<span>2400</span></div>
                     <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
                 </Card>
             </div>
