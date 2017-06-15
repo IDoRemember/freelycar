@@ -14,6 +14,8 @@ import FixOrder from './components/consumption/FixOrder.jsx';
 import OrderDetail from './components/consumption/OrderDetail.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
 import OrderManage from './components/consumption/OrderManage.jsx';
+import HistoricalAccount from './components/income/HistoricalAccount.jsx';
+import ClientInfo from './components/member/ClientInfo.jsx'
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -21,18 +23,20 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"beautyorder"} component={BeautyOrder} />
             <Route path={"fixorder"} component={FixOrder} />
             <Route path={"accountingcenter"} component={CostClose} />
-            <Route path={"ordermanage"} component={OrderDetail} />
-            <Route path={"ordermanage/:orderId"} component={OrderDetail} />
+            <Route path={"ordermanage"} component={OrderManage} />
+            {/*<Route path={"ordermanage"} component={OrderDetail} />
+            <Route path={"ordermanage/:orderId"} component={OrderDetail} />*/}
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
             <Route path={"incomeSearch/:incomeId"} component={IncomeDetail} />
             <Route path={"historyIncome"} component={AdvancedTable} />
             <Route path={"otherPay"} component={AdvancedTable} />
+            <Route path={"historyAccount"} component={HistoricalAccount}/>
         </Route>
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
-            <Route path={"customer"} component={AdvancedTable} />
+            <Route path={"customer"} component={ClientInfo} />
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={AdvancedTable} />
