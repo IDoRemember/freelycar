@@ -16,6 +16,7 @@ import IncomeDetail from './components/income/IncomeDetail.jsx';
 import OrderManage from './components/consumption/OrderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
+import ItemManage from './components/productManage/ItemManage.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -46,7 +47,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"providerManage"} component={AdvancedTable} />
         </Route>
         <Route path={"productManage"} >
-            <Route path={"projectManage"} component={AdvancedTable} />
+            <Route path={"itemManage"} component={ItemManage} />
             <Route path={"partsManage"} component={AdvancedTable} />
             <Route path={"cardManage"} component={AdvancedTable} />
         </Route>
