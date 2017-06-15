@@ -15,31 +15,31 @@ const dateFormat = 'YYYY/MM/DD';
 //表格
 const data = [{
     key: '1',
-    index:'1',
+    index: '1',
     time: 'John Brown',
     actualIncome: 32,
     actualPay: 'New York No. 1 Lake Park',
 }, {
     key: '2',
-    index:'2',
+    index: '2',
     time: 'John Brown',
     actualIncome: 32,
     actualPay: 'New York No. 1 Lake Park',
 }, {
     key: '3',
-    index:'3',
+    index: '3',
     time: 'John Brown',
     actualIncome: 32,
     actualPay: 'New York No. 1 Lake Park',
 }, {
     key: '4',
-    index:'4',
+    index: '4',
     time: 'John Brown',
     actualIncome: 32,
     actualPay: 'New York No. 1 Lake Park',
 }];
 
-class IncomeDetail extends React.Component {
+class PayDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -80,10 +80,10 @@ class IncomeDetail extends React.Component {
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [{
-            title:'序号',
-            dataIndex:'index',
-            key:'index'
-        },{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index'
+        }, {
             title: '时间',
             dataIndex: 'time',
             key: 'time'
@@ -111,4 +111,4 @@ class IncomeDetail extends React.Component {
         );
     }
 }
-export default IncomeDetail
+export default PayDetail

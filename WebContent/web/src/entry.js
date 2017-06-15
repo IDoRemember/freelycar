@@ -21,12 +21,11 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"beautyorder"} component={BeautyOrder} />
             <Route path={"fixorder"} component={FixOrder} />
             <Route path={"accountingcenter"} component={CostClose} />
-            <Route path={"ordermanage"} component={OrderDetail}>
-                <Route path={":orderId"} component={OrderDetail} />
-            </Route>
+            <Route path={"ordermanage"} component={OrderDetail} />
+            <Route path={"ordermanage/:orderId"} component={OrderDetail} />
         </Route>
         <Route path={"incomeManage"} >
-            <Route path={"incomeSearch"} component={IncomeSearch}/>
+            <Route path={"incomeSearch"} component={IncomeSearch} />
             <Route path={"incomeSearch/:incomeId"} component={IncomeDetail} />
             <Route path={"historyIncome"} component={AdvancedTable} />
             <Route path={"otherPay"} component={AdvancedTable} />
