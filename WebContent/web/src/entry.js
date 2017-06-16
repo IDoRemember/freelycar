@@ -20,6 +20,8 @@ import PayDetail from './components/income/PayDetail.jsx';
 import OtherPay from './components/income/OtherPay.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
+//member
+import ClientInfo from './components/member/ClientInfo.jsx'
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
 import PartsManage from './components/productManage/PartsManage.jsx';
@@ -50,7 +52,7 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
-            <Route path={"customer"} component={AdvancedTable} />
+            <Route path={"customer"} component={ClientInfo} />
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
