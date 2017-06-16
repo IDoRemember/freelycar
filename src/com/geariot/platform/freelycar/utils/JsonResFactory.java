@@ -12,10 +12,16 @@ public class JsonResFactory {
 		return obj;
 	}
 	
-	public static net.sf.json.JSONObject buileNet(RESCODE res){
+	public static net.sf.json.JSONObject buildNet(RESCODE res){
 		net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
 		obj.put(Constants.RESPONSE_CODE_KEY, res.toString());
 		obj.put(Constants.RESPONSE_MSG_KEY, res.getMsg());
+		return obj;
+	}
+	
+	public static net.sf.json.JSONObject buildNetWithData(RESCODE res, Object data){
+		net.sf.json.JSONObject obj = buildNet(res);
+		obj.put(Constants.RESPONSE_DATA_KEY, data);
 		return obj;
 	}
 	

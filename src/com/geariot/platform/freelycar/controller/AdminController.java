@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -40,14 +42,33 @@ public class AdminController {
 	
 	@RequestMapping(value="/delete", method=RequestMethod.POST)
 	@PermissionRequire("admin:delete")
-	public String delete(int adminId){
-		return adminService.delete(adminId);
+	public String delete(String... accounts){
+		return adminService.delete(accounts);
 	}
 	
 	@RequestMapping(value="/list", method=RequestMethod.GET)
-	@PermissionRequire("admin:list")
+	@PermissionRequire("admin:query")
 	public String list(int page, int number){
 		return adminService.list(page, number);
+	}
+	
+	@RequestMapping(value="/query", method=RequestMethod.GET)
+	@PermissionRequire("admin:query")
+	public String query(Admin query){
+		// TODO
+		return null;
+	}
+	
+	@RequestMapping(value="/disable", method=RequestMethod.POST)
+	@PermissionRequire("admin:modify")
+	public String disable(String account){
+		return adminService.disable(account);
+	}
+	
+	@RequestMapping(value="/enable", method=RequestMethod.POST)
+	@PermissionRequire("admin:modify")
+	public String enable(String account){
+		return adminService.enable(account);
 	}
 	
 }

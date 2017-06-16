@@ -44,6 +44,18 @@ public class AdminDaoImpl implements AdminDao {
 	public void delete(Admin admin) {
 		this.getSession().delete(admin);
 	}
+	
+	@Override
+	public void delete(String account) {
+		String hql = "delete from Admin where account = :account";
+		this.getSession().createQuery(hql).setString("account", account).executeUpdate();
+	}
+
+	@Override
+	public void delete(int adminId) {
+		String hql = "delete from Admin where id = :adminId";
+		this.getSession().createQuery(hql).setInteger("adminId", adminId).executeUpdate();
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

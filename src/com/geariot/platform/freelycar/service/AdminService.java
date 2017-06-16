@@ -1,8 +1,10 @@
 package com.geariot.platform.freelycar.service;
 
 
+import java.sql.Date;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -18,8 +20,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.model.RESCODE;
+import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.MD5;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 @Service
 @Transactional
@@ -76,7 +83,7 @@ public class AdminService {
 	public String addAdmin(Admin admin) {
 		Admin exist = adminDao.findAdminByAccount(admin.getAccount());
 		JSONObject obj = null;
-		if(exist == null){
+		if(exist != null){
 			obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST);
 		}
 		else {
@@ -103,12 +110,20 @@ public class AdminService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String delete(int adminId) {
-		Admin exist = adminDao.findAdminById(adminId);
-		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+	public String delete(String[] accounts) {
+		String curUser = (String) SecurityUtils.getSubject().getPrincipal();
+		boolean delSelf = false;
+		for(String account : accounts){
+			if(StringUtils.equalsIgnoreCase(curUser, account)){
+				delSelf = true;
+			}
+			else{
+				adminDao.delete(account);
+			}
 		}
-		adminDao.delete(exist);
+		if(delSelf){
+			return JsonResFactory.buildOrg(RESCODE.CANNOT_DELETE_SELF).toString();
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
@@ -120,10 +135,30 @@ public class AdminService {
 		}
 		long realSize = adminDao.getCount();
 		int size=(int) Math.ceil(realSize/(double)number);
-		
-		return null;
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		return obj.toString();
 	}
 
-	
+	public String disable(String account) {
+		Admin admin = adminDao.findAdminByAccount(account);
+		if(admin == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		admin.setCurrent(false);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+
+	public String enable(String account) {
+		Admin admin = adminDao.findAdminByAccount(account);
+		if(admin == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		admin.setCurrent(true);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
 
 }

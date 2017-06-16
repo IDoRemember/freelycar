@@ -14,6 +14,10 @@ public interface AdminDao {
 
 	void delete(Admin admin);
 	
+	void delete(String account);
+	
+	void delete(int adminId);
+	
 	List<Admin> listAdmins(int from, int pageSize);
 	
 	long getCount();
