@@ -1,8 +1,7 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Radio } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon} from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-const RadioGroup = Radio.Group;
 const cardColumns = [
     { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
     { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
@@ -90,8 +89,6 @@ class ClientDetail extends React.Component {
         super(props)
         this.state = {
             option: [],
-            man: 'man',
-            female: 'female',
         }
     }
     onChange = (e) => {
@@ -113,14 +110,7 @@ class ClientDetail extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>性别：
-                            <div style={{ display: 'inline-block' }}>
-                                <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                    <Radio value={this.state.man}>男</Radio>
-                                    <Radio value={this.state.fe}>女</Radio>
-                                </RadioGroup>
-                            </div>
-                        </Col>
+                        <Col span={6}>性别：<span>男</span></Col>
                         <Col span={6}>身份证号：<span>36020202037636313</span></Col>
                         <Col span={6}>行驶证号：<span>20170273333</span></Col>
                     </Row>
@@ -140,7 +130,7 @@ class ClientDetail extends React.Component {
                 </Card>
                 <Card title="消费记录" className="accountTable" >
                     <Table columns={payColumns} dataSource={payData} ></Table>
-                    <p style={{ float: 'right',marginRight:'30px' }}><Link to = {'app/member/customer/uid/payhistory'}> 更多</Link></p>
+                    <p style={{ float: 'right',marginRight:'30px' }}><Link to = {'app/member/customer/1/payhistory'}> 更多</Link></p>
                 </Card>
             </div>
         )
