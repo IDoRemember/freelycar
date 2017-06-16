@@ -218,7 +218,7 @@ class BeautyOrder extends React.Component {
 
                                     {/*查询的模态框*/}
                                     <Modal
-                                        title="Basic Modal"
+                                        title="项目查询"
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
@@ -226,10 +226,16 @@ class BeautyOrder extends React.Component {
                                     >
                                         <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                             <Col span={2}>
+                                                <Button>确定</Button>
+                                            </Col>
+                                            <Col span={2}>
                                                 <Button>新增项目</Button>
                                             </Col>
-                                            <Col span={8}>
-                                                <Button>删除项目</Button>
+                                            <Col span={2}>
+                                                <Input placeholder='可按项目名称,类型等进行搜索' />
+                                            </Col>
+                                            <Col span={2}>
+                                                <Button  type="primary">查询</Button>
                                             </Col>
                                         </Row>
 
@@ -269,18 +275,49 @@ class BeautyOrder extends React.Component {
                                         />
                                     </Col>
                                 </Row>
-
-
-
-
-
                             </div>
-
-
-
-
                         </TabPane>
-                        <TabPane tab="项目类别" key="2">Content of Tab Pane 2</TabPane>
+                        <TabPane tab="项目类别" key="2">
+                            <div>
+                                <Row>
+                                    <Col span={4}>
+                                        <div style={{ marginBottom: 16 }}>
+                                            <Input addonBefore="类别名称" />
+                                        </div>
+                                    </Col>
+                                    <Col span={1}>
+                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
+                                    </Col>
+                                    <Col span={5}>
+                                        <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
+                                    </Col>
+                                    <Col span={8}>
+                                        <Button type="primary" onClick={this.showModal} >查询</Button>
+                                    </Col>
+                                </Row>
+
+
+                                <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
+                                    <Col span={2}>
+                                        <Button>新增</Button>
+                                    </Col>
+                                    <Col span={8}>
+                                        <Button>删除</Button>
+                                    </Col>
+                                </Row>
+
+                                <Row>
+                                    <Col span={24}>
+                                        <Table
+                                            rowSelection={rowSelection}
+                                            columns={columns}
+                                            dataSource={data}
+                                            bordered
+                                        />
+                                    </Col>
+                                </Row>
+                            </div>
+                            </TabPane>
                     </Tabs>
                 </Card>
             </div>
