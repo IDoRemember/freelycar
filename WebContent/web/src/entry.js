@@ -22,7 +22,15 @@ import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 import ItemManage from './components/productManage/ItemManage.jsx';
+import PartsManage from './components/productManage/PartsManage.jsx';
+import CardManage from './components/productManage/CardManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
+<<<<<<< HEAD
+=======
+import PutInStorage from './components/buySellStock/PutInStorage.jsx'
+
+
+>>>>>>> 50ebd310b4ef8b3953177d0dc3aba9ce7a1c6b5b
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -32,7 +40,10 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"accountingcenter"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />
+<<<<<<< HEAD
 
+=======
+>>>>>>> 50ebd310b4ef8b3953177d0dc3aba9ce7a1c6b5b
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
@@ -50,15 +61,15 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
-            <Route path={"buyProduct"} component={AdvancedTable} />
+            <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={AdvancedTable} />
             <Route path={"productReceipts"} component={AdvancedTable} />
             <Route path={"providerManage"} component={ProviderManage} />
         </Route>
         <Route path={"productManage"} >
             <Route path={"itemManage"} component={ItemManage} />
-            <Route path={"partsManage"} component={AdvancedTable} />
-            <Route path={"cardManage"} component={AdvancedTable} />
+            <Route path={"partsManage"} component={PartsManage} />
+            <Route path={"cardManage"} component={CardManage} />
         </Route>
         <Route path={"dataTable"} >
             <Route path={"businessSummary"} component={AdvancedTable} />
