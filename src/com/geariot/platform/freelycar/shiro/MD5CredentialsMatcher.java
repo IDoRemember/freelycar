@@ -1,9 +1,11 @@
-package com.geariot.platform.freelycar.utils;
+package com.geariot.platform.freelycar.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
+
+import com.geariot.platform.freelycar.utils.MD5;
 
 public class MD5CredentialsMatcher extends SimpleCredentialsMatcher {
 
