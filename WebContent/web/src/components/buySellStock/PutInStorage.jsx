@@ -1,6 +1,7 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm } from 'antd';
+import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 const Option = Select.Option;
 class PutInStorage extends React.Component {
@@ -114,12 +115,20 @@ class PutInStorage extends React.Component {
                     />
                 </Table>
                 <div style={{ marginTop: '40px', borderTop: '1px solid #e9e9e9' }}>
-                    <Row gutter={24} style={{ margin: "40px 0" ,fontSize:'18px'}}>
+                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
                         <Col span={12} >合计金额：<span>23450</span>
                         </Col>
                         <Col span={12} >
                             合计数量：
                         <span>20</span>
+                        </Col>
+                    </Row>
+                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
+                        <Col span={12} >
+                        </Col>
+                        <Col span={12}  style={{textAlign:'right'}}>
+                            <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
+                            <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
                     </Row>
                 </div>
