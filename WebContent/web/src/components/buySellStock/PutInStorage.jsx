@@ -11,12 +11,12 @@ class PutInStorage extends React.Component {
             data: [{
                 key: 1,
                 index: 1,
-                partNumber:'p2342232',
+                partNumber: 'p2342232',
                 name: '玻璃水',
                 category: '美容保养',
                 specification: '通用',
                 singleSummation: '20',
-                number:'1111'
+                number: '1111'
             }],
             option: []
         }
@@ -34,11 +34,15 @@ class PutInStorage extends React.Component {
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                    <Col span={12} >单据编号：<span>p1231231231232123</span>
+                    <Col span={8} >单据编号：<span>p1231231231232123</span>
                     </Col>
-                    <Col span={12} >
+                    <Col span={8} >
                         单据时间：
                         <span>2017-5-27 14:00:08</span>
+                    </Col>
+                    <Col span={8} >
+                        制单人：
+                        <span style={{verticalAlign:'middle'}}>🐟涵</span>
                     </Col>
                 </Row>
                 <Table className="accountTable" dataSource={this.state.data} bordered>
@@ -76,6 +80,9 @@ class PutInStorage extends React.Component {
                         title="数量"
                         key="number"
                         dataIndex="number"
+                        render={()=>{
+                            return <Input style={{width:'100px'}} />
+                        }}
                     />
                     <Col
                         title="供应商"

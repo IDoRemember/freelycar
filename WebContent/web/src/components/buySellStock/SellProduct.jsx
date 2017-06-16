@@ -48,20 +48,17 @@ class PutInStorage extends React.Component {
                         />
                     </Col>
                     <Col span={8} >
-                        制单人：
-                        <span>🐟涵</span>
+                        <div style={{ height: '28px',lineHeight:'28px' }}>
+                            制单人：
+                            <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
+                        </div>
                     </Col>
                 </Row>
-                <Table className="accountTable" dataSource={this.state.data} bordered>
+                <Table dataSource={this.state.data} bordered>
                     <Col
                         title="序号"
                         dataIndex="index"
                         key="index"
-                    />
-                    <Col
-                        title="配件编号"
-                        dataIndex="partNumber"
-                        key="partNumber"
                     />
                     <Col
                         title="配件名称"
@@ -104,24 +101,6 @@ class PutInStorage extends React.Component {
                         dataIndex="creatTime"
                     />
                 </Table>
-                <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
-                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
-                        <Col span={12} >合计金额：<span>23450</span>
-                        </Col>
-                        <Col span={12} >
-                            合计数量：
-                        <span>20</span>
-                        </Col>
-                    </Row>
-                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
-                        <Col span={12} >
-                        </Col>
-                        <Col span={12} style={{ textAlign: 'right' }}>
-                            <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
-                            <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
-                        </Col>
-                    </Row>
-                </div>
             </Card>
         </div>
     }
