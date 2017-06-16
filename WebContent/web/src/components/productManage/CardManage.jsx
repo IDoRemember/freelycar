@@ -3,6 +3,8 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
+//import jquery from 'jquery';
+import $ from 'jquery'; 
 
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon } from 'antd';
 import moment from 'moment';
@@ -25,6 +27,48 @@ class BeautyOrder extends React.Component {
             loading: false,
         }
     }
+
+     componentDidMount() {
+        console.log('开始掉接口')
+        // let data = { 'aa': 'bb' };
+        // axios.post('/fitness/api/sms/verification', {phone:'111'}).then((res) => {
+        //     console.log(res);
+        // }).catch( (error)=> {
+        //     console.log(error);
+        // });
+
+        // var xmlhttp = new XMLHttpRequest();
+        // xmlhttp.onload =function(res){
+        //     console.log(res);
+        // };
+        // xmlhttp.open('post','http://localhost:8078/freelycar/api/test/get',true);
+        // xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        // xmlhttp.send('a=1&b=s');
+        
+        
+
+      
+
+        $.ajax({
+            url:'http://localhost:8078/fitness/api/sms/verification',
+            data:{'phone': '18252085210' },
+            dataType:'json',
+            type:'post',
+            success:function(data){
+                console.log(data);
+            }
+
+
+        });
+
+
+        // post with form-data (custom headers)
+        // note that getHeaders() is non-standard API
+
+
+
+     }
+
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
         this.setState({
