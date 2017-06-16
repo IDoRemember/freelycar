@@ -19,7 +19,7 @@ import IncomeDetail from './components/income/IncomeDetail.jsx';
 import PayDetail from './components/income/PayDetail.jsx';
 import OtherPay from './components/income/OtherPay.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
-import HistoryAccount from './components/income/HistoryAccount.jsx';
+import HistoricalAccount from './components/income/HistoricalAccount.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 //member
 import ClientInfo from './components/member/ClientInfo.jsx'
@@ -46,7 +46,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"incomeSearch/income/:incomeId"} component={IncomeDetail} />
             <Route path={"incomeSearch/pay/:payId"} component = {PayDetail}/>
             <Route path={"historyIncome"} component={AdvancedTable} />
-            <Route path={"historyAccount"} component={HistoryAccount} />
+            <Route path={"historyAccount"} component={HistoricalAccount} />
             <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
