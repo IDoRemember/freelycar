@@ -15,8 +15,6 @@ import OrderDetail from './components/consumption/OrderDetail.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
 import PayDetail from './components/income/PayDetail.jsx';
 import OrderManage from './components/consumption/OrderManage.jsx';
-import HistoricalAccount from './components/income/HistoricalAccount.jsx';
-import ClientInfo from './components/member/ClientInfo.jsx'
 import OtherPay from './components/income/OtherPay.jsx';
 import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
@@ -26,7 +24,6 @@ import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
 import PutInStorage from './components/buySellStock/PutInStorage.jsx'
-
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -42,18 +39,18 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"incomeSearch/income/:incomeId"} component={IncomeDetail} />
             <Route path={"incomeSearch/pay/:payId"} component = {PayDetail}/>
             <Route path={"historyIncome"} component={AdvancedTable} />
-            <Route path={"historyAccount"} component={HistoricalAccount}/>
             <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
+
         </Route>
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
-            <Route path={"customer"} component={ClientInfo} />
+            <Route path={"customer"} component={AdvancedTable} />
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
-            <Route path={"buyProduct"} component={PutInStorage} />
+            <Route path={"buyProduct"} component={AdvancedTable} />
             <Route path={"sellProduct"} component={AdvancedTable} />
             <Route path={"productReceipts"} component={AdvancedTable} />
             <Route path={"providerManage"} component={ProviderManage} />

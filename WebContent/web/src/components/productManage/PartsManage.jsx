@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon ,Modal} from 'antd';
 import moment from 'moment';
 
 import { Link } from 'react-router';
@@ -23,8 +23,31 @@ class BeautyOrder extends React.Component {
             sortedInfo: null,
             selectedRowKeys: [],
             loading: false,
+            visible: false
         }
     }
+
+    // tab1模态框的处理函数
+
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+    //end of modal
+
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
         this.setState({
@@ -330,8 +353,47 @@ class BeautyOrder extends React.Component {
                                         <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
                                     </Col>
                                     <Col span={8}>
-                                        <Button type="primary">查询</Button>
+                                        <Button type="primary" onClick={this.showModal}>查询</Button>
                                     </Col>
+
+
+                                    {/*查询的模态框*/}
+                                    <Modal
+                                        title="项目查询"
+                                        visible={this.state.visible}
+                                        onOk={this.handleOk}
+                                        onCancel={this.handleCancel}
+                                        width = '80%'
+                                    >
+                                        <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
+                                            <Col span={2}>
+                                                <Button>确定</Button>
+                                            </Col>
+                                            <Col span={2}>
+                                                <Button>新增配件</Button>
+                                            </Col>
+                                            <Col span={2}>
+                                                <Input placeholder='可按项目名称,类型等进行搜索' />
+                                            </Col>
+                                            <Col span={2}>
+                                                <Button  type="primary">查询</Button>
+                                            </Col>
+                                        </Row>
+
+                                        <Row>
+                                            <Col span={24}>
+                                                <Table
+                                                    rowSelection={rowSelection}
+                                                    columns={columns}
+                                                    dataSource={data}
+                                                    bordered
+                                                />
+                                            </Col>
+                                        </Row>
+                                    </Modal>
+
+
+
                                 </Row>
 
 
@@ -413,7 +475,7 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="配件品牌" key="3">
                             <div>
                                 <Row>
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input  />
                                         </div>
