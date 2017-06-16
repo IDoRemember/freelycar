@@ -11,10 +11,12 @@ public enum RESCODE {
 	DELETE_ERROR(6, "删除错误"), 
 	DUPLICATED_ERROR(7,"重复数据"),
 	FILE_ERROR(8, "上传文件错误"),
-	ACCOUNT_ERROR(9, "账号错误"), 
+	ACCOUNT_ERROR(9, "账号不存在"), 
 	PSW_ERROR(10, "密码错误"), 
-	ACCOUNT_LOCKED_ERROR(9, "账号已被锁定"), 
-	PERMISSION_ERROR(9, "没有此权限"), 
+	ACCOUNT_LOCKED_ERROR(11, "账号已被锁定"), 
+	PERMISSION_ERROR(12, "没有此权限"), 
+	ALREADY_LOGIN(13, "已经登陆"), 
+	ACCOUNT_EXIST(14, "该账号已存在")
 	;
 	
 	// 定义私有变量

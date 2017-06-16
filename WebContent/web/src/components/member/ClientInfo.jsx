@@ -5,7 +5,10 @@ import { Link } from 'react-router';
 
 const columns = [
     { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
-    { title: '姓名', dataIndex: 'customerName', key: 'customerName' },
+    { title: '姓名', dataIndex: 'customerName', key: 'customerName',render:(text,record,index) =>{
+        return <Link to = {'app/member/customer/'+record.uid}>{text}</Link> 
+         } 
+    },
     { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
     { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
     { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
@@ -36,6 +39,7 @@ const data = [
         key: 1,
         indexNum: '1',
         customerName: '海蜇',
+        uid:1,
         phoneNumber: '15251873222',
         busNumber: '苏A234567',
         carBrand: '玛莎',
