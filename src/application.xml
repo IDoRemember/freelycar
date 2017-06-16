@@ -78,19 +78,19 @@
     </bean>
     
     <!-- shiro配置 -->
-    <bean id="jdbcRealm" class="org.apache.shiro.realm.jdbc.JdbcRealm">
-	    <property name="dataSource" ref="dataSource"/>
-	    <property name="authenticationQuery" value="SELECT password FROM admin WHERE account=?"/>
+    <bean name="credentialsMatcher" class="com.geariot.platform.freelycar.shiro.MD5CredentialsMatcher"/>
+    <bean id="jdbcRealm" class="com.geariot.platform.freelycar.shiro.ShiroRealmBaseDatabase">
+	    <!-- <property name="dataSource" ref="dataSource"/> -->
+	    <!-- <property name="authenticationQuery" value="SELECT password FROM admin WHERE account=?"/>
 	    <property name="userRolesQuery" value="SELECT roleName FROM role INNER JOIN admin WHERE account=?"/>
-	    <!-- 权限选择 -->
+	    权限选择
 	    <property name="permissionsQuery" 
 	    value="SELECT permission FROM permission WHERE id in 
 	    		(SELECT permissionId FROM role_permission WHERE roleId = 
-	    		(SELECT id FROM role WHERE roleName=?))"/>
+	    		(SELECT id FROM role WHERE roleName=?))"/> -->
 	    <property name="permissionsLookupEnabled" value="true"/>
 	    <property name="credentialsMatcher" ref="credentialsMatcher"/>
 	</bean>
-	<bean name="credentialsMatcher" class="com.geariot.platform.freelycar.utils.MD5CredentialsMatcher"/>
 	<bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
 	    <property name="realm" ref="jdbcRealm"/>
 	</bean>

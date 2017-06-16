@@ -18,7 +18,7 @@ public class ChargeController {
 	}
 	
 	@RequestMapping(value = "/deltype" , method = RequestMethod.POST)
-	public String deleteType(int otherTypeId){
+	public String deleteType(int otherExpandTypeId){
 		return null;
 	}
 	
@@ -43,7 +43,7 @@ public class ChargeController {
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
-	public String selectCharge(int otherExpandOrderId , Date startTime , Date endTime){
+	public String selectCharge(int otherExpandTypeId , Date startTime , Date endTime){
 		return null;
 	}
 	

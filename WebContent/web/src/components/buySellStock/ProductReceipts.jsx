@@ -20,7 +20,7 @@ class PutInStorage extends React.Component {
                 dataIndex: 'stockNumber',
                 key: 'stockNumber',
                 render: (text, record, index) => {
-                    return <span><Link to="" >{text}</Link></span>
+                    return <span><Link to={"/app/buySellStock/productReceipts/"+text} >{text}</Link></span>
                 }
             }, {
                 title: '创建时间',
