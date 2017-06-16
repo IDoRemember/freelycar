@@ -31,8 +31,11 @@ import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
 //buy
 import ProviderManage from './components/buySellStock/ProviderManage.jsx';
-import ProductSearch from './components/buySellStock/ProductSearch.jsx'
-import PutInStorage from './components/buySellStock/PutInStorage.jsx'
+import ProductSearch from './components/buySellStock/ProductSearch.jsx';
+import ReceiptDetail from './components/buySellStock/ReceiptDetail.jsx';
+import PutInStorage from './components/buySellStock/PutInStorage.jsx';
+import SellProduct from './components/buySellStock/SellProduct.jsx';
+import ProductReceipts from './components/buySellStock/ProductReceipts.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -52,7 +55,6 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
-
         </Route>
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
@@ -63,9 +65,10 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
             <Route path={"buyProduct"} component={PutInStorage} />
-            <Route path={"sellProduct"} component={AdvancedTable} />
-            <Route path={"productReceipts"} component={AdvancedTable} />
+            <Route path={"sellProduct"} component={SellProduct} />
+            <Route path={"productReceipts"} component={ProductReceipts} />
             <Route path={"providerManage"} component={ProviderManage} />
+            <Route path={"productReceipts/:receiptId"} component={ReceiptDetail}/>
         </Route>
         <Route path={"productManage"} >
             <Route path={"itemManage"} component={ItemManage} />
