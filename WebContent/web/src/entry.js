@@ -34,6 +34,7 @@ import ReceiptDetail from './components/buySellStock/ReceiptDetail.jsx';
 import PutInStorage from './components/buySellStock/PutInStorage.jsx';
 import SellProduct from './components/buySellStock/SellProduct.jsx';
 import ProductReceipts from './components/buySellStock/ProductReceipts.jsx';
+import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -72,7 +73,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"cardManage"} component={CardManage} />
         </Route>
         <Route path={"dataTable"} >
-            <Route path={"businessSummary"} component={AdvancedTable} />
+            <Route path={"businessSummary"} component={BusinessSummary} />
         </Route>
         <Route path={"systemSet"} >
             <Route path={"staffManage"} component={AdvancedTable} />
