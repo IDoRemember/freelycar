@@ -1,8 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal ,Radio} from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal,Radio } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
-// const RadioGroup = Radio.Group;
+
 const columns = [
     { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
     { title: '姓名', dataIndex: 'customerName', key: 'customerName' },
