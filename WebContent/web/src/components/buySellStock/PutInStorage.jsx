@@ -11,17 +11,12 @@ class PutInStorage extends React.Component {
             data: [{
                 key: 1,
                 index: 1,
-                project: '洗车',
-                price: '20.00',
-                number: '20',
+                partNumber:'p2342232',
+                name: '玻璃水',
+                category: '美容保养',
+                specification: '通用',
                 singleSummation: '20',
-                DeductionCardTime: '1',
-            }, {
-                key: '',
-                index: '',
-                total: '合计',
-                singleSummation: '20',
-                DeductionCardTime: '1',
+                number:'1111'
             }],
             option: []
         }
@@ -54,8 +49,8 @@ class PutInStorage extends React.Component {
                     />
                     <Col
                         title="配件编号"
-                        dataIndex="number"
-                        key="number"
+                        dataIndex="partNumber"
+                        key="partNumber"
                     />
                     <Col
                         title="配件名称"
@@ -79,15 +74,15 @@ class PutInStorage extends React.Component {
                     />
                     <Col
                         title="数量"
-                        key="DeductionCardTime"
-                        dataIndex="DeductionCardTime"
+                        key="number"
+                        dataIndex="number"
                     />
                     <Col
                         title="供应商"
-                        key="DeductionCardTime"
-                        dataIndex="DeductionCardTime"
+                        key="supplier"
+                        dataIndex="supplier"
                         render={(text) => {
-                            if (!text) {
+                            if (text) {
                                 return <span> </span>
                             } else {
                                 return <Select showSearch
@@ -100,7 +95,6 @@ class PutInStorage extends React.Component {
                                     {projectOptions}
                                 </Select>
                             }
-
                         }}
                     />
                     <Col
