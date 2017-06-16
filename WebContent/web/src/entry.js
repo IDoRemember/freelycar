@@ -56,7 +56,7 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
-            <Route path={"buyProduct"} component={AdvancedTable} />
+            <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={AdvancedTable} />
             <Route path={"productReceipts"} component={AdvancedTable} />
             <Route path={"providerManage"} component={ProviderManage} />
