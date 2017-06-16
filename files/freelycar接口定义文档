@@ -11,7 +11,18 @@
 			"code":0
 			"msg":""
 		}
-	1.2 新增账户：
+		0,9,10,11,13=成功，账号不存在，密码错误，账号被锁定，已经登陆
+	1.2 管理员登出:
+		请求:GET
+		server_url/admin/logout
+		参数:{
+
+		}
+		响应:{
+			"code":0
+			"msg":
+		}
+	1.3 新增账户：
 		请求：POST
 		server_url/admin/add
 		参数:{
@@ -21,28 +32,30 @@
 			"code":0
 			"msg":
 		}
-	1.3 修改账户信息:
+		0,14=成功，账户已存在
+	1.4 修改账户信息:
 		请求：POST
 		server_url/admin/modify
 		参数:{
-			adminId=adminId
 			admin=Admin
 		}
 		响应:{
 			"code":0
 			"msg":""
 		}
-	1.4 删除账户:
+		0,2,14=成功，未找到，账号已存在
+	1.5 删除账户:
 		请求:POST
 		server_url/admin/delete
 		参数:{
-			adminId=adminId
+			adminIds=List<Integer>
 		}
 		响应:{
 			"code":0
 			"msg":
 		}
-	1.5 查询账户:
+		0,15=成功，无法删除当前登陆账户
+	1.6 查询账户:
 		请求：GET
 		server_url/admin/list
 		参数:{
@@ -55,7 +68,8 @@
 			"data":{admin1,admin2}
 			"size":
 		}
-	1.6 指定条件查询账户:
+		0,2=，
+	1.7 指定条件查询账户:
 		请求：GET
 		server_url/admin/query
 		参数:{
@@ -67,7 +81,8 @@
 			"msg":
 			"data":{admin1,admin2}
 		}
-	1.7 禁用账户:
+
+	1.8 禁用账户:
 		请求:POST
 		server_url/admin/disable
 		参数:{
@@ -77,7 +92,8 @@
 			"code":0
 			"msg":
 		}
-	1.8 启用账户:
+		0,2=
+	1.9 启用账户:
 		请求:POST
 		server_url/admin/enable
 		参数:{
@@ -87,7 +103,7 @@
 			"code":0
 			"msg":
 		}
-
+		0,2=
 2. 员工接口:/staff/
 	2.1 新增员工
 		请求：POST
