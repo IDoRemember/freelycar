@@ -1,3 +1,4 @@
+
 package com.geariot.platform.freelycar.shiro;
 
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -19,3 +20,4 @@ public class MD5CredentialsMatcher extends SimpleCredentialsMatcher {
 	}
 
 }
+
