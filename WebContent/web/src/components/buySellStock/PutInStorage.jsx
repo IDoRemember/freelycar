@@ -53,21 +53,46 @@ class PutInStorage extends React.Component {
                         key="index"
                     />
                     <Col
-                        title=""
-                        dataIndex="total"
-                        key="total"
+                        title="配件编号"
+                        dataIndex="number"
+                        key="number"
                     />
                     <Col
-                        title="项目名称"
-                        key="project"
-                        dataIndex="project"
+                        title="配件名称"
+                        key="name"
+                        dataIndex="name"
+                    />
+                    <Col
+                        title="配件类别"
+                        key="category"
+                        dataIndex="category"
+                    />
+                    <Col
+                        title="规格属性"
+                        key="specification"
+                        dataIndex="specification"
+                    />
+                    <Col
+                        title="单价"
+                        key="singleSummation"
+                        dataIndex="singleSummation"
+                    />
+                    <Col
+                        title="数量"
+                        key="DeductionCardTime"
+                        dataIndex="DeductionCardTime"
+                    />
+                    <Col
+                        title="供应商"
+                        key="DeductionCardTime"
+                        dataIndex="DeductionCardTime"
                         render={(text) => {
                             if (!text) {
                                 return <span> </span>
                             } else {
                                 return <Select showSearch
                                     style={{ width: '100px' }}
-                                    placeholder="输入项目名称"
+                                    placeholder="输入供应商名称"
                                     optionFilterProp="children "
                                     onChange={this.handleChange}
                                     filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
@@ -79,26 +104,10 @@ class PutInStorage extends React.Component {
                         }}
                     />
                     <Col
-                        title="项目价格"
-                        key="price"
-                        dataIndex="price"
-                    />
-                    <Col
-                        title="数量"
-                        key="number"
-                        dataIndex="number"
-                    />
-                    <Col
                         title="单项合计"
-                        key="singleSummation"
-                        dataIndex="singleSummation"
-                    />
-                    <Col
-                        title="抵扣卡次"
                         key="DeductionCardTime"
                         dataIndex="DeductionCardTime"
                     />
-
                     <Col
                         title="操作"
                         key="action"
@@ -114,7 +123,7 @@ class PutInStorage extends React.Component {
                         }}
                     />
                 </Table>
-                <div style={{ marginTop: '40px', borderTop: '1px solid #e9e9e9' }}>
+                <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
                     <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
                         <Col span={12} >合计金额：<span>23450</span>
                         </Col>
@@ -126,7 +135,7 @@ class PutInStorage extends React.Component {
                     <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
                         <Col span={12} >
                         </Col>
-                        <Col span={12}  style={{textAlign:'right'}}>
+                        <Col span={12} style={{ textAlign: 'right' }}>
                             <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                             <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
