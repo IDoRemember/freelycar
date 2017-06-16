@@ -25,12 +25,7 @@ import ItemManage from './components/productManage/ItemManage.jsx';
 import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
-<<<<<<< HEAD
-=======
 import PutInStorage from './components/buySellStock/PutInStorage.jsx'
-
-
->>>>>>> 50ebd310b4ef8b3953177d0dc3aba9ce7a1c6b5b
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -40,10 +35,6 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"accountingcenter"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />
-<<<<<<< HEAD
-
-=======
->>>>>>> 50ebd310b4ef8b3953177d0dc3aba9ce7a1c6b5b
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
