@@ -23,6 +23,8 @@ import HistoricalAccount from './components/income/HistoricalAccount.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 //member
 import ClientInfo from './components/member/ClientInfo.jsx'
+import ClientDetail from './components/member/ClientDetail.jsx'
+
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
 import PartsManage from './components/productManage/PartsManage.jsx';
@@ -55,6 +57,8 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"member"} >
             <Route path={"memberShip"} component={AdvancedTable} />
             <Route path={"customer"} component={ClientInfo} />
+            <Route path={"customer/:uid"} component={ClientDetail} />
+
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />

@@ -1,31 +1,97 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon,Radio } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Radio } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 const RadioGroup = Radio.Group;
-const cardColumns=[
-     { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
-     { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
-     { title: '开卡时间', dataIndex: 'transactionTime', key: 'transactionTime' },
-     { title: '剩余次数', dataIndex: 'resCount', key: 'resCount' },
-     { title: '制单人', dataIndex: 'makePeople', key: 'makePeople' },
+const cardColumns = [
+    { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
+    { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
+    { title: '开卡时间', dataIndex: 'transactionTime', key: 'transactionTime' },
+    { title: '剩余次数', dataIndex: 'resCount', key: 'resCount' },
+    { title: '制单人', dataIndex: 'makePeople', key: 'makePeople' },
 ]
-const cardData=[
+const cardData = [
     {
-        key:1,
-        cardNum:'100010',
-        cardClasses:'次卡',
-        transactionTime:'2017-06-12',
-        resCount:'15',
-        makePeople:'小易',
+        key: 1,
+        cardNum: '100010',
+        cardClasses: '次卡',
+        transactionTime: '2017-06-12',
+        resCount: '15',
+        makePeople: '小易',
     }
 ]
+
+const carColumns = [
+    { title: '车牌号码', dataIndex: 'carNum', key: 'carNum' },
+    { title: '品牌', dataIndex: 'brand', key: 'brand' },
+    { title: '车辆型号', dataIndex: 'carType', key: 'carType' },
+    { title: '里程数', dataIndex: 'mileageNum', key: 'mileageNum' },
+    { title: '发动机号', dataIndex: 'engineNum', key: 'engineNum' },
+    { title: '是否二手车', dataIndex: 'oldcar', key: 'oldcar' },
+    { title: '保险金额', dataIndex: 'insuranceMoney', key: 'insuranceMoney' },
+    { title: '保险有效期', dataIndex: 'insuranceTime', key: 'insuranceTime' },
+    { title: '备注', dataIndex: 'other', key: 'other' },
+    {
+        title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
+            return <span>
+                <span style={{ marginRight: '10px' }}>
+                    <Link to="" >
+                        <span >新增</span>
+                    </Link>
+                    <Link to="">
+                        <span style={{ marginLeft: '5px' }}> 删除</span>
+                    </Link>
+                </span>
+
+            </span>
+        }
+    },
+]
+const carData = [
+    {
+        key: 1,
+        carNum: "苏A123456",
+        brand: "保时捷",
+        carType: "911",
+        mileageNum: "3000",
+        oldcar: "否",
+        insuranceMoney: "3000",
+        insuranceTime: "2018-5-23",
+        other: "",
+    }
+]
+const payColumns = [
+    { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
+    { title: '保养项目', dataIndex: 'maintainItem', key: 'maintainItem' },
+    { title: '消费金额', dataIndex: 'payMoney', key: 'payMoney' },
+    { title: '支付方式', dataIndex: 'payType', key: 'payType' },
+    { title: '服务人员', dataIndex: 'servicePeople', key: 'servicePeople' },
+    { title: '服务时间', dataIndex: 'serviceTime', key: 'serviceTime' },
+    { title: '状态', dataIndex: 'serviceState', key: 'serviceState' },
+
+]
+const payData = [
+    {
+        key: 1,
+        indexNum: 1,
+        maintainItem: "洗车",
+        payMoney: "20",
+        payType: "支付宝",
+        carType: "911",
+        servicePeople: "小易,小爱",
+        serviceTime: "2017-5-23",
+        insuranceMoney: "3000",
+        serviceState: "已完成",
+    }
+]
+
 class ClientDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             option: [],
-            value: man,
+            man: 'man',
+            female: 'female',
         }
     }
     onChange = (e) => {
@@ -38,35 +104,43 @@ class ClientDetail extends React.Component {
         return (
             <div>
                 <BreadcrumbCustom first='会员管理' second='客户信息' third='详细信息' />
-                <Card title="应收金额" bordered={false}>
-                    <Row gutter={16}>
-                        <Col span={8}>姓名：<span>林凡</span></Col>
-                        <Col span={8}>手机号：<span>15251872222</span></Col>
-                        <Col span={8}>生日：<span>1994-01-01</span></Col>
+                <Card title="客户资料" bordered={false} style={{ marginBottom: '15px' }}>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={3}></Col>
+                        <Col span={6}>姓名：<span>林凡</span></Col>
+                        <Col span={6}>手机号：<span>15251872222</span></Col>
+                        <Col span={6}>生日：<span>1996-01-01</span></Col>
                     </Row>
-                    <Row gutter={16}>
-                        <Col span={8}>性别：
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={3}></Col>
+                        <Col span={6}>性别：
                             <div style={{ display: 'inline-block' }}>
                                 <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                    <Radio value={man}>男</Radio>
-                                    <Radio value={female}>女</Radio>
+                                    <Radio value={this.state.man}>男</Radio>
+                                    <Radio value={this.state.fe}>女</Radio>
                                 </RadioGroup>
                             </div>
                         </Col>
-                        <Col span={8}>身份证号：<span>36020202037634313</span></Col>
-                        <Col span={8}>行驶证号：<span>20170273333</span></Col>
+                        <Col span={6}>身份证号：<span>36020202037636313</span></Col>
+                        <Col span={6}>行驶证号：<span>20170273333</span></Col>
                     </Row>
-                    <Row gutter={16}>
-                        <Col span={8}>车主状态：<span>新手</span></Col>
-                        <Col span={8}>积分：<span>1000</span></Col>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={3}></Col>
+                        <Col span={6}>车主状态：<span>新手</span></Col>
+                        <Col span={6}>积分：<span>1000</span></Col>
                     </Row>
                 </Card>
-                <Card title="会员卡信息">
-                    <Button><Icon type='idcard'></Icon>开卡</Button>
-                    <Table columns={cardColumns} dataSource={cardData}></Table>
+                <Card title="会员卡信息" className="accountTable" style={{ marginBottom: '15px' }}>
+                    <Button style={{ marginBottom: '20px'}}><Icon type='idcard'></Icon>开卡</Button>
+                    
+                   <Table columns={cardColumns} dataSource={cardData}></Table>
                 </Card>
-                <Card title="车辆信息">
-
+                <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
+                    <Table columns={carColumns} dataSource={carData}></Table>
+                </Card>
+                <Card title="消费记录" className="accountTable" >
+                    <Table columns={payColumns} dataSource={payData} ></Table>
+                    <p style={{ float: 'right',marginRight:'30px' }}><Link to = {'app/member/customer/uid/payhistory'}> 更多</Link></p>
                 </Card>
             </div>
         )
