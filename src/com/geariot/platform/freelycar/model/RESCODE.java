@@ -5,13 +5,16 @@ public enum RESCODE {
 	SUCCESS(0, "成功"), 
 	WRONG_PARAM(1, "参数错误"), 
 	NOT_FOUND(2, "无该条记录"),
-	PSW_ERROR(3, "invalid username or password"), 
-	UPDATE_ERROR(4, "更新数据错误"), 
-	CREATE_ERROR(5, "存储数据错误"), 
-	DATE_FORMAT_ERROR(6, "日期格式错误"),
-	DELETE_ERROR(7, "删除错误"), 
-	DUPLICATED_ERROR(8,"重复数据"),
-	FILE_ERROR(9, "上传文件错误"),
+	UPDATE_ERROR(3, "更新数据错误"), 
+	CREATE_ERROR(4, "存储数据错误"), 
+	DATE_FORMAT_ERROR(5, "日期格式错误"),
+	DELETE_ERROR(6, "删除错误"), 
+	DUPLICATED_ERROR(7,"重复数据"),
+	FILE_ERROR(8, "上传文件错误"),
+	ACCOUNT_ERROR(9, "账号错误"), 
+	PSW_ERROR(10, "密码错误"), 
+	ACCOUNT_LOCKED_ERROR(9, "账号已被锁定"), 
+	PERMISSION_ERROR(9, "没有此权限"), 
 	;
 	
 	// 定义私有变量

@@ -22,9 +22,26 @@ import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 import ItemManage from './components/productManage/ItemManage.jsx';
+<<<<<<< HEAD
+import PartsManage from './components/productManage/PartsManage.jsx';
+import CardManage from './components/productManage/CardManage.jsx';
+=======
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
+<<<<<<< HEAD
 import PutInStorage from './components/buySellStock/PutInStorage.jsx'
 
+=======
+<<<<<<< HEAD
+>>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
+=======
+<<<<<<< HEAD
+import PutInStorage from './components/buySellStock/PutInStorage.jsx'
+
+=======
+>>>>>>> b19dc2630840ffb97b6d8bec7b714a2c35805ec6
+>>>>>>> ff0a7f67f9c181fcb1a8b9ed0bb4488161d6afea
+>>>>>>> ff70d09aae9113b87afbdc91b05dcbcb25021164
+>>>>>>> 3c6f01562bb2457c7adcbda749b9d02ea28fad42
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -58,8 +75,8 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"productManage"} >
             <Route path={"itemManage"} component={ItemManage} />
-            <Route path={"partsManage"} component={AdvancedTable} />
-            <Route path={"cardManage"} component={AdvancedTable} />
+            <Route path={"partsManage"} component={PartsManage} />
+            <Route path={"cardManage"} component={CardManage} />
         </Route>
         <Route path={"dataTable"} >
             <Route path={"businessSummary"} component={AdvancedTable} />
