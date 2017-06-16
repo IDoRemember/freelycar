@@ -1,13 +1,14 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal,Radio } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio,Popconfirm } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 
 const columns = [
     { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
-    { title: '姓名', dataIndex: 'customerName', key: 'customerName',render:(text,record,index) =>{
-        return <Link to = {'app/member/customer/'+record.uid}>{text}</Link> 
-         } 
+    {
+        title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
+            return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
+        }
     },
     { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
     { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
@@ -25,9 +26,9 @@ const columns = [
                     <Link to="">
                         <span style={{ marginLeft: '5px' }}> 修改</span>
                     </Link>
-                    <Link to="">
-                        <span style={{ marginLeft: '5px' }}> 删除</span>
-                    </Link>
+                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                        <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
+                    </Popconfirm>
                 </span>
 
             </span>
@@ -39,7 +40,7 @@ const data = [
         key: 1,
         indexNum: '1',
         customerName: '海蜇',
-        uid:1,
+        uid: 1,
         phoneNumber: '15251873222',
         busNumber: '苏A234567',
         carBrand: '玛莎',
@@ -60,7 +61,7 @@ const data = [
 
     },
     {
-        key:3,
+        key: 3,
         indexNum: '3',
         customerName: 'JZW',
         phoneNumber: '15251873232',

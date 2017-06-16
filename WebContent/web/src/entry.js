@@ -24,6 +24,7 @@ import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 //member
 import ClientInfo from './components/member/ClientInfo.jsx'
 import ClientDetail from './components/member/ClientDetail.jsx'
+import PayHistory from './components/member/PayHistory.jsx'
 
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
@@ -60,6 +61,9 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"memberShip"} component={AdvancedTable} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:uid"} component={ClientDetail} />
+            <Route path={"customer/:uid/payhistory"} component={PayHistory} />
+            
+            
 
         </Route>
         <Route path={"buySellStock"} >
