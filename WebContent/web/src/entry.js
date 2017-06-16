@@ -5,23 +5,27 @@ import ReactDom from 'react-dom';
 import { Router, Route, hashHistory } from 'react-router';
 import App from './App';
 import Login from './components/Login.jsx';
-import BeautyOrder from './components/consumption/BeautyOrder.jsx'
 import AdvancedTable from './components/tables/AdvancedTables.jsx';
-import CostClose from './components/consumption/CostClose.jsx';
-import IncomeSearch from './components/income/IncomeSearch.jsx';
 import Page from './components/Page.jsx';
+//consumption
+import OrderManage from './components/consumption/OrderManage.jsx';
+import BeautyOrder from './components/consumption/BeautyOrder.jsx'
+import CostClose from './components/consumption/CostClose.jsx';
 import FixOrder from './components/consumption/FixOrder.jsx';
 import OrderDetail from './components/consumption/OrderDetail.jsx';
+//income
+import IncomeSearch from './components/income/IncomeSearch.jsx';
 import IncomeDetail from './components/income/IncomeDetail.jsx';
 import PayDetail from './components/income/PayDetail.jsx';
-import OrderManage from './components/consumption/OrderManage.jsx';
 import OtherPay from './components/income/OtherPay.jsx';
-import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import HistoryIncomeDetail from './components/income/HistoryIncomeDetail.jsx';
 import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
+//product
 import ItemManage from './components/productManage/ItemManage.jsx';
 import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
+//buy
+import ProviderManage from './components/buySellStock/ProviderManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
 import PutInStorage from './components/buySellStock/PutInStorage.jsx'
 const routes = < Route path={"/"} components={Page} >
