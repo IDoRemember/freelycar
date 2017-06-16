@@ -49,6 +49,7 @@
         "antd": "^2.9.3",
         "babel-plugin-import": "^1.1.1",
         "screenfull": "^3.2.0",
-        "styled-components": "^1.4.3"
+        "styled-components": "^1.4.3",
+        "jquery" :"latest"
     }
 }
