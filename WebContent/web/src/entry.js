@@ -26,8 +26,6 @@ import PartsManage from './components/productManage/PartsManage.jsx';
 import CardManage from './components/productManage/CardManage.jsx';
 import ProductSearch from './components/buySellStock/ProductSearch.jsx'
 import PutInStorage from './components/buySellStock/PutInStorage.jsx'
-
-
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
