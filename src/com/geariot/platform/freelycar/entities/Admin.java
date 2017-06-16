@@ -2,7 +2,6 @@ package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -44,12 +43,12 @@ public class Admin {
 	public String getPassword() {
 		return password;
 	}
-	@ManyToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
 	public Role getRole() {
 		return role;
 	}
-	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToOne(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))
 	public Staff getStaff() {
 		return staff;

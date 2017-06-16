@@ -1,4 +1,4 @@
-package com.geariot.platform.freelycar.utils;
+package com.geariot.platform.freelycar.shiro;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
