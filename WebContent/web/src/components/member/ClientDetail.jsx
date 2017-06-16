@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon,Radio } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+const RadioGroup = Radio.Group;
 const cardColumns=[
      { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
      { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
@@ -11,7 +12,12 @@ const cardColumns=[
 ]
 const cardData=[
     {
-        
+        key:1,
+        cardNum:'100010',
+        cardClasses:'次卡',
+        transactionTime:'2017-06-12',
+        resCount:'15',
+        makePeople:'小易',
     }
 ]
 class ClientDetail extends React.Component {
@@ -56,9 +62,12 @@ class ClientDetail extends React.Component {
                     </Row>
                 </Card>
                 <Card title="会员卡信息">
+                    <Button><Icon type='idcard'></Icon>开卡</Button>
                     <Table columns={cardColumns} dataSource={cardData}></Table>
                 </Card>
+                <Card title="车辆信息">
 
+                </Card>
             </div>
         )
     }
