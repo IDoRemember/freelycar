@@ -46,6 +46,11 @@ public class ClientService {
 		if(exist != null){
 			return JsonResFactory.buildOrg(RESCODE.PHONE_EXIST).toString();
 		}
+		if(client.getCars() != null){
+			for(Car car : client.getCars()){
+				car.setCreateDate(new Date());
+			}
+		}
 		client.setCreateDate(new Date());
 		clientDao.save(client);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
@@ -61,8 +66,8 @@ public class ClientService {
 		}
 		exist.setAge(client.getAge());
 		exist.setBirthday(client.getBirthday());
-		exist.setCar(client.getCar());
-		exist.setCard(client.getCard());
+		exist.setCars(client.getCars());
+		exist.setCards(client.getCards());
 		exist.setDirveLicense(client.getDirveLicense());
 		exist.setGender(client.getGender());
 		exist.setIdNumber(client.getIdNumber());
@@ -92,13 +97,13 @@ public class ClientService {
 		if(client == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		client.getCar().add(car);
+		client.getCars().add(car);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
 	public String deleteCar(int carId) {
 		clientDao.deleteCar(carId);
-		return null;
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
 }
