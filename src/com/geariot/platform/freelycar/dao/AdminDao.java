@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.dao;
 import java.util.List;
 
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.Role;
 
 public interface AdminDao {
 	
@@ -24,4 +25,5 @@ public interface AdminDao {
 
 	List<Admin> queryByNameAndId(int id, String name);
 	
+	void save(Role role);
 }

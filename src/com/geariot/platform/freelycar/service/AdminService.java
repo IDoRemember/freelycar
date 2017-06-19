@@ -1,7 +1,7 @@
 package com.geariot.platform.freelycar.service;
 
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
@@ -19,11 +19,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.Role;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.MD5;
+import com.geariot.platform.freelycar.utils.PermissionsList;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -69,6 +71,7 @@ public class AdminService {
 		else {
 			obj = JsonResFactory.buildOrg(RESCODE.ALREADY_LOGIN);
 		}
+		curUser = SecurityUtils.getSubject();
 		return obj.toString();
 	}
 	
@@ -87,6 +90,8 @@ public class AdminService {
 			obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST);
 		}
 		else {
+			admin.setCreateDate(new Date());
+			admin.setPassword(MD5.compute(admin.getPassword()));
 			adminDao.save(admin);
 			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
 		}
@@ -101,7 +106,6 @@ public class AdminService {
 		if(adminDao.findAdminByAccount(admin.getAccount()) != null){
 			return JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST).toString();
 		}
-		exist.setAccount(admin.getAccount());
 		exist.setComment(admin.getComment());
 		exist.setName(admin.getName());
 		exist.setRole(admin.getRole());
@@ -169,6 +173,14 @@ public class AdminService {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		admin.setCurrent(true);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+
+	public String readRoles() {
+		List<Role> roles = PermissionsList.getRoles();
+		for(Role role : roles){
+			adminDao.save(role);
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
