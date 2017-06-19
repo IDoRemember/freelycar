@@ -21,5 +21,7 @@ public interface AdminDao {
 	List<Admin> listAdmins(int from, int pageSize);
 	
 	long getCount();
+
+	List<Admin> queryByNameAndId(int id, String name);
 	
 }

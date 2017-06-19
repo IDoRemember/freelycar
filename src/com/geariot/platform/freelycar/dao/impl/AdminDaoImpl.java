@@ -71,4 +71,12 @@ public class AdminDaoImpl implements AdminDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Admin> queryByNameAndId(int id, String name) {
+		String hql = "from Admin where id like :id and name like :name";
+		return this.getSession().createQuery(hql).setInteger("id", id).setString("name", name)
+				.list();
+	}
+
 }

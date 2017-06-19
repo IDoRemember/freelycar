@@ -60,8 +60,7 @@
 		请求：GET
 		server_url/admin/query
 		参数:{
-			adminId=adminId
-			name=name
+			admin=Admin(adminId=, name=)
 		}
 		响应:{
 			"code":0

@@ -142,6 +142,17 @@ public class AdminService {
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		return obj.toString();
 	}
+	
+	public String query(Admin admin) {
+		List<Admin> list = adminDao.queryByNameAndId(admin.getId(), admin.getName());
+		if(list == null || list.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+	}
 
 	public String disable(String account) {
 		Admin admin = adminDao.findAdminByAccount(account);
