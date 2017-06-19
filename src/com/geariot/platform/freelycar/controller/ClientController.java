@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,13 +32,13 @@ public class ClientController {
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
 	@PermissionRequire("client:add")
-	public String addClient(Client client) {
+	public String addClient(@RequestBody Client client) {
 		return clientService.add(client);
 	}
 	
 	@RequestMapping(value = "/modify" , method = RequestMethod.POST)
 	@PermissionRequire("client:modify")
-	public String modifyClient(Client client) {
+	public String modifyClient(@RequestBody Client client) {
 		return clientService.modify(client);
 	}
 	
@@ -48,27 +49,27 @@ public class ClientController {
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
-	public String searchClient(String searchText)
-	{
-		return null;
+	@PermissionRequire("client:query")
+	public String searchClient(String phone, String licensePlate) {
+		return clientService.query(phone, licensePlate);
 	}
 	
 	@RequestMapping(value = "/detail" , method = RequestMethod.GET)
-	public String getClientDetail(int clientId)
-	{
-		return null;
+	@PermissionRequire("client:query")
+	public String getClientDetail(int clientId) {
+		return clientService.detail(clientId);
 	}
 	
 	@RequestMapping(value = "/addcar" , method = RequestMethod.POST)
-	public String addClientCar(int clientId , Car car)
-	{
-		return null;
+	@PermissionRequire("client:modify")
+	public String addClientCar(Car car) {
+		return clientService.addCar(car);
 	}
 	
 	@RequestMapping(value = "/delcar" , method = RequestMethod.POST)
-	public String addClientCar(int clientId , int carId)
-	{
-		return null;
+	@PermissionRequire("client:modify")
+	public String addClientCar(int carId) {
+		return clientService.deleteCar(carId);
 	}
 	
 }

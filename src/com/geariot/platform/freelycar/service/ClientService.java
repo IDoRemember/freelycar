@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.ClientDao;
+import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -45,6 +46,7 @@ public class ClientService {
 		if(exist != null){
 			return JsonResFactory.buildOrg(RESCODE.PHONE_EXIST).toString();
 		}
+		client.setCreateDate(new Date());
 		clientDao.save(client);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -73,6 +75,30 @@ public class ClientService {
 	public String delete(List<Integer> clientIds) {
 		this.clientDao.delete(clientIds);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+
+	public String query(String phone, String licensePlate) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String detail(int clientId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String addCar(Car car) {
+		Client client = clientDao.findById(car.getClient().getId());
+		if(client == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		client.getCar().add(car);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+
+	public String deleteCar(int carId) {
+		clientDao.deleteCar(carId);
+		return null;
 	}
 
 }

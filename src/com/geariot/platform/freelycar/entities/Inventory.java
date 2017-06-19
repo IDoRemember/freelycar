@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -24,7 +25,7 @@ public class Inventory {
 	private String property;
 	private float price;
 	private float amount;
-	private List<Provider> providers;
+	private Set<Provider> providers;
 	private String comment;
 	private Date createDate;
 	public float getAmount() {
@@ -60,7 +61,7 @@ public class Inventory {
 	@JoinTable(name="inventory_provider", 
 				joinColumns={@JoinColumn(name="inventoryId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))})
-	public List<Provider> getProviders() {
+	public Set<Provider> getProviders() {
 		return providers;
 	}
 	public String getStandard() {
@@ -95,7 +96,7 @@ public class Inventory {
 	public void setProperty(String property) {
 		this.property = property;
 	}
-	public void setProviders(List<Provider> providers) {
+	public void setProviders(Set<Provider> providers) {
 		this.providers = providers;
 	}
 	public void setStandard(String standard) {

@@ -18,4 +18,8 @@ public interface ClientDao {
 	
 	void delete(List<Integer> clientId);
 	
+	List<Client> query(String phone, String licensePlate);
+
+	void deleteCar(int carId);
+	
 }

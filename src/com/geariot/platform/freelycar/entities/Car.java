@@ -2,7 +2,9 @@ package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,7 +29,7 @@ public class Car {
 	private int lastMiles;
 	private int miles;
 	private Date createDate;
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Client getClient() {
 		return client;

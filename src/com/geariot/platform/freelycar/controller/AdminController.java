@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class AdminController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(String account, String password, boolean rememberMe){
+		System.out.println(account + "---" + password);
 		return adminService.login(account, password, rememberMe);
 	}
 	
@@ -34,13 +36,13 @@ public class AdminController {
 	
 	@RequestMapping(value="/add", method=RequestMethod.POST)
 	@PermissionRequire("admin:add")
-	public String add(Admin admin){
+	public String add(@RequestBody Admin admin){
 		return adminService.addAdmin(admin);
 	}
 	
 	@RequestMapping(value="/modify", method=RequestMethod.POST)
 	@PermissionRequire("admin:modify")
-	public String modify(Admin admin){
+	public String modify(@RequestBody Admin admin){
 		return adminService.modify(admin);
 	}
 	
@@ -59,7 +61,7 @@ public class AdminController {
 	
 	@RequestMapping(value="/query", method=RequestMethod.GET)
 	@PermissionRequire("admin:query")
-	public String query(Admin admin){
+	public String query(@RequestBody Admin admin){
 		return adminService.query(admin);
 	}
 	

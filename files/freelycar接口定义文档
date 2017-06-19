@@ -218,7 +218,6 @@
 		请求:POST
 		server_url/client/addcar
 		参数:{
-			clientId=clientId
 			car=Car()
 		}
 		响应:{
@@ -229,7 +228,6 @@
 		请求:POST
 		server_url/client/delcar
 		参数:{
-			clientId=clientId
 			carId=carId
 		}
 

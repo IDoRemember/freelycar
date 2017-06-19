@@ -58,4 +58,16 @@ public class ClientDaoImpl implements ClientDao {
 		this.getSession().createQuery(hql).setParameterList("ids", clientIds).executeUpdate();
 	}
 
+	@Override
+	public List<Client> query(String phone, String licensePlate) {
+		String hql = "from Client c where phone = :phone and c.";
+		return null;
+	}
+
+	@Override
+	public void deleteCar(int carId) {
+		String hql = "delete from Car where id = :id";
+		this.getSession().createQuery(hql).setInteger("id", carId).executeUpdate();
+	}
+
 }

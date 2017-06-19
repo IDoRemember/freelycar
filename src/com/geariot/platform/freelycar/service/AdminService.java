@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
@@ -177,7 +178,7 @@ public class AdminService {
 	}
 
 	public String readRoles() {
-		List<Role> roles = PermissionsList.getRoles();
+		Set<Role> roles = PermissionsList.getRoles();
 		for(Role role : roles){
 			adminDao.save(role);
 		}

@@ -5,8 +5,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,8 +32,8 @@ public class PermissionsList {
 		return br;
 	}
 	
-	public static List<Permission> getPermissions(){
-		List<Permission> permissions = new ArrayList<>();
+	public static Set<Permission> getPermissions(){
+		Set<Permission> permissions = new HashSet<>();
         try {
 			BufferedReader br = getReader();
 			String line = null;
@@ -56,8 +56,8 @@ public class PermissionsList {
 		return permissions;
 	}
 	
-	public static List<Role> getRoles(){
-		List<Role> roles = new ArrayList<>();
+	public static Set<Role> getRoles(){
+		Set<Role> roles = new HashSet<>();
 		try {
 			BufferedReader br = getReader();
 			String line = null;
@@ -69,7 +69,7 @@ public class PermissionsList {
 						Role temp = new Role();
 						temp.setRoleName(role[0]);
 						temp.setDescription(role[1]);
-						List<Permission> tempPer = new ArrayList<>();
+						Set<Permission> tempPer = new HashSet<>();
 						for(String per : role_per[1].split(",")){
 							Permission perTemp = new Permission();
 							perTemp.setPermission(per);
