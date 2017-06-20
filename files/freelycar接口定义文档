@@ -1497,8 +1497,6 @@
 		server_url/service/query
 		参数:{
 			name=
-			startTime=
-			endTime=
 		}
 		响应:{
 			"code":0
