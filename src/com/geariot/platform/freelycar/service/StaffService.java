@@ -1,6 +1,6 @@
 package com.geariot.platform.freelycar.service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
@@ -36,6 +36,7 @@ public class StaffService {
 	
 	public String addStaff(Staff staff){
 		JSONObject obj = null;
+		staff.setCreateDate(new Date());
 		staffDao.saveStaff(staff);
 		obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
 		return obj.toString();
