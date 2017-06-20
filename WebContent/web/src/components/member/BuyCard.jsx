@@ -16,6 +16,9 @@ class BuyCard extends React.Component {
     }
 
     render() {
+        const plateOptions = this.state.option.map((item, index) => {
+            return <Option key={index} value={item.value}>{item.text}</Option>
+        })
         return (
             <div>
                 <Card title='客户信息'>
