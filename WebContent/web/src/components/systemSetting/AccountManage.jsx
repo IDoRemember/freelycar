@@ -183,74 +183,27 @@ class BeautyOrder extends React.Component {
 
         return (
             <div>
-                <BreadcrumbCustom first="产品管理" second="项目管理" />
+                <BreadcrumbCustom first="系统设置" second="账户管理" />
 
                 <Card>
                     <Tabs defaultActiveKey="1" onChange={this.tabCallback}>
-                        <TabPane tab="项目管理" key="1">
+                        <TabPane tab="账户管理" key="1">
                             <div>
                                 <Row>
                                     <Col span={9}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="项目名称" />
+                                            <Input addonBefore="账号" />
                                         </div>
                                     </Col>
                                     <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="项目类别" />
+                                            <Input addonBefore="姓名" />
                                         </div>
                                     </Col>
-                                    <Col span={8}>
-
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
-                                    <Col span={8}>
-                                        <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
-                                    </Col>
-                                    <Col span={8}>
+                              
+                                    <Col span={2}>
                                         <Button type="primary" onClick={this.showModal} >查询</Button>
                                     </Col>
-
-                                    {/*查询的模态框*/}
-                                    <Modal
-                                        title="项目查询"
-                                        visible={this.state.visible}
-                                        onOk={this.handleOk}
-                                        onCancel={this.handleCancel}
-                                        width = '80%'
-                                    >
-                                        <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
-                                            <Col span={2}>
-                                                <Button>确定</Button>
-                                            </Col>
-                                            <Col span={2}>
-                                                <Button>新增项目</Button>
-                                            </Col>
-                                            <Col span={2}>
-                                                <Input placeholder='可按项目名称,类型等进行搜索' />
-                                            </Col>
-                                            <Col span={2}>
-                                                <Button  type="primary">查询</Button>
-                                            </Col>
-                                        </Row>
-
-                                        <Row>
-                                            <Col span={24}>
-                                                <Table
-                                                    rowSelection={rowSelection}
-                                                    columns={columns}
-                                                    dataSource={data}
-                                                    bordered
-                                                />
-                                            </Col>
-                                        </Row>
-                                    </Modal>
-
 
                                 </Row>
 
@@ -258,10 +211,10 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button>新增项目</Button>
+                                        <Button>新增账号</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button>删除项目</Button>
+                                        <Button>删除账号</Button>
                                     </Col>
                                 </Row>
 
@@ -277,47 +230,7 @@ class BeautyOrder extends React.Component {
                                 </Row>
                             </div>
                         </TabPane>
-                        <TabPane tab="项目类别" key="2">
-                            <div>
-                                <Row>
-                                    <Col span={4}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="类别名称" />
-                                        </div>
-                                    </Col>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
-                                    <Col span={5}>
-                                        <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Button type="primary" onClick={this.showModal} >查询</Button>
-                                    </Col>
-                                </Row>
-
-
-                                <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
-                                    <Col span={2}>
-                                        <Button>新增</Button>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Button>删除</Button>
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={24}>
-                                        <Table
-                                            rowSelection={rowSelection}
-                                            columns={columns}
-                                            dataSource={data}
-                                            bordered
-                                        />
-                                    </Col>
-                                </Row>
-                            </div>
-                            </TabPane>
+                        
                     </Tabs>
                 </Card>
             </div>
