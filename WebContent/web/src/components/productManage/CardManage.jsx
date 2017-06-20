@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
+import EditableCell from '../tables/EditableCell.jsx'
 //import jquery from 'jquery';
 import $ from 'jquery'; 
 
@@ -17,95 +18,100 @@ const dateFormat = 'YYYY/MM/DD';
 const TabPane = Tabs.TabPane;
 
 
+//可编辑的table 
+class EditableTable extends React.Component {
+  constructor(props) {
+    super(props);
+    this.columns = [{
+      title: 'name',
+      dataIndex: 'name',
+      width: '30%',
+      render: (text, record, index) => (
+        <EditableCell
+          value={text}
+          onChange={this.onCellChange(index, 'name')}
+        />
+      ),
+    }, {
+      title: 'age',
+      dataIndex: 'age',
+    }, {
+      title: 'address',
+      dataIndex: 'address',
+    }, {
+      title: 'operation',
+      dataIndex: 'operation',
+      render: (text, record, index) => {
+        return (
+          this.state.dataSource.length > 1 ?
+          (
+            <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
+              <a href="#">Delete</a>
+            </Popconfirm>
+          ) : null
+        );
+      },
+    }];
+
+    this.state = {
+      dataSource: [{
+        key: '0',
+        name: 'Edward King 0',
+        age: '32',
+        address: 'London, Park Lane no. 0',
+      }, {
+        key: '1',
+        name: 'Edward King 1',
+        age: '32',
+        address: 'London, Park Lane no. 1',
+      }],
+      count: 2,
+    };
+  }
+  onCellChange = (index, key) => {
+    return (value) => {
+      const dataSource = [...this.state.dataSource];
+      dataSource[index][key] = value;
+      this.setState({ dataSource });
+    };
+  }
+  onDelete = (index) => {
+    const dataSource = [...this.state.dataSource];
+    dataSource.splice(index, 1);
+    this.setState({ dataSource });
+  }
+  handleAdd = () => {
+    const { count, dataSource } = this.state;
+    const newData = {
+      key: count,
+      name: `Edward King ${count}`,
+      age: 32,
+      address: `London, Park Lane no. ${count}`,
+    };
+    this.setState({
+      dataSource: [...dataSource, newData],
+      count: count + 1,
+    });
+  }
+  render() {
+    const { dataSource } = this.state;
+    const columns = this.columns;
+    return (
+      <div>
+        <Button className="editable-add-btn" onClick={this.handleAdd}>Add</Button>
+        <Table bordered dataSource={dataSource} columns={columns} />
+      </div>
+    );
+  }
+}
+
+
 class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
-            selectedRowKeys: [],
-            loading: false,
+            selectedRowKeys: []
         }
-    }
-
-     componentDidMount() {
-        console.log('开始掉接口')
-        // let data = { 'aa': 'bb' };
-        // axios.post('/fitness/api/sms/verification', {phone:'111'}).then((res) => {
-        //     console.log(res);
-        // }).catch( (error)=> {
-        //     console.log(error);
-        // });
-
-        // var xmlhttp = new XMLHttpRequest();
-        // xmlhttp.onload =function(res){
-        //     console.log(res);
-        // };
-        // xmlhttp.open('post','http://localhost:8078/freelycar/api/test/get',true);
-        // xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        // xmlhttp.send('a=1&b=s');
-        
-        
-        var obj = {};
-        // obj.account = "1444";
-        // obj.password = '345';
-        // obj.name = "kjr";
-        // obj.current = true;
-        // var role1 = {id:10};
-        //  obj.role = role1;
-        obj.page = 1;
-        obj.number = 10;
-      
-        console.log(obj);
-        $.ajax({
-            url:'http://localhost:8078/freelycar/api/admin/list',
-            data:obj,
-            dataType:'json',
-            type:'get',
-            contentType:"application/json; charset=utf-8",
-            success:function(data){
-                console.log(data);
-            }
-
-
-        });
-
-
-        // post with form-data (custom headers)
-        // note that getHeaders() is non-standard API
-
-
-
-     }
-
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
-    }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
-            },
-        });
-    }
-
-
-    tabCallback = (key) => {
-        console.log(key);
     }
 
     render() {
@@ -156,7 +162,7 @@ class BeautyOrder extends React.Component {
             price: 'New York No. 1 Lake Park',
             createTime:'fff',
             remark:'xxx',
-            operation:'zz'
+            operation:<Button type="primary">Primary</Button>       
 
 
         }, {

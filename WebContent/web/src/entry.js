@@ -26,6 +26,7 @@ import ClientInfo from './components/member/ClientInfo.jsx'
 import ClientDetail from './components/member/ClientDetail.jsx'
 import PayHistory from './components/member/PayHistory.jsx'
 import AddClient from './components/member/AddClient.jsx'
+import BuyCard from './components/member/BuyCard.jsx'
 
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
@@ -41,6 +42,7 @@ import ProductReceipts from './components/buySellStock/ProductReceipts.jsx';
 import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
 //system
 import StaffManage from './components/systemSetting/StaffManage.jsx';
+import AccountManage from './components/systemSetting/AccountManage.jsx';
 
 
 const routes = < Route path={"/"} components={Page} >
@@ -64,7 +66,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >
-            <Route path={"memberShip"} component={AdvancedTable} />
+            <Route path={"memberShip"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:uid"} component={ClientDetail} />
             <Route path={"customer/:uid/payhistory"} component={PayHistory} />
@@ -88,7 +90,7 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"systemSet"} >
             <Route path={"staffManage"} component={StaffManage} />
-            <Route path={"accountManage"} component={AdvancedTable} />
+            <Route path={"accountManage"} component={AccountManage} />
         </Route>
         <Route path="/dashboard/index" component={AdvancedTable} />
     </Route>

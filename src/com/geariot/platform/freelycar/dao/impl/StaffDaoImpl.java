@@ -57,8 +57,8 @@ public class StaffDaoImpl implements StaffDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Staff> queryByNameAndId(int staffId, String staffName) {
-		String hql = "from Staff where id like :staffId and name like :staffName";
-		return this.getSession().createQuery(hql).setInteger("staffId", staffId).setString("staffName", staffName)
+		String hql = "from Staff where id like :staffId or name like :staffName";
+		return this.getSession().createQuery(hql).setInteger("staffId", staffId).setString("staffName", "%"+staffName+"%")
 				.list();
 	}
 
