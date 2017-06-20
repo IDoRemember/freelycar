@@ -1,6 +1,6 @@
 package com.geariot.platform.freelycar.entities;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -15,7 +15,7 @@ import javax.persistence.OneToMany;
 public class CarBrand {
 	private int id;
 	private String name;
-	private List<CarType> types;
+	private Set<CarType> types;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
@@ -26,7 +26,7 @@ public class CarBrand {
 	}
 	@OneToMany(cascade={CascadeType.ALL})
 	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
-	public List<CarType> getTypes() {
+	public Set<CarType> getTypes() {
 		return types;
 	}
 	public void setId(int id) {
@@ -35,7 +35,7 @@ public class CarBrand {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public void setTypes(List<CarType> types) {
+	public void setTypes(Set<CarType> types) {
 		this.types = types;
 	}
 	

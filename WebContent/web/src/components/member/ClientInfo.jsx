@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio,Popconfirm } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 
@@ -101,8 +101,17 @@ class ClientInfo extends React.Component {
     timeonChange = (time) => {
         console.log(time)
     }
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+    hideModal = () => {
+        this.setState({
+            visible: false,
+        });
+    }
     render() {
-
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -126,8 +135,8 @@ class ClientInfo extends React.Component {
                 </div>
 
                 <div>
-                    <Button ><Icon type='plus'></Icon>新增客户</Button>
-                    <Button style={{ marginLeft: '30px' }}>会员统计</Button>
+                    <Button ><Link to={'app/member/addclient'}><Icon type='plus'></Icon>新增客户</Link></Button>
+                    <Button style={{ marginLeft: '30px' }} onClick={this.showModal}>会员统计</Button>
                 </div>
                 <Card style={{ marginTop: '20px' }}>
                     <div>
@@ -136,8 +145,25 @@ class ClientInfo extends React.Component {
                         </Table>
                     </div>
                 </Card>
+                <Modal
+                    title="会员统计"
+                    visible={this.state.visible}
+                    onOk={this.hideModal}
+                    onCancel={this.hideModal}
+                    okText="确认"
+                    cancelText="取消"
+                  
+                >
+                    <div>
+                            <p style={{fontSize:'16px'}}>会员总数：<span>500</span></p>
+                             <p style={{fontSize:'16px'}}>本月新增：<span>30</span></p>
+                            <p style={{fontSize:'16px'}}>今日新增：<span>5</span></p>
+
+                    </div>
+                </Modal>
             </div>
         )
+
     }
 
 

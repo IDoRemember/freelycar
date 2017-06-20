@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.Role;
 import com.geariot.platform.freelycar.utils.Constants;
 
 @Repository
@@ -69,6 +70,19 @@ public class AdminDaoImpl implements AdminDao {
 	public long getCount() {
 		String hql = "select count(*) from Admin";
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Admin> queryByNameAndId(int id, String name) {
+		String hql = "from Admin where id like :id and name like :name";
+		return this.getSession().createQuery(hql).setInteger("id", id).setString("name", name)
+				.list();
+	}
+
+	@Override
+	public void save(Role role) {
+		this.getSession().save(role);
 	}
 
 }

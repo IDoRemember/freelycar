@@ -1,9 +1,11 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,22 +29,22 @@ public class Client {
 	private int points;
 	private String recommendName;
 	private Date createDate;
-	private List<Car> cars;
-	private List<Card> cards;
+	private Set<Car> cars;
+	private Set<Card> cards;
 	public int getAge() {
 		return age;
 	}
 	public Date getBirthday() {
 		return birthday;
 	}
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name="cliendId", foreignKey=@ForeignKey(name="none"))
-	public List<Car> getCar() {
+	public Set<Car> getCars() {
 		return cars;
 	}
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
-	public List<Card> getCard() {
+	public Set<Card> getCards() {
 		return cards;
 	}
 	public Date getCreateDate() {
@@ -83,11 +85,11 @@ public class Client {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	public void setCar(List<Car> car) {
-		this.cars = car;
+	public void setCars(Set<Car> cars) {
+		this.cars = cars;
 	}
-	public void setCard(List<Card> card) {
-		this.cards = card;
+	public void setCards(Set<Card> cards) {
+		this.cards = cards;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;

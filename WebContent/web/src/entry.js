@@ -25,6 +25,7 @@ import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 import ClientInfo from './components/member/ClientInfo.jsx'
 import ClientDetail from './components/member/ClientDetail.jsx'
 import PayHistory from './components/member/PayHistory.jsx'
+import AddClient from './components/member/AddClient.jsx'
 
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
@@ -67,9 +68,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:uid"} component={ClientDetail} />
             <Route path={"customer/:uid/payhistory"} component={PayHistory} />
-            
-            
-
+            <Route path={"addclient"} component={AddClient}/>
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />

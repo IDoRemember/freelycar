@@ -1,18 +1,51 @@
 package com.geariot.platform.freelycar.utils;
 
+
+import java.util.Collection;
+
 import net.sf.json.util.PropertyFilter;
 
 public class JsonPropertyFilter implements PropertyFilter {
 	
-	private Class<?> filterProperty = null;
+	private Class<?>[] filterProperties = null;
+	private Class<?>[] collectionProperties = null;
+	private boolean filterCollection = false;
 	
-	public JsonPropertyFilter(Class<?> filterProperty){
-		this.filterProperty = filterProperty;
+	public JsonPropertyFilter(boolean filterCollection, Class<?>... filterProperties){
+		this.filterCollection = filterCollection;
+		this.filterProperties = filterProperties;
+	}
+	
+	public JsonPropertyFilter(Class<?>... filterProperties){
+		this(false, filterProperties);
+	}
+	
+	public void setColletionProperties(Class<?>... collectionProperties){
+		this.filterCollection = true;
+		this.collectionProperties = collectionProperties;
 	}
 	
 	@Override
 	public boolean apply(Object source, String name, Object value) {
-		return this.filterProperty.isAssignableFrom(value.getClass());
+		if(filterCollection && Collection.class.isAssignableFrom(value.getClass())){
+			Collection val = (Collection) value;
+			if(val.size() != 0){
+				Object arg = val.iterator().next();
+				for(Class<?> c : collectionProperties){
+					if(c.isAssignableFrom(arg.getClass())){
+						return true;
+					}
+				}
+			}
+		}
+		else {
+			for(Class<?> c : filterProperties){
+				if(c.isAssignableFrom(value.getClass())){
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 }

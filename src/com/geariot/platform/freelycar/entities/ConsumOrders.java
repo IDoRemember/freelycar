@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -25,7 +26,7 @@ public class ConsumOrders {
 	private Program program;
 	private String parkingLocation;
 	private Date pickTime;
-	private List<Staff> staffs;
+	private Set<Staff> staffs;
 	private List<ConsumExtraInventoriesInfo> inventoryInfos;
 	private int state;		//0,1,2=接,完,交
 	private float workingHour;
@@ -83,7 +84,7 @@ public class ConsumOrders {
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
-	public List<Staff> getStaffs() {
+	public Set<Staff> getStaffs() {
 		return staffs;
 	}
 	public int getState() {
@@ -131,7 +132,7 @@ public class ConsumOrders {
 	public void setProjectPayMethod(int projectPayMethod) {
 		this.projectPayMethod = projectPayMethod;
 	}
-	public void setStaffs(List<Staff> staffs) {
+	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;
 	}
 	public void setState(int state) {

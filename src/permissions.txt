@@ -1,0 +1,9 @@
+[Permissions]
+*
+admin:add
+admin:modify
+admin:delete
+admin:query
+
+[Roles]
+test,superAdmin=*

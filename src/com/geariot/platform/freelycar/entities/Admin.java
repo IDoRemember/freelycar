@@ -83,4 +83,11 @@ public class Admin {
 	public void setStaff(Staff staff) {
 		this.staff = staff;
 	}
+	
+	@Override
+	public String toString() {
+		return "Admin [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + ", staff="
+				+ staff + ", role=" + role + ", current=" + current + ", createDate=" + createDate + ", comment="
+				+ comment + "]";
+	}
 }
