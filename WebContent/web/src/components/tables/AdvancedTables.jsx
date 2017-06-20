@@ -6,7 +6,6 @@ import { Row, Col, Card } from 'antd';
 import FixedTable from './FixedTable.jsx';
 import ExpandedTable from './ExpandedTable.jsx';
 import EditableTable from './EditableTable.jsx';
-import EditTableCell from './EditTableCell.jsx';
 import SearchTable from './SearchTable.jsx';
 import CarTable from './CarTable.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
