@@ -18,7 +18,9 @@ public enum RESCODE {
 	ALREADY_LOGIN(13, "已经登陆"), 
 	ACCOUNT_EXIST(14, "该账号已存在"),
 	CANNOT_DELETE_SELF(15, "无法删除当前登陆账户"),
-	PHONE_EXIST(16, "手机号码已存在")
+	PHONE_EXIST(16, "手机号码已存在"),
+	CAR_LICENSE_EXIST(17, "车牌号码已存在"),
+	PART_SUCCESS(18, "批处理部分成功")
 	;
 	
 	// 定义私有变量

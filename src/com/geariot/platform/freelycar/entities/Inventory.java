@@ -1,19 +1,16 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class Inventory {
@@ -31,7 +28,7 @@ public class Inventory {
 	public float getAmount() {
 		return amount;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
 	public InventoryBrand getBrand() {
 		return brand;
@@ -43,8 +40,6 @@ public class Inventory {
 		return createDate;
 	}
 	@Id
-	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
-	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}
@@ -57,7 +52,7 @@ public class Inventory {
 	public String getProperty() {
 		return property;
 	}
-	@ManyToMany
+	@ManyToMany(cascade={}, fetch=FetchType.LAZY)
 	@JoinTable(name="inventory_provider", 
 				joinColumns={@JoinColumn(name="inventoryId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))})
@@ -67,7 +62,7 @@ public class Inventory {
 	public String getStandard() {
 		return standard;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="typeId", foreignKey=@ForeignKey(name="none"))
 	public InventoryType getType() {
 		return type;

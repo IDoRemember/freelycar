@@ -7,15 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
+import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.Car;
+import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Client;
+import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
+import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 @Service
@@ -25,6 +30,12 @@ public class ClientService {
 	@Autowired
 	private ClientDao clientDao;
 	
+	@Autowired
+	private CarDao carDao;
+	
+	@Autowired
+	private IncomeOrderDao incomeOrderDao;
+	
 	public String list(int page, int number) {
 		int from = (page - 1) * number;
 		List<Client> list = clientDao.list(from, number);
@@ -33,8 +44,10 @@ public class ClientService {
 		}
 		long realSize = clientDao.getCount();
 		int size = (int) Math.ceil(realSize/(double)number);
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JsonConfig config = JsonResFactory.dateConfig();
+		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
+		filter.setColletionProperties(CarType.class);
+		config.setJsonPropertyFilter(filter);
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -48,7 +61,11 @@ public class ClientService {
 		}
 		if(client.getCars() != null){
 			for(Car car : client.getCars()){
+				if(carDao.findByLicense(car.getLicensePlate()) != null){
+					return JsonResFactory.buildOrg(RESCODE.CAR_LICENSE_EXIST).toString();
+				}
 				car.setCreateDate(new Date());
+				car.setClient(client);
 			}
 		}
 		client.setCreateDate(new Date());
@@ -82,14 +99,31 @@ public class ClientService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String query(String phone, String licensePlate) {
-		// TODO Auto-generated method stub
-		return null;
+	public String query(String name, String phone) {
+		List<Client> list = clientDao.query(name, phone);
+		if(list == null || list.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+				JSONArray.fromObject(list, JsonResFactory.dateConfig())).toString();
 	}
 
 	public String detail(int clientId) {
-		// TODO Auto-generated method stub
-		return null;
+		Client client = clientDao.findById(clientId);
+		if(client == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		JsonConfig config = JsonResFactory.dateConfig();
+		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
+		filter.setColletionProperties(CarType.class);
+		config.setJsonPropertyFilter(filter);
+		JSONObject obj = JsonResFactory.buildNet(RESCODE.SUCCESS, 
+				Constants.RESPONSE_CLIENT_KEY, JSONObject.fromObject(client, config));
+		List<IncomeOrder> consumHist = this.incomeOrderDao.findByClientId(clientId);
+		if(consumHist != null){
+			obj.put(Constants.RESPONSE_DATA_KEY, JSONArray.fromObject(consumHist, config));
+		}
+		return obj.toString();
 	}
 
 	public String addCar(Car car) {
@@ -97,12 +131,17 @@ public class ClientService {
 		if(client == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		Car exist = carDao.findByLicense(car.getLicensePlate());
+		if(exist != null){
+			return JsonResFactory.buildOrg(RESCODE.CAR_LICENSE_EXIST).toString();
+		}
+		car.setCreateDate(new Date());
 		client.getCars().add(car);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
 	public String deleteCar(int carId) {
-		clientDao.deleteCar(carId);
+		carDao.deleteById(carId);;
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 

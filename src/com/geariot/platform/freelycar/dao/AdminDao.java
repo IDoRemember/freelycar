@@ -23,7 +23,7 @@ public interface AdminDao {
 	
 	long getCount();
 
-	List<Admin> queryByNameAndId(int id, String name);
+	List<Admin> queryByNameAndAccount(String account, String name);
 	
 	void save(Role role);
 }

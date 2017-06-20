@@ -10,7 +10,10 @@ import org.springframework.stereotype.Repository;
 import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Role;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.AdminAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class AdminDaoImpl implements AdminDao {
@@ -74,10 +77,11 @@ public class AdminDaoImpl implements AdminDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Admin> queryByNameAndId(int id, String name) {
-		String hql = "from Admin where id like :id and name like :name";
-		return this.getSession().createQuery(hql).setInteger("id", id).setString("name", name)
-				.list();
+	public List<Admin> queryByNameAndAccount(String account, String name) {
+		StringBuffer basic = new StringBuffer("from Admin");
+		String andCondition = new AdminAndQueryCreator(account, name).createStatement();
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).list();
 	}
 
 	@Override

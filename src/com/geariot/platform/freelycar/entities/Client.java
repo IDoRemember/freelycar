@@ -31,6 +31,9 @@ public class Client {
 	private Date createDate;
 	private Set<Car> cars;
 	private Set<Card> cards;
+	private int consumTimes;
+	private float consumAmout;
+	private Date lastVisit;
 	public int getAge() {
 		return age;
 	}
@@ -38,14 +41,20 @@ public class Client {
 		return birthday;
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
+	public Set<Card> getCards() {
+		return cards;
+	}
+	@OneToMany(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="cliendId", foreignKey=@ForeignKey(name="none"))
 	public Set<Car> getCars() {
 		return cars;
 	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
-	public Set<Card> getCards() {
-		return cards;
+	public float getConsumAmout() {
+		return consumAmout;
+	}
+	public int getConsumTimes() {
+		return consumTimes;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -63,6 +72,9 @@ public class Client {
 	}
 	public String getIdNumber() {
 		return idNumber;
+	}
+	public Date getLastVisit() {
+		return lastVisit;
 	}
 	public String getName() {
 		return name;
@@ -85,11 +97,17 @@ public class Client {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
+	public void setCards(Set<Card> cards) {
+		this.cards = cards;
+	}
 	public void setCars(Set<Car> cars) {
 		this.cars = cars;
 	}
-	public void setCards(Set<Card> cards) {
-		this.cards = cards;
+	public void setConsumAmout(float consumAmout) {
+		this.consumAmout = consumAmout;
+	}
+	public void setConsumTimes(int consumTimes) {
+		this.consumTimes = consumTimes;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -105,6 +123,9 @@ public class Client {
 	}
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
+	}
+	public void setLastVisit(Date lastVisit) {
+		this.lastVisit = lastVisit;
 	}
 	public void setName(String name) {
 		this.name = name;

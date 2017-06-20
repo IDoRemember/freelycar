@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class InvenroryOrder {
+public class InventoryOrder {
 	private String id;
 	private List<InventoryOrderInfo> inventoryInfos;
 	private int type;	//0,1,2=入库,维修出库,美容出库
@@ -27,8 +27,6 @@ public class InvenroryOrder {
 		return createDate;
 	}
 	@Id
-	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
-	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}
