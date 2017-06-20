@@ -123,13 +123,13 @@ class ClientDetail extends React.Component {
                 <Card title="会员卡信息" className="accountTable" style={{ marginBottom: '15px' }}>
                     <Button style={{ marginBottom: '20px'}}><Icon type='idcard'></Icon>开卡</Button>
                     
-                   <Table columns={cardColumns} dataSource={cardData}></Table>
+                   <Table columns={cardColumns} dataSource={cardData} bordered></Table>
                 </Card>
                 <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
-                    <Table columns={carColumns} dataSource={carData}></Table>
+                    <Table columns={carColumns} dataSource={carData} bordered></Table>
                 </Card>
                 <Card title="消费记录" className="accountTable" >
-                    <Table columns={payColumns} dataSource={payData} ></Table>
+                    <Table columns={payColumns} dataSource={payData} bordered></Table>
                     <p style={{ float: 'right',marginRight:'30px' }}><Link to = {'app/member/customer/1/payhistory'}> 更多</Link></p>
                 </Card>
             </div>
