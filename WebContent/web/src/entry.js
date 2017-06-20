@@ -26,6 +26,7 @@ import ClientInfo from './components/member/ClientInfo.jsx'
 import ClientDetail from './components/member/ClientDetail.jsx'
 import PayHistory from './components/member/PayHistory.jsx'
 import AddClient from './components/member/AddClient.jsx'
+import BuyCard from './components/member/BuyCard.jsx'
 
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
@@ -65,7 +66,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >
-            <Route path={"memberShip"} component={AdvancedTable} />
+            <Route path={"memberShip"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:uid"} component={ClientDetail} />
             <Route path={"customer/:uid/payhistory"} component={PayHistory} />

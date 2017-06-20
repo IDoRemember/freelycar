@@ -3,7 +3,7 @@ import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePi
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 
-const columns = [
+    const columns = [
     { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
     {
         title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
@@ -95,6 +95,7 @@ class ClientInfo extends React.Component {
             visible: false
         }
     }
+
     handleChange = (value) => {
         console.log(`selected ${value}`)
     }
@@ -111,7 +112,15 @@ class ClientInfo extends React.Component {
             visible: false,
         });
     }
+    onDelete = (index) => {
+        const dataSource = [...this.state.dataSource];
+        dataSource.splice(index, 1);
+        this.setState({ dataSource });
+    }
+
+
     render() {
+    
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -119,12 +128,29 @@ class ClientInfo extends React.Component {
             <div>
                 <BreadcrumbCustom first="会员管理" second="客户信息" />
 
-                <div style={{ display: 'inline-block', marginBottom: '25px' }}>到店日期：
-                <DatePicker onChange={this.timeonChange} />
+                <div style={{ display: 'inline-block', marginBottom: '25px' }}>
 
                     <Select showSearch
+                        style={{ width: '140px', marginRight: '8px' }}
+                        placeholder="输入客户姓名"
+                        optionFilterProp="children"
+                        onChange={this.handleChange}
+                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                    >
+                        {plateOptions}
+                    </Select>
+                    <Select showSearch
                         style={{ width: '140px', marginRight: '8px', marginLeft: '26px' }}
-                        placeholder="输入手机号或车牌号"
+                        placeholder="输入手机号"
+                        optionFilterProp="children"
+                        onChange={this.handleChange}
+                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                    >
+                        {plateOptions}
+                    </Select>
+                    <Select showSearch
+                        style={{ width: '140px', marginRight: '8px', marginLeft: '26px' }}
+                        placeholder="输入车牌号"
                         optionFilterProp="children"
                         onChange={this.handleChange}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
@@ -152,12 +178,12 @@ class ClientInfo extends React.Component {
                     onCancel={this.hideModal}
                     okText="确认"
                     cancelText="取消"
-                  
+                    width='25%'
                 >
                     <div>
-                            <p style={{fontSize:'16px'}}>会员总数：<span>500</span></p>
-                             <p style={{fontSize:'16px'}}>本月新增：<span>30</span></p>
-                            <p style={{fontSize:'16px'}}>今日新增：<span>5</span></p>
+                        <p style={{ fontSize: '16px' }}>会员总数：<span>500</span></p>
+                        <p style={{ fontSize: '16px' }}>本月新增：<span>30</span></p>
+                        <p style={{ fontSize: '16px' }}>今日新增：<span>5</span></p>
 
                     </div>
                 </Modal>

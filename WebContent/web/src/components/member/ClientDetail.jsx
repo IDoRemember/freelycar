@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon} from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon,Popconfirm} from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import CarTable from '../tables/CarTable.jsx';
 const cardColumns = [
     { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
     { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
@@ -89,6 +90,8 @@ class ClientDetail extends React.Component {
         super(props)
         this.state = {
             option: [],
+            value:this.props.value,
+            editable:false,
         }
     }
     onChange = (e) => {
@@ -97,7 +100,21 @@ class ClientDetail extends React.Component {
             value: e.target.value,
         });
     }
+    handleChange = (e) =>{
+        const value =e.target.value;
+        this.setState({value});
+    }
+    check =() =>{
+        this.setState({editable:false});
+        if(this.props.onChange){
+            this.props.onChange(this.state.value);
+        }
+    }
+    edit =()=>{
+        this.setState({editable:true});
+    }
     render() {
+        const{value,editable} =this.state;
         return (
             <div>
                 <BreadcrumbCustom first='会员管理' second='客户信息' third='详细信息' />
@@ -126,7 +143,7 @@ class ClientDetail extends React.Component {
                    <Table columns={cardColumns} dataSource={cardData} bordered></Table>
                 </Card>
                 <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
-                    <Table columns={carColumns} dataSource={carData} bordered></Table>
+                    <CarTable></CarTable>
                 </Card>
                 <Card title="消费记录" className="accountTable" >
                     <Table columns={payColumns} dataSource={payData} bordered></Table>
