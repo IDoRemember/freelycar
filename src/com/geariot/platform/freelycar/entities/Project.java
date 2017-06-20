@@ -43,7 +43,7 @@ public class Project {
 	public float getPricePerUnit() {
 		return pricePerUnit;
 	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@OneToMany
 	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
 	public List<ProjectInventoriesInfo> getProjectAccessoriesInfos() {
 		return inventoryInfos;
