@@ -46,14 +46,23 @@ class BeautyOrder extends React.Component {
         // xmlhttp.send('a=1&b=s');
         
         
-
+        var obj = {};
+        // obj.account = "1444";
+        // obj.password = '345';
+        // obj.name = "kjr";
+        // obj.current = true;
+        // var role1 = {id:10};
+        //  obj.role = role1;
+        obj.page = 1;
+        obj.number = 10;
       
-
+        console.log(obj);
         $.ajax({
-            url:'http://localhost:8078/fitness/api/sms/verification',
-            data:{'phone': '18252085210' },
+            url:'http://localhost:8078/freelycar/api/admin/list',
+            data:obj,
             dataType:'json',
-            type:'post',
+            type:'get',
+            contentType:"application/json; charset=utf-8",
             success:function(data){
                 console.log(data);
             }

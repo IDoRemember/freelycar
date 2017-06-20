@@ -13,7 +13,6 @@ class BusinessSummary extends React.Component {
     render() {
         return <div>
             <BreadcrumbCustom first="数据报表" second="营业汇总" />
-
         </div>
     }
 }

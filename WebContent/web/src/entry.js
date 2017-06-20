@@ -38,6 +38,10 @@ import PutInStorage from './components/buySellStock/PutInStorage.jsx';
 import SellProduct from './components/buySellStock/SellProduct.jsx';
 import ProductReceipts from './components/buySellStock/ProductReceipts.jsx';
 import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
+//system
+import StaffManage from './components/systemSetting/StaffManage.jsx';
+
+
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -84,7 +88,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"businessSummary"} component={BusinessSummary} />
         </Route>
         <Route path={"systemSet"} >
-            <Route path={"staffManage"} component={AdvancedTable} />
+            <Route path={"staffManage"} component={StaffManage} />
             <Route path={"accountManage"} component={AdvancedTable} />
         </Route>
         <Route path="/dashboard/index" component={AdvancedTable} />
