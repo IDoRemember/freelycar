@@ -334,8 +334,6 @@
 		参数:{
 			name=
 			programId=
-			startTime=
-			endTime=
 		}
 		响应:{
 			"code":0
@@ -378,6 +376,18 @@
 			"data":{Provider1, Provider2...}
 			"size":
 		}
+		
+	6.4 根据名字查找供应商:
+ 		请求:GET
+ 		server_url/provider/query
+ 		参数:{
+ 			name=
+ 		}
+ 		响应:{
+ 			"code":
+ 			"msg":
+ 			"data":{Provider1,...}
+ 		}
 
 7. 库存相关接口:/inventory/
 	7.1 库存类别相关：
