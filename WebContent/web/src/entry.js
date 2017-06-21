@@ -6,6 +6,7 @@ import { Router, Route, hashHistory } from 'react-router';
 import App from './App';
 import Login from './components/Login.jsx';
 import Page from './components/Page.jsx';
+import IndexPage from './components/IndexPage.jsx'
 //consumption
 import OrderManage from './components/consumption/OrderManage.jsx';
 import BeautyOrder from './components/consumption/BeautyOrder.jsx'
@@ -90,7 +91,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"staffManage"} component={StaffManage} />
             <Route path={"accountManage"} component={AccountManage} />
         </Route>
-        <Route path="/dashboard/index" component={StaffManage} />
+        <Route path="/dashboard/index" component={IndexPage} />
     </Route>
 </Route>
 
