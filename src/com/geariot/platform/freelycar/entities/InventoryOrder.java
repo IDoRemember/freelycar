@@ -3,15 +3,14 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class InventoryOrder {
@@ -30,12 +29,12 @@ public class InventoryOrder {
 	public String getId() {
 		return id;
 	}
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="inventoryOrderId", foreignKey=@ForeignKey(name="none"))
 	public List<InventoryOrderInfo> getInventoryOrderInfo() {
 		return inventoryInfos;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="makerId", foreignKey=@ForeignKey(name="none"))
 	public Admin getOrderMaker() {
 		return orderMaker;

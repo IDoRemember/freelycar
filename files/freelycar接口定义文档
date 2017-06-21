@@ -659,12 +659,12 @@
 			"size":
 		}
 
-9. 消费开单相关接口:/orders/
+9. 消费开单相关接口:/order/
 	9.1 消费下单:
 		请求:POST
-		server_url/orders/book
+		server_url/order/book
 		参数:{
-			consumOrders=
+			consumOrder=
 		}
 		响应:{
 			"code":0
@@ -672,7 +672,7 @@
 		}
 	9.2 消费单据列表:
 		请求:GET
-		server_url/orders/list
+		server_url/order/list
 		参数:{
 			page=1
 			number=10
@@ -684,8 +684,45 @@
 			"size":
 		}
 		
-	☆9.3 消费单据查询
-	☆9.4 消费单据状态更新 （完工-->交车）
+	9.3 消费单据修改:
+		请求:POST
+		server_url/order/modify
+		参数:{
+			consumOrder=
+		}
+		响应:{
+			"code":
+			"msg":
+		}
+	9.4 完工:
+		请求:POST
+		server_url/order/finish
+		参数:{
+			consumOrderId=
+		}
+		响应:{
+			"code":
+			"msg":
+		}
+	9.5 交车:
+		请求:POST
+		server_url/order/deliver
+		参数:{
+			consumOrderId=
+		}
+		响应:{
+			"code":
+			"msg":
+		}
+	9.6 根据条件查询:
+		请求:{
+
+		}
+		响应:{
+			"code":
+			"msg":
+			"data":
+		}
 
 10. 结算接口:/pay/
 	10.1 购买会员卡:

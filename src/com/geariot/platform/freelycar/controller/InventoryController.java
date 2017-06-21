@@ -1,7 +1,6 @@
 package com.geariot.platform.freelycar.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
+import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.entities.InventoryType;
 import com.geariot.platform.freelycar.service.InventoryService;
 
@@ -62,47 +62,47 @@ public class InventoryController {
 	}
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
-	public String add(Inventory inventory){
-		return null;
+	public String add(@RequestBody Inventory inventory){
+		return this.inventoryService.addInventory(inventory);
 	}
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
-	public String delete(int inventoryId){
-		return null;
+	public String delete(Integer... inventoryIds){
+		return this.inventoryService.deleteInventory(inventoryIds);
 	}
 	
 	@RequestMapping(value = "/instock" , method = RequestMethod.POST)
-	public String inStock(List<Inventory> inventories){
-		return null;
+	public String inStock(@RequestBody InventoryOrder inventoryOrder){
+		return this.inventoryService.inStock(inventoryOrder);
 	}
 	
 	@RequestMapping(value = "/outstock" , method = RequestMethod.POST)
-	public String outStock(List<Inventory> inventories){
-		return null;
+	public String outStock(@RequestBody InventoryOrder inventoryOrder){
+		return this.inventoryService.outStock(inventoryOrder);
 	}
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
-	public String listStock(int page , int number){
-		return null;
+	public String listInventory(int page , int number){
+		return this.inventoryService.listInventory(page, number);
 	}
 	
 	@RequestMapping(value = "/remain" , method = RequestMethod.GET)
-	public String remain(int inventoryId){
-		return null;
+	public String remain(String inventoryId){
+		return this.inventoryService.findInventoryById(inventoryId);
 	}
 	
 	@RequestMapping(value = "/listorder" , method = RequestMethod.GET)
 	public String listOrder(int page , int number){
-		return null;
+		return this.inventoryService.listOrder(page, number);
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
-	public String query(int inventoryOrderId , Date createDate , int adminId ){
-		return null;
+	public String query(String inventoryOrderId , String adminId ){
+		return this.inventoryService.queryOrder(inventoryOrderId, adminId);
 	}
 	
 	@RequestMapping(value = "/orderdetail" , method = RequestMethod.GET)
-	public String orderDetail(int inventoryOrderId){
-		return null;
+	public String orderDetail(String inventoryOrderId){
+		return this.inventoryService.orderDetail(inventoryOrderId);
 	}
 }
