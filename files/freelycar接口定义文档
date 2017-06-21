@@ -295,16 +295,18 @@
 			"code":0
 			"msg":
 		}
-	5.2 修改项目:
-		请求:POST
-		server_url/project/modify
-		参数:{
-			project=Project(包含存在的Id)
-		}
-		响应:{
-			"code":0
-			"msg":
-		}
+		
+	//5.2 修改项目:
+	//	请求:POST
+	//	server_url/project/modify
+	//	参数:{
+	//		project=Project(包含存在的Id)
+	//	}
+	//	响应:{
+	//		"code":0
+	//		"msg":
+	//	}
+	
 	5.3 删除项目:
 		请求:POST
 		server_url/project/delete
@@ -506,6 +508,12 @@
 				"code":0
 				"msg":
 			}
+		
+		☆7.3.3 库存修改
+		☆7.3.4 库存列表
+		☆7.3.5 库存本身查询
+		
+		
 	7.4 入库:
 		请求:POST
 		server_url/inventory/instock
@@ -587,6 +595,10 @@
 			"msg":
 			"data":InventoryOrder
 		}
+		
+	☆7.11　库存单据的修改
+	☆7.12  库存单据的删除
+	
 
 8. 会员卡种类相关接口:/service/
 	8.1 新增卡类:
@@ -671,6 +683,9 @@
 			"data":{ConsumOrders1, ConsumOrders2...}
 			"size":
 		}
+		
+	☆9.3 消费单据查询
+	☆9.4 消费单据状态更新 （完工-->交车）
 
 10. 结算接口:/pay/
 	10.1 购买会员卡:
@@ -739,16 +754,18 @@
 				"code":
 				"msg":
 			}
-		11.2.2 删除其他支出记录:
-			请求:POST
-			server_url/charge/delete
-			参数:{
-				otherExpandOrderId=
-			}
-			响应:{
-				"code":
-				"msg":
-			}
+			
+		//11.2.2 删除其他支出记录:
+		//	请求:POST
+		//	server_url/charge/delete
+		//	参数:{
+		//		otherExpandOrderId=
+		//	}
+		//	响应:{
+		//		"code":
+		//		"msg":
+		//	}
+		
 		11.2.3 列出所有支出记录:
 			请求:GET
 			server_url/charge/list
