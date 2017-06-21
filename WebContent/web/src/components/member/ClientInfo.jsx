@@ -3,96 +3,97 @@ import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePi
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 
-    const columns = [
-    { title: '序号', dataIndex: 'index', key: 'index' },
-    {
-        title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
-            return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
-        }
-    },
-    { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-    { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
-    { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
-    { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
-    { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
-    { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
-    {
-        title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
-            return <span>
-                <span style={{ marginRight: '10px' }}>
-                    <Link to="" >
-                        <span >开卡</span>
-                    </Link>
-                    <Link to="">
-                        <span style={{ marginLeft: '5px' }}> 修改</span>
-                    </Link>
-                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                        <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
-                    </Popconfirm>
-                </span>
 
-            </span>
-        }
-    },
-]
-const data = [
-    {
-        key: 1,
-        index: 1,
-        customerName: '海蜇',
-        uid: 1,
-        phoneNumber: '15251873222',
-        busNumber: '苏A234567',
-        carBrand: '玛莎',
-        isMember: '是',
-        consumeCount: '4',
-        latelyTime: '2017-05-23',
-    },
-    {
-        key: 2,
-        index: 2,
-        customerName: 'JZW',
-        phoneNumber: '15251873232',
-        busNumber: '苏A123456',
-        carBrand: '维修',
-        isMember: '否',
-        consumeCount: '5',
-        latelyTime: '2017-05-24',
-
-    },
-    {
-        key: 3,
-        index: 3,
-        customerName: 'JZW',
-        phoneNumber: '15251873232',
-        busNumber: '苏A123456',
-        carBrand: '维修',
-        isMember: '否',
-        consumeCount: '5',
-        latelyTime: '2017-05-24',
-
-    },
-    {
-        key: 4,
-        index:4,
-        customerName: 'JZW',
-        phoneNumber: '15251873232',
-        busNumber: '苏A123456',
-        carBrand: '维修',
-        isMember: '否',
-        consumeCount: '5',
-        latelyTime: '2017-05-24',
-
-    }
-
-];
 
 class ClientInfo extends React.Component {
     constructor(props) {
         super(props);
+        this.columns = [
+            { title: '序号', dataIndex: 'index', key: 'index' },
+            {
+                title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
+                    return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
+                }
+            },
+            { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+            { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
+            { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
+            { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
+            { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
+            { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
+            {
+                title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
+                    return <span>
+                        <span style={{ marginRight: '10px' }}>
+                            <Link to="" >
+                                <span >开卡</span>
+                            </Link>
+                            <Link to="">
+                                <span style={{ marginLeft: '5px' }}> 修改</span>
+                            </Link>
+                            <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                                <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
+                            </Popconfirm>
+                        </span>
+
+                    </span>
+                }
+            },
+        ]
         this.state = {
             option: [],
-            visible: false
+            visible: false,
+            dataSource :[
+                {
+                    key: 1,
+                    index: 1,
+                    customerName: '海蜇',
+                    uid: 1,
+                    phoneNumber: '15251873222',
+                    busNumber: '苏A234567',
+                    carBrand: '玛莎',
+                    isMember: '是',
+                    consumeCount: '4',
+                    latelyTime: '2017-05-23',
+                },
+                {
+                    key: 2,
+                    index: 2,
+                    customerName: 'JZW',
+                    phoneNumber: '15251873232',
+                    busNumber: '苏A123456',
+                    carBrand: '维修',
+                    isMember: '否',
+                    consumeCount: '5',
+                    latelyTime: '2017-05-24',
+
+                },
+                {
+                    key: 3,
+                    index: 3,
+                    customerName: 'JZW',
+                    phoneNumber: '15251873232',
+                    busNumber: '苏A123456',
+                    carBrand: '维修',
+                    isMember: '否',
+                    consumeCount: '5',
+                    latelyTime: '2017-05-24',
+
+                },
+                {
+                    key: 4,
+                    index: 4,
+                    customerName: 'JZW',
+                    phoneNumber: '15251873232',
+                    busNumber: '苏A123456',
+                    carBrand: '维修',
+                    isMember: '否',
+                    consumeCount: '5',
+                    latelyTime: '2017-05-24',
+
+                }
+
+            ],
         }
     }
 
@@ -120,7 +121,8 @@ class ClientInfo extends React.Component {
 
 
     render() {
-    
+        const { dataSource } = this.state;
+        const columns = this.columns;
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -166,7 +168,7 @@ class ClientInfo extends React.Component {
                 </div>
                 <Card style={{ marginTop: '20px' }}>
                     <div>
-                        <Table columns={columns} dataSource={data}>
+                        <Table dataSource={dataSource} columns={columns}>
 
                         </Table>
                     </div>
