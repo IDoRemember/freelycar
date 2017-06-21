@@ -77,12 +77,91 @@ class CustomerInfo extends React.Component {
                             {plateOptions}
                         </Select>
                         <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
-                        <Modal title="Modal" visible={this.state.visible}
+                        <Modal title="新增车辆" visible={this.state.visible}
                             onOk={this.handleOk} onCancel={this.handleCancel}
                             okText="OK" cancelText="Cancel">
-                            <p>Bla bla ...</p>
-                            <p>Bla bla ...</p>
-                            <p>Bla bla ...</p>
+                            <h3>客户信息：</h3>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    姓名：<span>牛查查</span>
+                                </Col>
+                                <Col span={12}>
+                                    年龄：<span>23</span>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    手机号：<span>18362981112</span>
+                                </Col>
+                                <Col span={12}>
+                                    性别：<span>女</span>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    生日：<span>19941002</span>
+                                </Col>
+                                <Col span={12}>
+                                    身份证：<span>3829382932898293</span>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    行驶证号：<span>23232332</span>
+                                </Col>
+                                <Col span={12}>
+                                    身份证：<span>3829382932898293</span>
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    车主状态：<span>新手</span>
+                                </Col>
+                                <Col span={12}>
+                                </Col>
+                            </Row>
+                            <h3>车辆信息</h3 >
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    <span style={{ color: 'red' }}>*</span>车牌号码：<Input style={{ width: '100px' }} />
+                                </Col>
+                                <Col span={12}>
+                                    <span style={{ color: 'red' }}>*</span>车辆品牌：<Input style={{ width: '100px' }} />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    车辆型号： <Input style={{ width: '100px' }} />
+                                </Col>
+                                <Col span={12}>
+                                    保险起止时间： <Input style={{ width: '100px' }} />
+                                </Col>
+                            </Row>
+
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    是否二手车：<Input style={{ width: '100px' }} />
+                                </Col>
+                                <Col span={12}>
+                                    保险金额：<Input style={{ width: '100px' }} />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    里程数：<Input style={{ width: '100px' }} />
+                                </Col>
+                                <Col span={12}>
+                                    上牌时间：<Input style={{ width: '100px' }} />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{marginBottom:'10px'}}>
+                                <Col span={12} >
+                                    车架号：<Input style={{ width: '100px' }} />
+                                </Col>
+                                <Col span={12}>
+                                    发动机号：<Input style={{ width: '100px' }} />
+                                </Col>
+                            </Row>
                         </Modal>
                     </Col>
                     <Col span={6} >
