@@ -4,17 +4,22 @@ import ReactEcharts from 'echarts-for-react';
 
 const option = {
     title: {
-        text: 'Customized Pie',
+        text: 'pie',
         left: 'center',
         top: 20,
         textStyle: {
             color: '#777' 
         }
     },
-
+    color:['#ccf', '#cfc','#ccc','#ffc'] ,
     tooltip : {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+    legend:{
+        orient:'vertical',
+        left:'left',
+        data:['美容服务','维修服务','洗车','抢修']
     },
 
     visualMap: {
@@ -27,18 +32,16 @@ const option = {
     },
     series : [
         {
-            name:'访问来源',
+            name:'项目类别',
             type:'pie',
             radius : '55%',
-            center: ['50%', '50%'],
+            center: ['50%', '60%'],
             data:[
-                {value:335, name:'直接访问'},
-                {value:310, name:'邮件营销'},
-                {value:274, name:'联盟广告'},
-                {value:235, name:'视频广告'},
-                {value:400, name:'搜索引擎'}
+                {value:335, name:'美容服务'},
+                {value:310, name:'维修服务'},
+                {value:234, name:'洗车'},
+                {value:135, name:'抢修'},
             ].sort(function (a, b) { return a.value - b.value}),
-            roseType: 'angle',
             label: {
                 normal: {
                     textStyle: {
@@ -58,10 +61,10 @@ const option = {
             },
             itemStyle: {
                 normal: {
-                    color: '#c23531',
-                    shadowBlur: 200,
-                    shadowColor: '#777'
-                }
+                    shadowBlur: 10,
+                    shadowColor: 'rgba(0,0,0,0.5)'
+                },
+
             },
 
             animationType: 'scale',
