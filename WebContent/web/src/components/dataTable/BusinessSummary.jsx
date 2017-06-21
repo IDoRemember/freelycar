@@ -17,7 +17,6 @@ class BusinessSummary extends React.Component {
     render() {
         return <div>
             <BreadcrumbCustom first="数据报表" second="营业汇总" />
-<<<<<<< HEAD
             <Card>
                 <div>
                     <Row>
@@ -70,8 +69,6 @@ class BusinessSummary extends React.Component {
                 </div>
                 <Chart></Chart>
             </Card>
-=======
->>>>>>> 59beaab70cae185602bc1476710db7a68e61df67
         </div>
     }
 }
