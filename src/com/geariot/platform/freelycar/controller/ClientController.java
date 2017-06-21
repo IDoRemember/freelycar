@@ -50,8 +50,8 @@ public class ClientController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("client:query")
-	public String searchClient(String phone, String licensePlate) {
-		return clientService.query(phone, licensePlate);
+	public String searchClient(String name, String phone) {
+		return clientService.query(name, phone);
 	}
 	
 	@RequestMapping(value = "/detail" , method = RequestMethod.GET)
@@ -62,7 +62,7 @@ public class ClientController {
 	
 	@RequestMapping(value = "/addcar" , method = RequestMethod.POST)
 	@PermissionRequire("client:modify")
-	public String addClientCar(Car car) {
+	public String addClientCar(@RequestBody Car car) {
 		return clientService.addCar(car);
 	}
 	

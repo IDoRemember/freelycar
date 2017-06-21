@@ -3,12 +3,12 @@ package com.geariot.platform.freelycar.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.geariot.platform.freelycar.entities.ConsumOrders;
+import com.geariot.platform.freelycar.entities.ConsumOrder;
 
 public class OrdersController {
 
 	@RequestMapping(value = "/book" , method = RequestMethod.POST)
-	public String Book(ConsumOrders consumOrders){
+	public String Book(ConsumOrder consumOrders){
 		return null;
 	}
 	

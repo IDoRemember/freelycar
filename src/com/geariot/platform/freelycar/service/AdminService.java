@@ -149,7 +149,7 @@ public class AdminService {
 	}
 	
 	public String query(Admin admin) {
-		List<Admin> list = adminDao.queryByNameAndId(admin.getId(), admin.getName());
+		List<Admin> list = adminDao.queryByNameAndAccount(admin.getAccount(), admin.getName());
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}

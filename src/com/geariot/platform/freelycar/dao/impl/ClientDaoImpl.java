@@ -9,7 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.entities.Client;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.ClientAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class ClientDaoImpl implements ClientDao {
@@ -58,16 +61,14 @@ public class ClientDaoImpl implements ClientDao {
 		this.getSession().createQuery(hql).setParameterList("ids", clientIds).executeUpdate();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<Client> query(String phone, String licensePlate) {
-		String hql = "from Client c where phone = :phone and c.";
-		return null;
+	public List<Client> query(String name, String phone) {
+		StringBuffer basic = new StringBuffer("from Client");
+		String andCondition = new ClientAndQueryCreator(name, phone).createStatement();
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	@Override
-	public void deleteCar(int carId) {
-		String hql = "delete from Car where id = :id";
-		this.getSession().createQuery(hql).setInteger("id", carId).executeUpdate();
-	}
 
 }

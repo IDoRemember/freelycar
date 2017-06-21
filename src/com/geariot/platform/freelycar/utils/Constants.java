@@ -15,6 +15,7 @@ public class Constants {
 	public static final String RESPONSE_MSG_KEY = "msg"; //返回对象里的msg的key名称
 	public static final String RESPONSE_DATA_KEY = "data"; //返回对象里的data的key名称
 	public static final String RESPONSE_SIZE_KEY = "size"; //返回对象里的size的key名称
+	public static final String RESPONSE_CLIENT_KEY = "client";
 
 	/*是否开启查询缓存*/
 	public static boolean SELECT_CACHE = false;

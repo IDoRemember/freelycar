@@ -3,13 +3,11 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class OtherExpendOrder {
-	private int id;
+	private String id;
 	private int otherExpandTypeId;
 	private float amount;
 	private String comment;
@@ -24,8 +22,7 @@ public class OtherExpendOrder {
 		return createDate;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 	public int getOtherExpandTypeId() {
@@ -40,7 +37,7 @@ public class OtherExpendOrder {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	public void setOtherExpandTypeId(int otherExpandTypeId) {

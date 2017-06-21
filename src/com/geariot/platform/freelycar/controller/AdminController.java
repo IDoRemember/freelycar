@@ -25,7 +25,6 @@ public class AdminController {
 	
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public String login(String account, String password, boolean rememberMe){
-		System.out.println(account + "---" + password);
 		return adminService.login(account, password, rememberMe);
 	}
 	
@@ -59,7 +58,7 @@ public class AdminController {
 		return adminService.list(page, number);
 	}
 	
-	@RequestMapping(value="/query", method=RequestMethod.GET)
+	@RequestMapping(value="/query", method={RequestMethod.GET, RequestMethod.POST})
 	@PermissionRequire("admin:query")
 	public String query(@RequestBody Admin admin){
 		return adminService.query(admin);

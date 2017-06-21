@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-public class ConsumOrders {
+public class ConsumOrder {
 	private String id;
 	private Client client;
 	private Car car;
@@ -53,8 +53,6 @@ public class ConsumOrders {
 		return createDate;
 	}
 	@Id
-	@GenericGenerator(name="IdGen", strategy="com.geariot.platform.freelycar.utils.IDGenerator")
-	@GeneratedValue(generator="IdGen")
 	public String getId() {
 		return id;
 	}

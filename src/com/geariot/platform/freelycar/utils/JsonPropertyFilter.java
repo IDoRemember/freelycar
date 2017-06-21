@@ -27,6 +27,9 @@ public class JsonPropertyFilter implements PropertyFilter {
 	
 	@Override
 	public boolean apply(Object source, String name, Object value) {
+		if(value == null){
+			return true;
+		}
 		if(filterCollection && Collection.class.isAssignableFrom(value.getClass())){
 			Collection val = (Collection) value;
 			if(val.size() != 0){

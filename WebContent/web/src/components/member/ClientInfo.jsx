@@ -4,7 +4,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 
     const columns = [
-    { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
+    { title: '序号', dataIndex: 'index', key: 'index' },
     {
         title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
             return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
@@ -38,7 +38,7 @@ import { Link } from 'react-router';
 const data = [
     {
         key: 1,
-        indexNum: '1',
+        index: 1,
         customerName: '海蜇',
         uid: 1,
         phoneNumber: '15251873222',
@@ -50,7 +50,7 @@ const data = [
     },
     {
         key: 2,
-        indexNum: '2',
+        index: 2,
         customerName: 'JZW',
         phoneNumber: '15251873232',
         busNumber: '苏A123456',
@@ -62,7 +62,7 @@ const data = [
     },
     {
         key: 3,
-        indexNum: '3',
+        index: 3,
         customerName: 'JZW',
         phoneNumber: '15251873232',
         busNumber: '苏A123456',
@@ -74,7 +74,7 @@ const data = [
     },
     {
         key: 4,
-        indexNum: '4',
+        index:4,
         customerName: 'JZW',
         phoneNumber: '15251873232',
         busNumber: '苏A123456',
