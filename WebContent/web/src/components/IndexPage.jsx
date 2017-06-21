@@ -2,74 +2,124 @@ import React from 'react';
 import { Link } from 'react-router';
 import BreadcrumbCustom from './BreadcrumbCustom.jsx';
 import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon } from 'antd';
+import styled from "styled-components"
 
+const UlBox = styled.ul`
+    margin:30px;
+    width:calc( 100% - 60px);
+`, Li = styled.li`
+    margin:20px;
+    float:left;
+    display:inline-block;
+    height:120px;
+    width:calc(( 100% - 160px)/4);
+    line-height:120px;
+    color:#fff;
+    font-size:22px;
+    text-align:center;
+    border-radius:5px;
+`
 class IndexPage extends React.Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            tab: [
+                {
+                    background: '#a9c3e4',
+                    text: '消费开单',
+                    url: '/app/productManage/itemManage'
+                }, {
+                    background: '#eafd89',
+                    text: '收支管理',
+                    url: '/app/productManage/itemManage'
+                }, {
+                    background: 'lightblue',
+                    text: '会员管理',
+                    url: '/app/productManage/itemManage'
+                }, {
+                    background: '#a3c07e',
+                    text: '进销存管理',
+                    url: '/app/productManage/itemManage'
+                }, {
+                    background: '#a9c3e4',
+                    text: '产品管理',
+                    url: '/app/productManage/itemManage'
+                }
+            ],
+            nowTab: [{
+                    background: '#a9c3e4',
+                    text: '消费开单',
+                    url: '/app/productManage/itemManage',
+                    over: 'none'
+                }, {
+                    background: 'lightblue',
+                    text: '会员管理',
+                    url: '/app/productManage/itemManage',
+                    over: 'none'
+                }, {
+                    background: '#a3c07e',
+                    text: '进销存管理',
+                    url: '/app/productManage/itemManage',
+                    over: 'none'
+                }, {
+                    background: '#a9c3e4',
+                    text: '产品管理',
+                    url: '/app/productManage/itemManage',
+                    over: 'none'
+                }
+            ]
+        }
+    }
+    deleteTab = (index) => {
+        let nowTab = this.state.nowTab
+        nowTab.splice(index, 1)
+        this.setState({
+            nowTab: nowTab
+        })
+    }
+    showIcon = (index) => {
+        let nowTab = this.state.nowTab
+        nowTab[index]['over'] = 'block'
+        this.setState({
+            nowTab: nowTab
+        })
+    }
+    hiddenIcon = (index) => {
+        let nowTab = this.state.nowTab
+        nowTab[index]['over'] = 'none'
+        this.setState({
+            nowTab: nowTab
+        })
+    }
     render() {
+        let nowLi = this.state.nowTab.map((item, index) => {
+            return <Li style={{ position: 'relative', background: item.background, boxShadow: item.over == 'none' ? 'none' : '0 0 5px #888' }} key={index} onMouseOver={() => this.showIcon(index)} onMouseOut={() => this.hiddenIcon(index)}>
+                <Icon type="close-circle-o" style={{ position: 'absolute', right: '5px', top: '5px', display: item.over }} onClick={() => this.deleteTab(index)} />
+                <Link to={item.url} style={{ color: '#fff' }}>
+                    {item.text}
+                </Link>
+            </Li>
+        })
         return (
             <div style={{ background: '#ECECEC' }}>
-                 <BreadcrumbCustom />
-                <Row gutter={16} style={{width:'80%',marginLeft:'10%'}}>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#a9c3e4'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">消费开单</span>
-                            </div>
-                            </Card>
+                <BreadcrumbCustom />
+                <UlBox className="clear" >
+                    {nowLi}
+                    <Li style={{ background: '#f8e4dd' ,boxShadow:'0 0 5px #888'}}>
+                        <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px' }} />
+                    </Li>
+                </UlBox>
+                {/*<Row gutter={16}>
+                    <Col span={8}>
+                        <Card bordered={false}>Card content</Card>
                     </Col>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#eafd89'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">收支管理</span>
-                            </div>
-                            </Card>
+                    <Col span={8}>
+                        <Card bordered={false}>Card content</Card>
                     </Col>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'lightblue'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">会员管理</span>
-                            </div>
-                            </Card>
+                    <Col span={8}>
+                        <Card bordered={false}>Card content</Card>
                     </Col>
-                    <Col span={6} >
-                        <Card  bordered={false} style={{backgroundColor:'#a3c07e'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">进销存管理</span>
-                            </div>
-                            </Card>
-                    </Col>
-                  
-                </Row>
-                  <Row gutter={16} style={{width:'80%',marginLeft:'10%',marginTop:'20px'}}>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#ff9b6d'}}>
-                            <div style={{height:'150px',textAlign:'center'}} >
-                                <span className="cardtext">产品管理</span>
-                            </div>
-                            </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#ffd37c'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">数据报表</span>
-                            </div>
-                            </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#aeaeae'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <span className="cardtext">系统设置</span>
-                            </div>
-                            </Card>
-                    </Col>
-                    <Col span={6}>
-                        <Card  bordered={false} style={{backgroundColor:'#f8e4dd'}}>
-                            <div style={{height:'150px',textAlign:"center"}}>
-                                <Icon type="plus-circle-o" style={{fontSize:'100px',color:'#fff',lineHeight:'150px'}} />
-                            </div>
-                            </Card>
-                    </Col>
-                  
-                </Row>
+                </Row>*/}
             </div>
         )
     }
