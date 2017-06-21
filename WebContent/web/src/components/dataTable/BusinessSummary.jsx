@@ -16,17 +16,32 @@ class BusinessSummary extends React.Component {
                 payway: '金额',
                 cash: '¥2000',
                 easyfubao: '¥2000',
-                alipay:'¥2000',
-                wechatpay:'¥2000'
+                alipay: '¥2000',
+                wechatpay: '¥2000'
             }, {
                 key: 2,
                 index: 2,
                 payway: '比例',
                 cash: '25%',
                 easyfubao: '25%',
-                alipay:'25%',
-                wechatpay:'25%'
+                alipay: '25%',
+                wechatpay: '25%'
             }],
+            proportionData: [{
+                key: 1,
+                index: 1,
+                projectCategory: '美容服务',
+                number: '2000',
+                proportion: '20%',
+                money: '¥2000'
+            }, {
+                key: 2,
+                index: 2,
+                projectCategory: '美容服务',
+                number: '2000',
+                proportion: '20%',
+                money: '¥2000'
+            }]
         }
     }
 
@@ -83,7 +98,7 @@ class BusinessSummary extends React.Component {
                     </Row>
                 </div>
                 <div>
-                    <h2 style={{padding:'10px'}}>收款方式</h2>
+                    <h2 style={{ padding: '10px' }}>收款方式</h2>
                     <Table className="accountTable" dataSource={this.state.data} bordered>
                         <Col
                             title="支付方式"
@@ -113,9 +128,31 @@ class BusinessSummary extends React.Component {
                     </Table>
                 </div>
                 <div>
-                    <h2 style={{padding:'10px'}}>项目类别</h2>
+                    <h2 style={{ padding: '10px' }}>项目类别</h2>
                 </div>
                 <Chart></Chart>
+                <Table className="accountTable" dataSource={this.state.proportionData} bordered>
+                    <Col
+                        title="项目类别"
+                        dataIndex="projectCategory"
+                        key="projectCategory"
+                    />
+                    <Col
+                        title="数量"
+                        dataIndex="number"
+                        key="number"
+                    />
+                    <Col
+                        title="占比"
+                        key="proportion"
+                        dataIndex="proportion"
+                    />
+                    <Col
+                        title="金额"
+                        key="money"
+                        dataIndex="money"
+                    />
+                </Table>
             </Card>
         </div>
     }

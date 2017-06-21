@@ -4,14 +4,13 @@ import ReactEcharts from 'echarts-for-react';
 
 const option = {
     title: {
-        text: 'pie',
+        text: '项目类别占比图',
         left: 'center',
         top: 20,
         textStyle: {
             color: '#777' 
         }
     },
-    color:['#ccf', '#cfc','#ccc','#ffc'] ,
     tooltip : {
         trigger: 'item',
         formatter: "{a} <br/>{b} : {c} ({d}%)"
