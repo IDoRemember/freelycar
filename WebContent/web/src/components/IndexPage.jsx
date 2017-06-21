@@ -110,17 +110,6 @@ class IndexPage extends React.Component {
                         <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px' }} />
                     </Li>
                 </UlBox>
-                {/*<Row gutter={16}>
-                    <Col span={8}>
-                        <Card bordered={false}>Card content</Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card bordered={false}>Card content</Card>
-                    </Col>
-                    <Col span={8}>
-                        <Card bordered={false}>Card content</Card>
-                    </Col>
-                </Row>*/}
             </div>
         )
     }
