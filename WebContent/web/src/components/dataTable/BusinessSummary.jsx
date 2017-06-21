@@ -25,7 +25,6 @@ class BusinessSummary extends React.Component {
                                 <Radio.Button value="top">今日</Radio.Button>
                                 <Radio.Button value="left">本月</Radio.Button>
                             </Radio.Group>
-
                         </Col>
 
                         {/*日期选择器*/}
