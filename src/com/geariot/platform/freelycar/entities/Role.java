@@ -1,7 +1,9 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
@@ -14,10 +16,11 @@ import javax.persistence.ManyToMany;
 
 @Entity
 public class Role {
+	
 	private int id;
 	private String roleName;
 	private String description;
-	List<Permission> permissions;
+	Set<Permission> permissions;
 	public String getDescription() {
 		return description;
 	}
@@ -26,12 +29,12 @@ public class Role {
 	public int getId() {
 		return id;
 	}
-	@ManyToMany(fetch=FetchType.EAGER)
+	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
 	@JoinTable(name="role_permission", 
 				joinColumns={@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="permissionId", foreignKey=@ForeignKey(name="none"))})	
-	public List<Permission> getPermissions() {
+	public Set<Permission> getPermissions() {
 		return permissions;
 	}
 	public String getRoleName() {
@@ -43,7 +46,7 @@ public class Role {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setPermissions(List<Permission> permissions) {
+	public void setPermissions(Set<Permission> permissions) {
 		this.permissions = permissions;
 	}
 	public void setRoleName(String roleName) {

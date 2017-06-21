@@ -24,6 +24,9 @@ import HistoryOutcomeDetail from './components/income/HistoryOutcomeDetail.jsx';
 //member
 import ClientInfo from './components/member/ClientInfo.jsx'
 import ClientDetail from './components/member/ClientDetail.jsx'
+import PayHistory from './components/member/PayHistory.jsx'
+import AddClient from './components/member/AddClient.jsx'
+import BuyCard from './components/member/BuyCard.jsx'
 
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
@@ -37,6 +40,11 @@ import PutInStorage from './components/buySellStock/PutInStorage.jsx';
 import SellProduct from './components/buySellStock/SellProduct.jsx';
 import ProductReceipts from './components/buySellStock/ProductReceipts.jsx';
 import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
+//system
+import StaffManage from './components/systemSetting/StaffManage.jsx';
+import AccountManage from './components/systemSetting/AccountManage.jsx';
+
+
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >
@@ -58,10 +66,11 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >
-            <Route path={"memberShip"} component={AdvancedTable} />
+            <Route path={"memberShip"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:uid"} component={ClientDetail} />
-
+            <Route path={"customer/:uid/payhistory"} component={PayHistory} />
+            <Route path={"addclient"} component={AddClient}/>
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
@@ -80,8 +89,8 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"businessSummary"} component={BusinessSummary} />
         </Route>
         <Route path={"systemSet"} >
-            <Route path={"staffManage"} component={AdvancedTable} />
-            <Route path={"accountManage"} component={AdvancedTable} />
+            <Route path={"staffManage"} component={StaffManage} />
+            <Route path={"accountManage"} component={AccountManage} />
         </Route>
         <Route path="/dashboard/index" component={AdvancedTable} />
     </Route>

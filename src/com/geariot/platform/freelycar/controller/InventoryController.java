@@ -3,6 +3,8 @@ package com.geariot.platform.freelycar.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -10,58 +12,62 @@ import org.springframework.web.bind.annotation.RestController;
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryType;
+import com.geariot.platform.freelycar.service.InventoryService;
 
 @RestController
 @RequestMapping(value = "/inventory")
 public class InventoryController {
 
+	@Autowired
+	private InventoryService inventoryService;
+	
 	@RequestMapping(value = "/addtype" , method = RequestMethod.POST)
-	public String addType(InventoryType inventoryType){
-		return null;
+	public String addType(@RequestBody InventoryType inventoryType){
+		return this.inventoryService.addType(inventoryType);
 	}
 	
 	@RequestMapping(value = "/deltype" , method = RequestMethod.POST)
-	public String deleteType(int inventoryTypeId){
-		return null;
+	public String deleteType(Integer... inventoryTypeIds){
+		return this.inventoryService.deleteType(inventoryTypeIds);
 	}
 	
 	@RequestMapping(value = "/listtype" , method = RequestMethod.GET)
 	public String listType(int page , int number){
-		return null;
+		return this.inventoryService.listType(page, number);
 	}
 	
 	@RequestMapping(value = "/querytype" , method = RequestMethod.GET)
 	public String queryType(String name , Date startTime , Date endTime){
-		return null;
+		return this.inventoryService.queryType(name, startTime, endTime);
 	}
 	
 	@RequestMapping(value = "/addbrand" , method = RequestMethod.POST)
-	public String addBrand(InventoryBrand inventoryBrand){
-		return null;
+	public String addBrand(@RequestBody InventoryBrand inventoryBrand){
+		return this.inventoryService.addBrand(inventoryBrand);
 	}
 	
 	@RequestMapping(value = "/delbrand" , method = RequestMethod.POST)
-	public String deleteBrand(int inventoryBrandId){
-		return null;
+	public String deleteBrand(Integer... inventoryBrandIds){
+		return this.inventoryService.deleteBrand(inventoryBrandIds);
 	}
 	
 	@RequestMapping(value = "/listbrand" , method = RequestMethod.GET)
 	public String listBrand(int page , int number){
-		return null;
+		return this.inventoryService.listBrand(page, number);
 	}
 	
 	@RequestMapping(value = "/querybrand" , method = RequestMethod.GET)
 	public String queryBrand(String name){
-		return null;
+		return this.inventoryService.queryBrand(name);
 	}
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
-	public String Add(Inventory inventory){
+	public String add(Inventory inventory){
 		return null;
 	}
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
-	public String Delete(int inventoryId){
+	public String delete(int inventoryId){
 		return null;
 	}
 	
@@ -81,7 +87,7 @@ public class InventoryController {
 	}
 	
 	@RequestMapping(value = "/remain" , method = RequestMethod.GET)
-	public String Remain(int inventoryId){
+	public String remain(int inventoryId){
 		return null;
 	}
 	
@@ -91,7 +97,7 @@ public class InventoryController {
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
-	public String Query(int inventoryOrderId , Date createDate , int adminId ){
+	public String query(int inventoryOrderId , Date createDate , int adminId ){
 		return null;
 	}
 	

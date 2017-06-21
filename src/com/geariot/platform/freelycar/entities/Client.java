@@ -1,9 +1,11 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,23 +29,32 @@ public class Client {
 	private int points;
 	private String recommendName;
 	private Date createDate;
-	private List<Car> cars;
-	private List<Card> cards;
+	private Set<Car> cars;
+	private Set<Card> cards;
+	private int consumTimes;
+	private float consumAmout;
+	private Date lastVisit;
 	public int getAge() {
 		return age;
 	}
 	public Date getBirthday() {
 		return birthday;
 	}
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
+	public Set<Card> getCards() {
+		return cards;
+	}
+	@OneToMany(cascade={}, fetch=FetchType.LAZY)
 	@JoinColumn(name="cliendId", foreignKey=@ForeignKey(name="none"))
-	public List<Car> getCar() {
+	public Set<Car> getCars() {
 		return cars;
 	}
-	@OneToMany
-	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
-	public List<Card> getCard() {
-		return cards;
+	public float getConsumAmout() {
+		return consumAmout;
+	}
+	public int getConsumTimes() {
+		return consumTimes;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -61,6 +72,9 @@ public class Client {
 	}
 	public String getIdNumber() {
 		return idNumber;
+	}
+	public Date getLastVisit() {
+		return lastVisit;
 	}
 	public String getName() {
 		return name;
@@ -83,11 +97,17 @@ public class Client {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-	public void setCar(List<Car> car) {
-		this.cars = car;
+	public void setCards(Set<Card> cards) {
+		this.cards = cards;
 	}
-	public void setCard(List<Card> card) {
-		this.cards = card;
+	public void setCars(Set<Car> cars) {
+		this.cars = cars;
+	}
+	public void setConsumAmout(float consumAmout) {
+		this.consumAmout = consumAmout;
+	}
+	public void setConsumTimes(int consumTimes) {
+		this.consumTimes = consumTimes;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -103,6 +123,9 @@ public class Client {
 	}
 	public void setIdNumber(String idNumber) {
 		this.idNumber = idNumber;
+	}
+	public void setLastVisit(Date lastVisit) {
+		this.lastVisit = lastVisit;
 	}
 	public void setName(String name) {
 		this.name = name;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Select, Table, Iconconst,Popconfirm } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
-import EditTableCell from './EditTableCell.jsx'
+import EditableCell from './EditableCell.jsx'
 const Option = Select.Option;
 class PartsDetail extends React.Component {
     constructor(props) {
@@ -129,7 +129,7 @@ class PartsDetail extends React.Component {
                     key="number"
                     dataIndex="number"
                     render={(text, record, index) => (
-                        <EditTableCell
+                        <EditableCell
                             value={text}
                             onChange={this.onCellChange(index, 'name')}
                         />
