@@ -5,7 +5,6 @@ import ReactDom from 'react-dom';
 import { Router, Route, hashHistory } from 'react-router';
 import App from './App';
 import Login from './components/Login.jsx';
-import AdvancedTable from './components/tables/AdvancedTables.jsx';
 import Page from './components/Page.jsx';
 //consumption
 import OrderManage from './components/consumption/OrderManage.jsx';
@@ -59,7 +58,6 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
             <Route path={"incomeSearch/income/:incomeId"} component={IncomeDetail} />
             <Route path={"incomeSearch/pay/:payId"} component = {PayDetail}/>
-            <Route path={"historyIncome"} component={AdvancedTable} />
             <Route path={"historyAccount"} component={HistoricalAccount} />
             <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
@@ -92,7 +90,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"staffManage"} component={StaffManage} />
             <Route path={"accountManage"} component={AccountManage} />
         </Route>
-        <Route path="/dashboard/index" component={AdvancedTable} />
+        <Route path="/dashboard/index" component={StaffManage} />
     </Route>
 </Route>
 

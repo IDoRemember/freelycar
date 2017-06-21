@@ -20,7 +20,7 @@ class BusinessSummary extends React.Component {
             <Card>
                 <div>
                     <Row>
-                        <Col span={18}>
+                        <Col span={12}>
                             <Radio.Group onChange={this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
                                 <Radio.Button value="top">今日</Radio.Button>
                                 <Radio.Button value="left">本月</Radio.Button>
@@ -28,7 +28,7 @@ class BusinessSummary extends React.Component {
                         </Col>
 
                         {/*日期选择器*/}
-                        <Col span={6}>
+                        <Col span={12}>
                             <div>
                                 <span>查找日期 : </span>
                                 <DatePicker.RangePicker
