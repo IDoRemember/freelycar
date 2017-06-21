@@ -147,8 +147,6 @@ class EditableTable extends React.Component {
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-
-                    
                      <span>
                             <span style={{ marginRight: '10px', cursor: 'pointer' }}onClick={this.handleAdd}>
                                 <a href="javascript:void(0);">新增</a>
@@ -190,7 +188,7 @@ class EditableTable extends React.Component {
                 insuranceTime: "2018-5-23",
                 other: "",
             }],
-            count: 2,
+            count: 3,
         };
     }
     onCellChange = (index, key) => {
@@ -213,6 +211,7 @@ class EditableTable extends React.Component {
             age: 32,
             address: `London, Park Lane no. ${count}`,
         };
+        console.log(count)
         this.setState({
             dataSource: [...dataSource, newData],
             count: count + 1,
