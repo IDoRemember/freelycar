@@ -7,12 +7,12 @@ import EditableCell from '../tables/EditableCell.jsx'
 //import jquery from 'jquery';
 import $ from 'jquery';
 
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal,Form } from 'antd';
 import moment from 'moment';
 
 import { Link } from 'react-router';
 const { RangePicker } = DatePicker;
-
+const FormItem = Form.Item;
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
 const TabPane = Tabs.TabPane;
@@ -162,6 +162,48 @@ class EditableTable extends React.Component {
             }),
         };
 
+        //表单
+        const formItemLayout = {
+            labelCol: {
+                xs: { span: 24 },
+                sm: { span: 6 },
+            },
+            wrapperCol: {
+                xs: { span: 24 },
+                sm: { span: 10 },
+            },
+        };
+
+        //modal弹出表格数据
+        const modalDate = [{
+            key: '1',
+            name: '胡彦斌',
+            age: 32,
+            address: '西湖区湖底公园1号'
+            }, {
+            key: '2',
+            name: '胡彦祖',
+            age: 42,
+            address: '西湖区湖底公园1号'
+            }];
+
+            const modalColumns = [{
+            title: '姓名',
+            dataIndex: 'name',
+            key: 'name',
+            }, {
+            title: '年龄',
+            dataIndex: 'age',
+            key: 'age',
+            }, {
+            title: '住址',
+            dataIndex: 'address',
+            key: 'address',
+            }];
+
+
+
+
 
 
         return (
@@ -214,46 +256,61 @@ class EditableTable extends React.Component {
 
                 </Card>
 
-                  {/*模态框*/}
-                                <Modal
-                                    title="项目查询"
-                                    visible={this.state.visible}
-                                    onOk={this.handleOk}
-                                    onCancel={this.handleCancel}
-                                    width='80%' >
-                                    <Row type="flex" justify="center" style={{ marginTop: '40px', marginBottom: '20px' }}>
-                                        <div>
-                                            <Input addonBefore="卡类名称"  />
-                                        </div>
-                                            <div>
-                                                <Input addonBefore="卡类名称"  />
-                                            </div>
-                                        <Col span={24}>
-                                            <Input addonBefore="卡类属性"  />
-                                        </Col>
-                                        <Col span={24}>
-                                            <Input addonBefore="卡类名称"  />
-                                        </Col>
-                                        <Col span={24}>
-                                            <Input addonBefore="卡类名称"  />
-                                        </Col>
-                                        <Col span={24}>
-                                            <Input addonBefore="卡类名称"  />
-                                        </Col>
+                {/*模态框*/}
+                <Modal
+                    title="项目查询"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    width='50%' >
 
-                                    </Row>
 
-                                        <Row>
-                                            <Col span={24}>
-                                                <Table
-                                                    columns={this.columns}
-                                                    dataSource={this.state.dataSource}
-                                                    bordered
-                                                />
-                                            </Col>
-                                        </Row>
+                    <Form onSubmit={this.handleSubmit}>
+                        <FormItem
+                            {...formItemLayout}
+                            label="卡类名称"
+                            hasFeedback
+                        >
+                            <Input />
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="卡类属性"
+                            hasFeedback
+                        >
+                            <Input />
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="售卡金额"
+                            hasFeedback
+                        >
+                            <Input />
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="有效期(年)"
+                            hasFeedback
+                        >
+                            <Input />
+                        </FormItem>
+                        <FormItem
+                            {...formItemLayout}
+                            label="备注"
+                            hasFeedback
+                        >
+                            <Input />
+                        </FormItem>
+                    </Form>
 
-                                </Modal>
+
+                    <Row>
+                        <Col span={24}>
+                            <ModalEditableTable />
+                        </Col>
+                    </Row>
+
+                </Modal>
 
 
             </div>
@@ -261,3 +318,106 @@ class EditableTable extends React.Component {
     }
 }
 export default EditableTable
+
+
+
+//可编辑的table 
+class ModalEditableTable extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+
+        }
+
+
+        this.columns = [{
+            title: '项目名称',
+            dataIndex: 'name',
+            key: 'name'
+        }, {
+            title: '可用次数',
+            dataIndex: 'count',
+            key: 'count'
+        }, {
+            title: 'operation',
+            dataIndex: 'operation',
+            render: (text, record, index) => {
+                return (
+                    this.state.dataSource.length > 1 ?
+                        (
+                            <div>
+                                <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
+                                    <a href="#">删除</a>
+                                </Popconfirm>
+                            </div>
+                        ) : null
+                );
+            },
+        }];
+
+        this.state = {
+            dataSource: [{
+                key: '1',
+                index: '1',
+                name: 'John Brown',
+                count: 'dfsd',
+                operation: 'zz'
+            }, {
+                key: '2',
+                index: '2',
+                name: 'John Brown',
+                count: 'dfsd',
+                operation: 'zz'
+            }],
+            count: 3,
+        };
+    }
+
+
+    onCellChange = (index, key) => {
+        return (value) => {
+            const dataSource = [...this.state.dataSource];
+            dataSource[index][key] = value;
+            this.setState({ dataSource });
+        };
+    }
+    onDelete = (index) => {
+        const dataSource = [...this.state.dataSource];
+        dataSource.splice(index, 1);
+        this.setState({ dataSource });
+    }
+    handleAdd = () => {
+        const { count, dataSource } = this.state;
+        const newData = {
+            key: count,
+            index: count,
+            name: `Edward King ${count}`,
+            properties: `Edward King ${count}`,
+            valateTime: `Edward King ${count}`,
+            price: `Edward King ${count}`,
+            createTime: `Edward King ${count}`,
+            remark: `Edward King ${count}`,
+        };
+        this.setState({
+            dataSource: [...dataSource, newData],
+            count: count + 1,
+        });
+    }
+    render() {
+        const { dataSource } = this.state;
+        const columns = this.columns;
+       
+
+        return (
+            <div>
+                <Button  className="editable-add-btn" onClick={this.handleAdd}>新增</Button>
+                <Table
+                    columns={columns}
+                    dataSource={dataSource}
+                    bordered
+                />
+            </div>
+        );
+    }
+}
+
