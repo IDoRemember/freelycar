@@ -31,12 +31,12 @@ public class StatController {
 	}
 
 	@RequestMapping(value = "/today/detail" , method = RequestMethod.GET)
-	public String dailyStatDetail(int income , int expand){
+	public String dailyStatDetail(int income , int expend){
 		return null;
 	}
 	
 	@RequestMapping(value = "/thismonth/detail" , method = RequestMethod.GET)
-	public String monthlyStatDetail(int income , int expand){
+	public String monthlyStatDetail(int income , int expend){
 		return null;
 	}
 

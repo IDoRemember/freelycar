@@ -8,9 +8,10 @@ import javax.persistence.Id;
 @Entity
 public class OtherExpendOrder {
 	private String id;
-	private int otherExpandTypeId;
+	private int otherExpendTypeId;
 	private float amount;
 	private String comment;
+	private Date expendDate;
 	private Date createDate;
 	public float getAmount() {
 		return amount;
@@ -25,8 +26,8 @@ public class OtherExpendOrder {
 	public String getId() {
 		return id;
 	}
-	public int getOtherExpandTypeId() {
-		return otherExpandTypeId;
+	public int getOtherExpendTypeId() {
+		return otherExpendTypeId;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
@@ -40,7 +41,13 @@ public class OtherExpendOrder {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public void setOtherExpandTypeId(int otherExpandTypeId) {
-		this.otherExpandTypeId = otherExpandTypeId;
+	public void setOtherExpendTypeId(int otherExpendTypeId) {
+		this.otherExpendTypeId = otherExpendTypeId;
+	}
+	public Date getExpendDate() {
+		return expendDate;
+	}
+	public void setExpendDate(Date expendDate) {
+		this.expendDate = expendDate;
 	}
 }
