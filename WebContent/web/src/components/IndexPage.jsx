@@ -23,6 +23,7 @@ class IndexPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            shadowStyle:false,
             tab: [
                 {
                     background: '#a9c3e4',
@@ -105,7 +106,7 @@ class IndexPage extends React.Component {
                 <BreadcrumbCustom />
                 <UlBox className="clear" >
                     {nowLi}
-                    <Li style={{ background: '#f8e4dd' ,boxShadow:'0 0 5px #888'}}>
+                    <Li style={{ background: '#f8e4dd' ,boxShadow:this.state.shadowStyle?'0 0 5px #888':'none'}} onMouseOver={() => this.setState({shadowStyle:true})} onMouseOut={() => this.setState({shadowStyle:false})}>
                         <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px' }} />
                     </Li>
                 </UlBox>
