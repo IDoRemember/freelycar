@@ -8,6 +8,4 @@ public interface CarDao {
 	Car findById(int carId);
 	
 	Car findByLicense(String licensePlate);
-
-	Car findByFuzzyLicense(String licensePlate);
 }

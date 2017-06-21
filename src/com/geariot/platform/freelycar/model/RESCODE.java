@@ -21,7 +21,8 @@ public enum RESCODE {
 	PHONE_EXIST(16, "手机号码已存在"),
 	CAR_LICENSE_EXIST(17, "车牌号码已存在"),
 	PART_SUCCESS(18, "批处理部分成功"),
-	NAME_EXIST(19, "名称已存在")
+	NAME_EXIST(19, "名称已存在"),
+	WORK_NOT_FINISH(20, "当前订单还未完工")
 	;
 	
 	// 定义私有变量

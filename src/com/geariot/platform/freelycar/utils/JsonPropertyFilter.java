@@ -11,13 +11,8 @@ public class JsonPropertyFilter implements PropertyFilter {
 	private Class<?>[] collectionProperties = null;
 	private boolean filterCollection = false;
 	
-	public JsonPropertyFilter(boolean filterCollection, Class<?>... filterProperties){
-		this.filterCollection = filterCollection;
-		this.filterProperties = filterProperties;
-	}
-	
 	public JsonPropertyFilter(Class<?>... filterProperties){
-		this(false, filterProperties);
+		this.filterProperties = filterProperties;
 	}
 	
 	public void setColletionProperties(Class<?>... collectionProperties){

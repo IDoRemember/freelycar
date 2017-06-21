@@ -39,10 +39,10 @@ public class JsonResFactory {
 		return obj;
 	}
 	
-	public static net.sf.json.JsonConfig dateConfig(){
+	public static net.sf.json.JsonConfig dateConfig(Class<?>... classes){
 		net.sf.json.JsonConfig config = new net.sf.json.JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		config.setJsonPropertyFilter(new JsonPropertyFilter());
+		config.setJsonPropertyFilter(new JsonPropertyFilter(classes));
 		return config;
 	}
 	

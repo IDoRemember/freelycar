@@ -28,7 +28,7 @@ public class Inventory {
 	public float getAmount() {
 		return amount;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
 	public InventoryBrand getBrand() {
 		return brand;
@@ -62,7 +62,7 @@ public class Inventory {
 	public String getStandard() {
 		return standard;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="typeId", foreignKey=@ForeignKey(name="none"))
 	public InventoryType getType() {
 		return type;
@@ -99,5 +99,12 @@ public class Inventory {
 	}
 	public void setType(InventoryType type) {
 		this.type = type;
+	}
+	
+	@Override
+	public String toString() {
+		return "Inventory [id=" + id + ", name=" + name + ", type=" + type + ", brand=" + brand + ", standard="
+				+ standard + ", property=" + property + ", price=" + price + ", amount=" + amount + ", providers="
+				+ providers + ", comment=" + comment + ", createDate=" + createDate + "]";
 	}
 }

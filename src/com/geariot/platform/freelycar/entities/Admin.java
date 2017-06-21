@@ -48,7 +48,7 @@ public class Admin {
 	public Role getRole() {
 		return role;
 	}
-	@OneToOne(cascade={}, fetch=FetchType.LAZY)
+	@OneToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))
 	public Staff getStaff() {
 		return staff;
@@ -84,10 +84,4 @@ public class Admin {
 		this.staff = staff;
 	}
 	
-	@Override
-	public String toString() {
-		return "Admin [id=" + id + ", account=" + account + ", password=" + password + ", name=" + name + ", staff="
-				+ staff + ", role=" + role + ", current=" + current + ", createDate=" + createDate + ", comment="
-				+ comment + "]";
-	}
 }

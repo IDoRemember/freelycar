@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,7 +23,7 @@ public class InventoryOrderInfo {
 	public int getId() {
 		return id;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="inventoryId", foreignKey=@ForeignKey(name="none"))
 	public Inventory getInventory() {
 		return inventory;

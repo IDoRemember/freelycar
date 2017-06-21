@@ -39,10 +39,4 @@ public class CarDaoImpl implements CarDao {
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
-	@Override
-	public Car findByFuzzyLicense(String licensePlate) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }

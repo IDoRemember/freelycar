@@ -4,17 +4,15 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 public class ConsumOrder {
@@ -25,36 +23,44 @@ public class ConsumOrder {
 	private int projectPayMethod;	//项目费支付方式：0,1=付现金,扣卡次
 	private Program program;
 	private String parkingLocation;
-	private Date pickTime;
 	private Set<Staff> staffs;
 	private List<ConsumExtraInventoriesInfo> inventoryInfos;
 	private int state;		//0,1,2=接,完,交
 	private float workingHour;
-	private float workingPricePerHousr;
+	private float workingPricePerHour;
 	private float totalPrice;
 	private int payState;	//0,1=未结算,已结算
+	private Date pickTime;
+	private Date finishTime;
+	private Date deliverTime;
 	private Date createDate;
-	@ManyToOne
+	@ManyToOne(cascade={})
 	@JoinColumn(name="carId", foreignKey=@ForeignKey(name="none"))
 	public Car getCar() {
 		return car;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={})
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Client getClient() {
 		return client;
 	}
-	@OneToMany
-	@JoinColumn(name="consumeOrdersId", foreignKey=@ForeignKey(name="none"))
-	public List<ConsumExtraInventoriesInfo> getConsumExtraAccessoriesInfo() {
-		return inventoryInfos;
-	}
 	public Date getCreateDate() {
 		return createDate;
+	}
+	public Date getDeliverTime() {
+		return deliverTime;
+	}
+	public Date getFinishTime() {
+		return finishTime;
 	}
 	@Id
 	public String getId() {
 		return id;
+	}
+	@OneToMany(cascade={CascadeType.ALL})
+	@JoinColumn(name="consumeOrdersId", foreignKey=@ForeignKey(name="none"))
+	public List<ConsumExtraInventoriesInfo> getInventoryInfos() {
+		return inventoryInfos;
 	}
 	public String getParkingLocation() {
 		return parkingLocation;
@@ -65,12 +71,12 @@ public class ConsumOrder {
 	public Date getPickTime() {
 		return pickTime;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={})
 	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
 	public Program getProgram() {
 		return program;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={})
 	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
 	public Project getProject() {
 		return project;
@@ -78,7 +84,7 @@ public class ConsumOrder {
 	public int getProjectPayMethod() {
 		return projectPayMethod;
 	}
-	@ManyToMany
+	@ManyToMany(cascade={CascadeType.ALL})
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
@@ -94,8 +100,8 @@ public class ConsumOrder {
 	public float getWorkingHour() {
 		return workingHour;
 	}
-	public float getWorkingPricePerHousr() {
-		return workingPricePerHousr;
+	public float getWorkingPricePerHour() {
+		return workingPricePerHour;
 	}
 	public void setCar(Car car) {
 		this.car = car;
@@ -103,14 +109,20 @@ public class ConsumOrder {
 	public void setClient(Client client) {
 		this.client = client;
 	}
-	public void setConsumExtraAccessoriesInfo(List<ConsumExtraInventoriesInfo> consumExtraAccessoriesInfo) {
-		this.inventoryInfos = consumExtraAccessoriesInfo;
-	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	public void setDeliverTime(Date deliverTime) {
+		this.deliverTime = deliverTime;
+	}
+	public void setFinishTime(Date finishTime) {
+		this.finishTime = finishTime;
+	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public void setInventoryInfos(List<ConsumExtraInventoriesInfo> inventoryInfos) {
+		this.inventoryInfos = inventoryInfos;
 	}
 	public void setParkingLocation(String parkingLocation) {
 		this.parkingLocation = parkingLocation;
@@ -142,7 +154,7 @@ public class ConsumOrder {
 	public void setWorkingHour(float workingHour) {
 		this.workingHour = workingHour;
 	}
-	public void setWorkingPricePerHousr(float workingPricePerHousr) {
-		this.workingPricePerHousr = workingPricePerHousr;
+	public void setWorkingPricePerHour(float workingPricePerHour) {
+		this.workingPricePerHour = workingPricePerHour;
 	}
 }
