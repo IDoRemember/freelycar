@@ -741,14 +741,14 @@
 			响应:{
 				"code":
 				"msg":
-				"data":{OtherExpandType1, OtherExpandType2...}
+				"data":{OtherExpendType1, OtherExpendType2...}
 			}
 	11.2 其他支出记录
 		11.2.1 增加其他支出记录:
 			请求:POST
 			server_url/charge/add
 			参数:{
-				OtherExpandOrder=OtherExpandOrder()
+				OtherExpendOrder=OtherExpendOrder()
 			}
 			响应:{
 				"code":
@@ -759,7 +759,7 @@
 		//	请求:POST
 		//	server_url/charge/delete
 		//	参数:{
-		//		otherExpandOrderId=
+		//		otherExpendOrderId=
 		//	}
 		//	响应:{
 		//		"code":
@@ -776,21 +776,21 @@
 			响应:{
 				"code":
 				"msg":
-				"data":{OtherExpandOrder1, OtherExpandOrder2...}
+				"data":{OtherExpendOrder1, OtherExpendOrder2...}
 				"size":
 			}
 		11.2.4 根据条件查询:
 			请求:GET
 			server_url/charge/query
 			参数:{
-				otherExpandTypeId=
+				otherExpendTypeId=
 				startTime=
 				endTime=
 			}
 			响应:{
 				"code":
 				"msg":
-				"data":{OtherExpandOrder1, OtherExpandOrder2...}
+				"data":{OtherExpendOrder1, OtherExpendOrder2...}
 				"size":
 			}
 
@@ -806,7 +806,7 @@
 				"code":
 				"msg":
 				"income":IncomeStat
-				"expend":ExpandStat
+				"expend":ExpendStat
 			}
 		12.1.2 本月收支查询:
 			请求:GET
@@ -818,7 +818,7 @@
 				"code":
 				"msg":
 				"income":IncomeStat
-				"expend":ExpandStat
+				"expend":ExpendStat
 			}
 		12.1.3 指定日期期间查询:
 			请求:GET
@@ -831,7 +831,7 @@
 				"code":
 				"msg":
 				"income":{IncomeStat1, IncomeStat2...}
-				"expend":{ExpandStat1, ExpandStat2...}
+				"expend":{ExpendStat1, ExpendStat2...}
 			}
 		12.1.4 给定某年按月份查询:
 			server_url/stat/monthlybyyear
@@ -843,7 +843,7 @@
 				"code":
 				"msg":
 				"income":{IncomeStat1, IncomeStat2...}
-				"expend":{ExpandStat1, ExpandStat2...}
+				"expend":{ExpendStat1, ExpendStat2...}
 			}
 	12.2 收支详细信息:
 		12.2.1 本日收入详情:
@@ -851,7 +851,7 @@
 			server_url/stat/today/detail
 			参数:{
 				income=1
-				expand=0
+				expend=0
 			}
 			响应:{
 				"code":
@@ -863,19 +863,19 @@
 			server_url/stat/today/detail
 			参数:{
 				income=0
-				expand=1
+				expend=1
 			}
 			响应:{
 				"code":
 				"msg":
-				"data":{ExpandOrder1, ExpandOrder2...}
+				"data":{ExpendOrder1, ExpendOrder2...}
 			}
 		12.2.3 本月收入详情:
 			请求:GET
 			server_url/stat/thismonth/detail
 			参数:{
 				income=1
-				expand=0
+				expend=0
 			}
 			响应:{
 				"code":
@@ -885,12 +885,12 @@
 		12.2.4 本月支出详情:
 			参数:{
 				income=0
-				expand=1
+				expend=1
 			}
 			响应:{
 				"code":
 				"msg":
-				"data":{ExpandOrder1, ExpandOrder2...}
+				"data":{ExpendOrder1, ExpendOrder2...}
 
 13. 单据Id生成接口:/idgen
 	13.1 生成id:
