@@ -379,7 +379,7 @@ class ModalEditableTable extends React.Component {
 
         return (
             <div>
-                <Button  className="editable-add-btn" onClick={this.handleAdd}>新增</Button>
+                <Button  className="editable-add-btn" onClick={this.handleAdd} style={{marginBottom:'15px'}}>新增</Button>
                 <Table
                     columns={columns}
                     dataSource={dataSource}
