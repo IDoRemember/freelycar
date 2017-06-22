@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm,InputNumber } from 'antd';
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 const Option = Select.Option;
@@ -81,7 +81,7 @@ class PutInStorage extends React.Component {
                         key="number"
                         dataIndex="number"
                         render={()=>{
-                            return <Input style={{width:'100px'}} />
+                            return <InputNumber min={1}  style={{width:'100px'}} />
                         }}
                     />
                     <Col
