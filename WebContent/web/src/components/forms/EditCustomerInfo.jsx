@@ -219,7 +219,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={6}>
                         接车时间：
-                        <DatePicker size="small" showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.timeonChange} />
+                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.timeonChange} />
                     </Col>
                     <Col span={6}>
                         会员卡种：
