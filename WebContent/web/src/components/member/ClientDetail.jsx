@@ -122,6 +122,14 @@ class ClientDetail extends React.Component {
     edit =()=>{
         this.setState({editable:true});
     }
+    onHandleChange=(e,key)=>{
+        console.log(key)
+        let form = this.state.form
+        form[key] = e.target.value
+        this.setState({
+            form:form
+        })
+    }
     render() {
         const{value,editable} =this.state;
         return (
@@ -130,19 +138,19 @@ class ClientDetail extends React.Component {
                 <Card title="客户资料" bordered={false} style={{ marginBottom: '15px' }}>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>姓名：<Input value={this.state.form.name} style={{width:'200px'}}/></Col>
-                        <Col span={6}>手机号：<Input value={this.state.form.phone}  style={{width:'200px'}}/></Col>
-                        <Col span={6}>生日：<Input value={this.state.form.birthday} style={{width:'200px'}}/></Col>
+                        <Col span={6}>姓名：<Input value={this.state.form.name} onChange={(e)=>this.onHandleChange(e,'name')} style={{width:'200px'}}/></Col>
+                        <Col span={6}>手机号：<Input value={this.state.form.phone} onChange={(e)=>this.onHandleChange(e,'phone')} style={{width:'200px'}}/></Col>
+                        <Col span={6}>生日：<Input value={this.state.form.birthday} onChange={(e)=>this.onHandleChange(e,'birthday')} style={{width:'200px'}}/></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>性别：<Input value={this.state.form.gender} style={{width:'200px'}}/></Col>
-                        <Col span={6}>身份证号：<Input value={this.state.form.idCard} style={{width:'200px'}}/></Col>
-                        <Col span={6}>行驶证号：<Input value={this.state.form.drivingLicense} style={{width:'200px'}}/></Col>
+                        <Col span={6}>性别：<Input value={this.state.form.gender} onChange={(e)=>this.onHandleChange(e,'gender')} style={{width:'200px'}}/></Col>
+                        <Col span={6}>身份证号：<Input value={this.state.form.idCard} onChange={(e)=>this.onHandleChange(e,'idCard')} style={{width:'200px'}}/></Col>
+                        <Col span={6}>行驶证号：<Input value={this.state.form.drivingLicense} onChange={(e)=>this.onHandleChange(e,'drivingLicense')} style={{width:'200px'}}/></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>车主状态：<Input value={this.state.form.ownerState} style={{width:'200px'}}/></Col>
+                        <Col span={6}>车主状态：<Input value={this.state.form.ownerState} onChange={(e)=>this.onHandleChange(e,'ownerState')} style={{width:'200px'}}/></Col>
                         <Col span={6}>积分：<span>21212</span></Col>
                     </Row>
                 </Card>
