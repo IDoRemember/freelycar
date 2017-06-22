@@ -164,6 +164,10 @@ public class AdminService {
 		if(admin == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		Subject curUser = SecurityUtils.getSubject();
+		if(account.equals(curUser.getPrincipal())){
+			return JsonResFactory.buildOrg(RESCODE.DISABLE_CURRENT_USER).toString();
+		}
 		admin.setCurrent(false);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

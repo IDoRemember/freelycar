@@ -26,7 +26,7 @@ public class ConsumOrder {
 	private Program program;
 	private String parkingLocation;
 	private Set<Staff> staffs;
-	private List<ConsumExtraInventoriesInfo> inventoryInfos;
+	private Set<ConsumExtraInventoriesInfo> inventoryInfos;
 	private int state;		//0,1,2=接,完,交
 	private float workingHour;
 	private float workingPricePerHour;
@@ -56,7 +56,7 @@ public class ConsumOrder {
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="consumeOrdersId", foreignKey=@ForeignKey(name="none"))
-	public List<ConsumExtraInventoriesInfo> getInventoryInfos() {
+	public Set<ConsumExtraInventoriesInfo> getInventoryInfos() {
 		return inventoryInfos;
 	}
 	public String getParkingLocation() {
@@ -123,7 +123,7 @@ public class ConsumOrder {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public void setInventoryInfos(List<ConsumExtraInventoriesInfo> inventoryInfos) {
+	public void setInventoryInfos(Set<ConsumExtraInventoriesInfo> inventoryInfos) {
 		this.inventoryInfos = inventoryInfos;
 	}
 	public void setParkingLocation(String parkingLocation) {
