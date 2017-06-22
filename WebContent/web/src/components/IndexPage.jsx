@@ -28,7 +28,19 @@ class IndexPage extends React.Component {
             tab: [
                 {
                     background: '#a9c3e4',
-                    text: '消费开单',
+                    text: '美容开单',
+                    url: '/app/productManage/itemManage'
+                },{
+                    background: '#a9c3e4',
+                    text: '维修开单',
+                    url: '/app/productManage/itemManage'
+                },{
+                    background: '#a9c3e4',
+                    text: '单据管理',
+                    url: '/app/productManage/itemManage'
+                },{
+                    background: '#a9c3e4',
+                    text: '美容开单',
                     url: '/app/productManage/itemManage'
                 }, {
                     background: '#eafd89',
@@ -129,7 +141,7 @@ class IndexPage extends React.Component {
                 <UlBox className="clear" >
                     {nowLi}
                     <Li style={{ background: '#f8e4dd', boxShadow: this.state.shadowStyle ? '0 0 5px #888' : 'none' }} onMouseOver={() => this.setState({ shadowStyle: true })} onMouseOut={() => this.setState({ shadowStyle: false })}>
-                        <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px' }} onClick={this.showModal} />
+                        <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px',cursor:'pointer' }} onClick={this.showModal} />
                     </Li>
                 </UlBox>
                 <Modal visible={this.state.visible}
@@ -144,11 +156,6 @@ class IndexPage extends React.Component {
                             onSelect={this.onSelect}
                             onCheck={this.onCheck}
                         >
-                            <TreeNode title="消费开单" key="0-0">
-                                <TreeNode title="美容开单" key="0-0-0" />
-                                <TreeNode title="消费开单" key="0-0-1" />
-                                <TreeNode title="单据管理" key="0-0-2" />
-                            </TreeNode>
                             <TreeNode title="消费开单" key="0-0">
                                 <TreeNode title="美容开单" key="0-0-0" />
                                 <TreeNode title="消费开单" key="0-0-1" />
