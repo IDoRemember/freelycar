@@ -29,34 +29,78 @@ class IndexPage extends React.Component {
                 {
                     background: '#a9c3e4',
                     text: '美容开单',
-                    url: '/app/productManage/itemManage'
+                    url: '/app/consumption/beautyOrder'
                 },{
                     background: '#a9c3e4',
                     text: '维修开单',
-                    url: '/app/productManage/itemManage'
+                    url: '/app/consumption/fixOrder'
                 },{
                     background: '#a9c3e4',
                     text: '单据管理',
-                    url: '/app/productManage/itemManage'
+                    url: '/app/consumption/orderManage'
                 },{
                     background: '#a9c3e4',
-                    text: '美容开单',
-                    url: '/app/productManage/itemManage'
+                    text: '收支查询',
+                    url: '/app/incomeManage/incomeSearch'
                 }, {
                     background: '#eafd89',
-                    text: '收支管理',
-                    url: '/app/productManage/itemManage'
+                    text: '历史收支查询',
+                    url: '/app/incomeManage/historyAccount'
                 }, {
                     background: 'lightblue',
-                    text: '会员管理',
-                    url: '/app/productManage/itemManage'
+                    text: '其他支出',
+                    url: '/app/incomeManage/otherPay'
                 }, {
                     background: '#a3c07e',
-                    text: '进销存管理',
+                    text: '会员办理',
+                    url: '/app/member/memberShip'
+                }, {
+                    background: '#a9c3e4',
+                    text: '客户管理',
+                    url: '/app/member/customer'
+                }, {
+                    background: '#a9c3e4',
+                    text: '库存查询',
+                    url: '/app/buySellStock/productSearch'
+                }, {
+                    background: '#a9c3e4',
+                    text: '入库',
+                    url: '/app/buySellStock/buyProduct'
+                }, {
+                    background: '#a9c3e4',
+                    text: '出库',
+                    url: '/app/buySellStock/sellProduct'
+                }, {
+                    background: '#a9c3e4',
+                    text: '库存单据',
+                    url: '/app/buySellStock/productReceipts'
+                }, {
+                    background: '#a9c3e4',
+                    text: '供应商管理',
+                    url: '/app/buySellStock/providerManage'
+                }, {
+                    background: '#a9c3e4',
+                    text: '项目管理',
                     url: '/app/productManage/itemManage'
                 }, {
                     background: '#a9c3e4',
-                    text: '产品管理',
+                    text: '配件管理',
+                    url: '/app/productManage/partsManage'
+                }, {
+                    background: '#a9c3e4',
+                    text: '卡类管理',
+                    url: '/app/productManage/cardManage'
+                }, {
+                    background: '#a9c3e4',
+                    text: '营业汇总',
+                    url: '/app/dataTable/businessSummary'
+                }, {
+                    background: '#a9c3e4',
+                    text: '员工管理',
+                    url: '/app/productManage/itemManage'
+                }, {
+                    background: '#a9c3e4',
+                    text: '账户管理',
                     url: '/app/productManage/itemManage'
                 }
             ],
