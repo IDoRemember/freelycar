@@ -27,81 +27,108 @@ class IndexPage extends React.Component {
             shadowStyle: false,
             tab: [
                 {
-                    background: '#a9c3e4',
-                    text: '美容开单',
-                    url: '/app/consumption/beautyOrder'
-                },{
-                    background: '#a9c3e4',
-                    text: '维修开单',
-                    url: '/app/consumption/fixOrder'
-                },{
-                    background: '#a9c3e4',
-                    text: '单据管理',
-                    url: '/app/consumption/orderManage'
-                },{
-                    background: '#a9c3e4',
-                    text: '收支查询',
-                    url: '/app/incomeManage/incomeSearch'
+                    title: '消费开单',
+                    items: [{
+                        background: '#a9c3e4',
+                        text: '美容开单',
+                        url: '/app/consumption/beautyOrder'
+                    }, {
+                        background: '#a9c3e4',
+                        text: '维修开单',
+                        url: '/app/consumption/fixOrder'
+                    }, {
+                        background: '#a9c3e4',
+                        text: '单据管理',
+                        url: '/app/consumption/orderManage'
+                    }]
                 }, {
-                    background: '#eafd89',
-                    text: '历史收支查询',
-                    url: '/app/incomeManage/historyAccount'
+                    title: '收支管理',
+                    items: [
+                        {
+                            background: '#eafd89',
+                            text: '收支查询',
+                            url: '/app/incomeManage/incomeSearch'
+                        }, {
+                            background: '#eafd89',
+                            text: '历史收支查询',
+                            url: '/app/incomeManage/historyAccount'
+                        }, {
+                            background: 'eafd89',
+                            text: '其他支出',
+                            url: '/app/incomeManage/otherPay'
+                        }
+                    ]
                 }, {
-                    background: 'lightblue',
-                    text: '其他支出',
-                    url: '/app/incomeManage/otherPay'
+                    title: '会员管理',
+                    items: [
+                        {
+                            background: '#a3c07e',
+                            text: '会员办理',
+                            url: '/app/member/memberShip'
+                        }, {
+                            background: '#a3c07e',
+                            text: '客户管理',
+                            url: '/app/member/customer'
+                        }
+                    ]
                 }, {
-                    background: '#a3c07e',
-                    text: '会员办理',
-                    url: '/app/member/memberShip'
+                    title: '进销存管理',
+                    items: [
+                        {
+                            background: '#a3c07e',
+                            text: '库存查询',
+                            url: '/app/buySellStock/productSearch'
+                        }, {
+                            background: '#a3c07e',
+                            text: '入库',
+                            url: '/app/buySellStock/buyProduct'
+                        }, {
+                            background: '#a3c07e',
+                            text: '出库',
+                            url: '/app/buySellStock/sellProduct'
+                        }, {
+                            background: '#a3c07e',
+                            text: '库存单据',
+                            url: '/app/buySellStock/productReceipts'
+                        }, {
+                            background: '#a3c07e',
+                            text: '供应商管理',
+                            url: '/app/buySellStock/providerManage'
+                        }
+                    ]
                 }, {
-                    background: '#a9c3e4',
-                    text: '客户管理',
-                    url: '/app/member/customer'
+                    title: '产品管理',
+                    items: [{
+                        background: '#ff9b6d',
+                        text: '项目管理',
+                        url: '/app/productManage/itemManage'
+                    }, {
+                        background: '#ff9b6d',
+                        text: '配件管理',
+                        url: '/app/productManage/partsManage'
+                    }, {
+                        background: '#ff9b6d',
+                        text: '卡类管理',
+                        url: '/app/productManage/cardManage'
+                    }]
                 }, {
-                    background: '#a9c3e4',
-                    text: '库存查询',
-                    url: '/app/buySellStock/productSearch'
+                    title: '数据报表',
+                    items: [{
+                        background: '#ffd37c',
+                        text: '营业汇总',
+                        url: '/app/dataTable/businessSummary'
+                    }]
                 }, {
-                    background: '#a9c3e4',
-                    text: '入库',
-                    url: '/app/buySellStock/buyProduct'
-                }, {
-                    background: '#a9c3e4',
-                    text: '出库',
-                    url: '/app/buySellStock/sellProduct'
-                }, {
-                    background: '#a9c3e4',
-                    text: '库存单据',
-                    url: '/app/buySellStock/productReceipts'
-                }, {
-                    background: '#a9c3e4',
-                    text: '供应商管理',
-                    url: '/app/buySellStock/providerManage'
-                }, {
-                    background: '#a9c3e4',
-                    text: '项目管理',
-                    url: '/app/productManage/itemManage'
-                }, {
-                    background: '#a9c3e4',
-                    text: '配件管理',
-                    url: '/app/productManage/partsManage'
-                }, {
-                    background: '#a9c3e4',
-                    text: '卡类管理',
-                    url: '/app/productManage/cardManage'
-                }, {
-                    background: '#a9c3e4',
-                    text: '营业汇总',
-                    url: '/app/dataTable/businessSummary'
-                }, {
-                    background: '#a9c3e4',
-                    text: '员工管理',
-                    url: '/app/productManage/itemManage'
-                }, {
-                    background: '#a9c3e4',
-                    text: '账户管理',
-                    url: '/app/productManage/itemManage'
+                    title: '系统设置',
+                    items: [{
+                        background: '#f8e4dd',
+                        text: '员工管理',
+                        url: '/app/productManage/itemManage'
+                    }, {
+                        background: '#f8e4dd',
+                        text: '账户管理',
+                        url: '/app/productManage/itemManage'
+                    }]
                 }
             ],
             nowTab: [{
@@ -185,7 +212,7 @@ class IndexPage extends React.Component {
                 <UlBox className="clear" >
                     {nowLi}
                     <Li style={{ background: '#f8e4dd', boxShadow: this.state.shadowStyle ? '0 0 5px #888' : 'none' }} onMouseOver={() => this.setState({ shadowStyle: true })} onMouseOut={() => this.setState({ shadowStyle: false })}>
-                        <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px',cursor:'pointer' }} onClick={this.showModal} />
+                        <Icon type="plus-circle-o" style={{ fontSize: '70px', color: '#fff', lineHeight: '120px', cursor: 'pointer' }} onClick={this.showModal} />
                     </Li>
                 </UlBox>
                 <Modal visible={this.state.visible}
