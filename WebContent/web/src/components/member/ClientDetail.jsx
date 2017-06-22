@@ -153,6 +153,7 @@ class ClientDetail extends React.Component {
                 </Card>
                 <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
                     <CarTable></CarTable>
+
                 </Card>
                 <Card title="消费记录" className="accountTable" >
                     <Table columns={payColumns} dataSource={payData} bordered></Table>

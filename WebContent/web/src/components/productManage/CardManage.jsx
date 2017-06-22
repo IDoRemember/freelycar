@@ -188,8 +188,8 @@ class EditableTable extends React.Component {
                                 </div>
                             </Col>
 
-                            <Col span={1}>
-                                <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
+                            <Col span={1} style={{minWidth:"70px",marginLeft:"16px"}}>
+                                <span style={{ verticalAlign: 'middle', lineHeight: '28px', }}>创建日期:</span>
                             </Col>
                             <Col span={8}>
                                 <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />

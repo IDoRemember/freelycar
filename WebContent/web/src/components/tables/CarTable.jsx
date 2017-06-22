@@ -1,61 +1,6 @@
 import { Table, Input, Icon, Button, Popconfirm } from 'antd';
 import React from 'react';
-class EditableCell extends React.Component {
-
-    constructor(props) {
-        super(props)
-        this.state = {
-            value: this.props.value,
-            editable: false,
-
-        }
-    }
-    handleChange = (e) => {
-        const value = e.target.value;
-        this.setState({ value });
-    }
-    check = () => {
-        this.setState({ editable: false });
-        if (this.props.onChange) {
-            this.props.onChange(this.state.value);
-        }
-    }
-    edit = () => {
-        this.setState({ editable: true });
-    }
-    render() {
-        const { value, editable } = this.state;
-        return (
-            <div className="editable-cell">
-                {
-                    editable ?
-                        <div className="editable-cell-input-wrapper">
-                            <Input
-                                value={value}
-                                onChange={this.handleChange}
-                                onPressEnter={this.check}
-                            />
-                            <Icon
-                                type="check"
-                                className="editable-cell-icon-check"
-                                onClick={this.check}
-                            />
-                        </div>
-                        :
-                        <div className="editable-cell-text-wrapper">
-                            {value || ' '}
-                            <Icon
-                                type="edit"
-                                className="editable-cell-icon"
-                                onClick={this.edit}
-                            />
-                        </div>
-                }
-            </div>
-        );
-    }
-}
-
+import EditableCell from '../tables/EditableCell.jsx';
 
 class EditableTable extends React.Component {
     constructor(props) {
@@ -203,6 +148,9 @@ class EditableTable extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ dataSource });
     }
+    onChange = (value) =>{
+        console.log(value);
+    }
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
@@ -218,11 +166,11 @@ class EditableTable extends React.Component {
         });
     }
     render() {
-        const { dataSource } = this.state;
+      
         const columns = this.columns;
         return (
             <div>
-                <Table bordered dataSource={dataSource} columns={columns} />
+                <Table bordered dataSource={this.state.dataSource} columns={columns} />
             </div>
         );
     }
