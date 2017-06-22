@@ -32,7 +32,7 @@ class SiderCustom extends Component {
         console.log(collapsed);
         this.setState({
             collapsed,
-            mode: collapsed ? 'vertical' : 'inline',
+            mode: collapsed ? 'inline' : 'inline',
         });
     };
     menuClick = (e) => {
@@ -43,7 +43,7 @@ class SiderCustom extends Component {
 
     };
     openMenu = (v) => {
-        console.log(v);
+      //  console.log(v);
         this.setState({
             openKey: v[v.length - 1]
         })
