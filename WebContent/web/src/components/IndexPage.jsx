@@ -24,6 +24,7 @@ class IndexPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            checkedKeys:[],
             shadowStyle: false,
             tab: [
                 {
@@ -31,15 +32,18 @@ class IndexPage extends React.Component {
                     items: [{
                         background: '#a9c3e4',
                         text: '美容开单',
-                        url: '/app/consumption/beautyOrder'
+                        url: '/app/consumption/beautyOrder',
+                        over: 'none'
                     }, {
                         background: '#a9c3e4',
                         text: '维修开单',
-                        url: '/app/consumption/fixOrder'
+                        url: '/app/consumption/fixOrder',
+                        over: 'none'
                     }, {
                         background: '#a9c3e4',
                         text: '单据管理',
-                        url: '/app/consumption/orderManage'
+                        url: '/app/consumption/orderManage',
+                        over: 'none'
                     }]
                 }, {
                     title: '收支管理',
@@ -47,15 +51,18 @@ class IndexPage extends React.Component {
                         {
                             background: '#eafd89',
                             text: '收支查询',
-                            url: '/app/incomeManage/incomeSearch'
+                            url: '/app/incomeManage/incomeSearch',
+                            over: 'none'
                         }, {
                             background: '#eafd89',
                             text: '历史收支查询',
-                            url: '/app/incomeManage/historyAccount'
+                            url: '/app/incomeManage/historyAccount',
+                            over: 'none'
                         }, {
-                            background: 'eafd89',
+                            background: '#eafd89',
                             text: '其他支出',
-                            url: '/app/incomeManage/otherPay'
+                            url: '/app/incomeManage/otherPay',
+                            over: 'none'
                         }
                     ]
                 }, {
@@ -64,11 +71,13 @@ class IndexPage extends React.Component {
                         {
                             background: '#a3c07e',
                             text: '会员办理',
-                            url: '/app/member/memberShip'
+                            url: '/app/member/memberShip',
+                            over: 'none'
                         }, {
                             background: '#a3c07e',
                             text: '客户管理',
-                            url: '/app/member/customer'
+                            url: '/app/member/customer',
+                            over: 'none'
                         }
                     ]
                 }, {
@@ -77,23 +86,28 @@ class IndexPage extends React.Component {
                         {
                             background: '#a3c07e',
                             text: '库存查询',
-                            url: '/app/buySellStock/productSearch'
+                            url: '/app/buySellStock/productSearch',
+                            over: 'none'
                         }, {
                             background: '#a3c07e',
                             text: '入库',
-                            url: '/app/buySellStock/buyProduct'
+                            url: '/app/buySellStock/buyProduct',
+                            over: 'none'
                         }, {
                             background: '#a3c07e',
                             text: '出库',
-                            url: '/app/buySellStock/sellProduct'
+                            url: '/app/buySellStock/sellProduct',
+                            over: 'none'
                         }, {
                             background: '#a3c07e',
                             text: '库存单据',
-                            url: '/app/buySellStock/productReceipts'
+                            url: '/app/buySellStock/productReceipts',
+                            over: 'none'
                         }, {
                             background: '#a3c07e',
                             text: '供应商管理',
-                            url: '/app/buySellStock/providerManage'
+                            url: '/app/buySellStock/providerManage',
+                            over: 'none'
                         }
                     ]
                 }, {
@@ -101,58 +115,43 @@ class IndexPage extends React.Component {
                     items: [{
                         background: '#ff9b6d',
                         text: '项目管理',
-                        url: '/app/productManage/itemManage'
+                        url: '/app/productManage/itemManage',
+                        over: 'none'
                     }, {
                         background: '#ff9b6d',
                         text: '配件管理',
-                        url: '/app/productManage/partsManage'
+                        url: '/app/productManage/partsManage',
+                        over: 'none'
                     }, {
                         background: '#ff9b6d',
                         text: '卡类管理',
-                        url: '/app/productManage/cardManage'
+                        url: '/app/productManage/cardManage',
+                        over: 'none'
                     }]
                 }, {
                     title: '数据报表',
                     items: [{
                         background: '#ffd37c',
                         text: '营业汇总',
-                        url: '/app/dataTable/businessSummary'
+                        url: '/app/dataTable/businessSummary',
+                        over: 'none'
                     }]
                 }, {
                     title: '系统设置',
                     items: [{
                         background: '#f8e4dd',
                         text: '员工管理',
-                        url: '/app/productManage/itemManage'
+                        url: '/app/productManage/itemManage',
+                        over: 'none'
                     }, {
                         background: '#f8e4dd',
                         text: '账户管理',
-                        url: '/app/productManage/itemManage'
+                        url: '/app/productManage/itemManage',
+                        over: 'none'
                     }]
                 }
             ],
-            nowTab: [{
-                background: '#a9c3e4',
-                text: '消费开单',
-                url: '/app/productManage/itemManage',
-                over: 'none'
-            }, {
-                background: 'lightblue',
-                text: '会员管理',
-                url: '/app/productManage/itemManage',
-                over: 'none'
-            }, {
-                background: '#a3c07e',
-                text: '进销存管理',
-                url: '/app/productManage/itemManage',
-                over: 'none'
-            }, {
-                background: '#a9c3e4',
-                text: '产品管理',
-                url: '/app/productManage/itemManage',
-                over: 'none'
-            }
-            ]
+            nowTab: []
         }
     }
     deleteTab = (index) => {
@@ -185,6 +184,16 @@ class IndexPage extends React.Component {
         this.setState({
             visible: false
         });
+        let nowTab = this.state.nowTab
+        for (let onekey of this.state.checkedKeys) {
+            let newtab = onekey.split('-')
+            if (newtab.length == 1) {
+                nowTab.push(...this.state.tab[newtab].items)
+            } else {
+                nowTab.push(this.state.tab[newtab[0]].items[newtab[1]])
+            }
+        }
+        this.setState({ nowTab: [...new Set(nowTab)] })
     }
     handleCancel = () => {
         this.setState({
@@ -192,10 +201,14 @@ class IndexPage extends React.Component {
         });
     }
     onSelect = (selectedKeys, info) => {
+        
         console.log('selected', selectedKeys, info);
     }
     onCheck = (checkedKeys, info) => {
-        console.log('onCheck', checkedKeys, info);
+        this.setState({
+            checkedKeys:checkedKeys
+        })
+        console.log('onCheck', checkedKeys, info, this.state.nowTab);
     }
     render() {
         let nowLi = this.state.nowTab.map((item, index) => {
@@ -205,6 +218,16 @@ class IndexPage extends React.Component {
                     {item.text}
                 </Link>
             </Li>
+        })
+
+        const treenode = this.state.tab.map((onetab, index) => {
+            return <TreeNode title={onetab.title} key={index}>
+                {
+                    onetab.items.map((oneitem, itemindex) => {
+                        return <TreeNode title={oneitem.text} key={`${index}-${itemindex}`} />
+                    })
+                }
+            </TreeNode>
         })
         return (
             <div style={{ background: '#ECECEC' }}>
@@ -221,45 +244,10 @@ class IndexPage extends React.Component {
                     <div >
                         <Tree
                             checkable
-                            /*defaultExpandedKeys={['0-0-0', '0-0-1']}
-                            defaultSelectedKeys={['0-0-0', '0-0-1']}
-                            defaultCheckedKeys={['0-0-0', '0-0-1']}*/
                             onSelect={this.onSelect}
                             onCheck={this.onCheck}
                         >
-                            <TreeNode title="消费开单" key="0-0">
-                                <TreeNode title="美容开单" key="0-0-0" />
-                                <TreeNode title="消费开单" key="0-0-1" />
-                                <TreeNode title="单据管理" key="0-0-2" />
-                            </TreeNode>
-                            <TreeNode title="收支管理" key="0-1">
-                                <TreeNode title="收支查询" key="0-1-0" />
-                                <TreeNode title="历史收支查询" key="0-1-1" />
-                                <TreeNode title="其他支出" key="0-1-2" />
-                            </TreeNode>
-                            <TreeNode title="会员管理" key="0-2">
-                                <TreeNode title="会员办理" key="0-2-0" />
-                                <TreeNode title="客户管理" key="0-2-1" />
-                            </TreeNode>
-                            <TreeNode title="进销存管理" key="0-3">
-                                <TreeNode title="库存查询" key="0-3-0" />
-                                <TreeNode title="入库" key="0-3-1" />
-                                <TreeNode title="出库" key="0-3-2" />
-                                <TreeNode title="库存单据" key="0-3-3" />
-                                <TreeNode title="供应商管理" key="0-3-4" />
-                            </TreeNode>
-                            <TreeNode title="产品管理" key="0-4">
-                                <TreeNode title="项目管理" key="0-4-0" />
-                                <TreeNode title="配件管理" key="0-4-1" />
-                                <TreeNode title="卡类管理" key="0-4-2" />
-                            </TreeNode>
-                            <TreeNode title="数据报表" key="0-5">
-                                <TreeNode title="营业汇总" key="0-5-0" />
-                            </TreeNode>
-                            <TreeNode title="系统设置" key="0-6">
-                                <TreeNode title="员工管理" key="0-6-0" />
-                                <TreeNode title="账号管理" key="0-6-0" />
-                            </TreeNode>
+                            {treenode}
                         </Tree>
 
                     </div>
