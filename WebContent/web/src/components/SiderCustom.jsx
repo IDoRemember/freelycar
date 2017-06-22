@@ -1,6 +1,4 @@
-/**
- * Created by hao.cheng on 2017/4/13.
- */
+
 import React, { Component } from 'react';
 import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
@@ -25,12 +23,9 @@ class SiderCustom extends Component {
         });
     }
     componentWillReceiveProps(nextProps) {
-        console.log(nextProps);
-
         this.onCollapse(nextProps.collapsed);
     }
     onCollapse = (collapsed) => {
-        console.log(collapsed);
         this.setState({
             collapsed,
             mode: collapsed ? 'vertical' : 'inline',
@@ -40,8 +35,6 @@ class SiderCustom extends Component {
         this.setState({
             selectedKey: e.key
         });
-        console.log(this.state);
-
     };
     openMenu = (v) => {
       //  console.log(v);
