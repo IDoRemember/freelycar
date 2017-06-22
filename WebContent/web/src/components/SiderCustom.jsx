@@ -26,13 +26,14 @@ class SiderCustom extends Component {
     }
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
+
         this.onCollapse(nextProps.collapsed);
     }
     onCollapse = (collapsed) => {
         console.log(collapsed);
         this.setState({
             collapsed,
-            mode: collapsed ? 'inline' : 'inline',
+            mode: collapsed ? 'vertical' : 'inline',
         });
     };
     menuClick = (e) => {
@@ -55,7 +56,7 @@ class SiderCustom extends Component {
                 breakpoint="lg"
                 collapsible
                 collapsed={this.props.collapsed}
-                onCollapse={this.onCollapse}
+               // onCollapse={this.onCollapse}
                 style={{ overflowY: 'auto' }}
             >
                 <div className="logo" >
