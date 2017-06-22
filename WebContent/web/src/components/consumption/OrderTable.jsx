@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 const columns = [
     {
         title: ' ', dataIndex: 'delete', key: 'delete', render: () => {
-            return <div><Icon type="delete" /></div>
+            return <div><Icon type="delete" style={{cursor:'pointer'}}/></div>
         }
     },
     { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber' },
@@ -83,15 +83,9 @@ class OrderTable extends React.Component {
                            <Table columns={columns} dataSource={data} ></Table>
                        </Card>
                    </div>
-
-
                 </Row>
-
             </div>
         )
     }
-    
-
-
 }
 export default OrderTable
