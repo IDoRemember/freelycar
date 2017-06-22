@@ -1,6 +1,61 @@
 import { Table, Input, Icon, Button, Popconfirm } from 'antd';
 import React from 'react';
-import EditableCell from '../tables/EditableCell.jsx';
+class EditableCell extends React.Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            value: this.props.value,
+            editable: false,
+
+        }
+    }
+    handleChange = (e) => {
+        const value = e.target.value;
+        this.setState({ value });
+    }
+    check = () => {
+        this.setState({ editable: false });
+        if (this.props.onChange) {
+            this.props.onChange(this.state.value);
+        }
+    }
+    edit = () => {
+        this.setState({ editable: true });
+    }
+    render() {
+        const { value, editable } = this.state;
+        return (
+            <div className="editable-cell">
+                {
+                    editable ?
+                        <div className="editable-cell-input-wrapper">
+                            <Input
+                                value={value}
+                                onChange={this.handleChange}
+                                onPressEnter={this.check}
+                            />
+                            <Icon
+                                type="check"
+                                className="editable-cell-icon-check"
+                                onClick={this.check}
+                            />
+                        </div>
+                        :
+                        <div className="editable-cell-text-wrapper">
+                            {value || ' '}
+                            <Icon
+                                type="edit"
+                                className="editable-cell-icon"
+                                onClick={this.edit}
+                            />
+                        </div>
+                }
+            </div>
+        );
+    }
+}
+
 
 class EditableTable extends React.Component {
     constructor(props) {
@@ -92,17 +147,19 @@ class EditableTable extends React.Component {
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-                     <span>
-                            <span style={{ marginRight: '10px', cursor: 'pointer' }}onClick={this.handleAdd}>
-                                <a href="javascript:void(0);">新增</a>
+
+
+                    <span>
+                        <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.handleAdd}>
+                            <a href="javascript:void(0);">新增</a>
                         </span>
-                            <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                                <a href="javascript:void(0);">删除</a>
-                            </Popconfirm>
-                        </span>
+                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                            <a href="javascript:void(0);">删除</a>
+                        </Popconfirm>
+                    </span>
                     // this.state.dataSource.length > 1 ?
                     //     (
-                            
+
                     //         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
                     //             <a href="#">删除</a>
                     //         </Popconfirm>
@@ -148,9 +205,7 @@ class EditableTable extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ dataSource });
     }
-    onChange = (value) =>{
-        console.log(value);
-    }
+   
     handleAdd = () => {
         const { count, dataSource } = this.state;
         const newData = {
@@ -159,20 +214,20 @@ class EditableTable extends React.Component {
             age: 32,
             address: `London, Park Lane no. ${count}`,
         };
-        console.log(count)
         this.setState({
             dataSource: [...dataSource, newData],
-            count: count + 1,
+            count:  1,
         });
     }
     render() {
-
+        const { dataSource } = this.state;
+        const columns = this.columns;
         return (
             <div>
-                <Table bordered dataSource={this.state.dataSource} columns={this.columns} />
+                <Table bordered dataSource={dataSource} columns={columns} />
             </div>
         );
     }
 }
 
-export default EditableTable
+export default EditableTable 
