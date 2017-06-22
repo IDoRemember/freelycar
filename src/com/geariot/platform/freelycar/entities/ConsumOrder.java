@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -17,10 +18,11 @@ import javax.persistence.OneToMany;
 @Entity
 public class ConsumOrder {
 	private String id;
-	private Client client;
 	private Car car;
 	private Project project;
 	private int projectPayMethod;	//项目费支付方式：0,1=付现金,扣卡次
+	private Card payCard;
+	private int payCardTimes;
 	private Program program;
 	private String parkingLocation;
 	private Set<Staff> staffs;
@@ -34,15 +36,10 @@ public class ConsumOrder {
 	private Date finishTime;
 	private Date deliverTime;
 	private Date createDate;
-	@ManyToOne(cascade={})
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="carId", foreignKey=@ForeignKey(name="none"))
 	public Car getCar() {
 		return car;
-	}
-	@ManyToOne(cascade={})
-	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
-	public Client getClient() {
-		return client;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -57,7 +54,7 @@ public class ConsumOrder {
 	public String getId() {
 		return id;
 	}
-	@OneToMany(cascade={CascadeType.ALL})
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="consumeOrdersId", foreignKey=@ForeignKey(name="none"))
 	public List<ConsumExtraInventoriesInfo> getInventoryInfos() {
 		return inventoryInfos;
@@ -65,18 +62,26 @@ public class ConsumOrder {
 	public String getParkingLocation() {
 		return parkingLocation;
 	}
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
+	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
+	public Card getPayCard() {
+		return payCard;
+	}
+	public int getPayCardTimes() {
+		return payCardTimes;
+	}
 	public int getPayState() {
 		return payState;
 	}
 	public Date getPickTime() {
 		return pickTime;
 	}
-	@ManyToOne(cascade={})
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
 	public Program getProgram() {
 		return program;
 	}
-	@ManyToOne(cascade={})
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
 	public Project getProject() {
 		return project;
@@ -84,7 +89,7 @@ public class ConsumOrder {
 	public int getProjectPayMethod() {
 		return projectPayMethod;
 	}
-	@ManyToMany(cascade={CascadeType.ALL})
+	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
@@ -106,9 +111,6 @@ public class ConsumOrder {
 	public void setCar(Car car) {
 		this.car = car;
 	}
-	public void setClient(Client client) {
-		this.client = client;
-	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
@@ -126,6 +128,12 @@ public class ConsumOrder {
 	}
 	public void setParkingLocation(String parkingLocation) {
 		this.parkingLocation = parkingLocation;
+	}
+	public void setPayCard(Card payCard) {
+		this.payCard = payCard;
+	}
+	public void setPayCardTimes(int payCardTimes) {
+		this.payCardTimes = payCardTimes;
 	}
 	public void setPayState(int payState) {
 		this.payState = payState;

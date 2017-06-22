@@ -3,7 +3,9 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,7 +31,7 @@ public class Card {
 	public int getId() {
 		return id;
 	}
-	@ManyToOne
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="makerId", foreignKey=@ForeignKey(name="none"))
 	public Admin getOrderMaker() {
 		return orderMaker;
@@ -40,7 +42,7 @@ public class Card {
 	public int getPayMethod() {
 		return payMethod;
 	}
-	@OneToMany
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
 	public List<CardProjectRemainingInfo> getRemainingInfos() {
 		return projectInfos;

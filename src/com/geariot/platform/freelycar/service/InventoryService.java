@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.hibernate.mapping.Collection;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -143,7 +141,7 @@ public class InventoryService {
 
 	public String inStock(InventoryOrder order) {
 		order.setCreateDate(new Date());
-		order.setState(1);
+		order.setState(0);
 		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
 		List<Inventory> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){

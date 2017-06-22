@@ -5,7 +5,7 @@ import java.util.List;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 
-public interface OrdersDao {
+public interface ConsumOrderDao {
 	
 	void save(ConsumOrder consumOrder);
 

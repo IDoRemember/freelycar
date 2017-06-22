@@ -14,4 +14,6 @@ public interface InventoryDao {
 	List<Inventory> list(int from, int number);
 
 	long getCount();
+
+	void rollback();
 }

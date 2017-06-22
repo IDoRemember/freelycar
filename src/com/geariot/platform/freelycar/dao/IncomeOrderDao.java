@@ -6,4 +6,6 @@ import com.geariot.platform.freelycar.entities.IncomeOrder;
 
 public interface IncomeOrderDao {
 	List<IncomeOrder> findByClientId(int clientId);
+	
+	void save(IncomeOrder incomeOrder);
 }

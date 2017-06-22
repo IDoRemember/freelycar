@@ -11,7 +11,7 @@ import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 
 @Repository
-public class IncomOrderDaoImpl implements IncomeOrderDao {
+public class IncomeOrderDaoImpl implements IncomeOrderDao {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -25,6 +25,11 @@ public class IncomOrderDaoImpl implements IncomeOrderDao {
 	public List<IncomeOrder> findByClientId(int clientId) {
 		String hql = "from IncomeOrder where clientId = :clientId";
 		return this.getSession().createQuery(hql).setInteger("clientId", clientId).list();
+	}
+
+	@Override
+	public void save(IncomeOrder incomeOrder) {
+		this.getSession().save(incomeOrder);
 	}
 
 }

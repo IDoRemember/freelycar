@@ -28,7 +28,7 @@ public class Car {
 	private int lastMiles;
 	private int miles;
 	private Date createDate;
-	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Client getClient() {
 		return client;

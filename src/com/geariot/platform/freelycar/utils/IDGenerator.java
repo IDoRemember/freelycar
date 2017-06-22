@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.utils;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 
@@ -13,6 +14,8 @@ import org.hibernate.id.Configurable;
 import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
+
+import com.geariot.platform.freelycar.controller.IdgenController;
 
 /**
  * 自定义ID生成器
@@ -39,4 +42,18 @@ public class IDGenerator implements IdentifierGenerator, Configurable {
 		log.debug("create order --id:" + id);
 		return id;
 	}
+	
+	private static String[] prefix = {"Pay", "S", "X", "osto", "isto", "inv"};
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+	//type:0,1,2,3,4,5 = 开卡，美容，维修，出库，入库，库存编号
+	public static String generate(int type){
+		synchronized(IDGenerator.class){
+			StringBuilder sb = new StringBuilder();
+			sb.append(prefix[type]);
+			sb.append(sdf.format(new Date()));
+			sb.append(RandomStringGenerator.getRandomStringByLength(6));
+			return sb.toString();
+		}
+	}
+	
 }
