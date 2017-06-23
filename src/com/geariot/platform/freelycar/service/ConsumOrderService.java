@@ -119,7 +119,7 @@ public class ConsumOrderService {
 		if(order.getState() < 1){
 			return JsonResFactory.buildOrg(RESCODE.WORK_NOT_FINISH).toString();
 		}
-		order.setState(3);
+		order.setState(2);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
