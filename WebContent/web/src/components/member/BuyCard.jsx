@@ -183,7 +183,9 @@ class BuyCard extends React.Component {
                     </Row>
                 </Card>
                 <CardModal visible={this.state.visible} onOk={()=>this.handleOk}
-                    onCancel={()=>this.handleCancel}></CardModal>
+                    onCancel={()=>this.handleCancel}>
+                </CardModal>
+                <Button type="primary" style={{display:'block',margin:'10px auto', width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>办理</Link></Button>
             </div>
         )
     }
