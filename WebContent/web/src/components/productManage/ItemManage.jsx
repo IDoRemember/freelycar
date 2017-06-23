@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Popconfirm } from 'antd';
 import moment from 'moment';
 
 import { Link } from 'react-router';
@@ -19,46 +19,46 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
             selectedRowKeys: [],
             loading: false,
-            visible: false
+            visible: false,
+            data: [{
+                key: '1',
+                index: '1',
+                project: 'John Brown',
+                type: 32,
+                price: 'New York No. 1 Lake Park',
+                duration: 'New York No. 1 Lake Park',
+                durationPrice: 'xx',
+                createTime: 'fff',
+                remark: 'xxx'
+            }, {
+                key: '2',
+                index: '2',
+                project: 'John Brown',
+                type: 32,
+                price: 'New York No. 1 Lake Park',
+                duration: 'New York No. 1 Lake Park',
+                durationPrice: 'xx',
+                createTime: 'fff',
+                remark: 'xxx'
+            }]
         }
     }
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
-    }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
-            },
+
         });
     }
 
-
+    //tab切换函数
     tabCallback = (key) => {
         console.log(key);
     }
 
 
     // tab1模态框的处理函数
-
     showModal = () => {
         this.setState({
             visible: true,
@@ -77,12 +77,39 @@ class BeautyOrder extends React.Component {
         });
     }
 
-
+    //表格删除
+    onCellChange = (index, key) => {
+        return (value) => {
+            const dataSource = [...this.state.data];
+            dataSource[index][key] = value;
+            this.setState({ dataSource });
+        };
+    }
+    onDelete = (index) => {
+        console.log(index);
+        const dataSource = [...this.state.data];
+        dataSource.splice(index, 1);
+        this.setState({ data:dataSource });
+    }
+    handleAdd = () => {
+        const { count, dataSource } = this.state;
+        const newData = {
+            key: count,
+            index: count,
+            name: `Edward King ${count}`,
+            properties: `Edward King ${count}`,
+            valateTime: `Edward King ${count}`,
+            price: `Edward King ${count}`,
+            createTime: `Edward King ${count}`,
+            remark: `Edward King ${count}`,
+        };
+        this.setState({
+            dataSource: [...dataSource, newData],
+            count: count + 1,
+        });
+    }
 
     render() {
-        let { sortedInfo, filteredInfo } = this.state;
-        sortedInfo = sortedInfo || {};
-        filteredInfo = filteredInfo || {};
         const columns = [{
             title: '序号',
             dataIndex: 'index',
@@ -118,56 +145,18 @@ class BeautyOrder extends React.Component {
         }, {
             title: '操作',
             dataIndex: 'operation',
-            key: 'operation'
-        }];
-
-        //表格
-        const data = [{
-            key: '1',
-            index: '1',
-            project: 'John Brown',
-            type: 32,
-            price: 'New York No. 1 Lake Park',
-            duration: 'New York No. 1 Lake Park',
-            durationPrice: 'xx',
-            createTime: 'fff',
-            remark: 'xxx',
-            operation: 'zz'
-
-
-        }, {
-            key: '2',
-            index: '2',
-            project: 'John Brown',
-            type: 32,
-            price: 'New York No. 1 Lake Park',
-            duration: 'New York No. 1 Lake Park',
-            durationPrice: 'xx',
-            createTime: 'fff',
-            remark: 'xxx',
-            operation: 'zz'
-        }, {
-            key: '3',
-            index: '3',
-            project: 'John Brown',
-            type: 32,
-            price: 'New York No. 1 Lake Park',
-            duration: 'New York No. 1 Lake Park',
-            durationPrice: 'xx',
-            createTime: 'fff',
-            remark: 'xxx',
-            operation: 'zz'
-        }, {
-            key: '4',
-            index: '4',
-            project: 'John Brown',
-            type: 32,
-            price: 'New York No. 1 Lake Park',
-            duration: 'New York No. 1 Lake Park',
-            durationPrice: 'xx',
-            createTime: 'fff',
-            remark: 'xxx',
-            operation: 'zz'
+            render: (text, record, index) => {
+                return (
+                    this.state.data.length > 1 ?
+                        (
+                            <div>
+                                <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
+                                    <a href="#">删除</a>
+                                </Popconfirm>
+                            </div>
+                        ) : null
+                );
+            },
         }];
 
         // rowSelection object indicates the need for row selection
@@ -222,7 +211,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
-                                        width = '80%'
+                                        width='80%'
                                     >
                                         <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                             <Col span={2}>
@@ -235,7 +224,7 @@ class BeautyOrder extends React.Component {
                                                 <Input placeholder='可按项目名称,类型等进行搜索' />
                                             </Col>
                                             <Col span={2}>
-                                                <Button  type="primary">查询</Button>
+                                                <Button type="primary">查询</Button>
                                             </Col>
                                         </Row>
 
@@ -244,7 +233,7 @@ class BeautyOrder extends React.Component {
                                                 <Table
                                                     rowSelection={rowSelection}
                                                     columns={columns}
-                                                    dataSource={data}
+                                                    dataSource={this.state.data}
                                                     bordered
                                                 />
                                             </Col>
@@ -270,7 +259,7 @@ class BeautyOrder extends React.Component {
                                         <Table
                                             rowSelection={rowSelection}
                                             columns={columns}
-                                            dataSource={data}
+                                            dataSource={this.state.data}
                                             bordered
                                         />
                                     </Col>
@@ -311,13 +300,13 @@ class BeautyOrder extends React.Component {
                                         <Table
                                             rowSelection={rowSelection}
                                             columns={columns}
-                                            dataSource={data}
+                                            dataSource={this.state.data}
                                             bordered
                                         />
                                     </Col>
                                 </Row>
                             </div>
-                            </TabPane>
+                        </TabPane>
                     </Tabs>
                 </Card>
             </div>
