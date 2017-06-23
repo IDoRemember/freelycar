@@ -1,5 +1,5 @@
 /*设置与获取Cookie*/
-var Cookie = {}
+let Cookie = {}
 Cookie.write = function (key, value, duration) {
     var d = new Date();
     d.setTime(d.getTime() + 1000 * 60 * 60 * 24 * 30);
@@ -12,7 +12,7 @@ Cookie.read = function (key) {
     return "";
 };
 //定义本地存储对象
-var storage = {
+let storage = {
     getItem: function (key) {//假如浏览器支持本地存储则从localStorage里getItem，否则乖乖用Cookie
         return window.localStorage ? localStorage.getItem(key) : Cookie.read(key);
     },
@@ -24,3 +24,5 @@ var storage = {
         }
     }
 };
+
+export default storage

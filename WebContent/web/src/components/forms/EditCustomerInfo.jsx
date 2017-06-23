@@ -260,7 +260,7 @@ class CustomerInfo extends React.Component {
                     <Col span={6} >
                     </Col>
                     {this.props.MemberButton && <Col span={6} >
-                        <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}><Link to="" style={{ color: '#fff' }}>会员办理</Link></Button>
+                        <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>会员办理</Link></Button>
                     </Col>}
                 </Row>
             </Card>
