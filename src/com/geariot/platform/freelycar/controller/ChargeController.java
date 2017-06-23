@@ -46,8 +46,8 @@ public class ChargeController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("charge:delete")
-	public String deleteCharge(String id){
-		return chargeService.deleteCharge(id);
+	public String deleteCharge(String... ids){
+		return chargeService.deleteCharge(ids);
 	}
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
@@ -58,8 +58,8 @@ public class ChargeController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("charge:query")
-	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime){
-		return chargeService.selectCharge(otherExpendTypeId, startTime, endTime);
+	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+		return chargeService.selectCharge(otherExpendTypeId, startTime, endTime, page, number);
 	}
 		
 }

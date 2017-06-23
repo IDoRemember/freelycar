@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -11,10 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.ChargeDao;
 import com.geariot.platform.freelycar.entities.OtherExpendOrder;
 import com.geariot.platform.freelycar.entities.OtherExpendType;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ChargeAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -69,17 +74,12 @@ public class ChargeService {
 		
 	}
 	
-	public String deleteCharge(String id){
-		OtherExpendOrder exist = chargeDao.findById(id);
-		JSONObject obj = null;
-		if(exist ==null){
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteCharge(String[] ids){
+		int del = this.chargeDao.delete(Arrays.asList(ids));
+		if(del < ids.length){
+			return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
 		}
-		else{
-			chargeDao.delete(id);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
-		}
-		return obj.toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
 	public String listAllCharge(int page , int number){
@@ -98,16 +98,30 @@ public class ChargeService {
 		return obj.toString();
 	}
 	
-	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime){
-		List<OtherExpendOrder> list = chargeDao.getSelectList(otherExpendTypeId, startTime, endTime);
+	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+		String start = null;
+		String end = null;
+		if(startTime != null || endTime != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if(startTime != null){
+				start = sdf.format(startTime);
+			}
+			if(endTime != null){
+				end = sdf.format(endTime);
+			}
+		}
+		String andCondition = new ChargeAndQueryCreator(String.valueOf(otherExpendTypeId), 
+				start, end).createStatement();
+		int from = (page - 1) * number;
+		List<OtherExpendOrder> list = chargeDao.getConditionQuery(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		long size = (long) list.size();
+		long realSize = (long) chargeDao.getConditionCount(andCondition);
+		int size=(int) Math.ceil(realSize/(double)number);
 		JSONArray jsonArray = JSONArray.fromObject(list);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		return obj.toString();
-		
 	}
 }

@@ -39,6 +39,7 @@ public class ConsumOrderController {
 	@RequestMapping(value = "/finish", method = RequestMethod.POST)
 	@PermissionRequire("order:finish")
 	public String finish(String consumOrderId){
+		System.out.println(consumOrderId);
 		return this.orderService.finish(consumOrderId);
 	}
 	
