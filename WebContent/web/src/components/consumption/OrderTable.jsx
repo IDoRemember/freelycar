@@ -8,7 +8,9 @@ const columns = [
             return <div><Icon type="delete" style={{cursor:'pointer'}}/></div>
         }
     },
-    { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber' },
+    { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber',render:(text,record,index)=>{
+        return <div><Link to={`/app/consumptions/ordermanage/:${text}`}>{text}</Link></div>
+    } },
     { title: '单据时间', dataIndex: 'receiptTime', key: 'receiptTime' },
     { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
     { title: '客户名称', dataIndex: 'customerName', key: 'customerName' },
