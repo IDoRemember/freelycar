@@ -122,8 +122,6 @@ class CardModal extends React.Component() {
                             <Input />
                         </FormItem>
                     </Form>
-
-
                     <Row>
                         <Col span={24}>
                            <ModalTable></ModalTable>

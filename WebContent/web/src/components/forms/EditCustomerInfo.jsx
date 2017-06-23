@@ -251,7 +251,7 @@ class CustomerInfo extends React.Component {
                         本次里程：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6}>
+                    <Col span={6} style={{height:'28px',lineHeight:'28px'}}>
                         提示信息：
                         <span style={{ width: '100px' }} >
                             共消费2次,  最近消费2017-05-24 15:22
