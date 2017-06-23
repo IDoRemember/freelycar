@@ -35,10 +35,16 @@ public class StaffService {
 	private AdminDao adminDao;
 	
 	public String addStaff(Staff staff){
+		Staff exist = staffDao.findStaffByPhone(staff.getPhone());
 		JSONObject obj = null;
-		staff.setCreateDate(new Date());
-		staffDao.saveStaff(staff);
-		obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+		if(exist != null){
+			obj = JsonResFactory.buildOrg(RESCODE.PHONE_EXIST);
+		}
+		else{
+			staff.setCreateDate(new Date());
+			staffDao.saveStaff(staff);
+			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+		}
 		return obj.toString();
 	}
 	
@@ -91,12 +97,14 @@ public class StaffService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		exist.setName(staff.getName());
-		exist.setGender(staff.getGender());
-		exist.setPhone(staff.getPhone());
-		exist.setPosition(staff.getPosition());
-		exist.setLevel(staff.getLevel());
-		exist.setComment(staff.getComment());
+		else{
+			exist.setName(staff.getName());
+			exist.setGender(staff.getGender());
+			exist.setPhone(staff.getPhone());
+			exist.setPosition(staff.getPosition());
+			exist.setLevel(staff.getLevel());
+			exist.setComment(staff.getComment());
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	

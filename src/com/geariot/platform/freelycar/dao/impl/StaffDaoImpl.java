@@ -76,5 +76,12 @@ public class StaffDaoImpl implements StaffDao {
 		
 	}
 
+	@Override
+	public Staff findStaffByPhone(String phone) {
+		String hql = "from Staff where phone = :phone";
+		return (Staff) getSession().createQuery(hql).setString("phone", phone)
+				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
 
 }

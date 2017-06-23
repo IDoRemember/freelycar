@@ -8,6 +8,8 @@ public interface StaffDao {
 	
 	Staff findStaffByStaffId(int staffId);
 	
+	Staff findStaffByPhone(String phone);
+	
 	void saveStaff(Staff staff);
 	
 	void deleteStaff(int staffId);
