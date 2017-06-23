@@ -4,6 +4,8 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import EditableCell from '../tables/EditableCell.jsx'
+// import CardModal from './CardModal.jsx'
+
 //import jquery from 'jquery';
 import $ from 'jquery';
 
@@ -224,6 +226,8 @@ class EditableTable extends React.Component {
                     </div>
 
                 </Card>
+
+
 
                 {/*模态框*/}
                 <Modal
