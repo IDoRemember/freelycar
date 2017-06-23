@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.ChargeDao;
+import com.geariot.platform.freelycar.dao.ExpendOrderDao;
+import com.geariot.platform.freelycar.entities.ExpendOrder;
 import com.geariot.platform.freelycar.entities.OtherExpendOrder;
 import com.geariot.platform.freelycar.entities.OtherExpendType;
 import com.geariot.platform.freelycar.model.ORDER_CON;
@@ -30,6 +32,9 @@ public class ChargeService {
 
 	@Autowired
 	private ChargeDao chargeDao;
+	
+	@Autowired
+	private ExpendOrderDao expendOrderDao;
 	
 	public String addType(OtherExpendType otherExpendType){
 		OtherExpendType exist = chargeDao.findByName(otherExpendType.getName());
@@ -70,14 +75,21 @@ public class ChargeService {
 	public String addCharge(OtherExpendOrder otherExpendOrder){
 		otherExpendOrder.setCreateDate(new Date());
 		chargeDao.save(otherExpendOrder);
+		//当有其他支出发生时,取信息存入expendOrder表
+		ExpendOrder expendOrder = new ExpendOrder();
+		expendOrder.setAmount(otherExpendOrder.getAmount());
+		expendOrder.setPayDate(otherExpendOrder.getCreateDate());
+		expendOrder.setType("其他支出");
+		expendOrderDao.save(expendOrder);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 		
 	}
 	
-	public String deleteCharge(String[] ids){
-		int del = this.chargeDao.delete(Arrays.asList(ids));
-		if(del < ids.length){
-			return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
+	public String deleteCharge(String id){
+		OtherExpendOrder exist = chargeDao.findById(id);
+		JSONObject obj = null;
+		if(exist ==null){  
+			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
 		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
