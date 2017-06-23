@@ -89,7 +89,7 @@ class BeautyOrder extends React.Component {
         console.log(index);
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ data:dataSource });
+        this.setState({ data: dataSource });
     }
     handleAdd = () => {
         const { count, dataSource } = this.state;
@@ -179,26 +179,22 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="项目管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={9}>
+                                    <Col span={8}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="项目名称" />
                                         </div>
                                     </Col>
-                                    <Col span={5}>
+                                    <Col span={8}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="项目类别" />
                                         </div>
                                     </Col>
                                     <Col span={8}>
-
                                     </Col>
                                 </Row>
-
                                 <Row>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
                                     <Col span={8}>
+                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:&nbsp;</span>
                                         <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
                                     </Col>
                                     <Col span={8}>
@@ -227,7 +223,6 @@ class BeautyOrder extends React.Component {
                                                 <Button type="primary">查询</Button>
                                             </Col>
                                         </Row>
-
                                         <Row>
                                             <Col span={24}>
                                                 <Table
@@ -239,12 +234,7 @@ class BeautyOrder extends React.Component {
                                             </Col>
                                         </Row>
                                     </Modal>
-
-
                                 </Row>
-
-
-
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
                                         <Button>新增项目</Button>
