@@ -3,7 +3,6 @@ package com.geariot.platform.freelycar.dao;
 import java.util.List;
 
 import com.geariot.platform.freelycar.entities.ConsumOrder;
-import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 
 public interface ConsumOrderDao {
 	
@@ -18,5 +17,7 @@ public interface ConsumOrderDao {
 	List<ConsumOrder> query(String andCondition, int from, int pageSize);
 	
 	long getQueryCount(String andCondition);
+	
+	List<String> getConsumOrderIdsByStaffId(int staffId);
 	
 }
