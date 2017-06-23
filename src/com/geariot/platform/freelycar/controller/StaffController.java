@@ -17,27 +17,31 @@ public class StaffController {
 	private StaffService staffService;
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
-	@PermissionRequire
+	@PermissionRequire("staff:add")
 	public String addStaff(Staff staff){
 		return staffService.addStaff(staff);
 	}
 	
 	@RequestMapping(value = "/modify" , method = RequestMethod.POST)
+	@PermissionRequire("staff:modify")
 	public String modifyStaff(Staff staff){
 		return staffService.modifyStaff(staff);
 	}
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
+	@PermissionRequire("staff:delete")
 	public String deleteStaff(int[] staffIds ){
 		return staffService.deleteStaff(staffIds);
 	}
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
+	@PermissionRequire("staff:query")
 	public String getStaffList(int page , int number){
 		return staffService.getStaffList(page, number);
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
+	@PermissionRequire("staff:query")
 	public String getSelectStaff(int staffId , String staffName){
 		//System.out.println(staffId+","+staffName);
 		return staffService.getSelectStaff(staffId, staffName);

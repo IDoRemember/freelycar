@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.service.ProviderService;
+import com.geariot.platform.freelycar.shiro.PermissionRequire;
 
 @RestController
 @RequestMapping(value = "/provider")
@@ -16,22 +17,25 @@ public class ProviderController {
 	private ProviderService providerService;
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
+	@PermissionRequire("provider:add")
 	public String addProvider(Provider provider){
 		return providerService.addProvider(provider);
 	}
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
-	public String deleteProvider(int[] providerIds)
-	{
+	@PermissionRequire("provider:delete")
+	public String deleteProvider(int[] providerIds){
 		return providerService.deleteProvider(providerIds);
 	}
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
+	@PermissionRequire("provider:query")
 	public String getProviderList(int page , int number){
 		return providerService.getProviderList(page, number);
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
+	@PermissionRequire("provider:query")
 	public String getSelectProvider(String name){
 		return providerService.getSelectProvider(name);
 	}

@@ -125,8 +125,6 @@ class CustomerInfo extends React.Component {
                                 </Col>
                             </Row>
                             <h3>车辆信息</h3 >
-
-
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
                                 <Col span={12} >
                                     <span style={{ color: 'red' }}>*</span>车牌号码：<Input style={{ width: '100px' }} />
@@ -189,7 +187,7 @@ class CustomerInfo extends React.Component {
                         >
                             {plateOptions}
                         </Select>
-                        <Link to='/app/member/customer' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
+                        <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
                     <Col span={6} >
                         停车位置：
