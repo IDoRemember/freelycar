@@ -85,11 +85,10 @@ public class ChargeService {
 		
 	}
 	
-	public String deleteCharge(String id){
-		OtherExpendOrder exist = chargeDao.findById(id);
-		JSONObject obj = null;
-		if(exist ==null){  
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteCharge(String[] ids){
+		int success = this.chargeDao.delete(Arrays.asList(ids));
+		if(success < ids.length){
+			return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
 		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

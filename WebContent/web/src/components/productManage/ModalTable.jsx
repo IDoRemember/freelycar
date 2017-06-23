@@ -88,7 +88,7 @@ class ModalTable extends React.Component {
 
 
     render() {
-        const { dataSource } = this.state;
+      //  const { dataSource } = this.state;
         const columns = this.columns;
             // const rowSelection = {
             //     onChange: (selectedRowKeys, selectedRows) => {
@@ -100,8 +100,9 @@ class ModalTable extends React.Component {
             // };
         return (
             <div>
-                <Table bordered dataSource={dataSource} pagination={false} columns={columns} />
+                <Table bordered size="small" pagination={false} dataSource={this.state.dataSource}  columns={columns}  />
             </div>
+
         );
     }
 }

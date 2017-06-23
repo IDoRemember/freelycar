@@ -41,7 +41,7 @@ class ModalTable extends React.Component {
 
         return (
             <div>
-                <Table bordered dataSource={this.state.dataSource} columns={this.state.columns} />
+                <Table bordered size="small" pagination={{pageSize:5}} size="small" dataSource={this.state.dataSource} columns={this.state.columns} />
             </div>
         );
     }
