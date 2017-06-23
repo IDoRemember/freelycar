@@ -63,11 +63,18 @@ public class ClientDaoImpl implements ClientDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Client> query(String name, String phone) {
+	public List<Client> query(String condition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from Client");
-		String andCondition = new ClientAndQueryCreator(name, phone).createStatement();
+		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getQueryCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from Client");
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
 

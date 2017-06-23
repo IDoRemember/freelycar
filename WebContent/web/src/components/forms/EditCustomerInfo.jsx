@@ -251,7 +251,7 @@ class CustomerInfo extends React.Component {
                         本次里程：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6}>
+                    <Col span={6} style={{height:'28px',lineHeight:'28px'}}>
                         提示信息：
                         <span style={{ width: '100px' }} >
                             共消费2次,  最近消费2017-05-24 15:22
@@ -260,7 +260,7 @@ class CustomerInfo extends React.Component {
                     <Col span={6} >
                     </Col>
                     {this.props.MemberButton && <Col span={6} >
-                        <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}><Link to="" style={{ color: '#fff' }}>会员办理</Link></Button>
+                        <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>会员办理</Link></Button>
                     </Col>}
                 </Row>
             </Card>

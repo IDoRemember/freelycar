@@ -280,10 +280,8 @@ class BeautyOrder extends React.Component {
                                 </Row>
 
                                 <Row>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
                                     <Col span={8}>
+                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:&nbsp;</span>
                                         <RangePicker defaultValue={[moment(), moment()]} format={dateFormat} />
                                     </Col>
                                     <Col span={8}>

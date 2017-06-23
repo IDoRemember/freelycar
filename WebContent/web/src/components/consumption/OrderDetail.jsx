@@ -130,6 +130,12 @@ class BeautyDetail extends React.Component {
                 </Steps>
             </Card>
             <CustomerInfo />
+            <Card style={{marginBottom:'10px'}}>
+                <h3>故障描述：</h3>
+                <p>你这不行</p>
+                <h3>维修建议：</h3>
+                <p>你这不行</p>
+            </Card>
             <Card style={{ marginBottom: '10px' }}>
                 <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
                 <Table className="accountTable" columns={serviceColumns} dataSource={this.state.serviceData} bordered />

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst,Popconfirm } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import EditableCell from './EditableCell.jsx'
@@ -65,7 +65,7 @@ class PartsDetail extends React.Component {
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <div style={{fontSize:'18px',marginBottom:'10px'}}>配件明细</div>
+            <div style={{ fontSize: '18px', marginBottom: '10px' }}>配件明细</div>
             <Table className="accountTable" dataSource={this.state.data} bordered>
                 <Col
                     title="序号"
@@ -143,15 +143,17 @@ class PartsDetail extends React.Component {
                 <Col
                     title="操作"
                     key="action"
-                    render={(text,record,index) => {
-                        return <span>
-                            <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                                <a href="javascript:void(0);">新增</a>
-                        </span>
-                            <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                                <a href="javascript:void(0);">删除</a>
-                            </Popconfirm>
-                        </span>
+                    render={(text, record, index) => {
+                        if (!record.total) {
+                            return <span>
+                                <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
+                                    <a href="javascript:void(0);">新增</a>
+                                </span>
+                                <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                                    <a href="javascript:void(0);">删除</a>
+                                </Popconfirm>
+                            </span>
+                        }
                     }}
                 />
             </Table>

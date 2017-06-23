@@ -1,6 +1,5 @@
 package com.geariot.platform.freelycar.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import com.geariot.platform.freelycar.entities.OtherExpendOrder;
@@ -28,6 +27,12 @@ public interface ChargeDao {
 	
 	void delete(String id);
 	
-	List<OtherExpendOrder> getSelectList(int otherExpendTypeId , Date startTime , Date endTime);
+	int delete(List<String> ids);
+	
+//	List<OtherExpendOrder> getSelectList(int otherExpendTypeId , Date startTime , Date endTime);
+	
+	List<OtherExpendOrder> getConditionQuery(String andCondition, int from, int pageSize);
+	
+	long getConditionCount(String andCondition);
 	
 }

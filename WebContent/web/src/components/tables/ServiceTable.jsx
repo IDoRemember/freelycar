@@ -57,7 +57,7 @@ class ServiceTable extends React.Component {
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <div style={{fontSize:'18px',marginBottom:'10px'}}>服务项目</div>
+            <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
             <Table className="accountTable" dataSource={this.state.data} bordered>
                 <Col
                     title="序号"
@@ -114,15 +114,18 @@ class ServiceTable extends React.Component {
                 <Col
                     title="操作"
                     key="action"
-                    render={(text,record,index) => {
-                        return <span>
-                            <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                                <a href="javascript:void(0);">新增</a>
-                        </span>
-                            <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                                <a href="javascript:void(0);">删除</a>
-                            </Popconfirm>
-                        </span>
+                    render={(text, record, index) => {
+                        console.log(record)
+                        if (!record.total) {
+                            return <span>
+                                <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
+                                    <a href="javascript:void(0);">新增</a>
+                                </span>
+                                <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                                    <a href="javascript:void(0);">删除</a>
+                                </Popconfirm>
+                            </span>
+                        }
                     }}
                 />
             </Table>

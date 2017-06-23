@@ -27,15 +27,15 @@ class CustomerInfo extends React.Component {
     componentDidMount() {
         console.log('开始掉接口')
         let data = { 'aa': 'bb' };
-        axios.post('/fitness/api/sms/verification', JSON.stringify({ phone: "18362981113" }), {
-            headers: {
-                "Content-Type": "text/html;charset=UTF-8"
-            }
-        }).then((res) => {
-            console.log(res);
-        }).catch((error) => {
-            console.log(error);
-        });
+        // axios.post('/fitness/api/sms/verification', JSON.stringify({ phone: "18362981113" }), {
+        //     headers: {
+        //         "Content-Type": "text/html;charset=UTF-8"
+        //     }
+        // }).then((res) => {
+        //     console.log(res);
+        // }).catch((error) => {
+        //     console.log(error);
+        // });
     }
     handleChange = (value) => {
         console.log(`selected ${value}`)

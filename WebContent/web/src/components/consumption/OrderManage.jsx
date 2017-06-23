@@ -15,7 +15,6 @@ class OrderManage extends React.Component {
     handleChange = (value) => {
         console.log(`selected ${value}`)
     }
-
     render() {
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>

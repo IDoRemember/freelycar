@@ -48,7 +48,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 
 	@Override
 	public ConsumOrder findById(String consumOrderId) {
-		String hql = "from ConsumOrder where id = id";
+		String hql = "from ConsumOrder where id = :id";
 		return (ConsumOrder) this.getSession().createQuery(hql).setString("id", consumOrderId)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
