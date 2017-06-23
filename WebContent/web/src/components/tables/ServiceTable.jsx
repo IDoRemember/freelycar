@@ -110,12 +110,10 @@ class ServiceTable extends React.Component {
                     key="DeductionCardTime"
                     dataIndex="DeductionCardTime"
                 />
-
                 <Col
                     title="操作"
                     key="action"
                     render={(text, record, index) => {
-                        console.log(record)
                         if (!record.total) {
                             return <span>
                                 <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
