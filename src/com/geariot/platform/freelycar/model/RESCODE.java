@@ -25,7 +25,8 @@ public enum RESCODE {
 	WORK_NOT_FINISH(20, "当前订单还未完工"),
 	NOT_SET_PAY_CARD(21, "未设置项目付款卡"),
 	CARD_REMAINING_NOT_ENOUGH(22, "所选会员卡对应项目剩余次数不足"),
-	INVENTORY_NOT_ENOUGH(23, "库存不足")
+	INVENTORY_NOT_ENOUGH(23, "库存不足"),
+	DISABLE_CURRENT_USER(24, "无法禁用当前登陆账户")
 	;
 	
 	// 定义私有变量

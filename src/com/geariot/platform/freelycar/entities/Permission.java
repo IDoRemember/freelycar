@@ -24,5 +24,5 @@ public class Permission {
 	public void setPermission(String permission) {
 		this.permission = permission;
 	}
-
+	
 }

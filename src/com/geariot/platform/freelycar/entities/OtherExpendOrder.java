@@ -3,12 +3,15 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class OtherExpendOrder {
 	private String id;
-	private int otherExpendTypeId;
+	private OtherExpendType type;
 	private float amount;
 	private String comment;
 	private Date expendDate;
@@ -26,8 +29,10 @@ public class OtherExpendOrder {
 	public String getId() {
 		return id;
 	}
-	public int getOtherExpendTypeId() {
-		return otherExpendTypeId;
+	@ManyToOne(cascade={})
+	@JoinColumn(name="otherExpendTypeId", foreignKey=@ForeignKey(name="none"))
+	public OtherExpendType getType() {
+		return type;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
@@ -41,8 +46,8 @@ public class OtherExpendOrder {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public void setOtherExpendTypeId(int otherExpendTypeId) {
-		this.otherExpendTypeId = otherExpendTypeId;
+	public void setType(OtherExpendType type) {
+		this.type = type;
 	}
 	public Date getExpendDate() {
 		return expendDate;
