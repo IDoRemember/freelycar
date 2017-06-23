@@ -13,6 +13,7 @@ public class ExpendOrder {
 	private String type;
 	private float amount;
 	private Date payDate;
+	private String comment;
 	public float getAmount() {
 		return amount;
 	}

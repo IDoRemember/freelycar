@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio,Modal } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import CardModal from '../productManage/CardModal.jsx';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 const RadioGroup = Radio.Group;
@@ -27,7 +28,7 @@ class BuyCard extends React.Component {
             this.setState({ option: res.data })
         })
     }
-     showModal = () => {
+    showModal = () => {
         this.setState({
             visible: true
         });
@@ -121,7 +122,7 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}>车辆品牌:
                             <span style={{ marginLeft: '15px' }}>玛莎</span>
-                        </Col> 
+                        </Col>
                         <Col span={8} >推荐人：
                             <span style={{ marginLeft: '15px' }}>科科</span>
                         </Col>
@@ -159,7 +160,7 @@ class BuyCard extends React.Component {
                         <Col span={8} offset={4} >
                             <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
                                  <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15 }}  onChange={this.handleChange} >
+                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15 }} onChange={this.handleChange} >
                                         <Option value="cash">现金</Option>
                                         <Option value="wechatpay">微信</Option>
                                         <Option value="alipay">支付宝</Option>
@@ -171,7 +172,7 @@ class BuyCard extends React.Component {
                         <Col span={8} >
                             <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
                                  <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                    <Select defaultValue="1" style={{ width: 140, marginLeft: '15px' }}  onChange={this.handleChange}>
+                                    <Select defaultValue="1" style={{ width: 140, marginLeft: '15px' }} onChange={this.handleChange}>
                                         <Option value="1">小易</Option>
                                         <Option value="2">海蜇</Option>
                                         <Option value="3">科科</Option>
@@ -181,13 +182,8 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <Modal title="Modal" visible={this.state.visible}
-                            onOk={this.handleOk} onCancel={this.handleCancel}
-                            okText="OK" cancelText="Cancel">
-                            <p>Bla bla ...</p>
-                            <p>Bla bla ...</p>
-                            <p>Bla bla ...</p>
-                        </Modal>
+                <CardModal visible={this.state.visible} onOk={()=>this.handleOk}
+                    onCancel={()=>this.handleCancel}></CardModal>
             </div>
         )
     }

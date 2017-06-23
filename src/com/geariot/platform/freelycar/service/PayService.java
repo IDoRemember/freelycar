@@ -52,6 +52,11 @@ public class PayService {
 		order.setLicensePlate(null);
 		order.setPayDate(new Date());
 		this.incomeOrderDao.save(order);
+		
+		client.setConsumTimes(client.getConsumTimes() + 1);
+		client.setConsumAmout(client.getConsumAmout() + order.getAmount());
+		client.setLastVisit(new Date());
+		
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
@@ -94,6 +99,12 @@ public class PayService {
 		recoder.setPayDate(new Date());
 		recoder.setType(1);
 		this.incomeOrderDao.save(recoder);
+		
+		Client client = order.getCar().getClient();
+		client.setConsumTimes(client.getConsumTimes() + 1);
+		client.setConsumAmout(client.getConsumAmout() + recoder.getAmount());
+		client.setLastVisit(new Date());
+		
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	

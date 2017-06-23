@@ -44,28 +44,29 @@ public class AndQueryCreator {
 			String value = condition[i];
 			if(value == null || value.isEmpty() || value.trim().isEmpty() || value.equals("-1") || value.equals("-2"))
 				continue;
-			else
-			{
+			else {
 				if(i != 0 && content.length() > 0)
 					content.append(" and ");
 				content.append(conditionKeys.get(i).toString());
-				if(conditionKeys.get(i).getOperator().equals("like"))
-				{
+				if(conditionKeys.get(i).getOperator().equals("like")) {
 					content.append("'%");
 					content.append(value);
 					content.append("%'");
 				}
-				else if(conditionKeys.get(i).getOperator().equals("=="))
-				{
+				else if(conditionKeys.get(i).getOperator().equals("==")) {
 					content.append(Integer.parseInt(value));
 					
 				}
-				else if(conditionKeys.get(i).getOperator().equals("="))
-				{
+				else if(conditionKeys.get(i).getOperator().equals("=")) {
 					content.append("'" + value + "'");
 				}
-				else
-				{
+				else if(conditionKeys.get(i).getOperator().equals(">")) {
+					content.append("'" + value + "'");
+				}
+				else if(conditionKeys.get(i).getOperator().equals("<")) {
+					content.append("'" + value + "'");
+				}
+				else {
 					content.append(value);
 				}
 			}

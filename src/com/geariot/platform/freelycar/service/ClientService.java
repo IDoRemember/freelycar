@@ -18,6 +18,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ClientAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -99,13 +100,19 @@ public class ClientService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String query(String name, String phone) {
-		List<Client> list = clientDao.query(name, phone);
+	public String query(String name, String phone, int page, int number) {
+		int from = (page - 1) * number;
+		String andCondition = new ClientAndQueryCreator(name, phone).createStatement();
+		List<Client> list = clientDao.query(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
-				JSONArray.fromObject(list, JsonResFactory.dateConfig())).toString();
+		long realSize = this.clientDao.getQueryCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double)number);
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+				JSONArray.fromObject(list, JsonResFactory.dateConfig()));
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		return res.toString();
 	}
 
 	public String detail(int clientId) {

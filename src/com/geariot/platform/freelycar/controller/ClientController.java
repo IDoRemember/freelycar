@@ -50,8 +50,8 @@ public class ClientController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("client:query")
-	public String searchClient(String name, String phone) {
-		return clientService.query(name, phone);
+	public String searchClient(String name, String phone, int page, int number) {
+		return clientService.query(name, phone, page, number);
 	}
 	
 	@RequestMapping(value = "/detail" , method = RequestMethod.GET)

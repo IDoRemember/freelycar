@@ -18,5 +18,7 @@ public interface ClientDao {
 	
 	void delete(List<Integer> clientId);
 	
-	List<Client> query(String name, String phone);
+	List<Client> query(String condition, int from, int pageSize);
+
+	long getQueryCount(String andCondition);
 }
