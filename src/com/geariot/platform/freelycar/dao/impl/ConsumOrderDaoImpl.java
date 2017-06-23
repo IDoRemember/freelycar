@@ -1,9 +1,9 @@
 package com.geariot.platform.freelycar.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +13,13 @@ import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.query.ConsumOrderAndQueryCreator;
-import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class ConsumOrderDaoImpl implements ConsumOrderDao {
 
+	private static final Logger log = LogManager.getLogger(ConsumOrderDaoImpl.class);
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -55,51 +55,19 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ConsumOrder> query(ConsumOrderQueryCondition condition) {
+	public List<ConsumOrder> query(String andCondition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from ConsumOrder");
-		ConsumOrder order = condition.getConsumOrder();
-		String licensePlate = null;
-		int programId = -1;
-		if(order.getCar() != null){
-			licensePlate = order.getCar().getLicensePlate();
-		}
-		if(order.getProgram() != null){
-			programId = order.getProgram().getId();
-		}
-		String andCondition = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
-				String.valueOf(programId), String.valueOf(order.getPayState())).createStatement();
-		StringBuffer hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER);
-		Date startDate = condition.getStartDate();
-		Date endDate = condition.getEndDate();
-		if(startDate != null || endDate != null){
-			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String[] types = {" createDate ", " deliverTime ", " pickTime ", " finishTime "};
-			int dateType = condition.getDateType();
-			boolean and = true;
-			if(hql.indexOf("where") == -1){
-				hql.append(" where");
-				and = false;
-			}
-			if(startDate != null){
-				if(and){
-					hql.append(" and");
-				}
-				hql.append(types[dateType]);
-				hql.append(" > '");
-				hql.append(sdf.format(startDate));
-				hql.append("'");
-				and = true;
-			}
-			if(endDate != null){
-				hql.append(" and");
-			}
-			hql.append(types[dateType]);
-			hql.append(" < '");
-			hql.append(sdf.format(endDate));
-			hql.append("'");
-		}
-		System.out.println("consum order 查询最后拼接语句：" + hql);
-		return this.getSession().createQuery(hql.toString()).setCacheable(Constants.SELECT_CACHE).list();
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		log.debug("订单查询最后生成查询语句：" + hql);
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getQueryCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from ConsumOrder");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.geariot.platform.freelycar.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +32,7 @@ import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ConsumOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 
 import net.sf.json.JSONArray;
@@ -38,6 +42,8 @@ import net.sf.json.JsonConfig;
 @Transactional
 public class ConsumOrderService {
 
+	private static final Logger log = LogManager.getLogger(ConsumOrderService.class);
+	
 	@Autowired
 	private ConsumOrderDao orderDao;
 	
@@ -141,16 +147,66 @@ public class ConsumOrderService {
 	}
 
 	public String query(ConsumOrderQueryCondition condition) {
-		List<ConsumOrder> list = this.orderDao.query(condition);
+		String andCondition = this.buildAndCondition(condition);
+		int from = (condition.getPage() - 1) * condition.getNumber();
+		List<ConsumOrder> list = this.orderDao.query(andCondition, from, condition.getNumber());
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = this.orderDao.getQueryCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double) condition.getNumber());
 		JsonConfig config = JsonResFactory.dateConfig();
 		JsonPropertyFilter filter = new JsonPropertyFilter();
 		filter.setColletionProperties(Car.class, CarType.class, Card.class, ProjectInventoriesInfo.class, Project.class);
 		config.setJsonPropertyFilter(filter);
 		JSONArray array = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array).toString();
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		return res.toString();
 	}
 
+	private String buildAndCondition(ConsumOrderQueryCondition condition){
+		//生成条件查询and后缀语句
+		ConsumOrder order = condition.getConsumOrder();
+		String licensePlate = null;
+		int programId = -1;
+		if(order.getCar() != null){
+			licensePlate = order.getCar().getLicensePlate();
+		}
+		if(order.getProgram() != null){
+			programId = order.getProgram().getId();
+		}
+		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
+				String.valueOf(programId), String.valueOf(order.getPayState())).createStatement();
+		StringBuilder sb = new StringBuilder(temp.trim());
+		Date startDate = condition.getStartDate();
+		Date endDate = condition.getEndDate();
+		if(startDate != null || endDate != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			String[] types = {" createDate ", " deliverTime ", " pickTime ", " finishTime "};
+			int dateType = condition.getDateType();
+			boolean and = sb.length() != 0;
+			if(startDate != null){
+				if(and){
+					sb.append(" and");
+				}
+				sb.append(types[dateType]);
+				sb.append(" > '");
+				sb.append(sdf.format(startDate));
+				sb.append("'");
+				and = true;
+			}
+			if(endDate != null){
+				sb.append(" and");
+				sb.append(types[dateType]);
+				sb.append(" < '");
+				sb.append(sdf.format(endDate));
+				sb.append("'");
+			}
+		}
+		String andCondition = sb.toString();
+		log.debug("消费订单查询语句生成条件：" + andCondition);
+		return andCondition;
+	}
+	
 }

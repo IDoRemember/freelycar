@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.service;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -24,6 +25,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -75,12 +77,33 @@ public class InventoryService {
 		return obj.toString();
 	}
 
-	public String queryType(String name, Date startTime, Date endTime) {
-		List<InventoryType> list = this.inventoryTypeDao.query(name, startTime, endTime);
+	public String queryType(String name, Date startTime, Date endTime, int page, int number) {
+		String andCondition = this.buildTypeQueryCondition(name, startTime, endTime);
+		int from = (page - 1) * number;
+		List<InventoryType> list = this.inventoryTypeDao.query(andCondition, from, number);
 		if(list == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(list, JsonResFactory.dateConfig())).toString();
+		long realSize = this.inventoryTypeDao.getQueryCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double)number);
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(list, JsonResFactory.dateConfig()));
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		return res.toString();
+	}
+	
+	private String buildTypeQueryCondition(String name, Date startTime, Date endTime){
+		String start = null;
+		String end = null;
+		if(startTime != null || endTime != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			if(startTime != null){
+				start = sdf.format(startTime);
+			}
+			if(endTime != null){
+				end = sdf.format(endTime);
+			}
+		}
+		return new InventoryTypeAndQueryCreator(name, start, end).createStatement();
 	}
 
 	public String addBrand(InventoryBrand inventoryBrand) {

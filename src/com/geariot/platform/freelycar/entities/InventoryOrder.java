@@ -75,4 +75,11 @@ public class InventoryOrder {
 	public void setType(int type) {
 		this.type = type;
 	}
+	@Override
+	public String toString() {
+		return "InventoryOrder [id=" + id + ", inventoryInfos=" + inventoryInfos + ", type=" + type + ", totalAmount="
+				+ totalAmount + ", totalPrice=" + totalPrice + ", orderMaker=" + orderMaker + ", state=" + state
+				+ ", createDate=" + createDate + "]";
+	}
+	
 }

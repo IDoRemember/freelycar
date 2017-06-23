@@ -15,6 +15,8 @@ public interface ConsumOrderDao {
 
 	ConsumOrder findById(String consumOrderId);
 
-	List<ConsumOrder> query(ConsumOrderQueryCondition condition);
+	List<ConsumOrder> query(String andCondition, int from, int pageSize);
+	
+	long getQueryCount(String andCondition);
 	
 }
