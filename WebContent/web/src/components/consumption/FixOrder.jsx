@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx';
 import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import { Link } from 'react-router';
 import { Row, Col, Card, Button, Input ,Select} from 'antd';
 class BeautyOrder extends React.Component {
     constructor(props) {
@@ -30,7 +31,7 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>结算</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter">结算</Link></Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
