@@ -1,8 +1,9 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon,Popconfirm} from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, DatePicker } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CarTable from '../tables/CarTable.jsx';
+const { MonthPicker, RangePicker } = DatePicker;
 const cardColumns = [
     { title: '卡号', dataIndex: 'cardNum', key: 'cardNum' },
     { title: '会员卡类', dataIndex: 'cardClasses', key: 'cardClasses' },
@@ -90,16 +91,16 @@ class ClientDetail extends React.Component {
         super(props)
         this.state = {
             option: [],
-            value:this.props.value,
-            editable:false,
-            form:{
-                name:'陈钰涵',
-                phone:'18362981113',
-                birthday:'2003-12-12',
-                gender:'女',
-                drivingLicense:'198288912',
-                idCard:'2932032329309209320',
-                ownerState:'新手'
+            value: this.props.value,
+            editable: false,
+            form: {
+                name: '陈钰涵',
+                phone: '18362981113',
+                birthday: '2003-12-12',
+                gender: '女',
+                drivingLicense: '198288912',
+                idCard: '2932032329309209320',
+                ownerState: '新手'
             }
         }
     }
@@ -109,47 +110,67 @@ class ClientDetail extends React.Component {
             value: e.target.value,
         });
     }
-    handleChange = (e) =>{
-        const value =e.target.value;
-        this.setState({value});
+    handleChange = (e) => {
+        const value = e.target.value;
+        this.setState({ value });
     }
-    check =() =>{
-        this.setState({editable:false});
-        if(this.props.onChange){
+    check = () => {
+        this.setState({ editable: false });
+        if (this.props.onChange) {
             this.props.onChange(this.state.value);
         }
     }
-    edit =()=>{
-        this.setState({editable:true});
+    edit = () => {
+        this.setState({ editable: true });
+    }
+    onHandleChange = (e, key) => {
+        console.log(key)
+        let form = this.state.form
+        form[key] = e.target.value
+        this.setState({
+            form: form
+        })
+    }
+    onChange = (date, dateString) => {
+        console.log(date, dateString);
+    }
+    onOk = (value) => {
+        console.log('onOk: ', value);
     }
     render() {
-        const{value,editable} =this.state;
+        const { value, editable } = this.state;
         return (
             <div>
                 <BreadcrumbCustom first='会员管理' second='客户信息' third='详细信息' />
                 <Card title="客户资料" bordered={false} style={{ marginBottom: '15px' }}>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>姓名：<Input value={this.state.form.name} style={{width:'200px'}}/></Col>
-                        <Col span={6}>手机号：<Input value={this.state.form.phone}  style={{width:'200px'}}/></Col>
-                        <Col span={6}>生日：<Input value={this.state.form.birthday} style={{width:'200px'}}/></Col>
+                        <Col span={6}>姓名：<Input value={this.state.form.name} onChange={(e) => this.onHandleChange(e, 'name')} style={{ width: '200px' }} /></Col>
+                        <Col span={6}>手机号：<Input value={this.state.form.phone} onChange={(e) => this.onHandleChange(e, 'phone')} style={{ width: '200px' }} /></Col>
+                        <Col span={6}>生日：<DatePicker
+                            showTime
+                            format="YYYY-MM-DD"
+                            placeholder="选择时间"
+                            onChange={this.onChange}
+                            onOk={this.onOk}
+                        /></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>性别：<Input value={this.state.form.gender} style={{width:'200px'}}/></Col>
-                        <Col span={6}>身份证号：<Input value={this.state.form.idCard} style={{width:'200px'}}/></Col>
-                        <Col span={6}>行驶证号：<Input value={this.state.form.drivingLicense} style={{width:'200px'}}/></Col>
+                        <Col span={6}>性别：<Input value={this.state.form.gender} onChange={(e) => this.onHandleChange(e, 'gender')} style={{ width: '200px' }} /></Col>
+                        <Col span={6}>身份证号：<Input value={this.state.form.idCard} onChange={(e) => this.onHandleChange(e, 'idCard')} style={{ width: '200px' }} /></Col>
+                        <Col span={6}>行驶证号：<Input value={this.state.form.drivingLicense} onChange={(e) => this.onHandleChange(e, 'drivingLicense')} style={{ width: '200px' }} /></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
-                        <Col span={6}>车主状态：<Input value={this.state.form.ownerState} style={{width:'200px'}}/></Col>
+                        <Col span={6}>车主状态：<Input value={this.state.form.ownerState} onChange={(e) => this.onHandleChange(e, 'ownerState')} style={{ width: '200px' }} /></Col>
                         <Col span={6}>积分：<span>21212</span></Col>
                     </Row>
                 </Card>
                 <Card title="会员卡信息" className="accountTable" style={{ marginBottom: '15px' }}>
-                    <Button style={{ marginBottom: '20px'}}><Icon type='idcard'></Icon>开卡</Button>
-                    
-                   <Table columns={cardColumns} dataSource={cardData} bordered></Table>
+                    <Button style={{ marginBottom: '20px' }}><Icon type='idcard'></Icon>开卡</Button>
+
+                    <Table columns={cardColumns} dataSource={cardData} bordered></Table>
                 </Card>
                 <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
                     <CarTable></CarTable>
@@ -157,7 +178,7 @@ class ClientDetail extends React.Component {
                 </Card>
                 <Card title="消费记录" className="accountTable" >
                     <Table columns={payColumns} dataSource={payData} bordered></Table>
-                    <p style={{ float: 'right',marginRight:'30px' }}><Link to = {'app/member/customer/1/payhistory'}> 更多</Link></p>
+                    <p style={{ float: 'right', marginRight: '30px' }}><Link to={'app/member/customer/1/payhistory'}> 更多</Link></p>
                 </Card>
             </div>
         )

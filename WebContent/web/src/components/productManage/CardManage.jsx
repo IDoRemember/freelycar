@@ -9,7 +9,7 @@ import EditableCell from '../tables/EditableCell.jsx'
 //import jquery from 'jquery';
 import $ from 'jquery';
 
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal,Form } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal, Form } from 'antd';
 import moment from 'moment';
 
 import { Link } from 'react-router';
@@ -25,11 +25,84 @@ class EditableTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: false
+            visible: false,
+            data: [{
+                key: '1',
+                index: '1',
+                name: 'John Brown',
+                properties: 'dfsd',
+                valateTime: '一年',
+                price: 'New York No. 1 Lake Park',
+                createTime: 'fff',
+                remark: 'xxx',
+                operation: 'zz'
+            }, {
+                key: '2',
+                index: '2',
+                name: 'John Brown',
+                properties: 'dfsd',
+                valateTime: '一年',
+                price: 'New York No. 1 Lake Park',
+                createTime: 'fff',
+                remark: 'xxx',
+                operation: 'zz'
+            }]
         }
 
+    }
 
-        this.columns = [{
+    // 模态框的处理函数
+    showModal = () => {
+        this.setState({
+            visible: true,
+        });
+    }
+    handleOk = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+    handleCancel = (e) => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    }
+    //end of modal
+
+    onCellChange = (index, key) => {
+        return (value) => {
+            const dataSource = [...this.state.data];
+            dataSource[index][key] = value;
+            this.setState({ data: dataSource });
+        };
+    }
+    onDelete = (index) => {
+        const dataSource = [...this.state.data];
+        dataSource.splice(index, 1);
+        this.setState({ data: dataSource });
+    }
+    handleAdd = () => {
+        const { count, dataSource } = this.state;
+        const newData = {
+            key: count,
+            index: count,
+            name: `Edward King ${count}`,
+            properties: `Edward King ${count}`,
+            valateTime: `Edward King ${count}`,
+            price: `Edward King ${count}`,
+            createTime: `Edward King ${count}`,
+            remark: `Edward King ${count}`,
+        };
+        this.setState({
+            dataSource: [...dataSource, newData],
+            count: count + 1,
+        });
+    }
+    render() {
+
+        const columns = [{
             title: '序号',
             dataIndex: 'index',
             key: 'index'
@@ -62,7 +135,7 @@ class EditableTable extends React.Component {
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-                    this.state.dataSource.length > 1 ?
+                    this.state.data.length > 1 ?
                         (
                             <div>
                                 <a onClick={this.showModal}>修改</a>
@@ -76,84 +149,7 @@ class EditableTable extends React.Component {
             },
         }];
 
-        this.state = {
-            dataSource: [{
-                key: '1',
-                index: '1',
-                name: 'John Brown',
-                properties: 'dfsd',
-                valateTime: '一年',
-                price: 'New York No. 1 Lake Park',
-                createTime: 'fff',
-                remark: 'xxx',
-                operation: 'zz'
-            }, {
-                key: '2',
-                index: '2',
-                name: 'John Brown',
-                properties: 'dfsd',
-                valateTime: '一年',
-                price: 'New York No. 1 Lake Park',
-                createTime: 'fff',
-                remark: 'xxx',
-                operation: 'zz'
-            }],
-            count: 3,
-        };
-    }
 
-    // 模态框的处理函数
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
-    handleOk = (e) => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
-    handleCancel = (e) => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
-    //end of modal
-
-    onCellChange = (index, key) => {
-        return (value) => {
-            const dataSource = [...this.state.dataSource];
-            dataSource[index][key] = value;
-            this.setState({ dataSource });
-        };
-    }
-    onDelete = (index) => {
-        const dataSource = [...this.state.dataSource];
-        dataSource.splice(index, 1);
-        this.setState({ dataSource });
-    }
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
-    }
-    render() {
-        const { dataSource } = this.state;
-        const columns = this.columns;
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -190,7 +186,7 @@ class EditableTable extends React.Component {
                                 </div>
                             </Col>
 
-                            <Col span={1} style={{minWidth:"70px",marginLeft:"16px"}}>
+                            <Col span={1} style={{ minWidth: "70px", marginLeft: "16px" }}>
                                 <span style={{ verticalAlign: 'middle', lineHeight: '28px', }}>创建日期:</span>
                             </Col>
                             <Col span={8}>
@@ -217,7 +213,7 @@ class EditableTable extends React.Component {
                                 <Table
                                     rowSelection={rowSelection}
                                     columns={columns}
-                                    dataSource={dataSource}
+                                    dataSource={this.state.data}
                                     bordered
                                 />
                             </Col>
@@ -299,37 +295,7 @@ class ModalEditableTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
-        }
-
-
-        this.columns = [{
-            title: '项目名称',
-            dataIndex: 'name',
-            key: 'name'
-        }, {
-            title: '可用次数',
-            dataIndex: 'count',
-            key: 'count'
-        }, {
-            title: 'operation',
-            dataIndex: 'operation',
-            render: (text, record, index) => {
-                return (
-                    this.state.dataSource.length > 1 ?
-                        (
-                            <div>
-                                <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
-                                    <a href="#">删除</a>
-                                </Popconfirm>
-                            </div>
-                        ) : null
-                );
-            },
-        }];
-
-        this.state = {
-            dataSource: [{
+            data: [{
                 key: '1',
                 index: '1',
                 name: 'John Brown',
@@ -341,23 +307,23 @@ class ModalEditableTable extends React.Component {
                 name: 'John Brown',
                 count: 'dfsd',
                 operation: 'zz'
-            }],
-            count: 3,
-        };
+            }]
+        }
+
     }
 
 
     onCellChange = (index, key) => {
         return (value) => {
-            const dataSource = [...this.state.dataSource];
+            const dataSource = [...this.state.data];
             dataSource[index][key] = value;
             this.setState({ dataSource });
         };
     }
     onDelete = (index) => {
-        const dataSource = [...this.state.dataSource];
+        const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ dataSource });
+        this.setState({ data:dataSource });
     }
     handleAdd = () => {
         const { count, dataSource } = this.state;
@@ -377,16 +343,37 @@ class ModalEditableTable extends React.Component {
         });
     }
     render() {
-        const { dataSource } = this.state;
-        const columns = this.columns;
-       
+        const columns = [{
+            title: '项目名称',
+            dataIndex: 'name',
+            key: 'name'
+        }, {
+            title: '可用次数',
+            dataIndex: 'count',
+            key: 'count'
+        }, {
+            title: 'operation',
+            dataIndex: 'operation',
+            render: (text, record, index) => {
+                return (
+                    this.state.data.length > 1 ?
+                        (
+                            <div>
+                                <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
+                                    <a href="#">删除</a>
+                                </Popconfirm>
+                            </div>
+                        ) : null
+                );
+            },
+        }];
 
         return (
             <div>
-                <Button  className="editable-add-btn" onClick={this.handleAdd} style={{marginBottom:'15px'}}>新增</Button>
+                <Button className="editable-add-btn" onClick={this.handleAdd} style={{ marginBottom: '15px' }}>新增</Button>
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={this.state.data}
                     bordered
                 />
             </div>

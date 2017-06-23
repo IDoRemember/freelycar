@@ -57,11 +57,11 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
-            <Route path={"incomeSearch/income/:incomeId"} component={IncomeDetail} />
-            <Route path={"incomeSearch/pay/:payId"} component = {PayDetail}/>
+            <Route path={"incomeSearch/incomedetail"} component={IncomeDetail} />
+            <Route path={"incomeSearch/paydetail"} component = {PayDetail}/>
             <Route path={"historyAccount"} component={HistoricalAccount} />
-            <Route path={"historyIncomeDetail"} component={HistoryIncomeDetail} />
-            <Route path={"historyOutcomeDetail"} component={HistoryOutcomeDetail} />
+            <Route path={"historyIncomeDetail/:incomeId"} component={HistoryIncomeDetail} />
+            <Route path={"historyOutcomeDetail/:outcomeId"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >

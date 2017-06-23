@@ -12,7 +12,7 @@ class EditableCell extends React.Component {
     }
     handleChange = (e) => {
         const value = e.target.value;
-        this.setState({ value });
+        this.setState({ value :value});
     }
     check = () => {
         this.setState({ editable: false });
@@ -24,14 +24,13 @@ class EditableCell extends React.Component {
         this.setState({ editable: true });
     }
     render() {
-        const { value, editable } = this.state;
         return (
             <div className="editable-cell">
                 {
-                    editable ?
+                    this.state.editable ?
                         <div className="editable-cell-input-wrapper">
                             <Input
-                                value={value}
+                                value={this.state.value}
                                 onChange={this.handleChange}
                                 onPressEnter={this.check}
                             />
@@ -43,7 +42,7 @@ class EditableCell extends React.Component {
                         </div>
                         :
                         <div className="editable-cell-text-wrapper">
-                            {value || ' '}
+                            {this.state.value || ' '}
                             <Icon
                                 type="edit"
                                 className="editable-cell-icon"

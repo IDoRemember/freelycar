@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +50,7 @@ public class ConsumOrderService {
 	public String book(@RequestBody ConsumOrder consumOrder) {
 		consumOrder.setCreateDate(new Date());
 		consumOrder.setState(0);
-		List<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();
+		Set<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();
 		List<InventoryOrderInfo> list = new ArrayList<>();
 		float totalAmount = 0.0f;
 		float totalPrice = 0.0f;
@@ -77,7 +78,7 @@ public class ConsumOrderService {
 		order.setInventoryOrderInfo(list);
 		order.setState(0);
 		order.setTotalAmount(totalAmount);
-		order.setTotalPrice(totalAmount);
+		order.setTotalPrice(totalPrice);
 		order.setType(consumOrder.getProgram().getId());
 		inventoryOrderDao.save(order);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();

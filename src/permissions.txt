@@ -7,3 +7,4 @@ admin:query
 
 [Roles]
 test,superAdmin=*
+owner,admin=*

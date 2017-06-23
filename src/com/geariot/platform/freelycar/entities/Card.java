@@ -1,7 +1,7 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,7 +21,7 @@ public class Card {
 	private Date payDate;
 	private Date expirationDate;
 	private int payMethod;
-	private List<CardProjectRemainingInfo> projectInfos;
+	private Set<CardProjectRemainingInfo> projectInfos;
 	private Admin orderMaker;
 	public Date getExpirationDate() {
 		return expirationDate;
@@ -44,7 +44,7 @@ public class Card {
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
-	public List<CardProjectRemainingInfo> getRemainingInfos() {
+	public Set<CardProjectRemainingInfo> getRemainingInfos() {
 		return projectInfos;
 	}
 	@ManyToOne
@@ -67,7 +67,7 @@ public class Card {
 	public void setPayMethod(int payMethod) {
 		this.payMethod = payMethod;
 	}
-	public void setRemainingInfos(List<CardProjectRemainingInfo> remainingInfos) {
+	public void setRemainingInfos(Set<CardProjectRemainingInfo> remainingInfos) {
 		this.projectInfos = remainingInfos;
 	}
 	public void setService(Service service) {
