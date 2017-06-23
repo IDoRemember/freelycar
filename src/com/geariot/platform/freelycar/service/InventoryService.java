@@ -275,7 +275,5 @@ public class InventoryService {
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				net.sf.json.JSONObject.fromObject(order, config)).toString();
 	}
-	
-	
-	
+
 }
