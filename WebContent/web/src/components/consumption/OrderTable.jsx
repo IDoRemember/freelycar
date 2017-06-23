@@ -9,7 +9,7 @@ const columns = [
         }
     },
     { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber',render:(text,record,index)=>{
-        return <div><Link to={`/app/consumption/ordermanage/:${text}`}>{text}</Link></div>
+        return <div><Link to={`/app/consumption/ordermanage/${text}`}>{text}</Link></div>
     } },
     { title: '单据时间', dataIndex: 'receiptTime', key: 'receiptTime' },
     { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
