@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.service;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -60,6 +61,10 @@ public class PayService {
 			client.setCards(cards);
 		}
 		card.setPayDate(new Date());
+		Calendar exp = Calendar.getInstance();
+		exp.setTime(new Date());
+		exp.add(Calendar.YEAR, service.getValidTime());
+		card.setExpirationDate(exp.getTime());
 		cards.add(card);
 		//创建新的收入订单并保存
 		IncomeOrder order = new IncomeOrder();

@@ -11,7 +11,6 @@ import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.query.ClientAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository

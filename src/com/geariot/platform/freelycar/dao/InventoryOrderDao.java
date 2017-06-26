@@ -17,5 +17,7 @@ public interface InventoryOrderDao {
 	long getQueryCount(String andCondition);
 
 	InventoryOrder findById(String inventoryOrderId);
+
+	void deleteOrder(String orderId);
 	
 }

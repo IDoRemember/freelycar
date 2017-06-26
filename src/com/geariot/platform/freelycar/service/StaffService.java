@@ -28,7 +28,6 @@ import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.StaffAndQueryCreator;
 
-
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
 

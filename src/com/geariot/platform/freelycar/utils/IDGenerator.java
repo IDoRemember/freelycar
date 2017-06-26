@@ -15,8 +15,6 @@ import org.hibernate.id.IdentifierGenerator;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.type.Type;
 
-import com.geariot.platform.freelycar.controller.IdgenController;
-
 /**
  * 自定义ID生成器
  * @author Administrator
