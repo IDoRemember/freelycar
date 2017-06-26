@@ -132,11 +132,14 @@ public class StaffService {
 		}
 		else{
 			int from = (page - 1) * number;
+			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId, from , number);
+			if(list == null || list.isEmpty()){
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JsonPropertyFilter filter = new JsonPropertyFilter();
 			filter.setColletionProperties(CarType.class , Car.class , ProjectInventoriesInfo.class , Card.class , Program.class , Staff.class , Inventory.class);
-			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId, from , number);
 			config.setJsonPropertyFilter(filter);
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
