@@ -15,9 +15,11 @@ import com.geariot.platform.freelycar.entities.ExpendOrder;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 @Service
 @Transactional
@@ -36,7 +38,9 @@ public class StatService {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
 			long size = (long) list.size();
-			JSONArray jsonArray = JSONArray.fromObject(list);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
 			return obj.toString();
@@ -47,7 +51,9 @@ public class StatService {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
 			long size = (long) list.size();
-			JSONArray jsonArray = JSONArray.fromObject(list);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
 			return obj.toString();
@@ -89,7 +95,9 @@ public class StatService {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
 			long size = (long) list.size();
-			JSONArray jsonArray = JSONArray.fromObject(list);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
 			return obj.toString();
@@ -99,7 +107,9 @@ public class StatService {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
 			long size = (long) list.size();
-			JSONArray jsonArray = JSONArray.fromObject(list);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
 			return obj.toString();
