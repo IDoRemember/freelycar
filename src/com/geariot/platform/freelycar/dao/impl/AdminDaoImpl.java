@@ -12,7 +12,6 @@ import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Role;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.query.AdminAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository

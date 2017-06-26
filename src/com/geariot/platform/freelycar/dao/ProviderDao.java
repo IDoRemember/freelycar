@@ -14,8 +14,14 @@ public interface ProviderDao {
 	
 	long getCount();
 	
-	List<Provider> queryByName(String name);
+	//List<Provider> queryByName(String name);
+	
+	List<Provider> getConditionQuery(String andCondition , int from , int pageSize);
 	
 	Provider findProviderById(int providerId);
+	
+	long getConditionCount(String andCondition);
+	
+	List<String> listName();
 	
 }

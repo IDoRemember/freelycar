@@ -8,9 +8,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import com.geariot.platform.freelycar.model.RESCODE;
-import com.geariot.platform.freelycar.utils.JsonResFactory;
-
 @Aspect
 @Component
 public class PermissionAspect {

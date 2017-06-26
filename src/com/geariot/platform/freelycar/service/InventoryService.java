@@ -75,6 +75,7 @@ public class InventoryService {
 		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig());
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 
@@ -135,6 +136,7 @@ public class InventoryService {
 		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig());
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 
@@ -163,6 +165,20 @@ public class InventoryService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
+	public String modify(Inventory inventory) {
+		Inventory exist = this.inventoryDao.findById(inventory.getId());
+		if(exist == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		exist.setBrand(inventory.getBrand());
+		exist.setComment(inventory.getComment());
+		exist.setName(inventory.getName());
+		exist.setProperty(inventory.getProperty());
+		exist.setStandard(inventory.getStandard());
+		exist.setType(inventory.getType());
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+	
 	public String inStock(InventoryOrder order) {
 		order.setCreateDate(new Date());
 		order.setState(0);
@@ -274,6 +290,76 @@ public class InventoryService {
 		config.setJsonPropertyFilter(filter);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				net.sf.json.JSONObject.fromObject(order, config)).toString();
+	}
+
+	//单据修改
+	public String modifyOrder(InventoryOrder order) {
+		InventoryOrder exist = this.inventoryOrderDao.findById(order.getId());
+		if(exist == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		exist.setOrderMaker(order.getOrderMaker());
+		//修改前单据库存项目列表
+		List<InventoryOrderInfo> existInfos = exist.getInventoryOrderInfo();
+		List<InventoryOrderInfo> fails = new ArrayList<>();
+		//遍历新单据列表中项目
+		for(InventoryOrderInfo newInfo : order.getInventoryOrderInfo()){
+			InventoryOrderInfo existInfo = null;
+			//在原单据列表中查找该库存对应的信息
+			for(InventoryOrderInfo temp : existInfos){ 
+				if(temp.getInventory().getId().equals(newInfo.getInventory().getId())){
+					existInfo = temp;
+					break;
+				}
+			}
+			Inventory inventory = this.inventoryDao.findById(newInfo.getInventory().getId());
+			//如果没找到，说明是新增项目，直接增加数量
+			if(existInfo == null){
+				inventory.setAmount(inventory.getAmount() + newInfo.getAmount());
+			}
+			else{
+				//找到项目，可能是数量修改
+				//如果数量减少，判断减少数量，如果减少数量大于库存现有数量，则此项目的修改失败
+				if(newInfo.getAmount() < existInfo.getAmount()){
+					float minus = existInfo.getAmount() - newInfo.getAmount();
+					if(minus > inventory.getAmount()){
+						fails.add(newInfo);
+						newInfo.setAmount(existInfo.getAmount());
+					}
+					else{
+						inventory.setAmount(inventory.getAmount() - minus);
+					}
+				}
+				//如果数量增加，直接更改库存数量
+				else{
+					inventory.setAmount(newInfo.getAmount() - existInfo.getAmount());
+				}
+				//将原单据列表中移除找到的信息。
+				existInfos.remove(existInfo);
+			}
+		}
+		//如果原单据列表中不为空，说明有入库信息被删除，查找库存并判断数量是否满足删除条件。
+		for(InventoryOrderInfo delete : existInfos){
+			Inventory inventory = this.inventoryDao.findById(delete.getInventory().getId());
+			if(inventory.getAmount() < delete.getAmount()){
+				fails.add(delete);
+				order.getInventoryOrderInfo().add(delete);
+			}
+			else{
+				inventory.setAmount(inventory.getAmount() - delete.getAmount());
+			}
+		}
+		exist.setInventoryOrderInfo(order.getInventoryOrderInfo());
+		if(!fails.isEmpty()){
+			net.sf.json.JSONArray array = net.sf.json.JSONArray.fromObject(fails);
+			return JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS, array).toString();
+		}
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+
+	public String deleteOrder(String orderId) {
+		this.inventoryOrderDao.deleteOrder(orderId);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
 }

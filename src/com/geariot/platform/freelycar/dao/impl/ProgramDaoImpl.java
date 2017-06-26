@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.ProgramDao;
-import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Program;
 import com.geariot.platform.freelycar.utils.Constants;
 

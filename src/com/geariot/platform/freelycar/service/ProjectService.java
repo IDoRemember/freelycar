@@ -10,7 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Project;
-import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
@@ -28,6 +27,7 @@ public class ProjectService {
 	
 	public String addProject(Project project){
 		project.setCreateDate(new Date());
+		project.getProjectAccessoriesInfos();
 		projectDao.save(project);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
