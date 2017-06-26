@@ -45,6 +45,31 @@ class EditableTable extends React.Component {
 
     }
 
+
+
+
+    componentDidMount(){
+        var jsondata = {};
+        jsondata.page = 1;
+        jsondata.number = 10;
+
+        
+        $.ajax({
+            url:'/api/product/list',
+            dataType:'json',
+            data:jsondata,
+            type:'post',
+            success:function(data){
+                console.log(data);
+            }
+
+
+
+        });
+    }
+
+    
+
     // 模态框的处理函数
     showModal = () => {
         this.setState({
