@@ -92,8 +92,8 @@ public class StaffService {
 		return obj.toString();
 	}
 	
-	public String getSelectStaff(int staffId , String staffName){
-		String andCondition = new StaffAndQueryCreator(String.valueOf(staffId), staffName).createStatement();
+	public String getSelectStaff(String staffId , String staffName){
+		String andCondition = new StaffAndQueryCreator(staffId , staffName).createStatement();
 		List<Staff> list = staffDao.getConditionQuery(andCondition);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
