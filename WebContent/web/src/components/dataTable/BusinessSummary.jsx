@@ -3,6 +3,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import Chart from '../charts/EchartsPie.jsx'
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
+import $ from 'jquery';
 import { Link } from 'react-router';
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
@@ -44,7 +45,16 @@ class BusinessSummary extends React.Component {
             }]
         }
     }
+    componentDidMount(){
+        $.ajax({
+            url:'api/stat/today',
+            data:{},
+            success:(result)=>{
+                console.log(result)
+            },
 
+        })
+    }
     render() {
         return <div>
             <BreadcrumbCustom first="数据报表" second="营业汇总" />
