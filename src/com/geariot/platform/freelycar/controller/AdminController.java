@@ -60,8 +60,8 @@ public class AdminController {
 	
 	@RequestMapping(value="/query", method={RequestMethod.GET, RequestMethod.POST})
 	@PermissionRequire("admin:query")
-	public String query(@RequestBody Admin admin){
-		return adminService.query(admin);
+	public String query(String account, String name, int page, int number){
+		return adminService.query(account, name, page, number);
 	}
 	
 	@RequestMapping(value="/disable", method=RequestMethod.POST)

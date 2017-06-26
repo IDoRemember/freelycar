@@ -11,11 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
+import com.geariot.platform.freelycar.dao.ServiceDao;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.CardProjectRemainingInfo;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
+import com.geariot.platform.freelycar.entities.ServiceProjectInfo;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
@@ -30,13 +32,28 @@ public class PayService {
 	private ClientDao clientDao;
 	
 	@Autowired
+	private ServiceDao serviceDao;
+	
+	@Autowired
 	private ConsumOrderDao consumOrderDao;
 
 	public String buyCard(int clientId, Card card) {
 		Client client = clientDao.findById(clientId);
-		if(client == null){
+		com.geariot.platform.freelycar.entities.Service service = 
+				this.serviceDao.findServiceById(card.getService().getId());
+		if(client == null || service == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		//将服务信息次数复制到卡中
+		Set<CardProjectRemainingInfo> cardInfos = new HashSet<>();
+		for(ServiceProjectInfo info : service.getServiceProjectInfos()){
+			CardProjectRemainingInfo cardInfo = new CardProjectRemainingInfo();
+			cardInfo.setProject(info.getProject());
+			cardInfo.setRemaining(info.getTimes());
+			cardInfos.add(cardInfo);
+		}
+		card.setRemainingInfos(cardInfos);
+		//将新增卡增加到客户卡列表中
 		Set<Card> cards = client.getCards();
 		if(cards == null){
 			cards = new HashSet<>();
@@ -44,15 +61,15 @@ public class PayService {
 		}
 		card.setPayDate(new Date());
 		cards.add(card);
-		
+		//创建新的收入订单并保存
 		IncomeOrder order = new IncomeOrder();
-		order.setAmount(card.getService().getPrice());
+		order.setAmount(service.getPrice());
 		order.setClientId(clientId);
 		order.setType(0);
 		order.setLicensePlate(null);
 		order.setPayDate(new Date());
 		this.incomeOrderDao.save(order);
-		
+		//更新客户的消费次数与消费情况信息。
 		client.setConsumTimes(client.getConsumTimes() + 1);
 		client.setConsumAmout(client.getConsumAmout() + order.getAmount());
 		client.setLastVisit(new Date());

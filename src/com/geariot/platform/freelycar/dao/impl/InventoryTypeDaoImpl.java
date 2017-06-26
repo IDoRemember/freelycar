@@ -6,7 +6,6 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.geariot.platform.freelycar.dao.InventoryTypeDao;
 import com.geariot.platform.freelycar.entities.InventoryType;
