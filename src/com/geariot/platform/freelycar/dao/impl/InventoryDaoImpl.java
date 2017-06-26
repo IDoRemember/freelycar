@@ -53,9 +53,4 @@ public class InventoryDaoImpl implements InventoryDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
-	@Override
-	public void rollback() {
-		this.getSession().getTransaction().rollback();
-	}
-
 }

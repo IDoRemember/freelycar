@@ -17,6 +17,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.StaffAndQueryCreator;
 import com.mchange.lang.IntegerUtils;
 
 import net.sf.json.JSONArray;
@@ -78,18 +79,19 @@ public class StaffService {
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 		return obj.toString();
 	}
 	
 	public String getSelectStaff(int staffId , String staffName){
-		List<Staff> list = staffDao.queryByNameAndId(staffId , staffName);
+		String andCondition = new StaffAndQueryCreator(String.valueOf(staffId), staffName).createStatement();
+		List<Staff> list = staffDao.getConditionQuery(andCondition);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+		JSONArray jsonArray = JSONArray.fromObject(list);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		return obj.toString();
 	}
 
 	public String modifyStaff(Staff staff){
@@ -108,6 +110,9 @@ public class StaffService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
+	/*public String staffServiceDetail(int staffId){
+		
+	}*/
 }
 	
 

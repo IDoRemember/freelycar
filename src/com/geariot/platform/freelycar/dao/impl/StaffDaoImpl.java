@@ -8,8 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.StaffDao;
+import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Staff;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class StaffDaoImpl implements StaffDao {
@@ -54,18 +57,28 @@ public class StaffDaoImpl implements StaffDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Staff> queryByNameAndId(int staffId, String staffName) {
 		String hql = "from Staff where id like :staffId or name like :staffName";
 		return this.getSession().createQuery(hql).setInteger("staffId", staffId).setString("staffName", "%"+staffName+"%")
 				.list();
-	}
+	}*/
+	
+	
 
 	@Override
 	public long getCount() {
 		String hql = "select count(*) from Staff";
 		return (long)this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Staff> getConditionQuery(String andCondition) {
+		String basic = "from Staff";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override

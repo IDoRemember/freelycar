@@ -7,8 +7,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geariot.platform.freelycar.entities.ConsumOrder;
+import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.service.ConsumOrderService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
+import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 
 @RestController
@@ -21,7 +23,16 @@ public class ConsumOrderController {
 	@RequestMapping(value = "/book", method = RequestMethod.POST)
 	@PermissionRequire("order:book")
 	public String book(@RequestBody ConsumOrder consumOrder){
-		return this.orderService.book(consumOrder);
+		String res = null;
+		try {
+			res = this.orderService.book(consumOrder);
+		} catch (ForRollbackException e){
+			org.json.JSONObject obj = new org.json.JSONObject();
+			obj.put(Constants.RESPONSE_DATA_KEY, e.getErrorCode());
+			obj.put(Constants.RESPONSE_MSG_KEY, e.getMessage());
+			return obj.toString();
+		}
+		return res;
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)

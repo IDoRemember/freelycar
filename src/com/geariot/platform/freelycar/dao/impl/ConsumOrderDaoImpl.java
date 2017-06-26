@@ -69,5 +69,12 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getConsumOrderIdsByStaffId(int staffId){
+		String sql = "select consumOrdersId from consumorders_staff where staffId=:id";
+		return this.getSession().createSQLQuery(sql).setInteger("id", staffId).setCacheable(Constants.SELECT_CACHE).list();
+	}
 
 }

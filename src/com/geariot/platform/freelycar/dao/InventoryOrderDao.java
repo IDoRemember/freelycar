@@ -12,7 +12,9 @@ public interface InventoryOrderDao {
 
 	long getCount();
 
-	List<InventoryOrder> query(String inventoryOrderId, String adminId);
+	List<InventoryOrder> query(String andCondition, int from, int pageSize);
+	
+	long getQueryCount(String andCondition);
 
 	InventoryOrder findById(String inventoryOrderId);
 	

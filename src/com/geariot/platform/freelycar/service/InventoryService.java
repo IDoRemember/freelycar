@@ -25,6 +25,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
 
 import net.sf.json.JSONArray;
@@ -243,16 +244,23 @@ public class InventoryService {
 		return obj.toString();
 	}
 
-	public String queryOrder(String inventoryOrderId, String adminId) {
-		List<InventoryOrder> list = this.inventoryOrderDao.query(inventoryOrderId, adminId);
+	public String queryOrder(String inventoryOrderId, String adminId, int page, int number) {
+		int from = (page - 1) * number;
+		String andCondition = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId).createStatement();
+		List<InventoryOrder> list = this.inventoryOrderDao.query(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = this.inventoryOrderDao.getQueryCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double) number);
 		JsonConfig config = JsonResFactory.dateConfig();
 		JsonPropertyFilter filter = new JsonPropertyFilter(Set.class);
 		config.setJsonPropertyFilter(filter);
 		JSONArray array = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array).toString();
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		return res.toString();
 	}
 
 	public String orderDetail(String inventoryOrderId) {
@@ -267,7 +275,5 @@ public class InventoryService {
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				net.sf.json.JSONObject.fromObject(order, config)).toString();
 	}
-	
-	
-	
+
 }

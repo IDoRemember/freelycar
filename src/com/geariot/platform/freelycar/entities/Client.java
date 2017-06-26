@@ -46,7 +46,7 @@ public class Client {
 		return cards;
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
-	@JoinColumn(name="cliendId", foreignKey=@ForeignKey(name="none"))
+	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Set<Car> getCars() {
 		return cars;
 	}

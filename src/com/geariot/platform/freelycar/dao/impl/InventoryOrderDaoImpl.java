@@ -11,7 +11,6 @@ import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
@@ -45,18 +44,26 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<InventoryOrder> query(String inventoryOrderId, String adminId) {
+	public List<InventoryOrder> query(String andCondition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from InventoryOrder");
-		String andCondition = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId).createStatement();
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@Override
+	public long getQueryCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from InventoryOrder");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+	
 	@Override
 	public InventoryOrder findById(String inventoryOrderId) {
 		String hql = "from InventoryOrder where id = :id";
 		return (InventoryOrder) this.getSession().createQuery(hql).setString("id", inventoryOrderId)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
+
 
 }

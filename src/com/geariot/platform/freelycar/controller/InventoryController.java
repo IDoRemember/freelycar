@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -12,8 +13,10 @@ import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.entities.InventoryType;
+import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.service.InventoryService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
+import com.geariot.platform.freelycar.utils.Constants;
 
 @RestController
 @RequestMapping(value = "/inventory")
@@ -115,8 +118,8 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String query(String inventoryOrderId , String adminId ){
-		return this.inventoryService.queryOrder(inventoryOrderId, adminId);
+	public String query(String inventoryOrderId , String adminId, int page, int number){
+		return this.inventoryService.queryOrder(inventoryOrderId, adminId, page, number);
 	}
 	
 	@RequestMapping(value = "/orderdetail" , method = RequestMethod.GET)
@@ -124,4 +127,5 @@ public class InventoryController {
 	public String orderDetail(String inventoryOrderId){
 		return this.inventoryService.orderDetail(inventoryOrderId);
 	}
+	
 }
