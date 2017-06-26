@@ -1,7 +1,6 @@
 package com.geariot.platform.freelycar.controller;
 
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +12,8 @@ import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.entities.InventoryType;
-import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.service.InventoryService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
-import com.geariot.platform.freelycar.utils.Constants;
 
 @RestController
 @RequestMapping(value = "/inventory")
@@ -85,6 +82,12 @@ public class InventoryController {
 		return this.inventoryService.deleteInventory(inventoryIds);
 	}
 	
+	@RequestMapping(value="/modify", method=RequestMethod.POST)
+	@PermissionRequire("inventory:modify")
+	public String modify(@RequestBody Inventory inventory){
+		return this.inventoryService.modify(inventory);
+	}
+	
 	@RequestMapping(value = "/instock" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:instock")
 	public String inStock(@RequestBody InventoryOrder inventoryOrder){
@@ -126,6 +129,18 @@ public class InventoryController {
 	@PermissionRequire("inventory:query")
 	public String orderDetail(String inventoryOrderId){
 		return this.inventoryService.orderDetail(inventoryOrderId);
+	}
+	
+	@RequestMapping(value="/modifyorder", method=RequestMethod.POST)
+	@PermissionRequire("inventory:modifyorder")
+	public String modifyOrder(@RequestBody InventoryOrder order){
+		return this.inventoryService.modifyOrder(order);
+	}
+	
+	@RequestMapping(value="/delorder", method=RequestMethod.POST)
+	@PermissionRequire("inventory:delorder")
+	public String deleteOrder(String orderId){
+		return this.inventoryService.deleteOrder(orderId);
 	}
 	
 }

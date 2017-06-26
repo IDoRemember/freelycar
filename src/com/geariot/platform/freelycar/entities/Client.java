@@ -24,7 +24,7 @@ public class Client {
 	private String gender;
 	private String phone;
 	private Date birthday;
-	private String dirveLicense;
+	private String driverLicense;
 	private int state;
 	private int points;
 	private String recommendName;
@@ -59,8 +59,8 @@ public class Client {
 	public Date getCreateDate() {
 		return createDate;
 	}
-	public String getDirveLicense() {
-		return dirveLicense;
+	public String getDriverLicense() {
+		return driverLicense;
 	}
 	public String getGender() {
 		return gender;
@@ -112,8 +112,8 @@ public class Client {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public void setDirveLicense(String dirveLicense) {
-		this.dirveLicense = dirveLicense;
+	public void setDriverLicense(String driverLicense) {
+		this.driverLicense = driverLicense;
 	}
 	public void setGender(String gender) {
 		this.gender = gender;
@@ -145,7 +145,7 @@ public class Client {
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + ", age=" + age + ", idNumber=" + idNumber + ", gender=" + gender
-				+ ", phone=" + phone + ", birthday=" + birthday + ", dirveLicense=" + dirveLicense + ", state=" + state
+				+ ", phone=" + phone + ", birthday=" + birthday + ", dirveLicense=" + driverLicense + ", state=" + state
 				+ ", points=" + points + ", recommendName=" + recommendName + ", createDate=" + createDate + ", cars="
 				+ cars + ", cards=" + cards + "]";
 	}

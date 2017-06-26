@@ -152,15 +152,19 @@ public class AdminService {
 	public String query(String account, String name, int page, int number) {
 		String andCondition = new AdminAndQueryCreator(account, name).createStatement();
 		int from = (page - 1) * number;
-//		List<Admin> list = adminDao.queryByNameAndAccount(account, name, from, number);
-		List<Admin> list = null;
+		List<Admin> list = adminDao.queryByNameAndAccount(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = this.adminDao.getQueryCount(andCondition);
+		int size = (int) Math.ceil((int) realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		return res.toString();
 	}
 
 	public String disable(String account) {

@@ -86,7 +86,7 @@ public class ClientService {
 		exist.setBirthday(client.getBirthday());
 		exist.setCars(client.getCars());
 		exist.setCards(client.getCards());
-		exist.setDirveLicense(client.getDirveLicense());
+		exist.setDriverLicense(client.getDriverLicense());
 		exist.setGender(client.getGender());
 		exist.setIdNumber(client.getIdNumber());
 		exist.setName(client.getName());

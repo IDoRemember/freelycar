@@ -17,6 +17,9 @@ public class ExpendOrder {
 	public float getAmount() {
 		return amount;
 	}
+	public String getComment() {
+		return comment;
+	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
@@ -30,6 +33,9 @@ public class ExpendOrder {
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	public void setId(int id) {
 		this.id = id;

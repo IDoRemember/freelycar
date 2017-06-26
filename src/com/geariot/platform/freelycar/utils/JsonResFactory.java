@@ -7,34 +7,34 @@ import org.json.JSONObject;
 import com.geariot.platform.freelycar.model.RESCODE;
 
 public class JsonResFactory {
-	public static JSONObject buildOrg(RESCODE res){
+	public static JSONObject buildOrg(RESCODE rescode){
 		JSONObject obj = new JSONObject();
-		obj.put(Constants.RESPONSE_CODE_KEY, res);
-		obj.put(Constants.RESPONSE_MSG_KEY, res.getMsg());
+		obj.put(Constants.RESPONSE_CODE_KEY, rescode);
+		obj.put(Constants.RESPONSE_MSG_KEY, rescode.getMsg());
 		return obj;
 	}
 	
-	public static JSONObject buildOrg(RESCODE res, String key, Object value){
-		JSONObject obj = buildOrg(res);
+	public static JSONObject buildOrg(RESCODE rescode, String key, Object value){
+		JSONObject obj = buildOrg(rescode);
 		obj.put(key, value);
 		return obj;
 	}
 	
-	public static net.sf.json.JSONObject buildNet(RESCODE res){
+	public static net.sf.json.JSONObject buildNet(RESCODE rescode){
 		net.sf.json.JSONObject obj = new net.sf.json.JSONObject();
-		obj.put(Constants.RESPONSE_CODE_KEY, res.toString());
-		obj.put(Constants.RESPONSE_MSG_KEY, res.getMsg());
+		obj.put(Constants.RESPONSE_CODE_KEY, rescode.toString());
+		obj.put(Constants.RESPONSE_MSG_KEY, rescode.getMsg());
 		return obj;
 	}
 	
-	public static net.sf.json.JSONObject buildNetWithData(RESCODE res, Object data){
-		net.sf.json.JSONObject obj = buildNet(res);
+	public static net.sf.json.JSONObject buildNetWithData(RESCODE rescode, Object data){
+		net.sf.json.JSONObject obj = buildNet(rescode);
 		obj.put(Constants.RESPONSE_DATA_KEY, data);
 		return obj;
 	}
 	
-	public static net.sf.json.JSONObject buildNet(RESCODE res, String key, Object value){
-		net.sf.json.JSONObject obj = buildNet(res);
+	public static net.sf.json.JSONObject buildNet(RESCODE rescode, String key, Object value){
+		net.sf.json.JSONObject obj = buildNet(rescode);
 		obj.put(key, value);
 		return obj;
 	}

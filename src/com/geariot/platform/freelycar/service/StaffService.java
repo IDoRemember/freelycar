@@ -18,7 +18,6 @@ import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.StaffAndQueryCreator;
-import com.mchange.lang.IntegerUtils;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
