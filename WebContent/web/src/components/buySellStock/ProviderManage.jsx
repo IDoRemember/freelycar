@@ -14,7 +14,7 @@ class ProviderManage extends React.Component {
         super(props)
         this.state = {
             visible: false,
-            option: [],
+            options: [],
             form: {
                 name: '',
                 linkman: '',
@@ -79,14 +79,12 @@ class ProviderManage extends React.Component {
                         createTime: result.data[i].createDate
                     }
                     this.setState({
-                        data: update(this.state.data, { $push: [dataitem] })
+                        data: update(this.state.data, { $push: [dataitem] }),
+                        options: update(this.state.options, { $push: [dataitem] })
                     })
                 }
 
             },
-        })
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
         })
     }
     showModal = () => {
@@ -136,25 +134,26 @@ class ProviderManage extends React.Component {
             visible: false,
         });
     }
+    handleSelected = (value) => {
+        console.log(value);
+
+    }
     onDelete = (index, id) => {
-        
         $.ajax({
             type: 'post',
             url: 'api/provider/delete',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                providerIds:[id]
+                providerIds: [id]
             },
-            traditional:true,
+            traditional: true,
             success: (result) => {
                 const dataSource = [...this.state.data];
                 dataSource.splice(index, 1);
                 this.setState({ data: dataSource });
             }
         })
-
-
     }
     onValueChange = (key, value) => {
         this.setState({
@@ -169,8 +168,8 @@ class ProviderManage extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
-        }, plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+        }, plateOptions = this.state.options.map((item, index) => {
+            return <Option key={index} value={item.id+''}>{item.name}</Option>
         });
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
@@ -181,7 +180,7 @@ class ProviderManage extends React.Component {
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
                         optionFilterProp="children"
-                        onChange={this.handleChange}
+                        onChange={this.handleSelected}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}
