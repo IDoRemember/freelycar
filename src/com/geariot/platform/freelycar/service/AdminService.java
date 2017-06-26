@@ -27,6 +27,7 @@ import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.MD5;
 import com.geariot.platform.freelycar.utils.PermissionsList;
+import com.geariot.platform.freelycar.utils.query.AdminAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -148,8 +149,11 @@ public class AdminService {
 		return obj.toString();
 	}
 	
-	public String query(Admin admin) {
-		List<Admin> list = adminDao.queryByNameAndAccount(admin.getAccount(), admin.getName());
+	public String query(String account, String name, int page, int number) {
+		String andCondition = new AdminAndQueryCreator(account, name).createStatement();
+		int from = (page - 1) * number;
+//		List<Admin> list = adminDao.queryByNameAndAccount(account, name, from, number);
+		List<Admin> list = null;
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}

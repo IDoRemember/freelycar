@@ -23,7 +23,9 @@ public interface AdminDao {
 	
 	long getCount();
 
-	List<Admin> queryByNameAndAccount(String account, String name);
+	List<Admin> queryByNameAndAccount(String andCondition, int from, int pageSize);
+	
+	long getQueryCount(String andCondition);
 	
 	void save(Role role);
 }

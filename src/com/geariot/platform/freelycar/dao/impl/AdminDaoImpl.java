@@ -77,13 +77,20 @@ public class AdminDaoImpl implements AdminDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Admin> queryByNameAndAccount(String account, String name) {
+	public List<Admin> queryByNameAndAccount(String andCondition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from Admin");
-		String andCondition = new AdminAndQueryCreator(account, name).createStatement();
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createQuery(hql).list();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@Override
+	public long getQueryCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from Admin");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+	
 	@Override
 	public void save(Role role) {
 		this.getSession().save(role);

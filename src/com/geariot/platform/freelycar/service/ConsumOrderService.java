@@ -27,6 +27,7 @@ import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Provider;
+import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.IDGenerator;
@@ -63,8 +64,7 @@ public class ConsumOrderService {
 		for(ConsumExtraInventoriesInfo info : infos){
 			Inventory inventory = inventoryDao.findById(info.getInventory().getId());
 			if(inventory.getAmount() < info.getNumber()){
-				this.inventoryDao.rollback();
-				return JsonResFactory.buildNetWithData(RESCODE.INVENTORY_NOT_ENOUGH, inventory).toString();
+				throw new ForRollbackException(RESCODE.INVENTORY_NOT_ENOUGH.getMsg(), RESCODE.INVENTORY_NOT_ENOUGH.getValue());
 			}
 			inventory.setAmount(inventory.getAmount() - info.getNumber());
 			InventoryOrderInfo temp = new InventoryOrderInfo();

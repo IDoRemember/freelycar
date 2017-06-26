@@ -15,5 +15,4 @@ public interface InventoryDao {
 
 	long getCount();
 
-	void rollback();
 }
