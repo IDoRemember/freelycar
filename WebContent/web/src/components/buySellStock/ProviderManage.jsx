@@ -107,7 +107,7 @@ class ProviderManage extends React.Component {
                     }
                     this.setState({
                         data: update(this.state.data, { $push: [dataitem] }),
-                        pagination: update(this.state.pagination, { total: { $set: result.data.realSize } }),
+                        pagination: {total: result.realSize } ,
                         options: update(this.state.options, { $push: [dataitem] })
                     })
                 }
@@ -255,6 +255,7 @@ class ProviderManage extends React.Component {
         }, plateOptions = this.state.options.map((item, index) => {
             return <Option key={index} value={item.name + ''}>{item.name}</Option>
         });
+        console.log(this.state.pagination)
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>
