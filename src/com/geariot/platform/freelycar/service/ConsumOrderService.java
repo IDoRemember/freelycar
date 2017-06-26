@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
@@ -54,7 +53,7 @@ public class ConsumOrderService {
 	@Autowired
 	private InventoryOrderDao inventoryOrderDao;
 	
-	public String book(@RequestBody ConsumOrder consumOrder) {
+	public String book(ConsumOrder consumOrder) {
 		consumOrder.setCreateDate(new Date());
 		consumOrder.setState(0);
 		Set<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();
