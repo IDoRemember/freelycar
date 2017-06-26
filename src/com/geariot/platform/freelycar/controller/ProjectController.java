@@ -35,7 +35,7 @@ public class ProjectController {
 	}
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
-	@PermissionRequire("project:query")
+	@PermissionRequire("project:list")
 	public String getProjectList(int page , int number){
 		return projectService.getProjectList(page, number);
 	}
