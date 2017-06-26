@@ -52,7 +52,7 @@ class ProviderManage extends React.Component {
                         <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
                             <a href="javascript:void(0);">修改</a>
                         </span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index, record.id)}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
                     </span>
@@ -73,6 +73,7 @@ class ProviderManage extends React.Component {
                 for (let i = 0; i < result.data.length; i++) {
                     let dataitem = {
                         key: i,
+                        id: result.data[i].id,
                         name: result.data[i].name,
                         remarks: result.data[i].comment,
                         createTime: result.data[i].createDate
@@ -117,13 +118,14 @@ class ProviderManage extends React.Component {
             success: (result) => {
                 console.log(result);
                 let newdata = {
-                    key:this.state.data.length+1,
+                    key: this.state.data.length + 1,
+                    id: result.data.id,
                     name: result.data.name,
                     remarks: result.data.comment,
                     createTime: result.data.createDate
                 }
                 this.setState({
-                    data: update(this.state.data, {$push:[newdata]})
+                    data: update(this.state.data, { $push: [newdata] })
                 })
             }
         })
@@ -134,10 +136,25 @@ class ProviderManage extends React.Component {
             visible: false,
         });
     }
-    onDelete = (index) => {
-        const dataSource = [...this.state.data];
-        dataSource.splice(index, 1);
-        this.setState({ data: dataSource });
+    onDelete = (index, id) => {
+        
+        $.ajax({
+            type: 'post',
+            url: 'api/provider/delete',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                providerIds:[id]
+            },
+            traditional:true,
+            success: (result) => {
+                const dataSource = [...this.state.data];
+                dataSource.splice(index, 1);
+                this.setState({ data: dataSource });
+            }
+        })
+
+
     }
     onValueChange = (key, value) => {
         this.setState({
