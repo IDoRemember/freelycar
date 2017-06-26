@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.dao;
 
 import java.util.List;
 
+import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Staff;
 
 public interface StaffDao {

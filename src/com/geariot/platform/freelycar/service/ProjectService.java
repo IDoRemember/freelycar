@@ -27,7 +27,7 @@ public class ProjectService {
 	
 	public String addProject(Project project){
 		project.setCreateDate(new Date());
-		project.getProjectAccessoriesInfos()
+		project.getProjectAccessoriesInfos();
 		projectDao.save(project);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
