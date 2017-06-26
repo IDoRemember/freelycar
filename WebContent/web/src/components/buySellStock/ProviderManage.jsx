@@ -211,6 +211,7 @@ class ProviderManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
+        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -255,7 +256,6 @@ class ProviderManage extends React.Component {
         }, plateOptions = this.state.options.map((item, index) => {
             return <Option key={index} value={item.name + ''}>{item.name}</Option>
         });
-        console.log(this.state.pagination)
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>
@@ -342,7 +342,7 @@ class ProviderManage extends React.Component {
                     </Modal>
                     <Button onClick={this.clearFilters}>删除供应商</Button>
                 </div>
-                < Table pagination={this.state.pagination} bordered onChange={this.handleTableChange} columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} />
+                < Table pagination={this.state.pagination} bordered onChange={(pagination)=>this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
         </div >
     }
