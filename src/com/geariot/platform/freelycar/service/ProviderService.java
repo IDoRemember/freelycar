@@ -15,6 +15,7 @@ import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 @Service
@@ -27,7 +28,14 @@ public class ProviderService {
 	public String addProvider(Provider provider){
 		provider.setCreateDate(new Date());
 		providerDao.save(provider);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JSONObject data = JSONObject.fromObject(provider , config);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, data);
+		return obj.toString();
+		/*provider.setCreateDate(new Date());
+		providerDao.save(provider);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();*/
 	}
 	
 	public String deleteProvider(int[] providerIds){

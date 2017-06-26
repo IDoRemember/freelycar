@@ -24,5 +24,7 @@ public interface StaffDao {
 	
 	List<Staff> getConditionQuery(String andCondition);
 	
+	List<ConsumOrder> staffServiceDetails(int staffId);
+	
 	long getCount();
 }

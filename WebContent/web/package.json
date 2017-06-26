@@ -37,6 +37,7 @@
         "file-loader": "0.10.0",
         "webpack": "^1.9.11",
         "webpack-dev-server": "^1.15.0",
+        "immutability-helper": "^2.1.2",
         "jquery":"^3.2.1"
     },
     "dependencies": {

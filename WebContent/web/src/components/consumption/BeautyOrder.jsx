@@ -4,6 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import { Row, Col, Card, Button } from 'antd';
+import { Link } from 'react-router';
 class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
@@ -11,7 +12,12 @@ class BeautyOrder extends React.Component {
             
         }
     }
-
+    componentWillMount(){
+        console.log('willmount')
+    }
+    componentDidMount(){
+        console.log('didmount')
+    }
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
@@ -25,7 +31,7 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>结算</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter">结算</Link></Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>

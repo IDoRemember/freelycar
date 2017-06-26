@@ -95,5 +95,14 @@ public class StaffDaoImpl implements StaffDao {
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ConsumOrder> staffServiceDetails(int staffId) {
+		String sql = "select consumOrdersId from consumorders_staff where staffId = :staffId";
+		List<Object> staffIds =  this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
+		String hql = "from ConsumOrder where id in :staffIds";
+		return this.getSession().createQuery(hql).setParameterList("staffIds", staffIds).list();
+	}
+
 
 }
