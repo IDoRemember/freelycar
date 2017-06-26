@@ -11,7 +11,12 @@ class BeautyOrder extends React.Component {
             
         }
     }
-
+    componentWillMount(){
+        console.log('willmount')
+    }
+    componentDidMount(){
+        console.log('didmount')
+    }
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />

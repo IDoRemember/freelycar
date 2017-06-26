@@ -45,12 +45,17 @@ class BusinessSummary extends React.Component {
             }]
         }
     }
-    componentDidMount(){
+    componentDidMount() {
         $.ajax({
-            url:'api/stat/today',
-            data:{},
-            success:(result)=>{
-                console.log(result)
+            url: 'api/stat/today',
+            data: {
+                today:new Date(),
+                income: 1,
+                expend: 0
+            },
+            success: (result) => {
+                console.log(result);
+                console.log(result.data[0])
             },
 
         })
