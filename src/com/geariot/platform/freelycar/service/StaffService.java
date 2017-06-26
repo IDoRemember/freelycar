@@ -91,16 +91,21 @@ public class StaffService {
 		return obj.toString();
 	}
 	
-	public String getSelectStaff(String staffId , String staffName){
+	public String getSelectStaff(String staffId , String staffName , int page , int number){
 		String andCondition = new StaffAndQueryCreator(staffId , staffName).createStatement();
-		List<Staff> list = staffDao.getConditionQuery(andCondition);
+		int from = (page - 1) * number;
+		List<Staff> list = staffDao.getConditionQuery(andCondition , from , number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = (long) staffDao.getConditionCount(andCondition);
+		int size=(int) Math.ceil(realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JSONArray jsonArray = JSONArray.fromObject(list , config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 		return obj.toString();
 	}
 
@@ -120,20 +125,25 @@ public class StaffService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String staffServiceDetail(int staffId){
+	public String staffServiceDetail(int staffId , int page , int number){
 		Staff exist = staffDao.findStaffByStaffId(staffId);
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		else{
+			int from = (page - 1) * number;
+			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId, from , number);
+			if(list == null || list.isEmpty()){
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JsonPropertyFilter filter = new JsonPropertyFilter();
 			filter.setColletionProperties(CarType.class , Car.class , ProjectInventoriesInfo.class , Card.class , Program.class , Staff.class , Inventory.class);
-			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId);
 			config.setJsonPropertyFilter(filter);
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,list.size());
 			return obj.toString();
 		}
 	}

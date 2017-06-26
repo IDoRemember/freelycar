@@ -14,7 +14,9 @@ class ProviderManage extends React.Component {
         super(props)
         this.state = {
             visible: false,
-            option: [],
+            options: [],
+            pagination: {},
+            queryValue: '',
             form: {
                 name: '',
                 linkman: '',
@@ -35,6 +37,26 @@ class ProviderManage extends React.Component {
                 title: '供应商名称',
                 dataIndex: 'name',
                 key: 'name'
+            }, {
+                title: '联系人',
+                dataIndex: 'linkman',
+                key: 'linkman'
+            }, {
+                title: '手机号码',
+                dataIndex: 'phonenumber',
+                key: 'phonenumber'
+            }, {
+                title: '手机号码',
+                dataIndex: 'landline',
+                key: 'landline'
+            }, {
+                title: '邮箱地址',
+                dataIndex: 'mail',
+                key: 'mail'
+            }, {
+                title: '联系地址',
+                dataIndex: 'address',
+                key: 'address'
             }, {
                 title: '备注',
                 dataIndex: 'remarks',
@@ -75,18 +97,22 @@ class ProviderManage extends React.Component {
                         key: i,
                         id: result.data[i].id,
                         name: result.data[i].name,
+                        linkman: result.data[i].contactName,
+                        phonenumber: result.data[i].phone,
+                        landline: result.data[i].landline,
+                        mail: result.data[i].email,
+                        address: result.data[i].address,
                         remarks: result.data[i].comment,
                         createTime: result.data[i].createDate
                     }
                     this.setState({
-                        data: update(this.state.data, { $push: [dataitem] })
+                        data: update(this.state.data, { $push: [dataitem] }),
+                        pagination: {total: result.realSize } ,
+                        options: update(this.state.options, { $push: [dataitem] })
                     })
                 }
 
             },
-        })
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
         })
     }
     showModal = () => {
@@ -121,6 +147,11 @@ class ProviderManage extends React.Component {
                     key: this.state.data.length + 1,
                     id: result.data.id,
                     name: result.data.name,
+                    linkman: result.data.contactName,
+                    phonenumber: result.data.phone,
+                    landline: result.data.landline,
+                    mail: result.data.email,
+                    address: result.data.address,
                     remarks: result.data.comment,
                     createTime: result.data.createDate
                 }
@@ -136,29 +167,81 @@ class ProviderManage extends React.Component {
             visible: false,
         });
     }
+    handleSelected = (value) => {
+        console.log(value);
+        this.setState({ queryValue: value })
+    }
+    startQuery = () => {
+        $.ajax({
+            type: 'GET',
+            url: 'api/provider/query',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                name: this.state.queryValue
+            },
+            traditional: true,
+            success: (result) => {
+                console.log(result)
+            }
+        })
+    }
     onDelete = (index, id) => {
-        
         $.ajax({
             type: 'post',
             url: 'api/provider/delete',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                providerIds:[id]
+                providerIds: [id]
             },
-            traditional:true,
+            traditional: true,
             success: (result) => {
                 const dataSource = [...this.state.data];
                 dataSource.splice(index, 1);
                 this.setState({ data: dataSource });
             }
         })
-
-
     }
     onValueChange = (key, value) => {
         this.setState({
             form: update(this.state.form, { [key]: { $set: value } })
+        })
+    }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        this.setState({
+            pagination: pager
+        })
+        $.ajax({
+            url: 'api/provider/list',
+            data: {
+                page: pagination.current,
+                number: 10
+            },
+            success: (result) => {
+                console.log(result);
+                for (let i = 0; i < result.data.length; i++) {
+                    let dataitem = {
+                        key: i,
+                        id: result.data[i].id,
+                        name: result.data[i].name,
+                        linkman: result.data[i].contactName,
+                        phonenumber: result.data[i].phone,
+                        landline: result.data[i].landline,
+                        mail: result.data[i].email,
+                        address: result.data[i].address,
+                        remarks: result.data[i].comment,
+                        createTime: result.data[i].createDate
+                    }
+                    this.setState({
+                        data: update(this.state.data, { $push: [dataitem] }),
+                        options: update(this.state.options, { $push: [dataitem] })
+                    })
+                }
+
+            },
         })
     }
     render() {
@@ -169,9 +252,10 @@ class ProviderManage extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
-        }, plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+        }, plateOptions = this.state.options.map((item, index) => {
+            return <Option key={index} value={item.name + ''}>{item.name}</Option>
         });
+        console.log(this.state.pagination)
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>
@@ -181,12 +265,12 @@ class ProviderManage extends React.Component {
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
                         optionFilterProp="children"
-                        onChange={this.handleChange}
+                        onChange={this.handleSelected}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}
                     </Select>
-                    <Button type="primary" style={{ margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
+                    <Button onClick={() => this.startQuery()} type="primary" style={{ margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
                 </div>
                 <div className="table-operations">
                     <Button onClick={this.showModal}>新增供应商</Button>
@@ -258,7 +342,7 @@ class ProviderManage extends React.Component {
                     </Modal>
                     <Button onClick={this.clearFilters}>删除供应商</Button>
                 </div>
-                < Table className="accountTable" bordered columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} />
+                < Table pagination={this.state.pagination} bordered onChange={this.handleTableChange} columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} />
             </Card >
         </div >
     }
