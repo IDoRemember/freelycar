@@ -75,10 +75,11 @@ public class StaffDaoImpl implements StaffDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Staff> getConditionQuery(String andCondition) {
+	public List<Staff> getConditionQuery(String andCondition , int from , int pageSize) {
 		String basic = "from Staff";
 		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override
@@ -98,11 +99,19 @@ public class StaffDaoImpl implements StaffDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ConsumOrder> staffServiceDetails(int staffId) {
+	public List<ConsumOrder> staffServiceDetails(int staffId , int from , int pageSize) {
 		String sql = "select consumOrdersId from consumorders_staff where staffId = :staffId";
-		List<Object> staffIds =  this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
-		String hql = "from ConsumOrder where id in :staffIds";
-		return this.getSession().createQuery(hql).setParameterList("staffIds", staffIds).list();
+		List<Object> consumOrdersId =  this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
+		String hql = "from ConsumOrder where id in :consumOrdersId";
+		return this.getSession().createQuery(hql).setParameterList("consumOrdersId", consumOrdersId).setFirstResult(from)
+				.setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getConditionCount(String andCondition) {
+		String basic = "select count(*) from Provider";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
 

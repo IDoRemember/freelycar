@@ -42,14 +42,14 @@ public class StaffController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("staff:query")
-	public String getSelectStaff(String staffId , String staffName){
-		System.out.println(staffId+","+staffName);
-		return staffService.getSelectStaff(staffId, staffName);
+	public String getSelectStaff(String staffId , String staffName , int page , int number){
+		//System.out.println(staffId+","+staffName);
+		return staffService.getSelectStaff(staffId, staffName, page, number);
 	}
 	
 	@RequestMapping(value = "/detail" , method = RequestMethod.GET)
 	@PermissionRequire("staff:detail")
-	public String staffServiceDetail(int staffId){
-		return staffService.staffServiceDetail(staffId);
+	public String staffServiceDetail(int staffId , int page , int number){
+		return staffService.staffServiceDetail(staffId, page, number);
 	}
 }

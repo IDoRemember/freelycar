@@ -23,9 +23,11 @@ public interface StaffDao {
 	
 	//List<Staff> queryByNameAndId(int staffId , String staffName);
 	
-	List<Staff> getConditionQuery(String andCondition);
+	List<Staff> getConditionQuery(String andCondition , int from , int pageSize);
 	
-	List<ConsumOrder> staffServiceDetails(int staffId);
+	List<ConsumOrder> staffServiceDetails(int staffId , int from , int pageSize);
 	
 	long getCount();
+	
+	long getConditionCount(String andCondition);
 }
