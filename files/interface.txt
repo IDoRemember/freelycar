@@ -1,0 +1,70 @@
+2. 员工接口:/staff/
+	2.1 新增员工
+		请求：POST
+		server_url/staff/add
+		参数:{
+			staff=Staff(包含name，phone，position，level，gender，comment)
+		}
+		响应:{
+			"code":0
+			"msg":"success"
+		}
+	2.2 修改员工信息
+		请求：POST
+		server_url/staff/modify
+		参数:{
+			staff=Staff(包含name，phone，position，level，gender，comment,但Id信息不许更改)
+		}
+		响应:{
+			"code":0
+			"msg":"success"
+		}
+	2.3 删除员工
+		请求：POST
+		server_url/staff/delete
+		参数:{
+			staffId=int[] staffIds(可以批量删除,也可以逐条删除,但需要传递数组)
+		}
+		响应:{
+			"code":0
+			"msg":"success"
+		}
+	2.4 获取所有员工
+		请求：GET
+		server_url/staff/list
+		参数:{
+			page=1
+			number=10
+		}
+		响应:{
+			"code":0
+			"msg":
+			"data":{staff1,staff2..}
+			"size":共多少页记录
+			"realSize":共多少条记录
+		}
+	2.5 查询员工
+		请求：GET
+		server_url/staff/query  可以复合查询
+		参数:{
+			String staffId= 
+			String staffName=
+			两参数都不传(或传递"-1","-2")则列出所有员工
+		}
+		响应:{
+			"code":0
+			"msg":
+			"data":{staff}
+		}
+	2.6 员工服务详情
+		请求:GET
+		server_url/staff/detail
+		参数:{
+			int staffId
+		}
+		响应:{
+		   	"code":0
+		   	"msg":
+		   	"data"{ConsumOrder1,ConsumOrder2}
+		}
+		

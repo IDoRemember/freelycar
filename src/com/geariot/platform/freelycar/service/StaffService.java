@@ -12,13 +12,22 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.dao.StaffDao;
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.Car;
+import com.geariot.platform.freelycar.entities.CarType;
+import com.geariot.platform.freelycar.entities.Card;
+import com.geariot.platform.freelycar.entities.ConsumOrder;
+import com.geariot.platform.freelycar.entities.Inventory;
+import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
+import com.geariot.platform.freelycar.entities.Program;
+import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
+import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.StaffAndQueryCreator;
-import com.mchange.lang.IntegerUtils;
+
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -83,13 +92,15 @@ public class StaffService {
 		return obj.toString();
 	}
 	
-	public String getSelectStaff(int staffId , String staffName){
-		String andCondition = new StaffAndQueryCreator(String.valueOf(staffId), staffName).createStatement();
+	public String getSelectStaff(String staffId , String staffName){
+		String andCondition = new StaffAndQueryCreator(staffId , staffName).createStatement();
 		List<Staff> list = staffDao.getConditionQuery(andCondition);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		JSONArray jsonArray = JSONArray.fromObject(list);
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JSONArray jsonArray = JSONArray.fromObject(list , config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		return obj.toString();
 	}
@@ -110,9 +121,23 @@ public class StaffService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	/*public String staffServiceDetail(int staffId){
-		
-	}*/
+	public String staffServiceDetail(int staffId){
+		Staff exist = staffDao.findStaffByStaffId(staffId);
+		if(exist == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		else{
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JsonPropertyFilter filter = new JsonPropertyFilter();
+			filter.setColletionProperties(CarType.class , Car.class , ProjectInventoriesInfo.class , Card.class , Program.class , Staff.class , Inventory.class);
+			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId);
+			config.setJsonPropertyFilter(filter);
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			return obj.toString();
+		}
+	}
 }
 	
 
