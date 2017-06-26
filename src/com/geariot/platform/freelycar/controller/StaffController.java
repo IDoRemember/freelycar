@@ -47,4 +47,9 @@ public class StaffController {
 		return staffService.getSelectStaff(staffId, staffName);
 	}
 	
+	/*@RequestMapping(value = "/detail" , method = RequestMethod.Get)
+	@PermissionRequire("staff:detail")
+	public String staffServiceDetail(int staffId){
+		return staffService.staffServiceDetail(staffId);
+	}*/
 }

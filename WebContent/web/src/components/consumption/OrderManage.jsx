@@ -50,7 +50,7 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             车辆状态：
                             <div style={{display:"inline-block"}}>
-                             <Button type="primary" size="large" shape="circle" >接</Button>
+                             <Button size="large" shape="circle" >接</Button>
                              <Button size="large" shape="circle" >完</Button>
                              <Button size="large" shape="circle" >交</Button>
                             </div>

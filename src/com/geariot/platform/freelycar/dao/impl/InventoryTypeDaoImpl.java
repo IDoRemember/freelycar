@@ -1,17 +1,18 @@
 package com.geariot.platform.freelycar.dao.impl;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.interceptor.TransactionInterceptor;
 
 import com.geariot.platform.freelycar.dao.InventoryTypeDao;
 import com.geariot.platform.freelycar.entities.InventoryType;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class InventoryTypeDaoImpl implements InventoryTypeDao {
@@ -56,35 +57,18 @@ public class InventoryTypeDaoImpl implements InventoryTypeDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<InventoryType> query(String name, Date startDate, Date endDate) {
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		StringBuilder sb = new StringBuilder("from InventoryType where");
-		boolean and = false;
-		if(name != null && !name.isEmpty()){
-			sb.append(" typeName like '%");
-			sb.append(name);
-			sb.append("%'");
-			and = true;
-		}
-		if(startDate != null){
-			if(and){
-				sb.append(" and");
-			}
-			sb.append(" createDate > '");
-			sb.append(sdf.format(startDate));
-			sb.append("'");
-			and = true;
-		}
-		if(endDate != null){
-			if(and){
-				sb.append(" and");
-			}
-			sb.append(" createDate < '");
-			sb.append(sdf.format(endDate));
-			sb.append("'");
-		}
-		System.out.println(sb);
-		return this.getSession().createQuery(sb.toString()).setCacheable(Constants.SELECT_CACHE).list();
+	public List<InventoryType> query(String andCondition, int from, int pageSize) {
+		StringBuffer basic = new StringBuffer("from InventoryType");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getQueryCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from InventoryType");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
 }

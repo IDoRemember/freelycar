@@ -1,23 +1,15 @@
 import React from 'react';
-import CustomerInfo from '../forms/CustomerInfo.jsx'
-import ServiceTable from '../tables/ServiceTable.jsx'
-import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import EditableCell from '../tables/EditableCell.jsx'
-// import CardModal from './CardModal.jsx'
-
-//import jquery from 'jquery';
+import CardModal from './CardModal.jsx'
 import $ from 'jquery';
-
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal, Form } from 'antd';
 import moment from 'moment';
-
 import { Link } from 'react-router';
 const { RangePicker } = DatePicker;
 const FormItem = Form.Item;
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
-const TabPane = Tabs.TabPane;
 
 
 //可编辑的table 
@@ -25,7 +17,9 @@ class EditableTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            //模态框状态
             visible: false,
+            //会员卡类别数据
             data: [{
                 key: '1',
                 index: '1',
@@ -70,7 +64,7 @@ class EditableTable extends React.Component {
         });
     }
     //end of modal
-
+    //可编辑表格的处理函数
     onCellChange = (index, key) => {
         return (value) => {
             const dataSource = [...this.state.data];
@@ -101,7 +95,7 @@ class EditableTable extends React.Component {
         });
     }
     render() {
-
+        //卡类的表头
         const columns = [{
             title: '序号',
             dataIndex: 'index',
@@ -149,7 +143,7 @@ class EditableTable extends React.Component {
             },
         }];
 
-
+        //表格前面选择
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
@@ -185,7 +179,6 @@ class EditableTable extends React.Component {
                                     <Input addonBefore="卡类名称" />
                                 </div>
                             </Col>
-
                             <Col span={1} style={{ minWidth: "70px", marginLeft: "16px" }}>
                                 <span style={{ verticalAlign: 'middle', lineHeight: '28px', }}>创建日期:</span>
                             </Col>
@@ -201,7 +194,7 @@ class EditableTable extends React.Component {
 
                         <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col span={2}>
-                                <Button className="editable-add-btn" onClick={this.handleAdd}>新增卡类</Button>
+                                <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
                             </Col>
                             <Col span={8}>
                                 <Button>删除卡类</Button>
@@ -223,18 +216,20 @@ class EditableTable extends React.Component {
 
                 </Card>
 
-
+                
+                <CardModal visible={this.state.visible} onOk={()=>this.handleOk}
+                    onCancel={()=>this.handleCancel}></CardModal>
 
                 {/*模态框*/}
-                <Modal
+                {/*<Modal
                     title="项目查询"
                     visible={this.state.visible}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
+                    onOk={this.changehandleOk}
+                    onCancel={this.changehandleCancel}
                     width='50%' >
 
 
-                    <Form onSubmit={this.handleSubmit}>
+                    <Form onSubmit={this.changehandleSubmit}>
                         <FormItem
                             {...formItemLayout}
                             label="卡类名称"
@@ -279,7 +274,7 @@ class EditableTable extends React.Component {
                         </Col>
                     </Row>
 
-                </Modal>
+                </Modal>*/}
 
 
             </div>

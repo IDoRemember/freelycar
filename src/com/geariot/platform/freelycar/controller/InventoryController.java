@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,8 +43,8 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/querytype" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String queryType(String name , Date startTime , Date endTime){
-		return this.inventoryService.queryType(name, startTime, endTime);
+	public String queryType(String name , Date startTime , Date endTime, int page, int number){
+		return this.inventoryService.queryType(name, startTime, endTime, page, number);
 	}
 	
 	@RequestMapping(value = "/addbrand" , method = RequestMethod.POST)
@@ -85,6 +86,7 @@ public class InventoryController {
 	@RequestMapping(value = "/instock" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:instock")
 	public String inStock(@RequestBody InventoryOrder inventoryOrder){
+		System.out.println(inventoryOrder);
 		return this.inventoryService.inStock(inventoryOrder);
 	}
 	
@@ -114,8 +116,8 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String query(String inventoryOrderId , String adminId ){
-		return this.inventoryService.queryOrder(inventoryOrderId, adminId);
+	public String query(String inventoryOrderId , String adminId, int page, int number){
+		return this.inventoryService.queryOrder(inventoryOrderId, adminId, page, number);
 	}
 	
 	@RequestMapping(value = "/orderdetail" , method = RequestMethod.GET)
@@ -123,4 +125,5 @@ public class InventoryController {
 	public String orderDetail(String inventoryOrderId){
 		return this.inventoryService.orderDetail(inventoryOrderId);
 	}
+	
 }
