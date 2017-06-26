@@ -23,16 +23,14 @@ public class ConsumOrderController {
 	@RequestMapping(value = "/book", method = RequestMethod.POST)
 	@PermissionRequire("order:book")
 	public String book(@RequestBody ConsumOrder consumOrder){
-		String res = null;
 		try {
-			res = this.orderService.book(consumOrder);
-		} catch (ForRollbackException e){
+			return this.orderService.book(consumOrder);
+		} catch (ForRollbackException e) {
 			org.json.JSONObject obj = new org.json.JSONObject();
 			obj.put(Constants.RESPONSE_DATA_KEY, e.getErrorCode());
 			obj.put(Constants.RESPONSE_MSG_KEY, e.getMessage());
 			return obj.toString();
 		}
-		return res;
 	}
 	
 	@RequestMapping(value = "/modify", method = RequestMethod.POST)
