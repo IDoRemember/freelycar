@@ -24,7 +24,7 @@ public class ProviderController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("provider:delete")
-	public String deleteProvider(int[] providerIds){
+	public String deleteProvider(Integer[] providerIds){
 		return providerService.deleteProvider(providerIds);
 	}
 	
@@ -36,7 +36,13 @@ public class ProviderController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("provider:query")
-	public String getSelectProvider(String name){
-		return providerService.getSelectProvider(name);
+	public String getSelectProvider(String name , int page , int number){
+		return providerService.getSelectProvider(name, page, number);
+	}
+	
+	@RequestMapping(value = "/name" , method = RequestMethod.GET)
+	@PermissionRequire("provider:query")
+	public String getProviderName(){
+		return providerService.getProviderName();
 	}
 }

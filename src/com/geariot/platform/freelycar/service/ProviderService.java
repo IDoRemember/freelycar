@@ -13,6 +13,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ProviderAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -38,16 +39,19 @@ public class ProviderService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();*/
 	}
 	
-	public String deleteProvider(int[] providerIds){
+	public String deleteProvider(Integer[] providerIds){
+		int count = 0;
 		for(int providerId : providerIds){
 			if(providerDao.findProviderById(providerId) == null){
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				count++;
 			}
 			else{
 				providerDao.delete(providerId);
 			}
 		}
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		String tips = "共"+count+"条未在数据库中存在记录";
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+		return obj.toString();
 	}
 	
 	public String getProviderList(int page , int number){
@@ -63,17 +67,32 @@ public class ProviderService {
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 	
-	public String getSelectProvider(String name){
-		List<Provider> list = providerDao.queryByName(name);
+	public String getSelectProvider(String name , int page , int number){
+		String andCondition = new ProviderAndQueryCreator(name).createStatement();
+		int from = (page - 1) * number;
+		List<Provider> list = providerDao.getConditionQuery(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = (long) providerDao.getConditionCount(andCondition);
+		int size=(int) Math.ceil(realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		return obj.toString();
+	}
+	
+	public String getProviderName(){
+		List<String> list = providerDao.listName();
+		JSONArray jsonArray = JSONArray.fromObject(list);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		return obj.toString();
 	}
 }
