@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.dao;
 
+import java.util.List;
+
 import com.geariot.platform.freelycar.entities.Car;
 
 public interface CarDao {
@@ -8,4 +10,6 @@ public interface CarDao {
 	Car findById(int carId);
 	
 	Car findByLicense(String licensePlate);
+
+	List<String> queryLicensePlate(String queryText);
 }

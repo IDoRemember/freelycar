@@ -123,6 +123,8 @@ public class ClientService {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		JsonConfig config = JsonResFactory.dateConfig();
+//		config.registerPropertyExclusion(Car.class, "client");
+//		config.registerPropertyExclusion(CarBrand.class, "types");
 		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
 		filter.setColletionProperties(CarType.class);
 		config.setJsonPropertyFilter(filter);
