@@ -5,6 +5,7 @@ import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal,
 import styled from "styled-components"
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import $ from 'jquery'
 const Option = Select.Option;
 const { MonthPicker, RangePicker } = DatePicker;
 const MemberButton = styled.div`
@@ -19,11 +20,24 @@ class CustomerInfo extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            id:'',
             option: [],
             visible: false
         }
     }
     componentDidMount() {
+        $.ajax({
+            url: 'api/idgen/generate',
+            data: {
+                type: this.props.type
+            },
+            success: (result) => {
+                console.log(result)
+                this.setState({
+                    id:result.id
+                })
+            }
+        })
         AjaxGet('GET', 'data/LicensePlate.json', (res) => {
             this.setState({ option: res.data })
         })
@@ -59,7 +73,7 @@ class CustomerInfo extends React.Component {
         return <div className="gutter-example" >
             <div style={{ marginBottom: '15px' }}>
                 <div style={{ width: '30%', display: 'inline-block' }}>单据编号：
-                    <span style={{ width: '150px' }}>S0000001</span>
+                    <span style={{ width: '150px' }}>{this.state.id}</span>
                 </div>
                 <div style={{ width: '30%', display: 'inline-block' }}>单据日期：
                     <span style={{ width: '150px' }}>2017-05-24 15:22:20</span>
@@ -141,7 +155,7 @@ class CustomerInfo extends React.Component {
                                     车辆型号： <Input style={{ width: '100px' }} />
                                 </Col>
                                 <Col span={12}>
-                                    保险起止时间： 
+                                    保险起止时间：
                                     <RangePicker onChange={this.onChange} />
                                 </Col>
                             </Row>
@@ -251,7 +265,7 @@ class CustomerInfo extends React.Component {
                         本次里程：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6} style={{height:'28px',lineHeight:'28px'}}>
+                    <Col span={6} style={{ height: '28px', lineHeight: '28px' }}>
                         提示信息：
                         <span style={{ width: '100px' }} >
                             共消费2次,  最近消费2017-05-24 15:22

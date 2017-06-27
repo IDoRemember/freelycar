@@ -5,18 +5,21 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CardModal from '../productManage/CardModal.jsx';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import $ from 'jquery'
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
 class BuyCard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            id:'',
             option: [],
             man: 'man',
             female: 'female',
             value: 1,
         }
     }
+
     onChange = (e) => {
         console.log("radio change", e.target.value);
         this.setState({
@@ -24,6 +27,17 @@ class BuyCard extends React.Component {
         });
     }
     componentDidMount() {
+        $.ajax({
+            url: 'api/idgen/generate',
+            data: {
+                type: 0
+            },
+            success: (result) => {
+                this.setState({
+                    id: result.id
+                })
+            }
+        })
         AjaxGet('GET', 'data/LicensePlate.json', (res) => {
             this.setState({ option: res.data })
         })
@@ -132,7 +146,7 @@ class BuyCard extends React.Component {
                 <Card title="会员信息" style={{ marginTop: '15px' }} >
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}>会员卡号：
-                            <Input style={{ width: '140px', marginLeft: '14px' }} />
+                            <span style = {{ marginLeft: '13px' }}>{this.state.id}</span>
                         </Col>
                         <Col span={6}>
                             会员卡类：
@@ -182,10 +196,10 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={()=>this.handleOk}
-                    onCancel={()=>this.handleCancel}>
+                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
+                    onCancel={() => this.handleCancel}>
                 </CardModal>
-                <Button type="primary" style={{display:'block',margin:'10px auto', width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>办理</Link></Button>
+                <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>办理</Link></Button>
             </div>
         )
     }

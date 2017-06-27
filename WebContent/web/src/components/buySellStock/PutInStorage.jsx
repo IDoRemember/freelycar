@@ -1,13 +1,15 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm,InputNumber } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber } from 'antd';
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
+import $ from 'jquery'
 const Option = Select.Option;
 class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            id:'',
             data: [{
                 key: 1,
                 index: 1,
@@ -22,6 +24,17 @@ class PutInStorage extends React.Component {
         }
     }
     componentDidMount() {
+        $.ajax({
+            url: 'api/idgen/generate',
+            data: {
+                type: 4
+            },
+            success: (result) => {
+                this.setState({
+                    id: result.id
+                })
+            }
+        })
         AjaxGet('GET', 'data/LicensePlate.json', (res) => {
             this.setState({ option: res.data })
         })
@@ -34,7 +47,7 @@ class PutInStorage extends React.Component {
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                    <Col span={8} >单据编号：<span>p1231231231232123</span>
+                    <Col span={8} >单据编号：<span>{this.state.id}</span>
                     </Col>
                     <Col span={8} >
                         单据时间：
@@ -42,7 +55,7 @@ class PutInStorage extends React.Component {
                     </Col>
                     <Col span={8} >
                         制单人：
-                        <span style={{verticalAlign:'middle'}}>🐟涵</span>
+                        <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
                     </Col>
                 </Row>
                 <Table className="accountTable" dataSource={this.state.data} bordered>
@@ -80,8 +93,8 @@ class PutInStorage extends React.Component {
                         title="数量"
                         key="number"
                         dataIndex="number"
-                        render={()=>{
-                            return <InputNumber min={1}  style={{width:'100px'}} />
+                        render={() => {
+                            return <InputNumber min={1} style={{ width: '100px' }} />
                         }}
                     />
                     <Col
