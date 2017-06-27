@@ -25,17 +25,7 @@ class CustomerInfo extends React.Component {
         }
     }
     componentDidMount() {
-        $.ajax({
-            url: 'api/idgen/generate',
-            data: {
-                type:this.props.type
-            },
-            success: (result) => {
-                if (result.code == "0") {
-                    console.log(result)
-                }
-            }
-        })
+  
     }
     handleChange = (value) => {
         console.log(`selected ${value}`)

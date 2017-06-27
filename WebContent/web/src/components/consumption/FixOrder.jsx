@@ -16,7 +16,7 @@ class BeautyOrder extends React.Component {
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="维修开单" />
-            <CustomerInfo MemberButton={true} />
+            <CustomerInfo MemberButton={true} type={2}/>
             <Card style={{marginBottom:'10px'}}>
                 <span style={{fontSize:'18px'}}>故障描述：</span><Input type="textarea" rows={3} style={{display:'inline-block',marginBottom:'10px'}}/>
                 <span style={{fontSize:'18px'}}>维修建议：</span><Input type="textarea" rows={3} style={{display:'inline-block'}}/>
