@@ -68,3 +68,113 @@
 		   	"data"{ConsumOrder1,ConsumOrder2}
 		}
 		
+5. 项目服务接口:/project/
+	5.1 增加项目:
+		请求:POST
+		server_url/project/add
+		参数:{
+			project=Project()
+		}
+		响应:{
+			"code":0
+			"msg":
+		}
+		
+	//5.2 修改项目:
+	//	请求:POST
+	//	server_url/project/modify
+	//	参数:{
+	//		project=Project(包含存在的Id)
+	//	}
+	//	响应:{
+	//		"code":0
+	//		"msg":
+	//	}
+	
+	5.3 删除项目:
+		请求:POST
+		server_url/project/delete
+		参数:{
+			projectId=
+		}
+		响应:{
+			"code":0
+			"msg":
+		}
+	5.4 列举所有项目:
+		请求:GET
+		server_url/project/list
+		参数:{
+			page=1
+			number=10
+		}
+		响应:{
+			"code":0
+			"msg":
+			"data":{project1, project2}
+			"size":
+		}
+	5.5 根据条件查找project:
+		请求:GET
+		server_url/project/query
+		参数:{
+			name=
+			programId=
+		}
+		响应:{
+			"code":0
+			"msg":
+			"data":{project1, project2..}
+		}
+		"code":0,2=成功,未找到
+
+6. 供应商接口:/provider/
+	6.1 新增供应商:
+		请求:POST
+		server_url/provider/add
+		参数:{
+			provider=Provider()
+		}
+		响应:{
+			"code":
+			"msg":
+			"realSize": 
+		}
+	6.2 删除供应商:
+		请求:POST
+		server_url/provider/delete
+		参数:{
+			providerId=
+		}
+		响应:{
+			"code":
+			"msg":
+			"realSize"
+		}
+	6.3 列举供应商:
+		请求:GET
+		server_url/provider/list
+		参数:{
+			page=1
+			number=10
+		}
+		响应:{
+			"code":
+			"msg":
+			"data":{Provider1, Provider2...}
+			"size":
+		}
+		
+	6.4 根据名字查找供应商:
+ 		请求:GET
+ 		server_url/provider/query
+ 		参数:{
+ 			name=
+ 		}
+ 		响应:{
+ 			"code":
+ 			"msg":
+ 			"data":{Provider1,...}
+ 		}
+
+		
