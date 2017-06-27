@@ -149,5 +149,8 @@ public class StatService {
 		
 	}
 	
+	public void test(){
+		this.incomeOrderDao.test();
+	}
 	
 }

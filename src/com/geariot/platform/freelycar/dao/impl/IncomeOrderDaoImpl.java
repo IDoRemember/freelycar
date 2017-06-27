@@ -71,5 +71,14 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime()).list();
 	}
+	
+	@Override
+	public void test(){
+//		String hql = "select sum(amount)  from IncomeOrder where payDate > '2017-01-01' and "
+//				+ "payDate < '2017-05-30' group by DATE_FORMAT(payDate,'%Y-%m')";
+		String hql = "select new com.geariot.platform.freelycar.utils.query.MonthStat(i.sum(amount), e.sum(amount), payDate) "
+				+ "from IncomeOrder i, ExpendOrder e where payDate > '2017-01-01' and payDate < '2017-05-31' group by DATE_FORMAT(payDate, '%Y-%m')";
+		System.out.println(this.getSession().createQuery(hql).list());
+	}
 
 }
