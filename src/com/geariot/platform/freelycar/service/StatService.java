@@ -92,6 +92,10 @@ public class StatService {
 	}
 	
 	public String thisMonth(Date today , int income , int expend){
+		if(today == null)
+		{
+			today = new Date();
+		}
 		if (income == 0 && expend == 1) {
 			List<ExpendOrder> list = expendOrderDao.listByMonth(today);
 			if (list == null || list.isEmpty()) {
