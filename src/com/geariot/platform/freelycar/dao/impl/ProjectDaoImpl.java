@@ -48,7 +48,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public long getCount() {
-		String hql = "select count(*) from Program";
+		String hql = "select count(*) from Project";
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
@@ -70,8 +70,8 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	public void deleteByprogramId(int programId) {
-		String hql = "delete from Project where programId =:programId";
-		this.getSession().createQuery(hql).setInteger("programId" , programId).executeUpdate();
+		String sql = "delete from project where programId =:programId";
+		this.getSession().createSQLQuery(sql).setInteger("programId" , programId).executeUpdate();
 	}
 
 	@Override
@@ -84,15 +84,15 @@ public class ProjectDaoImpl implements ProjectDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Project> getConditionQuery(String andCondition, int from, int pageSize) {
-		String basic = "from Project";
-		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+		String basic = "from project";
+		String sql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createSQLQuery(sql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override
 	public long getConditionCount(String andCondition) {
-		String basic = "select count(*) from Provider";
+		String basic = "select count(*) from Project";
 		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
