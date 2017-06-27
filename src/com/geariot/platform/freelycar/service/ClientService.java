@@ -16,6 +16,7 @@ import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.ClientAndQueryCreator;
@@ -46,6 +47,7 @@ public class ClientService {
 		long realSize = clientDao.getCount();
 		int size = (int) Math.ceil(realSize/(double)number);
 		JsonConfig config = JsonResFactory.dateConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
 		filter.setColletionProperties(CarType.class);
 		config.setJsonPropertyFilter(filter);

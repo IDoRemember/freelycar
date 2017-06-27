@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -21,6 +22,7 @@ public class Project {
 	private String comment;
 	private List<ProjectInventoriesInfo> inventoryInfos;
 	private Date createDate;
+	private Program program;
 	public String getComment() {
 		return comment;
 	}
@@ -32,6 +34,11 @@ public class Project {
 	public int getId() {
 		return id;
 	}
+	@OneToMany
+	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
+	public List<ProjectInventoriesInfo> getInventoryInfos() {
+		return inventoryInfos;
+	}
 	public String getName() {
 		return name;
 	}
@@ -41,10 +48,10 @@ public class Project {
 	public float getPricePerUnit() {
 		return pricePerUnit;
 	}
-	@OneToMany
-	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
-	public List<ProjectInventoriesInfo> getProjectAccessoriesInfos() {
-		return inventoryInfos;
+	@ManyToOne
+	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
+	public Program getProgram() {
+		return program;
 	}
 	public int getReferWorkTime() {
 		return referWorkTime;
@@ -58,6 +65,9 @@ public class Project {
 	public void setId(int id) {
 		this.id = id;
 	}
+	public void setInventoryInfos(List<ProjectInventoriesInfo> inventoryInfos) {
+		this.inventoryInfos = inventoryInfos;
+	}
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -67,8 +77,8 @@ public class Project {
 	public void setPricePerUnit(float pricePerUnit) {
 		this.pricePerUnit = pricePerUnit;
 	}
-	public void setProjectAccessoriesInfos(List<ProjectInventoriesInfo> projectAccessoriesInfos) {
-		this.inventoryInfos = projectAccessoriesInfos;
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 	public void setReferWorkTime(int referWorkTime) {
 		this.referWorkTime = referWorkTime;

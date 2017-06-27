@@ -1,15 +1,11 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
 
 @Entity
 public class Program {
@@ -17,7 +13,6 @@ public class Program {
 	private String name;
 	private String comment;
 	private Date createDate;
-	private Set<Project> project;
 	public String getComment() {
 		return comment;
 	}
@@ -32,11 +27,6 @@ public class Program {
 	public String getName() {
 		return name;
 	}
-	@OneToMany
-	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
-	public Set<Project> getProjects() {
-		return project;
-	}
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
@@ -48,8 +38,5 @@ public class Program {
 	}
 	public void setName(String name) {
 		this.name = name;
-	}
-	public void setProjects(Set<Project> projects) {
-		this.project = projects;
 	}
 }
