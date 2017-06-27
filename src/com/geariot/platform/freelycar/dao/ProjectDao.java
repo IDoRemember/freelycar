@@ -22,5 +22,9 @@ public interface ProjectDao {
 	
 	List<Project> listProjects(int from , int pageSize);
 	
-	List<Project> queryByNameAndId(String name , int programId);
+	//List<Project> queryByNameAndId(String name , int programId);
+	
+	List<Project> getConditionQuery(String andCondition , int from , int pageSize);
+	
+	long getConditionCount(String andCondition);
 }

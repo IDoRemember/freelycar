@@ -34,15 +34,15 @@ public class ProjectController {
 		return projectService.deleteProject(projectId);
 	}
 	
-	@RequestMapping(value = "/list" , method = RequestMethod.GET)
+	/*@RequestMapping(value = "/list" , method = RequestMethod.GET)
 	@PermissionRequire("project:list")
 	public String getProjectList(int page , int number){
 		return projectService.getProjectList(page, number);
-	}
+	}*/
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("project:query")
-	public String getSelectProject(String name , int programId){
-		return projectService.getSelectProject(name, programId);
+	public String getSelectProject(String name , String programId , int page , int number){
+		return projectService.getSelectProject(name, programId, page, number);
 	}
 }

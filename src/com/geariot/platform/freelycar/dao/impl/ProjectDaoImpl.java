@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Project;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class ProjectDaoImpl implements ProjectDao {
@@ -58,13 +60,13 @@ public class ProjectDaoImpl implements ProjectDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Project> queryByNameAndId(String name, int programId) {
 		String hql = "from Project where name like :name and programId like :programId";
 		return this.getSession().createQuery(hql).setString("name", name).setInteger("programId", programId)
 				.list();
-	}
+	}*/
 
 	@Override
 	public void deleteByprogramId(int programId) {
@@ -79,5 +81,23 @@ public class ProjectDaoImpl implements ProjectDao {
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Project> getConditionQuery(String andCondition, int from, int pageSize) {
+		String basic = "from Project";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getConditionCount(String andCondition) {
+		String basic = "select count(*) from Provider";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	
+	
 	
 }

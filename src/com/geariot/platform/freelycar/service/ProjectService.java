@@ -14,6 +14,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ProjectAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -45,7 +46,7 @@ public class ProjectService {
 		return obj.toString();
 	}
 	
-	public String getProjectList(int page , int number){
+	/*public String getProjectList(int page , int number){
 		int from = (page - 1) * number;
 		List<Project> list = projectDao.listProjects(from, number);
 		if(list == null || list.isEmpty()){
@@ -59,17 +60,42 @@ public class ProjectService {
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		return obj.toString();
-	}
+	}*/
 	
-	public String getSelectProject(String name , int programId){
-		List<Project> list = projectDao.queryByNameAndId(name, programId);
-		if(list == null || list.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+	public String getSelectProject(String name , String programId , int page ,int number){
+		if((name == null || name.isEmpty()|| name.trim().isEmpty())&&(programId.isEmpty()||programId.trim().isEmpty()||programId==null))
+		{
+			int from = (page - 1) * number;
+			List<Project> list = projectDao.listProjects(from, number);
+			if(list == null || list.isEmpty()){
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			long realSize = projectDao.getCount();
+			int size=(int) Math.ceil(realSize/(double)number);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list, config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			return obj.toString();
 		}
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+		else{
+			String andCondition = new ProjectAndQueryCreator(name, programId).createStatement();
+			int from = (page - 1) * number;
+			List<Project> list = projectDao.getConditionQuery(andCondition, from, number);
+			if(list == null || list.isEmpty()){
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			long realSize = (long) projectDao.getConditionCount(andCondition);
+			int size=(int) Math.ceil(realSize/(double)number);
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list, config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
+		}
 	}
 	
 	public String modifyProject(Project project){
