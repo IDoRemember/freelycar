@@ -2,14 +2,20 @@ import React from 'react';
 import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
-
-
-
+import update from 'immutability-helper'
+import $ from 'jquery';
+const Option = Select.Option;
 class ClientInfo extends React.Component {
     constructor(props) {
         super(props);
-        this.columns = [
-            { title: '序号', dataIndex: 'index', key: 'index' },
+        this.state = {
+            option: [],
+            visible: false,
+            dataSource:[],
+            columns: [
+            { title: '序号', dataIndex: 'index', key: 'index',render: (text, record, index) => {
+                    return <span>{index + 1}</span>
+                } },
             {
                 title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
                     return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
@@ -40,62 +46,42 @@ class ClientInfo extends React.Component {
                 }
             },
         ]
-        this.state = {
-            option: [],
-            visible: false,
-            dataSource :[
-                {
-                    key: 1,
-                    index: 1,
-                    customerName: '海蜇',
-                    uid: 1,
-                    phoneNumber: '15251873222',
-                    busNumber: '苏A234567',
-                    carBrand: '玛莎',
-                    isMember: '是',
-                    consumeCount: '4',
-                    latelyTime: '2017-05-23',
-                },
-                {
-                    key: 2,
-                    index: 2,
-                    customerName: 'JZW',
-                    phoneNumber: '15251873232',
-                    busNumber: '苏A123456',
-                    carBrand: '维修',
-                    isMember: '否',
-                    consumeCount: '5',
-                    latelyTime: '2017-05-24',
-
-                },
-                {
-                    key: 3,
-                    index: 3,
-                    customerName: 'JZW',
-                    phoneNumber: '15251873232',
-                    busNumber: '苏A123456',
-                    carBrand: '维修',
-                    isMember: '否',
-                    consumeCount: '5',
-                    latelyTime: '2017-05-24',
-
-                },
-                {
-                    key: 4,
-                    index: 4,
-                    customerName: 'JZW',
-                    phoneNumber: '15251873232',
-                    busNumber: '苏A123456',
-                    carBrand: '维修',
-                    isMember: '否',
-                    consumeCount: '5',
-                    latelyTime: '2017-05-24',
-
-                }
-
-            ],
-        }
+        }   
     }
+     componentDidMount(){
+        $.ajax({
+            url:"/api/client/list",
+            type:"GET",
+            data:{
+                page:1,
+                number:10
+            },
+          //  dataType:'json',
+            success:(res)=>{
+              var obj=res.data;
+              for(let i=0;i<obj.length;i++){
+                  let dataItem={
+                      key:i,
+                      customerName:obj[i].name,
+                    　phoneNumber:obj[i].phone,
+                    　busNumber: obj[i].cars.licensePlate,
+                    　carBrand: obj[i].cars.type,
+                    　isMember: obj[i].cards,
+                    　consumeCount:obj[i].consumTimes,
+                    　latelyTime: obj[i].lastVisit,
+                  }
+                  this.setState({
+                        dataSource: update(this.state.dataSource, { $push: [dataItem] }),
+                        option: update(this.state.option, { $push: [dataItem] })
+                  })
+
+              }
+            }
+
+        })
+
+    }
+    
 
     handleChange = (value) => {
         console.log(`selected ${value}`)
@@ -118,11 +104,16 @@ class ClientInfo extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ dataSource });
     }
+    componentWillMount(){
+        
+    }
+  
 
+   
 
     render() {
-        const { dataSource } = this.state;
-        const columns = this.columns;
+      //  const { dataSource } = this.state;
+       // const columns = this.columns;
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -168,7 +159,7 @@ class ClientInfo extends React.Component {
                 </div>
                 <Card style={{ marginTop: '20px' }}>
                     <div>
-                        <Table dataSource={dataSource} columns={columns}>
+                        <Table dataSource={this.state.dataSource} columns={this.state.columns}>
 
                         </Table>
                     </div>
