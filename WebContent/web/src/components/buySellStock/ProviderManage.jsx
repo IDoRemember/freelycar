@@ -212,9 +212,29 @@ class ProviderManage extends React.Component {
             traditional: true,
             success: (result) => {
                 if (result.code == "0") {
-                    this.setState({
-                        data: result.data
-                    })
+                 let datalist = []
+                    for (let i = 0; i < result.data.length; i++) {
+                        let dataitem = {
+                            key: result.data[i].id,
+                            id: result.data[i].id,
+                            name: result.data[i].name,
+                            linkman: result.data[i].contactName,
+                            phonenumber: result.data[i].phone,
+                            landline: result.data[i].landline,
+                            mail: result.data[i].email,
+                            address: result.data[i].address,
+                            remarks: result.data[i].comment,
+                            createTime: result.data[i].createDate
+                        }
+                        datalist.push(dataitem)
+                        if (datalist.length == result.data.length) {
+                            this.setState({
+                                data: datalist,
+                                pagination: { total: result.realSize },
+
+                            })
+                        }
+                    }
                 }
                 console.log(result)
             }
