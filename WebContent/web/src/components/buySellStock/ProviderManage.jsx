@@ -235,7 +235,7 @@ class ProviderManage extends React.Component {
             onChange: (selectedRowKeys, selectedRows) => {
                 let selectedIds = []
                 for (let item of selectedRows) {
-                    selectedIds.push(item.id)
+                    selectedIds.push(item.id);
                 }
                 this.setState({
                     selectedRowKeys: selectedRowKeys,
