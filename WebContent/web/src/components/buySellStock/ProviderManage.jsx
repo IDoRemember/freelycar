@@ -16,7 +16,7 @@ class ProviderManage extends React.Component {
             visible: false,
             options: [],
             pagination: {
-            
+
             },
             queryValue: '',
             form: {
@@ -73,7 +73,7 @@ class ProviderManage extends React.Component {
                 key: 'action',
                 render: (text, record, index) => {
                     return <span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index, record.id)}>
+                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([index], [record.id])}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
                     </span>
@@ -83,7 +83,7 @@ class ProviderManage extends React.Component {
         }
     }
     componentDidMount() {
-        this.getList(1,10)
+        this.getList(1, 10)
     }
     getList = (page, pageSize) => {
         $.ajax({
@@ -188,20 +188,22 @@ class ProviderManage extends React.Component {
             }
         })
     }
-    onDelete = (index, id) => {
+    onDelete = (indexArray, idArray) => {
         $.ajax({
             type: 'post',
             url: 'api/provider/delete',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                providerIds: [id]
+                providerIds: idArray
             },
             traditional: true,
             success: (result) => {
                 const dataSource = [...this.state.data];
                 console.log(result, this.state.pagination)
-                dataSource.splice(index, 1);
+                for (let item of indexArray) {
+                    dataSource.splice(item, 1);
+                }
                 this.setState({
                     data: dataSource,
                     pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -221,7 +223,7 @@ class ProviderManage extends React.Component {
         this.setState({
             pagination: pager
         })
-       this.getList(pagination.current,10)
+        this.getList(pagination.current, 10)
     }
     render() {
         const rowSelection = {
@@ -234,7 +236,6 @@ class ProviderManage extends React.Component {
         }, plateOptions = this.state.options.map((item, index) => {
             return <Option key={index} value={item.name + ''}>{item.name}</Option>
         });
-        console.log(this.state.pagination)
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>
@@ -318,7 +319,7 @@ class ProviderManage extends React.Component {
                             </Col>
                         </Row>
                     </Modal>
-                    <Button onClick={this.clearFilters}>删除供应商</Button>
+                    <Button onClick={this.onDelete}>删除供应商</Button>
                 </div>
                 <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
