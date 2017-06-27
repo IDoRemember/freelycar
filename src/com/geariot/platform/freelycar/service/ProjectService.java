@@ -43,11 +43,19 @@ public class ProjectService {
 				projectDao.delete(projectId);;
 			}
 		}
-		String tips = "共"+count+"条未在数据库中存在记录";
-		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
-		long realSize = projectDao.getCount();
-		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
-		return obj.toString();
+		if(count !=0){
+			String tips = "共"+count+"条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+			long realSize = projectDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
+		}
+		else{
+			JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			long realSize = projectDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
+		}
 	}
 	
 	/*public String getProjectList(int page , int number){
