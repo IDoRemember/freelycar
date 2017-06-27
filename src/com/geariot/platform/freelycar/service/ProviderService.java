@@ -51,6 +51,8 @@ public class ProviderService {
 		}
 		String tips = "共"+count+"条未在数据库中存在记录";
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+		long realSize = providerDao.getCount();
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 		return obj.toString();
 	}
 	
