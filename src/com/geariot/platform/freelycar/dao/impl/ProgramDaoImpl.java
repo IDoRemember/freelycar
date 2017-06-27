@@ -64,6 +64,13 @@ public class ProgramDaoImpl implements ProgramDao {
 		return (Program) getSession().createQuery(hql).setString("name", name)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Program> listAll() {
+		String hql = "from Program";
+		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+	}
 		
 	
 }
