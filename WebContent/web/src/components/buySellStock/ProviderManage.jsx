@@ -84,7 +84,7 @@ class ProviderManage extends React.Component {
             data: []
         }
     }
-    
+
     componentDidMount() {
         this.getList(1, 10)
         this.getName()
@@ -114,6 +114,7 @@ class ProviderManage extends React.Component {
             },
             success: (result) => {
                 if (result.code == "0") {
+                    let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
                             key: result.data[i].id,
@@ -127,11 +128,14 @@ class ProviderManage extends React.Component {
                             remarks: result.data[i].comment,
                             createTime: result.data[i].createDate
                         }
-                        this.setState({
-                            data: update(this.state.data, { $push: [dataitem] }),
-                            pagination: { total: result.realSize },
+                        datalist.push(dataitem)
+                        if (datalist.length == result.data.length) {
+                            this.setState({
+                                data: datalist,
+                                pagination: { total: result.realSize },
 
-                        })
+                            })
+                        }
                     }
                 }
             },
@@ -202,14 +206,14 @@ class ProviderManage extends React.Component {
             dataType: 'json',
             data: {
                 name: this.state.queryValue,
-                page:1,
-                number:10
+                page: 1,
+                number: 10
             },
             traditional: true,
             success: (result) => {
                 if (result.code == "0") {
                     this.setState({
-                        data:result.data
+                        data: result.data
                     })
                 }
                 console.log(result)

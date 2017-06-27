@@ -21,7 +21,7 @@ class BeautyOrder extends React.Component {
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
-            <CustomerInfo MemberButton={true} />
+            <CustomerInfo MemberButton={true} type={1}/>
             <ServiceTable />
             <PartsDetail />
             <Card>
