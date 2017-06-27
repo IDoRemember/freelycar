@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.dao.impl;
 
 import java.util.List;
 
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,6 +84,6 @@ public class ProviderDaoImpl implements ProviderDao{
 	@Override
 	public List<String> listName() {
 		String sql = "select name from Provider";
-		return (List<String>) this.getSession().createSQLQuery(sql).uniqueResult();
+		return (List<String>) this.getSession().createSQLQuery(sql).list();
 	}
 }

@@ -51,11 +51,19 @@ public class ProviderService {
 				providerDao.delete(providerId);
 			}
 		}
-		String tips = "共"+count+"条未在数据库中存在记录";
-		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
-		long realSize = providerDao.getCount();
-		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
-		return obj.toString();
+		if(count !=0){
+			String tips = "共"+count+"条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+			long realSize = providerDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
+		}
+		else{
+			org.json.JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			long realSize = providerDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
+		}
 	}
 	
 	public String getProviderList(int page , int number){
