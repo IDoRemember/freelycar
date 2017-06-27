@@ -107,7 +107,7 @@ class ProviderManage extends React.Component {
                     }
                     this.setState({
                         data: update(this.state.data, { $push: [dataitem] }),
-                        pagination: {total: result.realSize } ,
+                        pagination: { total: result.realSize },
                         options: update(this.state.options, { $push: [dataitem] })
                     })
                 }
@@ -144,7 +144,7 @@ class ProviderManage extends React.Component {
             success: (result) => {
                 console.log(result);
                 let newdata = {
-                    key: this.state.data.length + 1,
+                    key: result.data.id,
                     id: result.data.id,
                     name: result.data.name,
                     linkman: result.data.contactName,
@@ -225,7 +225,7 @@ class ProviderManage extends React.Component {
                 console.log(result);
                 for (let i = 0; i < result.data.length; i++) {
                     let dataitem = {
-                        key: i,
+                        key: result.data[i].id,
                         id: result.data[i].id,
                         name: result.data[i].name,
                         linkman: result.data[i].contactName,
@@ -342,7 +342,7 @@ class ProviderManage extends React.Component {
                     </Modal>
                     <Button onClick={this.clearFilters}>删除供应商</Button>
                 </div>
-                < Table pagination={this.state.pagination} bordered onChange={(pagination)=>this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
+                < Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
         </div >
     }
