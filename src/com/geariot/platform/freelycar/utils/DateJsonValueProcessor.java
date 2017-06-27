@@ -10,7 +10,7 @@ import net.sf.json.JsonConfig;
 import net.sf.json.processors.JsonValueProcessor;  
   
 public class DateJsonValueProcessor implements JsonValueProcessor {  
-	public static final String Default_DATE_PATTERN ="yyyy-dd-MMM hh:mm:ss E";  
+	public static final String Default_DATE_PATTERN ="yyyy-MM-dd HH:mm:ss";  
 	private DateFormat dateFormat ;  
 	public DateJsonValueProcessor(String datePattern){  
 		try{  
@@ -27,7 +27,7 @@ public class DateJsonValueProcessor implements JsonValueProcessor {
 			dateFormat  = new SimpleDateFormat(Default_DATE_PATTERN, Locale.US);  
 	     
 		}catch(Exception e ){  
-			dateFormat = new SimpleDateFormat("yyyy-dd-MMM hh:mm:ss E", Locale.US);  
+			dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);  
 	     
 		} 
     
