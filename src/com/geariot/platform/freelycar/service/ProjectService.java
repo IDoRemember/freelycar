@@ -63,7 +63,7 @@ public class ProjectService {
 	}*/
 	
 	public String getSelectProject(String name , String programId , int page ,int number){
-		if((name == null || name.isEmpty()|| name.trim().isEmpty())&&(programId.isEmpty()||programId.trim().isEmpty()||programId==null))
+		if((name == null || name.isEmpty()|| name.trim().isEmpty())&&(programId==null||programId.isEmpty()||programId.trim().isEmpty()))
 		{
 			int from = (page - 1) * number;
 			List<Project> list = projectDao.listProjects(from, number);
