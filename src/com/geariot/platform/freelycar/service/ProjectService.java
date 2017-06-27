@@ -33,7 +33,7 @@ public class ProjectService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String deleteProject(Integer[] projectIds){
+	public String deleteProject(Integer... projectIds){
 		int count = 0;
 		for(int projectId : projectIds){
 			if(projectDao.findProjectById(projectId) == null){
