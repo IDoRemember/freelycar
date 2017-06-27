@@ -73,4 +73,13 @@ public class ProgramService {
 		return obj.toString();
 	}
 	
+	public String getProgramList(){
+		List<Program> list = programDao.listAll();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		return obj.toString();
+	}
+	
 }

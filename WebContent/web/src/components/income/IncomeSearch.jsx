@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
+import $ from 'jquery';
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
 
@@ -51,45 +52,87 @@ const data = [{
     actualpayment: 'Sidney No. 1 Lake Park',
 }];
 
-
-
-
-class BeautyOrder extends React.Component {
+class IncomeSearch extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            mode: 0
+            mode: 'today',
+            incomeStat: '',
+            expendStat: ''
         }
     }
-
-
+    componentDidMount() {
+        this.getIncomeExpend(this.state.mode)
+    }
+    getIncomeExpend = (mode) => {
+        $.ajax({
+            url: 'api/stat/' + mode,
+            data: {
+                today:new Date('2017/06/27'),
+                income: 1,
+                expend: 1
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    this.setState({
+                        incomeStat: result.incomeStat,
+                        expendStat: result.expendStat
+                    })
+                }
+            }
+        })
+    }
     handleModeChange = (e) => {
         const mode = e.target.value;
         this.setState({ mode: mode });
+        if (mode == 'today') {
+            this.getIncomeExpend(mode)
+        } else if (mode == 'thismonth') {
+            this.getIncomeExpend(mode)
+        }
     }
-
+    onTimeSelected = (dates,dateStrings) =>{
+        console.log(dates,dateStrings)
+        if(this.state.mode == 'date') {
+             $.ajax({
+            url: 'api/stat/query',
+            data: {
+                startDate:new Date(dateStrings[0]),
+                endDate:new Date(dateStrings[1])
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    this.setState({
+                        incomeStat: result.incomeStat,
+                        expendStat: result.expendStat
+                    })
+                }
+            }
+        })
+        }
+    }
     render() {
         return (
             <div>
                 <BreadcrumbCustom first="收支查询" />
                 <div>
                     <Row>
-                        <Col span={18}>
+                        <Col span={12}>
                             <Radio.Group onChange={this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
-                                <Radio.Button value="top">今日</Radio.Button>
-                                <Radio.Button value="left">本月</Radio.Button>
+                                <Radio.Button value="today" >今日</Radio.Button>
+                                <Radio.Button value="thismonth">本月</Radio.Button>
+                                <Radio.Button value="date">区间查找</Radio.Button>
                             </Radio.Group>
                         </Col>
                         {/*日期选择器*/}
-                        <Col span={6}>
-                            <div>
-                                <span>查找日期 : </span>
-                                <DatePicker.RangePicker
-                                    defaultValue={[moment(), moment()]}
-                                    format={dateFormat}
-                                    showToday={true}
-                                />
-                            </div>
+                        <Col span={12}>
+                            <span>选择查找日期 : </span>
+                            <DatePicker.RangePicker
+                                defaultValue={[moment(), moment()]}
+                                format={dateFormat}
+                                showToday={true}
+                                onChange={(dates,dateStrings)=>{this.onTimeSelected(dates,dateStrings)}}
+                            />
                         </Col>
                     </Row>
                 </div>
@@ -98,7 +141,7 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实际收入">
-                                    <h1>￥100</h1>
+                                    <h1>¥{this.state.incomeStat}</h1>
                                     <p><Link to='/app/incomeManage/incomeSearch/incomedetail' activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
@@ -106,7 +149,7 @@ class BeautyOrder extends React.Component {
                         <Col span={12}>
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="实际支出">
-                                    <h1>￥100</h1>
+                                    <h1>¥{this.state.expendStat}</h1>
                                     <p><Link to='/app/incomeManage/incomeSearch/paydetail' activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
@@ -136,15 +179,6 @@ class BeautyOrder extends React.Component {
                 </div>
             </div>
         );
-
-
-
-
-
-
-
-
-
     }
 }
-export default BeautyOrder
+export default IncomeSearch

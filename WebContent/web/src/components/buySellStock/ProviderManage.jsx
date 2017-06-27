@@ -84,9 +84,27 @@ class ProviderManage extends React.Component {
             data: []
         }
     }
+
     componentDidMount() {
         this.getList(1, 10)
+        this.getName()
     }
+
+    getName = () => {
+        $.ajax({
+            url: 'api/provider/name',
+            data: {
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    this.setState({
+                        options: result.data
+                    })
+                }
+            }
+        })
+    }
+
     getList = (page, pageSize) => {
         $.ajax({
             url: 'api/provider/list',
@@ -95,25 +113,30 @@ class ProviderManage extends React.Component {
                 number: pageSize
             },
             success: (result) => {
-                console.log(result);
-                for (let i = 0; i < result.data.length; i++) {
-                    let dataitem = {
-                        key: result.data[i].id,
-                        id: result.data[i].id,
-                        name: result.data[i].name,
-                        linkman: result.data[i].contactName,
-                        phonenumber: result.data[i].phone,
-                        landline: result.data[i].landline,
-                        mail: result.data[i].email,
-                        address: result.data[i].address,
-                        remarks: result.data[i].comment,
-                        createTime: result.data[i].createDate
+                if (result.code == "0") {
+                    let datalist = []
+                    for (let i = 0; i < result.data.length; i++) {
+                        let dataitem = {
+                            key: result.data[i].id,
+                            id: result.data[i].id,
+                            name: result.data[i].name,
+                            linkman: result.data[i].contactName,
+                            phonenumber: result.data[i].phone,
+                            landline: result.data[i].landline,
+                            mail: result.data[i].email,
+                            address: result.data[i].address,
+                            remarks: result.data[i].comment,
+                            createTime: result.data[i].createDate
+                        }
+                        datalist.push(dataitem)
+                        if (datalist.length == result.data.length) {
+                            this.setState({
+                                data: datalist,
+                                pagination: { total: result.realSize },
+
+                            })
+                        }
                     }
-                    this.setState({
-                        data: update(this.state.data, { $push: [dataitem] }),
-                        pagination: { total: result.realSize },
-                        options: update(this.state.options, { $push: [dataitem] })
-                    })
                 }
             },
         })
@@ -145,23 +168,24 @@ class ProviderManage extends React.Component {
                 comment: this.state.form.remarks
             },
             success: (result) => {
-                console.log(result);
-                let newdata = {
-                    key: result.data.id,
-                    id: result.data.id,
-                    name: result.data.name,
-                    linkman: result.data.contactName,
-                    phonenumber: result.data.phone,
-                    landline: result.data.landline,
-                    mail: result.data.email,
-                    address: result.data.address,
-                    remarks: result.data.comment,
-                    createTime: result.data.createDate
+                if (result.code == "0") {
+                    let newdata = {
+                        key: result.data.id,
+                        id: result.data.id,
+                        name: result.data.name,
+                        linkman: result.data.contactName,
+                        phonenumber: result.data.phone,
+                        landline: result.data.landline,
+                        mail: result.data.email,
+                        address: result.data.address,
+                        remarks: result.data.comment,
+                        createTime: result.data.createDate
+                    }
+                    this.setState({
+                        data: update(this.state.data, { $push: [newdata] }),
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    })
                 }
-                this.setState({
-                    data: update(this.state.data, { $push: [newdata] }),
-                    pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                })
             }
         })
     }
@@ -172,7 +196,6 @@ class ProviderManage extends React.Component {
         });
     }
     handleSelected = (value) => {
-        console.log(value);
         this.setState({ queryValue: value })
     }
     startQuery = () => {
@@ -182,10 +205,37 @@ class ProviderManage extends React.Component {
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                name: this.state.queryValue
+                name: this.state.queryValue,
+                page: 1,
+                number: 10
             },
             traditional: true,
             success: (result) => {
+                if (result.code == "0") {
+                 let datalist = []
+                    for (let i = 0; i < result.data.length; i++) {
+                        let dataitem = {
+                            key: result.data[i].id,
+                            id: result.data[i].id,
+                            name: result.data[i].name,
+                            linkman: result.data[i].contactName,
+                            phonenumber: result.data[i].phone,
+                            landline: result.data[i].landline,
+                            mail: result.data[i].email,
+                            address: result.data[i].address,
+                            remarks: result.data[i].comment,
+                            createTime: result.data[i].createDate
+                        }
+                        datalist.push(dataitem)
+                        if (datalist.length == result.data.length) {
+                            this.setState({
+                                data: datalist,
+                                pagination: { total: result.realSize },
+
+                            })
+                        }
+                    }
+                }
                 console.log(result)
             }
         })
@@ -201,18 +251,19 @@ class ProviderManage extends React.Component {
             },
             traditional: true,
             success: (result) => {
-                let dataSource = [...this.state.data];
-            
-                for (let id of idArray) {
-                    dataSource = dataSource.filter((obj) => {
-                        return id !== obj.id;
+                if (result.code == "0") {
+                    let dataSource = [...this.state.data];
+                    for (let id of idArray) {
+                        dataSource = dataSource.filter((obj) => {
+                            return id !== obj.id;
+                        });
+                    }
+                    console.log(dataSource)
+                    this.setState({
+                        data: dataSource,
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
                 }
-                console.log(dataSource)
-                this.setState({
-                    data: dataSource,
-                    pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                });
             }
         })
     }
@@ -246,8 +297,8 @@ class ProviderManage extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
-        }, plateOptions = this.state.options.map((item, index) => {
-            return <Option key={index} value={item.name + ''}>{item.name}</Option>
+        }, plateOptions = [...new Set(this.state.options)].map((item, index) => {
+            return <Option key={index} value={item + ''}>{item}</Option>
         });
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
@@ -258,7 +309,7 @@ class ProviderManage extends React.Component {
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
                         optionFilterProp="children"
-                        onChange={this.handleSelected}
+                        onChange={(value)=>this.handleSelected(value)}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}

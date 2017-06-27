@@ -19,4 +19,6 @@ public interface ProgramDao {
 	List<Program> listPrograms(int from, int pageSize);
 	
 	long getCount();
+	
+	List<Program> listAll();
 }

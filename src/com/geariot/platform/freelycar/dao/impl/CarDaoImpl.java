@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,14 @@ public class CarDaoImpl implements CarDao {
 		String hql = "from Car where licensePlate = :license";
 		return (Car) this.getSession().createQuery(hql).setString("license", licensePlate)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> queryLicensePlate(String queryText) {
+		String hql = "select licensePlate from Car where licensePlate like :text";
+		return this.getSession().createQuery(hql).setString("text", "%"+queryText+"%")
+				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 }
