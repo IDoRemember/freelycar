@@ -297,7 +297,7 @@ class ProviderManage extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
-        }, plateOptions = this.state.options.map((item, index) => {
+        }, plateOptions = [...new Set(this.state.options)].map((item, index) => {
             return <Option key={index} value={item + ''}>{item}</Option>
         });
         return <div>
@@ -309,7 +309,7 @@ class ProviderManage extends React.Component {
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
                         optionFilterProp="children"
-                        onChange={this.handleSelected}
+                        onChange={(value)=>this.handleSelected(value)}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}
