@@ -11,7 +11,7 @@ public class ProviderAndQueryCreator extends AndQueryCreator{
 	}
 	
 	public ProviderAndQueryCreator(String name){
-		super(name);
+		super(new String[]{name});
 	}
 	
 

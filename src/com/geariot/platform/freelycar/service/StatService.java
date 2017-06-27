@@ -32,6 +32,9 @@ public class StatService {
 	private IncomeOrderDao incomeOrderDao;
 	
 	public String getToday(Date today, int income, int expend) {
+		if(today == null){
+			today = new Date();
+		}
 		if (income == 0 && expend == 1) {
 			List<ExpendOrder> list = expendOrderDao.listByDate(today);
 			if (list == null || list.isEmpty()) {
