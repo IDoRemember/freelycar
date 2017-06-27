@@ -84,9 +84,9 @@ public class ProjectDaoImpl implements ProjectDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Project> getConditionQuery(String andCondition, int from, int pageSize) {
-		String basic = "from project";
-		String sql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
-		return this.getSession().createSQLQuery(sql).setFirstResult(from).setMaxResults(pageSize)
+		String basic = "from Project";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
