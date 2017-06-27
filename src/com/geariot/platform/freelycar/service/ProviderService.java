@@ -29,10 +29,12 @@ public class ProviderService {
 	public String addProvider(Provider provider){
 		provider.setCreateDate(new Date());
 		providerDao.save(provider);
+		long realSize = providerDao.getCount();
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JSONObject data = JSONObject.fromObject(provider , config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, data);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 		/*provider.setCreateDate(new Date());
 		providerDao.save(provider);
