@@ -109,7 +109,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@Override
 	public long getConditionCount(String andCondition) {
-		String basic = "select count(*) from Provider";
+		String basic = "select count(*) from Staff";
 		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
