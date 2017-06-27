@@ -18,6 +18,8 @@ class ProviderManage extends React.Component {
             pagination: {
 
             },
+            selectedRowKeys: [],
+            selectedIds: [],
             queryValue: '',
             form: {
                 name: '',
@@ -73,7 +75,7 @@ class ProviderManage extends React.Component {
                 key: 'action',
                 render: (text, record, index) => {
                     return <span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([index], [record.id])}>
+                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
                     </span>
@@ -188,7 +190,7 @@ class ProviderManage extends React.Component {
             }
         })
     }
-    onDelete = (indexArray, idArray) => {
+    onDelete = (idArray) => {
         $.ajax({
             type: 'post',
             url: 'api/provider/delete',
@@ -199,11 +201,14 @@ class ProviderManage extends React.Component {
             },
             traditional: true,
             success: (result) => {
-                const dataSource = [...this.state.data];
-                console.log(result, this.state.pagination)
-                for (let item of indexArray) {
-                    dataSource.splice(item, 1);
+                let dataSource = [...this.state.data];
+            
+                for (let id of idArray) {
+                    dataSource = dataSource.filter((obj) => {
+                        return id !== obj.id;
+                    });
                 }
+                console.log(dataSource)
                 this.setState({
                     data: dataSource,
                     pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -228,7 +233,15 @@ class ProviderManage extends React.Component {
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                let selectedIds = []
+                for (let item of selectedRows) {
+                    selectedIds.push(item.id)
+                }
+                this.setState({
+                    selectedRowKeys: selectedRowKeys,
+                    selectedIds: selectedIds
+                })
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
@@ -319,7 +332,7 @@ class ProviderManage extends React.Component {
                             </Col>
                         </Row>
                     </Modal>
-                    <Button onClick={this.onDelete}>删除供应商</Button>
+                    <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除供应商</Button>
                 </div>
                 <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
