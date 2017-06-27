@@ -15,7 +15,9 @@ class ProviderManage extends React.Component {
         this.state = {
             visible: false,
             options: [],
-            pagination: {},
+            pagination: {
+            
+            },
             queryValue: '',
             form: {
                 name: '',
@@ -71,9 +73,6 @@ class ProviderManage extends React.Component {
                 key: 'action',
                 render: (text, record, index) => {
                     return <span>
-                        <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                            <a href="javascript:void(0);">修改</a>
-                        </span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index, record.id)}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
@@ -84,17 +83,20 @@ class ProviderManage extends React.Component {
         }
     }
     componentDidMount() {
+        this.getList(1,10)
+    }
+    getList = (page, pageSize) => {
         $.ajax({
             url: 'api/provider/list',
             data: {
-                page: 1,
-                number: 10
+                page: page,
+                number: pageSize
             },
             success: (result) => {
                 console.log(result);
                 for (let i = 0; i < result.data.length; i++) {
                     let dataitem = {
-                        key: i,
+                        key: result.data[i].id,
                         id: result.data[i].id,
                         name: result.data[i].name,
                         linkman: result.data[i].contactName,
@@ -111,7 +113,6 @@ class ProviderManage extends React.Component {
                         options: update(this.state.options, { $push: [dataitem] })
                     })
                 }
-
             },
         })
     }
@@ -156,7 +157,8 @@ class ProviderManage extends React.Component {
                     createTime: result.data.createDate
                 }
                 this.setState({
-                    data: update(this.state.data, { $push: [newdata] })
+                    data: update(this.state.data, { $push: [newdata] }),
+                    pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                 })
             }
         })
@@ -198,8 +200,12 @@ class ProviderManage extends React.Component {
             traditional: true,
             success: (result) => {
                 const dataSource = [...this.state.data];
+                console.log(result, this.state.pagination)
                 dataSource.splice(index, 1);
-                this.setState({ data: dataSource });
+                this.setState({
+                    data: dataSource,
+                    pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                });
             }
         })
     }
@@ -215,35 +221,7 @@ class ProviderManage extends React.Component {
         this.setState({
             pagination: pager
         })
-        $.ajax({
-            url: 'api/provider/list',
-            data: {
-                page: pagination.current,
-                number: 10
-            },
-            success: (result) => {
-                console.log(result);
-                for (let i = 0; i < result.data.length; i++) {
-                    let dataitem = {
-                        key: result.data[i].id,
-                        id: result.data[i].id,
-                        name: result.data[i].name,
-                        linkman: result.data[i].contactName,
-                        phonenumber: result.data[i].phone,
-                        landline: result.data[i].landline,
-                        mail: result.data[i].email,
-                        address: result.data[i].address,
-                        remarks: result.data[i].comment,
-                        createTime: result.data[i].createDate
-                    }
-                    this.setState({
-                        data: update(this.state.data, { $push: [dataitem] }),
-                        options: update(this.state.options, { $push: [dataitem] })
-                    })
-                }
-
-            },
-        })
+       this.getList(pagination.current,10)
     }
     render() {
         const rowSelection = {
@@ -256,6 +234,7 @@ class ProviderManage extends React.Component {
         }, plateOptions = this.state.options.map((item, index) => {
             return <Option key={index} value={item.name + ''}>{item.name}</Option>
         });
+        console.log(this.state.pagination)
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>
@@ -338,11 +317,10 @@ class ProviderManage extends React.Component {
                                 <Input type="textarea" rows={3} value={this.state.form.remarks} onChange={(e) => this.onValueChange('remarks', e.target.value)} />
                             </Col>
                         </Row>
-
                     </Modal>
                     <Button onClick={this.clearFilters}>删除供应商</Button>
                 </div>
-                < Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
+                <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
         </div >
     }
