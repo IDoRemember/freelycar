@@ -33,16 +33,20 @@ public class ProjectService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String deleteProject(int projectId){
-		Project exist = projectDao.findProjectById(projectId);
-		JSONObject obj = null;
-		if(exist == null){
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteProject(Integer[] projectIds){
+		int count = 0;
+		for(int projectId : projectIds){
+			if(projectDao.findProjectById(projectId) == null){
+				count++;
+			}
+			else{
+				projectDao.delete(projectId);;
+			}
 		}
-		else{
-			projectDao.delete(projectId);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
-		}
+		String tips = "共"+count+"条未在数据库中存在记录";
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+		long realSize = projectDao.getCount();
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 		return obj.toString();
 	}
 	

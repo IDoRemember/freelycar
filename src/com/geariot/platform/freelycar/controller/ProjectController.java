@@ -30,7 +30,7 @@ public class ProjectController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("project:delete")
-	public String deleteProject(int projectId){
+	public String deleteProject(Integer[] projectId){
 		return projectService.deleteProject(projectId);
 	}
 	

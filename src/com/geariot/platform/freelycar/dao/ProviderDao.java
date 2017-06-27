@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.dao;
 
 import java.util.List;
 
+
 import com.geariot.platform.freelycar.entities.Provider;
 
 public interface ProviderDao {
