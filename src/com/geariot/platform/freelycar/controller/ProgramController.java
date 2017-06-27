@@ -34,4 +34,9 @@ public class ProgramController {
 		return programService.deleteProgram(programId);
 	}
 	
+	@RequestMapping(value = "/listall" , method = RequestMethod.GET)
+	@PermissionRequire("program:query")
+	public String getProgramList(){
+		return programService.getProgramList();
+	}
 }

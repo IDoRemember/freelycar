@@ -1,7 +1,5 @@
 package com.geariot.platform.freelycar.controller;
 
-
-
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,6 +46,12 @@ public class StatController {
 		return null;
 	}
 
+	@RequestMapping(value="/test")
+	public String test(){
+		this.statService.test();
+		return null;
+	}
+	
 }
 
 
