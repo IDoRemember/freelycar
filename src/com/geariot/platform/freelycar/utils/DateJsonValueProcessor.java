@@ -17,17 +17,17 @@ public class DateJsonValueProcessor implements JsonValueProcessor {
 			dateFormat  = new SimpleDateFormat(datePattern);  
      
 		}catch(Exception e ){  
-			dateFormat = new SimpleDateFormat(Default_DATE_PATTERN, Locale.CHINA);  
+			dateFormat = new SimpleDateFormat(Default_DATE_PATTERN, Locale.US);  
      
 		}  
 	}
   
 	public DateJsonValueProcessor(){  
 		try{  
-			dateFormat  = new SimpleDateFormat(Default_DATE_PATTERN, Locale.CHINA);  
+			dateFormat  = new SimpleDateFormat(Default_DATE_PATTERN, Locale.US);  
 	     
 		}catch(Exception e ){  
-			dateFormat = new SimpleDateFormat("yyyy-dd-MMM hh:mm:ss E", Locale.CHINA);  
+			dateFormat = new SimpleDateFormat("yyyy-dd-MMM hh:mm:ss E", Locale.US);  
 	     
 		} 
     
