@@ -30,7 +30,7 @@ public class ProjectService {
 		project.setCreateDate(new Date());
 		//project.getInventoryInfos();
 		projectDao.save(project);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",new JSONObject(project)).toString();
 	}
 	
 	public String deleteProject(Integer... projectIds){
