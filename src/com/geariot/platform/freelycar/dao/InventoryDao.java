@@ -11,8 +11,8 @@ public interface InventoryDao {
 	
 	Inventory findById(String id);
 
-	List<Inventory> list(int from, int number);
+	List<Inventory> list(String andCondition, int from, int number);
 
-	long getCount();
+	long getCount(String andCondition);
 
 }

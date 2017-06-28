@@ -72,4 +72,10 @@ public class ClientController {
 		return clientService.deleteCar(carId);
 	}
 	
+	@RequestMapping(value="/querynames", method=RequestMethod.GET)
+	@PermissionRequire("client:query")
+	public String getClientNames(String name){
+		return this.clientService.getClientNames(name);
+	}
+	
 }

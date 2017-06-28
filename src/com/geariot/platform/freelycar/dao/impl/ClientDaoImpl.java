@@ -76,5 +76,13 @@ public class ClientDaoImpl implements ClientDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> getClientNames(String name) {
+		String hql = "select name from Client where name like :name";
+		return this.getSession().createQuery(hql).setString("name", "%"+name+"%")
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
 
 }

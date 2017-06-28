@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.entities.Inventory;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class InventoryDaoImpl implements InventoryDao {
@@ -41,15 +43,17 @@ public class InventoryDaoImpl implements InventoryDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Inventory> list(int from, int number) {
-		String hql = "from Inventory";
+	public List<Inventory> list(String andCondition, int from, int number) {
+		StringBuffer basic = new StringBuffer("from Inventory");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(number)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override
-	public long getCount() {
-		String hql = "select count(*) from Inventory";
+	public long getCount(String andCondition) {
+		StringBuffer basic = new StringBuffer("select count(*) from Inventory");
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 

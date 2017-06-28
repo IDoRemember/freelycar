@@ -157,4 +157,9 @@ public class ClientService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
+	public String getClientNames(String name) {
+		List<String> names = this.clientDao.getClientNames(name);
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(names)).toString();
+	}
+
 }

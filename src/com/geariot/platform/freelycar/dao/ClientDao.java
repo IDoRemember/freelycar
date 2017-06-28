@@ -21,4 +21,6 @@ public interface ClientDao {
 	List<Client> query(String condition, int from, int pageSize);
 
 	long getQueryCount(String andCondition);
+
+	List<String> getClientNames(String name);
 }
