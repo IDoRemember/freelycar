@@ -33,7 +33,7 @@ public class StatController {
 	
 	@RequestMapping(value = "/monthlybyyear" , method = RequestMethod.GET)
 	public String monthlyByYear(Date selectYear){
-		return null;
+		return this.statService.monthlyByYear(selectYear);
 	}
 
 	@RequestMapping(value = "/today/detail" , method = RequestMethod.GET)
@@ -46,12 +46,6 @@ public class StatController {
 		return null;
 	}
 
-	@RequestMapping(value="/test")
-	public String test(){
-		this.statService.test();
-		return null;
-	}
-	
 }
 
 

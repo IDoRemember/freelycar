@@ -13,6 +13,7 @@ public interface IncomeOrderDao {
 	List<IncomeOrder> listByDate(Date date);
 	
 	List<IncomeOrder> listByMonth(Date date);
+
+	List<Object[]> listMonthStat(Date start, Date end);
 	
-	void test();
 }
