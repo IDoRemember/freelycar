@@ -298,7 +298,7 @@ class ProviderManage extends React.Component {
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
             <Card>   {/*onSelect={(value) => this.handleSelected(value)}*/}
-                <div style={{ marginBottom: '40px' }}>
+                <div style={{ marginBottom: '40px' }} id="provider-area">
                     <span>供应商名称：</span>
                     <Select showSearch
                         mode="combobox"
@@ -311,7 +311,8 @@ class ProviderManage extends React.Component {
                         onChange={(value) => {this.setState({queryValue:value})}}
                         onBlur={(value)=>{this.setState({queryValue:value})}}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                        dropdownStyle = {this.state.queryValue.length<2?{display:'none'}:{}}
+                        getPopupContainer={() => document.getElementById('provider-area')}
+                        dropdownStyle = {(!this.state.queryValue||this.state.queryValue.length<2)?{display:'none'}:{}}
                     >
                         {plateOptions}
                     </Select>
