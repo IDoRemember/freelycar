@@ -37,7 +37,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncomeOrder> listByDate(Date date) {
+	public List<IncomeOrder> listByDate(Date date , int from , int pageSize) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(date.getTime());
 		cal1.set(Calendar.HOUR, 0);
@@ -50,12 +50,13 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.SECOND, 0);
 		cal2.add(Calendar.DAY_OF_MONTH, 1);
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime()).list();
+		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncomeOrder> listByMonth(Date date) {
+	public List<IncomeOrder> listByMonth(Date date , int from , int pageSize) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(date.getTime());
 		cal1.set(Calendar.DATE, 1);
@@ -70,7 +71,8 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.DATE, 1);
 		cal2.add(Calendar.MONTH, 1);
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime()).list();
+		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	
@@ -115,6 +117,13 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		sb.append("GROUP BY payDate");
 		return this.getSession().createSQLQuery(sb.toString()).setDate("start", start).setDate("end", end)
 				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IncomeOrder> listByWeek(int from , int pageSize) {
+		String hql = "from IncomeOrder where YEARWEEK(date_format(payDate,'%Y-%m-%d')) = YEARWEEK(now())";
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 	
 }

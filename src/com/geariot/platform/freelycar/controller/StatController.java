@@ -17,13 +17,13 @@ public class StatController {
 	private StatService statService;
 	
 	@RequestMapping(value = "/today" , method = RequestMethod.GET)
-	public String getToday(Date today , int income , int expend){
-		return statService.getToday(today , income , expend);
+	public String getToday(int income , int expend , int page , int number){
+		return statService.getToday(income, expend, page, number);
 	}
 	
 	@RequestMapping(value = "/thismonth" , method = RequestMethod.GET)
-	public String thisMonth(Date today , int income , int expend){
-		return statService.thisMonth(today , income , expend);
+	public String thisMonth(int income , int expend , int page , int number){
+		return statService.thisMonth(income, expend, page, number);
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
@@ -33,18 +33,14 @@ public class StatController {
 	
 	@RequestMapping(value = "/monthlybyyear" , method = RequestMethod.GET)
 	public String monthlyByYear(Date selectYear){
-		return this.statService.monthlyByYear(selectYear);
+		return statService.monthlyByYear(selectYear);
 	}
 
-	@RequestMapping(value = "/today/detail" , method = RequestMethod.GET)
-	public String dailyStatDetail(int income , int expend){
-		return null;
+	@RequestMapping(value = "/thisweek" , method = RequestMethod.GET)
+	public String weeklyStatDetail(int income , int expend , int page , int number){
+		return statService.weeklyStatDetail(income, expend, page, number);
 	}
 	
-	@RequestMapping(value = "/thismonth/detail" , method = RequestMethod.GET)
-	public String monthlyStatDetail(int income , int expend){
-		return null;
-	}
 
 }
 
