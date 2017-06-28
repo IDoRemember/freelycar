@@ -151,7 +151,6 @@ class ProviderManage extends React.Component {
         this.setState({
             visible: false,
         });
-
         console.log(this.state.form.name);
         $.ajax({
             type: 'post',
@@ -196,7 +195,10 @@ class ProviderManage extends React.Component {
         });
     }
     handleSelected = (value) => {
-        this.setState({ queryValue: value })
+        if (value) {
+            this.setState({ queryValue: value })
+        }
+
     }
     startQuery = () => {
         $.ajax({
@@ -212,7 +214,7 @@ class ProviderManage extends React.Component {
             traditional: true,
             success: (result) => {
                 if (result.code == "0") {
-                 let datalist = []
+                    let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
                             key: result.data[i].id,
@@ -309,8 +311,13 @@ class ProviderManage extends React.Component {
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
                         optionFilterProp="children"
-                        onChange={(value)=>this.handleSelected(value)}
+                        value={this.state.queryValue}
+                        defaultActiveFirstOption={false}
+                        onSearch={(value) => this.handleSelected(value)}
+                        allowClear={true}
+                        optionLabelProp={this.state.queryValue}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                        dropdownStyle = {this.state.queryValue.length<2&&{display:'none'}}
                     >
                         {plateOptions}
                     </Select>

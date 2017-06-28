@@ -4,7 +4,8 @@ import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import AjaxGet from '../../utils/ajaxGet'
-import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table} from 'antd';
+import $ from 'jquery'
+import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table } from 'antd';
 const Option = Select.Option,
     SubMenu = Menu.SubMenu,
     TreeNode = TreeSelect.TreeNode;
@@ -35,28 +36,28 @@ class ProductSearch extends React.Component {
                 title: '配件品牌',
                 dataIndex: 'brand',
                 key: 'brand'
-                
-            },{
+
+            }, {
                 title: '规格',
                 dataIndex: 'specification',
                 key: 'specification'
-            },{
+            }, {
                 title: '属性',
                 dataIndex: 'attribute',
                 key: 'attribute'
-            },{
+            }, {
                 title: '配件价格',
                 dataIndex: 'price',
                 key: 'price'
-            },{
+            }, {
                 title: '可用库存',
                 dataIndex: 'stock',
                 key: 'stock'
-            },{
+            }, {
                 title: '供应商',
                 dataIndex: 'supplier',
                 key: 'supplier'
-            },{
+            }, {
                 title: '联系方式',
                 dataIndex: 'phone',
                 key: 'phone'
@@ -64,9 +65,9 @@ class ProductSearch extends React.Component {
             data: [{
                 key: '1',
                 index: '1',
-                number:'1111222233333',
-                name:'涵涵',
-                category:'美容保养',
+                number: '1111222233333',
+                name: '涵涵',
+                category: '美容保养',
                 time: 'John Brown',
                 actualIncome: 32,
                 phone: '18362981113',
@@ -92,8 +93,48 @@ class ProductSearch extends React.Component {
         }
     }
     componentDidMount() {
+        this.getList(1,10)
         AjaxGet('GET', 'data/LicensePlate.json', (res) => {
             this.setState({ option: res.data })
+        })
+    }
+    getList = (page, pageSize) => {
+        $.ajax({
+            url: 'api/inventory/list',
+            data: {
+                page: page,
+                number: pageSize
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    console.log(result)
+                    let datalist = []
+                    for (let i = 0; i < result.data.length; i++) {
+                        let dataitem = {
+                            number: result.data[i].id,
+                            id: result.data[i].id,
+                            name: result.data[i].name,
+                            category: result.data[i].type,
+                            brand: result.data[i].brand,
+                            specification: result.data[i].standard,
+                            attribute: result.data[i].property,
+                            price: result.data[i].price,
+                            stock: result.data[i].amount,
+                            supplier: result.data[i].providers.name,
+                            createDate:result.data[i].createDate,
+                            phone:result.data[i].providers.phone
+                        }
+                        datalist.push(dataitem)
+                        if (datalist.length == result.data.length) {
+                            this.setState({
+                                data: datalist,
+                                pagination: { total: result.realSize },
+
+                            })
+                        }
+                    }
+                }
+            },
         })
     }
     handleClick = (e) => {
@@ -130,7 +171,6 @@ class ProductSearch extends React.Component {
                             </TreeNode>
                         </TreeNode>
                     </TreeSelect>
-
                     <Button type="primary" style={{ margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
                     < Table className="accountTable" bordered columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} />
                 </div>
