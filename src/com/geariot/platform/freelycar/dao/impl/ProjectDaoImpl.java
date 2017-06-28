@@ -31,8 +31,8 @@ public class ProjectDaoImpl implements ProjectDao {
 	}
 
 	@Override
-	public void save(Project project) {
-		this.getSession().save(project);
+	public String save(Project project) {
+		return this.getSession().save(project).toString();
 	}
 
 	@Override
