@@ -153,14 +153,15 @@ class ProductSearch extends React.Component {
             current: e.key,
         });
     }
-    startQuery = () => {
+    startQuery = (name,typeId) => {
         $.ajax({
             type: 'GET',
-            url: 'api/inventory/querytype',
+            url: 'api/inventory/list',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                name: this.state.category,
+                name: name,
+                typeId:typeId,
                 page: 1,
                 number: 10
             },
@@ -175,7 +176,7 @@ class ProductSearch extends React.Component {
     }
     render() {
         const plateOptions = [...new Set(this.state.options)].map((item, index) => {
-            return <Option key={index} value={item.typeName + ''}>{item.typeName}</Option>
+            return <Option key={index} value={item.id+''}>{item.typeName}</Option>
         });
         return <div>
             <BreadcrumbCustom first="进销存管理" second="库存查询" />
@@ -186,7 +187,7 @@ class ProductSearch extends React.Component {
                             商品名：<Search
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
-                                onSearch={value => console.log(value)}
+                                onSearch={value =>this.startQuery(value,-1)}
                                 onChange={e => this.setState({ tradeName: e.target.value })}
                                 value={this.state.tradeName}
                             />
@@ -202,7 +203,7 @@ class ProductSearch extends React.Component {
                             >
                                 {plateOptions}
                             </Select>
-                            <Button onClick={() => this.startQuery()} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+                            <Button onClick={() => this.startQuery('',this.state.category)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
 
                         </Col>
                     </Row>

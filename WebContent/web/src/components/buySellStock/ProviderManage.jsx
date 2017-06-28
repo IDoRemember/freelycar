@@ -193,12 +193,6 @@ class ProviderManage extends React.Component {
             visible: false,
         });
     }
-    handleSelected = (value) => {
-        if (value) {
-            this.setState({ queryValue: value })
-        }
-
-    }
     startQuery = () => {
         $.ajax({
             type: 'GET',
@@ -303,20 +297,21 @@ class ProviderManage extends React.Component {
         });
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
-            <Card>
+            <Card>   {/*onSelect={(value) => this.handleSelected(value)}*/}
                 <div style={{ marginBottom: '40px' }}>
                     <span>供应商名称：</span>
                     <Select showSearch
+                        mode="combobox"
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
+                        allowClear={true}
                         optionFilterProp="children"
                         value={this.state.queryValue}
                         defaultActiveFirstOption={false}
-                        onSearch={(value) => this.handleSelected(value)}
-                        allowClear={true}
-                        optionLabelProp={this.state.queryValue}
+                        onChange={(value) => {this.setState({queryValue:value})}}
+                        onBlur={(value)=>{this.setState({queryValue:value})}}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                        dropdownStyle = {this.state.queryValue.length<2&&{display:'none'}}
+                        dropdownStyle = {this.state.queryValue.length<2?{display:'none'}:{}}
                     >
                         {plateOptions}
                     </Select>
