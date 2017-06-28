@@ -49,7 +49,8 @@ class BeautyOrder extends React.Component {
             programItem: [],
             projName: '',//条件查询的项目名称
             progId: '',//条件查询的项目类别id
-            pagination:{}
+            pagination:{},
+            tabkey:1
         }
     }
 
@@ -76,6 +77,46 @@ class BeautyOrder extends React.Component {
         jsonData.number = number;
         $.ajax({
             url: '/api/project/query',
+            data: jsonData,
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+                let code = res.code;
+                if (code == '0') {
+                    let tableDate = [];//表格显示的数据
+                    let arr = res.data;
+                    for (let i = 0, len = arr.length; i < len; i++) {
+                        let obj = arr[i];
+                        let tableItem = {};
+                        for (let item in obj) {
+                            if (item == 'id')
+                                tableItem.key = obj[item];
+                            else if (item == 'program')
+                                tableItem.program = obj[item].name;
+                            else
+                                tableItem[item] = obj[item];
+                        }
+                        tableDate.push(tableItem);
+                    }
+                    this.setState({ data: tableDate ,pagination: { total: res.realSize }, });
+                }
+
+            }
+
+        });
+    }
+
+
+    //获取数据的函数
+    loadDataTab2 = (page, number, proName, programId) => {
+        let jsonData = {};
+        jsonData.name = proName;
+        jsonData.programId = programId;
+        jsonData.page = page;
+        jsonData.number = number;
+        $.ajax({
+            url: '/api/program/list',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -137,12 +178,20 @@ class BeautyOrder extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.loadData(pagination.current, 10)
+        this.loadData(pagination.current, 10);
     }
 
     //tab切换函数
     tabCallback = (key) => {
-        console.log(key);
+        if(key==1){
+            this.loadData(1, 10);
+            this.loadProgram();
+        }else if(key==2){
+            this.loadDataTab2(1,10);
+        }
+
+        //async
+        this.setState({tabkey:key});
     }
 
 
@@ -227,8 +276,16 @@ class BeautyOrder extends React.Component {
     }
 
     onDelete = (idArray) => {
+        let tabkey = this.state.tabkey;
+        let url = '';
+        if(tabkey == 1){
+            url = '/api/project/delete';
+        } else if (tabkey == 2){
+            url = '/api/program/delete';
+        }
+
         $.ajax({
-            url: '/api/project/delete',
+            url: url,
             data: { projectIds: idArray },
             dataType: 'json',
             type: 'post',
@@ -287,6 +344,39 @@ class BeautyOrder extends React.Component {
             title: '工时单价',
             dataIndex: 'pricePerUnit',
             key: 'pricePerUnit'
+        }, {
+            title: '创建时间',
+            dataIndex: 'createDate',
+            key: 'createDate'
+        }, {
+            title: '备注',
+            dataIndex: 'comment',
+            key: 'comment'
+        }, {
+            title: '操作',
+            dataIndex: 'operation',
+            render: (text, record, index) => {
+                return (
+                    <div>
+                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
+                            <a href="#">删除</a>
+                        </Popconfirm>
+                    </div>
+                );
+            },
+        }];
+
+        const columns_tab2 = [{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '类别名称',
+            dataIndex: 'name',
+            key: 'name'
         }, {
             title: '创建时间',
             dataIndex: 'createDate',
@@ -475,7 +565,7 @@ class BeautyOrder extends React.Component {
                                         <Button>新增</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button>删除</Button>
+                                        <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除</Button>
                                     </Col>
                                 </Row>
 
@@ -483,7 +573,7 @@ class BeautyOrder extends React.Component {
                                     <Col span={24}>
                                         <Table
                                             rowSelection={rowSelection}
-                                            columns={columns}
+                                            columns={columns_tab2}
                                             dataSource={this.state.data}
                                             bordered
                                         />
