@@ -9,9 +9,9 @@ public interface ExpendOrderDao {
 	
 	void save(ExpendOrder expendOrder);
 
-	List<ExpendOrder> listByDate(Date date);
+	List<ExpendOrder> listByDate(Date date , int from , int pageSize);
 	
-	List<ExpendOrder> listByMonth(Date date);
+	List<ExpendOrder> listByMonth(Date date , int from , int pageSize);
 
-	List<ExpendOrder> listByWeek();
+	List<ExpendOrder> listByWeek(int from , int pageSize);
 }

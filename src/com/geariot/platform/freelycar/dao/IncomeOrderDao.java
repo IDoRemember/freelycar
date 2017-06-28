@@ -10,12 +10,12 @@ public interface IncomeOrderDao {
 	
 	void save(IncomeOrder incomeOrder);
 	
-	List<IncomeOrder> listByDate(Date date);
+	List<IncomeOrder> listByDate(Date date , int from , int pageSize);
 	
-	List<IncomeOrder> listByMonth(Date date);
+	List<IncomeOrder> listByMonth(Date date , int from , int pageSize);
 
 	List<Object[]> listMonthStat(Date start, Date end);
 	
-	List<IncomeOrder> listByWeek();
+	List<IncomeOrder> listByWeek(int from , int pageSize);
 	
 }

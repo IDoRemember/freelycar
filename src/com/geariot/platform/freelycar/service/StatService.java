@@ -34,10 +34,11 @@ public class StatService {
 	@Autowired
 	private IncomeOrderDao incomeOrderDao;
 	
-	public String getToday(int income, int expend) {
+	public String getToday(int income, int expend , int page , int number) {
 		Date today = new Date();
+		int from = (page - 1) * number;
 		if (income == 0 && expend == 1) {
-			List<ExpendOrder> list = expendOrderDao.listByDate(today);
+			List<ExpendOrder> list = expendOrderDao.listByDate(today, from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -49,17 +50,17 @@ public class StatService {
 					expendStat = expendStat + expendOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("expendStat", expendStat);
 			return obj.toString();
 		}
 		else if(income == 1 && expend ==0 ){
-			List<IncomeOrder> list = incomeOrderDao.listByDate(today);
+			List<IncomeOrder> list = incomeOrderDao.listByDate(today, from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -71,18 +72,18 @@ public class StatService {
 					incomeStat = incomeStat + incomeOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		}
 		else if(income ==1 && expend ==1){
-			List<ExpendOrder> expendList = expendOrderDao.listByDate(today);
-			List<IncomeOrder> incomeList = incomeOrderDao.listByDate(today);
+			List<ExpendOrder> expendList = expendOrderDao.listByDate(today, from, number);
+			List<IncomeOrder> incomeList = incomeOrderDao.listByDate(today, from, number);
 			float incomeStat = 0;
 			float expendStat = 0;
 			if (expendList == null || expendList.isEmpty()) {
@@ -110,10 +111,11 @@ public class StatService {
 		
 	}
 	
-	public String thisMonth(int income , int expend){
+	public String thisMonth(int income , int expend , int page , int number){
 		Date today = new Date();
+		int from = ( page - 1 ) * number;
 		if (income == 0 && expend == 1) {
-			List<ExpendOrder> list = expendOrderDao.listByMonth(today);
+			List<ExpendOrder> list = expendOrderDao.listByMonth(today, from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -125,16 +127,16 @@ public class StatService {
 					expendStat = expendStat + expendOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("expendStat", expendStat);
 			return obj.toString();
 		} else if (income == 1 && expend == 0) {
-			List<IncomeOrder> list = incomeOrderDao.listByMonth(today);
+			List<IncomeOrder> list = incomeOrderDao.listByMonth(today, from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -146,17 +148,17 @@ public class StatService {
 					incomeStat = incomeStat + incomeOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		}else if(income==1 && expend ==1){
-			List<ExpendOrder> expendList = expendOrderDao.listByMonth(today);
-			List<IncomeOrder> incomeList = incomeOrderDao.listByMonth(today);
+			List<ExpendOrder> expendList = expendOrderDao.listByMonth(today, from, number);
+			List<IncomeOrder> incomeList = incomeOrderDao.listByMonth(today, from, number);
 			float expendStat = 0;
 			if (expendList == null || expendList.isEmpty()) {
 				expendStat = 0;
@@ -204,9 +206,10 @@ public class StatService {
 	}
 	
 	
-	public String weeklyStatDetail(int income , int expend){
+	public String weeklyStatDetail(int income , int expend , int page , int number){
+		int from = ( page - 1 ) * number;
 		if (income == 0 && expend == 1) {
-			List<ExpendOrder> list = expendOrderDao.listByWeek();
+			List<ExpendOrder> list = expendOrderDao.listByWeek(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -218,17 +221,17 @@ public class StatService {
 					expendStat = expendStat + expendOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("expendStat", expendStat);
 			return obj.toString();
 		}
 		else if(income == 1 && expend ==0 ){
-			List<IncomeOrder> list = incomeOrderDao.listByWeek();
+			List<IncomeOrder> list = incomeOrderDao.listByWeek(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
@@ -240,12 +243,12 @@ public class StatService {
 					incomeStat = incomeStat + incomeOrder.getAmount();
 				}
 			}
-			long size = (long) list.size();
+			long realSize = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		}
