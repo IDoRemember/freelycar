@@ -16,4 +16,6 @@ public interface IncomeOrderDao {
 
 	List<Object[]> listMonthStat(Date start, Date end);
 	
+	List<IncomeOrder> listByWeek();
+	
 }

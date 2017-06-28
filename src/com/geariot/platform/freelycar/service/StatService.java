@@ -34,14 +34,20 @@ public class StatService {
 	@Autowired
 	private IncomeOrderDao incomeOrderDao;
 	
-	public String getToday(Date today, int income, int expend) {
-		if(today == null){
-			today = new Date();
-		}
+	public String getToday(int income, int expend) {
+		Date today = new Date();
 		if (income == 0 && expend == 1) {
 			List<ExpendOrder> list = expendOrderDao.listByDate(today);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			float expendStat = 0;
+			if (list == null || list.isEmpty()) {
+				expendStat = 0;
+			} else {
+				for (ExpendOrder expendOrder : list) {
+					expendStat = expendStat + expendOrder.getAmount();
+				}
 			}
 			long size = (long) list.size();
 			JsonConfig config = new JsonConfig();
@@ -49,6 +55,7 @@ public class StatService {
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("expendStat", expendStat);
 			return obj.toString();
 		}
 		else if(income == 1 && expend ==0 ){
@@ -56,12 +63,21 @@ public class StatService {
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
+			float incomeStat = 0;
+			if (list == null || list.isEmpty()) {
+				incomeStat = 0;
+			} else {
+				for (IncomeOrder incomeOrder : list) {
+					incomeStat = incomeStat + incomeOrder.getAmount();
+				}
+			}
 			long size = (long) list.size();
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		}
 		else if(income ==1 && expend ==1){
@@ -94,11 +110,8 @@ public class StatService {
 		
 	}
 	
-	public String thisMonth(Date today , int income , int expend){
-		if(today == null)
-		{
-			today = new Date();
-		}
+	public String thisMonth(int income , int expend){
+		Date today = new Date();
 		if (income == 0 && expend == 1) {
 			List<ExpendOrder> list = expendOrderDao.listByMonth(today);
 			if (list == null || list.isEmpty()) {
@@ -173,4 +186,54 @@ public class StatService {
 	}
 	
 	
+	public String weeklyStatDetail(int income , int expend){
+		if (income == 0 && expend == 1) {
+			List<ExpendOrder> list = expendOrderDao.listByWeek();
+			if (list == null || list.isEmpty()) {
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			float expendStat = 0;
+			if (list == null || list.isEmpty()) {
+				expendStat = 0;
+			} else {
+				for (ExpendOrder expendOrder : list) {
+					expendStat = expendStat + expendOrder.getAmount();
+				}
+			}
+			long size = (long) list.size();
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("expendStat", expendStat);
+			return obj.toString();
+		}
+		else if(income == 1 && expend ==0 ){
+			List<IncomeOrder> list = incomeOrderDao.listByWeek();
+			if (list == null || list.isEmpty()) {
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			float incomeStat = 0;
+			if (list == null || list.isEmpty()) {
+				incomeStat = 0;
+			} else {
+				for (IncomeOrder incomeOrder : list) {
+					incomeStat = incomeStat + incomeOrder.getAmount();
+				}
+			}
+			long size = (long) list.size();
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("incomeStat", incomeStat);
+			return obj.toString();
+		}
+		else{
+			return JsonResFactory.buildOrg(RESCODE.WRONG_PARAM).toString();
+		}
+		
+	}
 }

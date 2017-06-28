@@ -66,5 +66,12 @@ public class ExpendOrderDaoImpl implements ExpendOrderDao{
 		String hql = "from ExpendOrder where payDate >= :date1 and payDate < :date2";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime()).list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ExpendOrder> listByWeek() {
+		String hql = "from ExpendOrder where YEARWEEK(date_format(payDate,'%Y-%m-%d')) = YEARWEEK(now())";
+		return this.getSession().createQuery(hql).list();
+	}
 	
 }

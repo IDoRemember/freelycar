@@ -116,5 +116,12 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		return this.getSession().createSQLQuery(sb.toString()).setDate("start", start).setDate("end", end)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IncomeOrder> listByWeek() {
+		String hql = "from IncomeOrder where YEARWEEK(date_format(payDate,'%Y-%m-%d')) = YEARWEEK(now())";
+		return this.getSession().createQuery(hql).list();
+	}
 	
 }

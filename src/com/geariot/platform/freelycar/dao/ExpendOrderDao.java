@@ -12,4 +12,6 @@ public interface ExpendOrderDao {
 	List<ExpendOrder> listByDate(Date date);
 	
 	List<ExpendOrder> listByMonth(Date date);
+
+	List<ExpendOrder> listByWeek();
 }
