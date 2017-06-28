@@ -57,8 +57,8 @@ const routes = < Route path={"/"} components={Page} >
         </Route>
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
-            <Route path={"incomeSearch/incomedetail"} component={IncomeDetail} />
-            <Route path={"incomeSearch/paydetail"} component = {PayDetail}/>
+            <Route path={"incomeSearch/incomedetail/:mode"} component={IncomeDetail} />
+            <Route path={"incomeSearch/paydetail/:mode"} component = {PayDetail}/>
             <Route path={"historyAccount"} component={HistoricalAccount} />
             <Route path={"historyIncomeDetail/:incomeId"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail/:outcomeId"} component={HistoryOutcomeDetail} />

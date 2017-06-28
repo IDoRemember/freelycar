@@ -133,7 +133,6 @@ class ProviderManage extends React.Component {
                             this.setState({
                                 data: datalist,
                                 pagination: { total: result.realSize },
-
                             })
                         }
                     }
