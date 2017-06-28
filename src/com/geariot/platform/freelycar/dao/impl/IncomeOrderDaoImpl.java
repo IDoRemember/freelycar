@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
+import com.geariot.platform.freelycar.utils.Constants;
 
 @Repository
 public class IncomeOrderDaoImpl implements IncomeOrderDao {
@@ -71,14 +72,49 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime()).list();
 	}
-	
-	@Override
-	public void test(){
-//		String hql = "select sum(amount)  from IncomeOrder where payDate > '2017-01-01' and "
-//				+ "payDate < '2017-05-30' group by DATE_FORMAT(payDate,'%Y-%m')";
-		String hql = "select new com.geariot.platform.freelycar.utils.query.MonthStat(i.sum(amount), e.sum(amount), payDate) "
-				+ "from IncomeOrder i, ExpendOrder e where payDate > '2017-01-01' and payDate < '2017-05-31' group by DATE_FORMAT(payDate, '%Y-%m')";
-		System.out.println(this.getSession().createQuery(hql).list());
-	}
 
+	
+	/*
+	 * 完整sql查询语句：
+	 * FROM
+			(
+			SELECT
+				i.amount AS income,
+				0 AS expend,
+				DATE_FORMAT(i.payDate, '%Y-%m') AS payDate
+			FROM
+				incomeorder AS i
+			WHERE
+				i.payDate > '2017-01-01'
+			AND i.payDate < '2017-12-31'
+			UNION
+				SELECT
+					0 AS income,
+					e.amount AS expend,
+					DATE_FORMAT(e.payDate, '%Y-%m') AS payDate
+				FROM
+					expendorder AS e
+				WHERE
+					e.payDate > '2017-01-01'
+				AND e.payDate < '2017-12-31'
+			) AS t
+		GROUP BY
+			payDate;
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> listMonthStat(Date start, Date end) {
+		StringBuilder sb = new StringBuilder("SELECT SUM(income), SUM(expend), payDate ");
+		sb.append("FROM (");
+		sb.append("SELECT i.amount AS income,0 AS expend,DATE_FORMAT(i.payDate, '%Y-%m') AS payDate FROM incomeorder AS i ");
+		sb.append("WHERE i.payDate >= :start AND i.payDate <= :end");
+		sb.append(" UNION ");
+		sb.append("SELECT 0 AS income,e.amount AS expend,DATE_FORMAT(e.payDate, '%Y-%m') AS payDate FROM expendorder AS e ");
+		sb.append("WHERE e.payDate >= :start AND e.payDate <= :end");
+		sb.append(") AS t ");
+		sb.append("GROUP BY payDate");
+		return this.getSession().createSQLQuery(sb.toString()).setDate("start", start).setDate("end", end)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+	
 }

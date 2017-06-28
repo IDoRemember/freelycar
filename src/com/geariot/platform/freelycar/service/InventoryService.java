@@ -231,9 +231,10 @@ public class InventoryService {
 		}
 		long realSize = this.inventoryDao.getCount();
 		int size = (int) Math.ceil(realSize/(double)number);
-		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig(Set.class));
+		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig());
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 

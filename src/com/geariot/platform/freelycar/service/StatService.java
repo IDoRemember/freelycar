@@ -1,6 +1,8 @@
 package com.geariot.platform.freelycar.service;
 
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.MonthStat;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -148,9 +151,26 @@ public class StatService {
 		}
 		
 	}
-	
-	public void test(){
-		this.incomeOrderDao.test();
+
+	public String monthlyByYear(Date selectYear) {
+		Calendar start = Calendar.getInstance();
+		Calendar end = Calendar.getInstance();
+		start.setTime(selectYear);
+		end.setTime(selectYear);
+		start.set(Calendar.MONTH, 0);
+		start.set(Calendar.DAY_OF_MONTH, 1);
+		end.set(Calendar.MONTH, 11);
+		end.set(Calendar.DAY_OF_MONTH, 31);
+		System.out.println(start.getTime());
+		System.out.println(end.getTime());
+		List<Object[]> rss = this.incomeOrderDao.listMonthStat(start.getTime(), end.getTime());
+		List<MonthStat> list = new ArrayList<>();
+		for(Object[] rs : rss){
+			list.add(new MonthStat(Double.valueOf(String.valueOf(rs[0])), Double.valueOf(String.valueOf(rs[1])), 
+					String.valueOf(rs[2])));
+		}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
 	}
+	
 	
 }
