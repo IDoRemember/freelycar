@@ -126,7 +126,7 @@ class PayDetail extends React.Component {
                 <Card>
                     <div className="table-operations">
                         <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>本周</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
                         <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
                     </div>
                     <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{}</span></div>

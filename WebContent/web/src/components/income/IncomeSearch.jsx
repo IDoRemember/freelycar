@@ -68,7 +68,6 @@ class IncomeSearch extends React.Component {
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
-                today:new Date('2017/06/27'),
                 income: 1,
                 expend: 1
             },
