@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal,Form, Popconfirm } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import { Link } from 'react-router';
@@ -40,20 +40,30 @@ class BeautyOrder extends React.Component {
             form: {
                 name: '',
                 programId: '',
+                program: '',
                 price: '',
                 referWorkTime: '',
                 pricePerUnit: '',
                 comment: ''
             },
-            programItem:[]
+            programItem: [],
+            projName: '',//条件查询的项目名称
+            progId: '',//条件查询的项目类别id
+            pagination:{}
         }
     }
 
+    //初始化数据
     componentDidMount() {
 
         this.loadData(1, 10);
         this.loadProgram();
 
+    }
+
+    //条件查询
+    queryData = () => {
+        this.loadData(1, 10, this.state.projName, this.state.progId);
     }
 
 
@@ -88,7 +98,7 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate });
+                    this.setState({ data: tableDate ,pagination: { total: res.realSize }, });
                 }
 
             }
@@ -103,7 +113,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let programItem = [];//表格显示的数据
@@ -122,11 +131,13 @@ class BeautyOrder extends React.Component {
 
 
 
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    handleChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
         this.setState({
-
-        });
+            pagination: pager
+        })
+        this.loadData(pagination.current, 10)
     }
 
     //tab切换函数
@@ -145,47 +156,39 @@ class BeautyOrder extends React.Component {
 
 
     handleOk = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
 
         let form = this.state.form;
+        var obj = {};
+        obj.name = form.name;
+        obj.price = form.price;
+        obj.referWorkTime = form.referWorkTime;
+        obj.pricePerUnit = form.pricePerUnit;
+        obj.comment = form.comment;
+        obj.program = { id: form.programId };
+
         $.ajax({
             type: 'post',
             url: 'api/project/add',
-            //contentType:'application/json;charset=utf-8',
+            contentType: 'application/json;charset=utf-8',
             dataType: 'json',
-            data: {
-                name: form.name,
-                programId: form.programId,
-                price:form.price,
-                referWorkTime:form.referWorkTime,
-                pricePerUnit:form.pricePerUnit,
-                comment:form.comment
-             
-            },
+            data: JSON.stringify(obj),
             success: (result) => {
                 console.log(result);
+                let code = result.code;
 
+                if (code == '0') {
 
+                    obj.program = result.data.program.name;
+                    obj.key = result.data.id;
 
-                // let newdata = {
-                //     key: result.data.id,
-                //     id: result.data.id,
-                //     name: result.data.name,
-                //     linkman: result.data.contactName,
-                //     phonenumber: result.data.phone,
-                //     landline: result.data.landline,
-                //     mail: result.data.email,
-                //     address: result.data.address,
-                //     remarks: result.data.comment,
-                //     createTime: result.data.createDate
-                // }
-                // this.setState({
-                //     data: update(this.state.data, { $push: [newdata] }),
-                //     pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                // })
+                    this.setState({
+                        data: [...this.state.data, obj],
+                    });
+                }
+
             }
         });
 
@@ -196,13 +199,18 @@ class BeautyOrder extends React.Component {
 
     }
 
-    //
+    //为state的form
     onValueChange = (key, value) => {
-        this.setState({
-            form: update(this.state.form, { [key]: { $set: value } })
-        })
+        if (key == 'program') {
+            console.log(value);
+            this.setState({
+                form: update(this.state.form, { ['program']: { $set: value.label }, ['programId']: { $set: value.key } })
+            })
+        } else
+            this.setState({
+                form: update(this.state.form, { [key]: { $set: value } })
+            })
     }
-
 
 
     handleCancel = (e) => {
@@ -219,7 +227,6 @@ class BeautyOrder extends React.Component {
     }
 
     onDelete = (idArray) => {
-        console.log(idArray);
         $.ajax({
             url: '/api/project/delete',
             data: { projectIds: idArray },
@@ -250,23 +257,6 @@ class BeautyOrder extends React.Component {
         });
 
 
-    }
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
     }
 
     render() {
@@ -336,7 +326,7 @@ class BeautyOrder extends React.Component {
 
 
         return (
-            <div>
+            <div >
                 <BreadcrumbCustom first="产品管理" second="项目管理" />
 
                 <Card>
@@ -346,16 +336,23 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={8}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="项目名称" />
+                                            <Input addonBefore="项目名称" value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                         </div>
                                     </Col>
                                     <Col span={4}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="项目类别" />
+                                            <Select addonBefore="项目类别"
+                                                    style={{ width: '100%' }}
+                                                    onChange={(e)=> this.setState({progId:e})}
+                                            >
+                                                {this.state.programItem}
+                                            </Select>
+
+
                                         </div>
                                     </Col>
                                     <Col span={8}>
-                                        <Button type="primary">查询</Button>
+                                        <Button type="primary" onClick={this.queryData}>查询</Button>
                                     </Col>
                                 </Row>
                                 <Row>
@@ -391,9 +388,10 @@ class BeautyOrder extends React.Component {
                                                 hasFeedback
                                             >
                                                 {/*<Input value={this.state.form.program} onChange={(e) => this.onValueChange('program', e.target.value)} />*/}
-                                                 <Select
+                                                <Select
                                                     style={{ width: '100%' }}
-                                                    onChange={(e) => this.onValueChange('programId', e.target.value)}
+                                                    onChange={(value) => this.onValueChange('program', value)}
+                                                    labelInValue
                                                 >
                                                     {this.state.programItem}
                                                 </Select>
@@ -426,7 +424,7 @@ class BeautyOrder extends React.Component {
                                                 label="备注"
                                                 hasFeedback
                                             >
-                                                <Input value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)}  />
+                                                <Input value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
                                             </FormItem>
                                         </Form>
 
@@ -445,6 +443,8 @@ class BeautyOrder extends React.Component {
                                             columns={columns}
                                             dataSource={this.state.data}
                                             bordered
+                                            pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handleChange(pagination)}
                                         />
                                     </Col>
                                 </Row>
@@ -493,7 +493,7 @@ class BeautyOrder extends React.Component {
                         </TabPane>
                     </Tabs>
                 </Card>
-            </div>
+            </div >
         );
     }
 }
