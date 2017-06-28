@@ -30,8 +30,8 @@ public class ProgramController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("program:delete")
-	public String deleteProgram(int programId){
-		return programService.deleteProgram(programId);
+	public String deleteProgram(Integer... programIds){
+		return programService.deleteProgram(programIds);
 	}
 	
 	@RequestMapping(value = "/listall" , method = RequestMethod.GET)

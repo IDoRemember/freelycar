@@ -27,7 +27,7 @@ public class StatController {
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
-	public String selectDate(Date startDate , Date endDate){
+	public String selectDate(Date startDate , Date endDate , int page , int number){
 		return null;
 	}
 	
