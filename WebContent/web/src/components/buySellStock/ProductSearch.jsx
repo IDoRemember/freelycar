@@ -4,22 +4,29 @@ import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import AjaxGet from '../../utils/ajaxGet'
+import update from 'immutability-helper'
 import $ from 'jquery'
 import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table } from 'antd';
 const Option = Select.Option,
     SubMenu = Menu.SubMenu,
-    TreeNode = TreeSelect.TreeNode;
+    Search = Input.Search
 class ProductSearch extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            option: [],
+            options: [],
+            pagination: {},
+            tradeName: '',
+            category: '',
             theme: 'light',
             current: '1',
             conlums: [{
                 title: '序号',
                 dataIndex: 'index',
-                key: 'index'
+                key: 'index',
+                render: (text, record, index) => {
+                    return <span>{index + 1}</span>
+                }
             }, {
                 title: '库存编号',
                 dataIndex: 'number',
@@ -62,40 +69,29 @@ class ProductSearch extends React.Component {
                 dataIndex: 'phone',
                 key: 'phone'
             }],
-            data: [{
-                key: '1',
-                index: '1',
-                number: '1111222233333',
-                name: '涵涵',
-                category: '美容保养',
-                time: 'John Brown',
-                actualIncome: 32,
-                phone: '18362981113',
-            }, {
-                key: '2',
-                index: '2',
-                time: 'John Brown',
-                actualIncome: 32,
-                actualPay: 'New York No. 1 Lake Park',
-            }, {
-                key: '3',
-                index: '3',
-                time: 'John Brown',
-                actualIncome: 32,
-                actualPay: 'New York No. 1 Lake Park',
-            }, {
-                key: '4',
-                index: '4',
-                time: 'John Brown',
-                actualIncome: 32,
-                actualPay: 'New York No. 1 Lake Park',
-            }]
+            data: []
         }
     }
     componentDidMount() {
-        this.getList(1,10)
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
+        this.getList(1, 10)
+        this.getTypeList(1, 10)
+    }
+    getTypeList = (page, pageSize) => {
+        $.ajax({
+            url: 'api/inventory/listtype',
+            data: {
+                page: page,
+                pagination: {},
+                number: pageSize
+            },
+            success: (result) => {
+                if (result.code == '0') {
+                    console.log(result)
+                    for (let item of result.data) {
+                        this.setState({ options: update(this.state.options, { $push: [item] }) })
+                    }
+                }
+            }
         })
     }
     getList = (page, pageSize) => {
@@ -111,6 +107,7 @@ class ProductSearch extends React.Component {
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
+                            key: result.data[i].id,
                             number: result.data[i].id,
                             id: result.data[i].id,
                             name: result.data[i].name,
@@ -121,15 +118,14 @@ class ProductSearch extends React.Component {
                             price: result.data[i].price,
                             stock: result.data[i].amount,
                             supplier: result.data[i].providers.name,
-                            createDate:result.data[i].createDate,
-                            phone:result.data[i].providers.phone
+                            createDate: result.data[i].createDate,
+                            phone: result.data[i].providers.phone
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
                             this.setState({
                                 data: datalist,
                                 pagination: { total: result.realSize },
-
                             })
                         }
                     }
@@ -137,44 +133,80 @@ class ProductSearch extends React.Component {
             },
         })
     }
+    handleChange = (value) => {
+        this.setState({
+            category: value
+        })
+    }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getList(pagination.current, 10)
+    }
     handleClick = (e) => {
         console.log('click ', e);
         this.setState({
             current: e.key,
         });
     }
-    render() {
-        const plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+    startQuery = () => {
+        $.ajax({
+            type: 'GET',
+            url: 'api/inventory/querytype',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                name: this.state.category,
+                page: 1,
+                number: 10
+            },
+            traditional: true,
+            success: (result) => {
+                if (result.code == "0") {
+
+                }
+                console.log(result)
+            }
         })
+    }
+    render() {
+        const plateOptions = [...new Set(this.state.options)].map((item, index) => {
+            return <Option key={index} value={item.typeName + ''}>{item.typeName}</Option>
+        });
         return <div>
             <BreadcrumbCustom first="进销存管理" second="库存查询" />
             <Card>
                 <div>
-                    <span>商品名：</span>
-                    <TreeSelect showSearch
-                        style={{ width: '300px' }}
-                        placeholder="输入供应商名称"
-                        allowClear
-                        treeDefaultExpandAll
-                        optionFilterProp="children"
-                        onChange={this.handleChange}
-                        dropdownStyle={{ maxHeight: 400, overflow: 'auto' }}
-                    >
-                        <TreeNode value="parent 1" title="parent 1" key="0-1">
-                            <TreeNode value="parent 1-0" title="parent 1-0" key="0-1-1">
-                                <TreeNode value="leaf1" title="my leaf" key="random" />
-                                <TreeNode value="leaf2" title="your leaf" key="random1" />
-                            </TreeNode>
-                            <TreeNode value="parent 1-1" title="parent 1-1" key="random2">
-                                <TreeNode value="sss" title={<b style={{ color: '#08c' }}>sss</b>} key="random3" />
-                            </TreeNode>
-                        </TreeNode>
-                    </TreeSelect>
-                    <Button type="primary" style={{ margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
-                    < Table className="accountTable" bordered columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} />
-                </div>
-                <div>
+                    <Row gutter={24} style={{ marginBottom: '10px' }}>
+                        <Col span={10} style={{ verticalAlign: 'middle' }}>
+                            商品名：<Search
+                                placeholder="输入商品名称"
+                                style={{ width: '200px', marginBottom: '10px' }}
+                                onSearch={value => console.log(value)}
+                                onChange={e => this.setState({ tradeName: e.target.value })}
+                                value={this.state.tradeName}
+                            />
+                        </Col>
+                        <Col span={10} style={{ verticalAlign: 'middle' }}>
+                            商品类别：<Select
+                                showSearch
+                                style={{ width: '200px' }}
+                                placeholder="选择商品类别进行搜索"
+                                optionFilterProp="children"
+                                onChange={(value) => this.handleChange(value)}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {plateOptions}
+                            </Select>
+                            <Button onClick={() => this.startQuery()} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+
+                        </Col>
+                    </Row>
+                    < Table pagination={this.state.pagination} bordered columns={this.state.conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />
                 </div>
             </Card>
         </div>

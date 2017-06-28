@@ -142,7 +142,7 @@ class IncomeSearch extends React.Component {
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实际收入">
                                     <h1>¥{this.state.incomeStat}</h1>
-                                    <p><Link to='/app/incomeManage/incomeSearch/incomedetail' activeClassName="active">详情</Link></p>
+                                    <p><Link to={'/app/incomeManage/incomeSearch/incomedetail/'+this.state.mode} activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
                         </Col>
@@ -150,7 +150,7 @@ class IncomeSearch extends React.Component {
                             <div style={{ background: '#ECECEC', padding: '30px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="实际支出">
                                     <h1>¥{this.state.expendStat}</h1>
-                                    <p><Link to='/app/incomeManage/incomeSearch/paydetail' activeClassName="active">详情</Link></p>
+                                    <p><Link to={'/app/incomeManage/incomeSearch/paydetail/'+this.state.mode} activeClassName="active">详情</Link></p>
                                 </Card>
                             </div>
                         </Col>
