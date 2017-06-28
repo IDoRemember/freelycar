@@ -36,7 +36,7 @@ public class StatController {
 		return statService.monthlyByYear(selectYear);
 	}
 
-	@RequestMapping(value = "/thisweek/detail" , method = RequestMethod.GET)
+	@RequestMapping(value = "/thisweek" , method = RequestMethod.GET)
 	public String weeklyStatDetail(int income , int expend){
 		return statService.weeklyStatDetail(income, expend);
 	}

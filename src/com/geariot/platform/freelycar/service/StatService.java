@@ -117,17 +117,13 @@ public class StatService {
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 			}
-			long size = (long) list.size();
-			JsonConfig config = new JsonConfig();
-			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-			JSONArray jsonArray = JSONArray.fromObject(list , config);
-			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-			obj.put(Constants.RESPONSE_SIZE_KEY, size);
-			return obj.toString();
-		} else if (income == 1 && expend == 0) {
-			List<IncomeOrder> list = incomeOrderDao.listByMonth(today);
+			float expendStat = 0;
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				expendStat = 0;
+			} else {
+				for (ExpendOrder expendOrder : list) {
+					expendStat = expendStat + expendOrder.getAmount();
+				}
 			}
 			long size = (long) list.size();
 			JsonConfig config = new JsonConfig();
@@ -135,11 +131,32 @@ public class StatService {
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("expendStat", expendStat);
+			return obj.toString();
+		} else if (income == 1 && expend == 0) {
+			List<IncomeOrder> list = incomeOrderDao.listByMonth(today);
+			if (list == null || list.isEmpty()) {
+				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			}
+			float incomeStat = 0;
+			if (list == null || list.isEmpty()) {
+				incomeStat = 0;
+			} else {
+				for (IncomeOrder incomeOrder : list) {
+					incomeStat = incomeStat + incomeOrder.getAmount();
+				}
+			}
+			long size = (long) list.size();
+			JsonConfig config = new JsonConfig();
+			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+			JSONArray jsonArray = JSONArray.fromObject(list , config);
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		}else if(income==1 && expend ==1){
 			List<ExpendOrder> expendList = expendOrderDao.listByMonth(today);
 			List<IncomeOrder> incomeList = incomeOrderDao.listByMonth(today);
-			float incomeStat = 0;
 			float expendStat = 0;
 			if (expendList == null || expendList.isEmpty()) {
 				expendStat = 0;
@@ -148,6 +165,7 @@ public class StatService {
 					expendStat = expendStat + expendOrder.getAmount();
 				}
 			}
+			float incomeStat = 0;
 			if (incomeList == null || incomeList.isEmpty()) {
 				incomeStat = 0;
 			} else {
