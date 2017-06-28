@@ -30,7 +30,7 @@ public class ProjectService {
 		project.setCreateDate(new Date());
 		//project.getInventoryInfos();
 		projectDao.save(project);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",new JSONObject(project)).toString();
 	}
 	
 	public String deleteProject(Integer... projectIds){
@@ -89,6 +89,7 @@ public class ProjectService {
 			JSONArray jsonArray = JSONArray.fromObject(list, config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 			return obj.toString();
 		}
 		else{

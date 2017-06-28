@@ -10,7 +10,7 @@ public interface ProjectDao {
 	
 	Project findProjectById(int projectId);
 	
-	void save(Project project);
+	String save(Project project);
 	
 	void delete(Project project);
 	

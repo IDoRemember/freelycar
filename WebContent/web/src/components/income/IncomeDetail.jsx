@@ -5,38 +5,13 @@ import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
+import $ from 'jquery';
 import { Link } from 'react-router';
 
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
 
 //表格
-const data = [{
-    key: '1',
-    index:'1',
-    time: 'John Brown',
-    actualIncome: 32,
-    actualPay: 'New York No. 1 Lake Park',
-}, {
-    key: '2',
-    index:'2',
-    time: 'John Brown',
-    actualIncome: 32,
-    actualPay: 'New York No. 1 Lake Park',
-}, {
-    key: '3',
-    index:'3',
-    time: 'John Brown',
-    actualIncome: 32,
-    actualPay: 'New York No. 1 Lake Park',
-}, {
-    key: '4',
-    index:'4',
-    time: 'John Brown',
-    actualIncome: 32,
-    actualPay: 'New York No. 1 Lake Park',
-}];
-
 class IncomeDetail extends React.Component {
     constructor(props) {
         super(props)
@@ -45,14 +20,47 @@ class IncomeDetail extends React.Component {
             sortedInfo: null,
             selectedRowKeys: [],
             loading: false,
+            data: []
         }
     }
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    componentDidMount() {
+        this.getIncomeExpend(this.props.params.mode)
+    }
+    componentWillReceiveProps(newprops) {
+        this.getIncomeExpend(this.props.params.mode)
+    }
+    getIncomeExpend = (mode) => {
+        $.ajax({
+            url: 'api/stat/' + mode,
+            data: {
+                income: 1,
+                expend: 0
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    let data = result.data
+                    for (let item of data) {
+                        item['key'] = item.id
+                    }
+                    if (data[data.length - 1]['key']) {
+                        this.setState({
+                            incomeStat: result.incomeStat,
+                            data: data,
+                            pagination: { total: result.size },
+                        })
+                    }
+                }
+            }
+        })
+    }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
+            pagination: pager
+        })
+        this.getIncomeExpend(this.props.params.mode)
     }
     clearFilters = () => {
         this.setState({ filteredInfo: null });
@@ -71,40 +79,49 @@ class IncomeDetail extends React.Component {
             },
         });
     }
-
-
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [{
-            title:'序号',
-            dataIndex:'index',
-            key:'index'
-        },{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '车牌号',
+            dataIndex: 'licensePlate',
+            key: 'licensePlate',
+
+        }, {
             title: '时间',
-            dataIndex: 'time',
-            key: 'time'
+            dataIndex: 'payDate',
+            key: 'payDate'
         }, {
-            title: '实收金额',
-            dataIndex: 'actualIncome',
-            key: 'actualMoney'
+            title: '项目',
+            dataIndex: 'type',
+            key: 'type',
+            render: (text, record, index) => {
+                return <span>{text == 1 ? '消费' : '办卡'}</span>
+            }
         }, {
-            title: '实际支出',
-            dataIndex: 'actualPay',
-            key: 'actualPay'
+            title: '金额',
+            dataIndex: 'amount',
+            key: 'amount'
         }];
         return (
             <div>
                 <BreadcrumbCustom first="收支查询" second="收入明细" />
                 <Card>
                     <div className="table-operations">
-                        <Button onClick={this.setAgeSort}>当日</Button>
-                        <Button onClick={this.clearFilters}>本周</Button>
-                        <Button onClick={this.clearAll}>本月</Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
                     </div>
-                    <div style={{color:'red',margin:'30px 0',fontSize:'18px'}}>合计金额：<span>2400</span></div>
-                    <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{this.state.incomeStat}</span></div>
+                    <Table bordered columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
                 </Card>
             </div>
         );

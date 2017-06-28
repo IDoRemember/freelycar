@@ -59,18 +59,31 @@ public class ProgramService {
 		return obj.toString();
 	}
 	
-	public String deleteProgram(int programId){
-		Program exist = programDao.findProgramByProgramId(programId);
-		JSONObject obj = null;
-		if(exist == null){
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteProgram(Integer... programIds){
+		int count = 0;
+		for(int programId : programIds){
+			Program exist = programDao.findProgramByProgramId(programId);
+			if(exist == null){
+				count++;
+			}
+			else{
+				programDao.delete(programId);
+				projectDao.deleteByprogramId(programId);	
+			}
+		}
+		if(count !=0){
+			String tips = "共"+count+"条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+			long realSize = programDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
 		else{
-			programDao.delete(programId);
-			projectDao.deleteByprogramId(programId);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			long realSize = programDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
-		return obj.toString();
 	}
 	
 	public String getProgramList(){

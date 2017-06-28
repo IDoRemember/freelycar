@@ -1,29 +1,28 @@
 package com.geariot.platform.freelycar.utils.query;
 
 public class MonthStat {
-//	public MonthStat(){}
 	
-	public MonthStat(float income, float expend, String payDate) {
+	public MonthStat(double income, double expend, String payDate) {
 		this.income = income;
 		this.expend = expend;
 		this.payDate = payDate;
 	}
-	private float income;
-	private float expend;
+	private double income;
+	private double expend;
 	private String payDate;
-	public float getExpend() {
+	public double getExpend() {
 		return expend;
 	}
-	public float getIncome() {
+	public double getIncome() {
 		return income;
 	}
 	public String getPayDate() {
 		return payDate;
 	}
-	public void setExpend(float expend) {
+	public void setExpend(double expend) {
 		this.expend = expend;
 	}
-	public void setIncome(float income) {
+	public void setIncome(double income) {
 		this.income = income;
 	}
 	public void setPayDate(String payDate) {

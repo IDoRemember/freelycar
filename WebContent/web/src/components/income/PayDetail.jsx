@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-
+import $ from 'jquery';
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
 
@@ -19,28 +19,28 @@ const data = [{
     payment: '采购入库',
     money: 32,
     paymentTime: '2017-5-23 14:00:08',
-    Remarks:'无'
+    Remarks: '无'
 }, {
     key: '2',
     index: '2',
     payment: '固定支出',
     money: 32,
     paymentTime: '2017-5-23 14:00:08',
-    Remarks:'无'
+    Remarks: '无'
 }, {
     key: '3',
     index: '3',
     payment: '固定支出',
     money: 32,
     paymentTime: '2017-5-23 14:00:08',
-    Remarks:'无'
+    Remarks: '无'
 }, {
     key: '4',
     index: '4',
     payment: '采购入库',
     money: 32,
     paymentTime: '2017-5-23 14:00:08',
-    Remarks:'无'
+    Remarks: '无'
 }];
 
 class PayDetail extends React.Component {
@@ -52,6 +52,26 @@ class PayDetail extends React.Component {
             selectedRowKeys: [],
             loading: false,
         }
+    }
+    componentDidMount() {
+        this.getIncomeExpend(this.props.params.mode)
+    }
+    getIncomeExpend = (mode) => {
+        $.ajax({
+            url: 'api/stat/' + mode,
+            data: {
+                income: 0,
+                expend: 1
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    this.setState({
+                        incomeStat: result.incomeStat,
+                        expendStat: result.expendStat
+                    })
+                }
+            }
+        })
     }
     handleChange = (pagination, filters, sorter) => {
         console.log('Various parameters', pagination, filters, sorter);
@@ -105,11 +125,11 @@ class PayDetail extends React.Component {
                 <BreadcrumbCustom first="收支查询" second="支出明细" />
                 <Card>
                     <div className="table-operations">
-                        <Button onClick={this.setAgeSort}>当日</Button>
-                        <Button onClick={this.clearFilters}>本周</Button>
-                        <Button onClick={this.clearAll}>本月</Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
                     </div>
-                    <div style={{color:'red',margin:'30px 0',fontSize:'18px'}}>合计金额：<span>2400</span></div>
+                    <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{}</span></div>
                     <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
                 </Card>
             </div>

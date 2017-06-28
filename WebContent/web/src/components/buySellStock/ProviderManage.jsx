@@ -133,7 +133,6 @@ class ProviderManage extends React.Component {
                             this.setState({
                                 data: datalist,
                                 pagination: { total: result.realSize },
-
                             })
                         }
                     }
@@ -151,7 +150,6 @@ class ProviderManage extends React.Component {
         this.setState({
             visible: false,
         });
-
         console.log(this.state.form.name);
         $.ajax({
             type: 'post',
@@ -195,9 +193,6 @@ class ProviderManage extends React.Component {
             visible: false,
         });
     }
-    handleSelected = (value) => {
-        this.setState({ queryValue: value })
-    }
     startQuery = () => {
         $.ajax({
             type: 'GET',
@@ -212,7 +207,7 @@ class ProviderManage extends React.Component {
             traditional: true,
             success: (result) => {
                 if (result.code == "0") {
-                 let datalist = []
+                    let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
                             key: result.data[i].id,
@@ -302,15 +297,22 @@ class ProviderManage extends React.Component {
         });
         return <div>
             <BreadcrumbCustom first="产品管理" second="供应商管理" />
-            <Card>
-                <div style={{ marginBottom: '40px' }}>
+            <Card>   {/*onSelect={(value) => this.handleSelected(value)}*/}
+                <div style={{ marginBottom: '40px' }} id="provider-area">
                     <span>供应商名称：</span>
                     <Select showSearch
+                        mode="combobox"
                         style={{ width: '200px' }}
                         placeholder="输入供应商名称"
+                        allowClear={true}
                         optionFilterProp="children"
-                        onChange={(value)=>this.handleSelected(value)}
+                        value={this.state.queryValue}
+                        defaultActiveFirstOption={false}
+                        onChange={(value) => {this.setState({queryValue:value})}}
+                        onBlur={(value)=>{this.setState({queryValue:value})}}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                        getPopupContainer={() => document.getElementById('provider-area')}
+                        dropdownStyle = {(!this.state.queryValue||this.state.queryValue.length<2)?{display:'none'}:{}}
                     >
                         {plateOptions}
                     </Select>
