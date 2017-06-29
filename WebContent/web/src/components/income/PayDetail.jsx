@@ -54,21 +54,32 @@ class PayDetail extends React.Component {
         }
     }
     componentDidMount() {
-        this.getIncomeExpend(this.props.params.mode)
+        this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
-    getIncomeExpend = (mode) => {
+    getIncomeExpend = (mode, page, number) => {
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
                 income: 0,
-                expend: 1
+                expend: 1,
+                page: page,
+                number: number
             },
             success: (result) => {
                 if (result.code == "0") {
-                    this.setState({
-                        incomeStat: result.incomeStat,
-                        expendStat: result.expendStat
-                    })
+                    if (result.code == "0") {
+                        let data = result.data
+                        for (let item of data) {
+                            item['key'] = item.id
+                        }
+                        if (data[data.length - 1]['key']) {
+                            this.setState({
+                                expendStat: result.expendStat,
+                                data: data,
+                                pagination: { total: result.realSize },
+                            })
+                        }
+                    }
                 }
             }
         })

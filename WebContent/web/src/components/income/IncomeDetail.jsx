@@ -24,17 +24,19 @@ class IncomeDetail extends React.Component {
         }
     }
     componentDidMount() {
-        this.getIncomeExpend(this.props.params.mode)
+        this.getIncomeExpend(this.props.params.mode,1,10)
     }
     componentWillReceiveProps(newprops) {
-        this.getIncomeExpend(this.props.params.mode)
+        this.getIncomeExpend(this.props.params.mode,1,10)
     }
-    getIncomeExpend = (mode) => {
+    getIncomeExpend = (mode,page,number) => {
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
                 income: 1,
-                expend: 0
+                expend: 0,
+                page:page,
+                number:number
             },
             success: (result) => {
                 if (result.code == "0") {
@@ -46,7 +48,7 @@ class IncomeDetail extends React.Component {
                         this.setState({
                             incomeStat: result.incomeStat,
                             data: data,
-                            pagination: { total: result.size },
+                            pagination: { total: result.realSize },
                         })
                     }
                 }

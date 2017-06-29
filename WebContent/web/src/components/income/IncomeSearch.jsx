@@ -69,7 +69,9 @@ class IncomeSearch extends React.Component {
             url: 'api/stat/' + mode,
             data: {
                 income: 1,
-                expend: 1
+                expend: 1,
+                page:1,
+                number:10
             },
             success: (result) => {
                 if (result.code == "0") {
