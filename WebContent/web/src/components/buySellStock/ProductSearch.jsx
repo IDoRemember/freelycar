@@ -16,6 +16,7 @@ class ProductSearch extends React.Component {
         this.state = {
             options: [],
             pagination: {},
+            name:null,
             tradeName: '',
             category: '',
             theme: 'light',
@@ -73,7 +74,7 @@ class ProductSearch extends React.Component {
         }
     }
     componentDidMount() {
-        this.getList(1, 10)
+        this.getList(null,null,1, 10)
         this.getTypeList(1, 10)
     }
     getTypeList = (page, pageSize) => {
@@ -94,10 +95,12 @@ class ProductSearch extends React.Component {
             }
         })
     }
-    getList = (page, pageSize) => {
+    getList = (name, typeId,page, pageSize) => {
         $.ajax({
             url: 'api/inventory/list',
             data: {
+                name:name,
+                typeId:typeId,
                 page: page,
                 number: pageSize
             },
@@ -145,7 +148,12 @@ class ProductSearch extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.getList(pagination.current, 10)
+        if(this.state.category>-1){
+            this.getList(null,this.state.category,pagination.current, 10)
+        } else {
+            this.getList(this.state.tradeName,-1,pagination.current, 10)
+        }
+        
     }
     handleClick = (e) => {
         console.log('click ', e);
@@ -153,30 +161,10 @@ class ProductSearch extends React.Component {
             current: e.key,
         });
     }
-    startQuery = (name,typeId) => {
-        $.ajax({
-            type: 'GET',
-            url: 'api/inventory/list',
-            // contentType:'application/json;charset=utf-8',
-            dataType: 'json',
-            data: {
-                name: name,
-                typeId:typeId,
-                page: 1,
-                number: 10
-            },
-            traditional: true,
-            success: (result) => {
-                if (result.code == "0") {
-
-                }
-                console.log(result)
-            }
-        })
-    }
+   
     render() {
         const plateOptions = [...new Set(this.state.options)].map((item, index) => {
-            return <Option key={index} value={item.id+''}>{item.typeName}</Option>
+            return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
         });
         return <div>
             <BreadcrumbCustom first="进销存管理" second="库存查询" />
@@ -187,7 +175,7 @@ class ProductSearch extends React.Component {
                             商品名：<Search
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
-                                onSearch={value =>this.startQuery(value,-1)}
+                                onSearch={value => this.getList(value, -1,1,10)}
                                 onChange={e => this.setState({ tradeName: e.target.value })}
                                 value={this.state.tradeName}
                             />
@@ -203,7 +191,7 @@ class ProductSearch extends React.Component {
                             >
                                 {plateOptions}
                             </Select>
-                            <Button onClick={() => this.startQuery('',this.state.category)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+                            <Button onClick={() => this.getList(null, this.state.category,1,10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
 
                         </Col>
                     </Row>
