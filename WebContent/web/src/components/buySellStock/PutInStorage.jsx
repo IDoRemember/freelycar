@@ -39,6 +39,7 @@ class PutInStorage extends React.Component {
             this.setState({ option: res.data })
         })
     }
+    
     render() {
         const projectOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
