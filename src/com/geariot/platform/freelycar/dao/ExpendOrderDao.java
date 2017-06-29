@@ -14,4 +14,10 @@ public interface ExpendOrderDao {
 	List<ExpendOrder> listByMonth(Date date , int from , int pageSize);
 
 	List<ExpendOrder> listByWeek(int from , int pageSize);
+	
+	List<ExpendOrder> listByDate(Date date);
+	
+	List<ExpendOrder> listByMonth(Date date);
+
+	List<ExpendOrder> listByWeek();
 }

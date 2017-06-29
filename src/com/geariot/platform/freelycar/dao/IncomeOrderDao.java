@@ -18,4 +18,10 @@ public interface IncomeOrderDao {
 	
 	List<IncomeOrder> listByWeek(int from , int pageSize);
 	
+	List<IncomeOrder> listByDate(Date date);
+	
+	List<IncomeOrder> listByMonth(Date date);
+	
+	List<IncomeOrder> listByWeek();
+	
 }
