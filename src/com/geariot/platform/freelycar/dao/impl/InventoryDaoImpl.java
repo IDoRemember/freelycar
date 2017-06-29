@@ -46,6 +46,7 @@ public class InventoryDaoImpl implements InventoryDao {
 	public List<Inventory> list(String andCondition, int from, int number) {
 		StringBuffer basic = new StringBuffer("from Inventory");
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+System.out.println("库存查询语句：" + hql.toString());
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(number)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
