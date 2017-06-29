@@ -225,8 +225,8 @@ public class InventoryService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String listInventory(String name, int typeId, int page, int number) {
-		String andCondition = new InventoryAndQueryCreator(name, String.valueOf(typeId)).createStatement();
+	public String listInventory(String name, Integer typeId, int page, int number) {
+		String andCondition = new InventoryAndQueryCreator(name, typeId.toString()).createStatement();
 		int from = (page - 1) * number;
 		List<Inventory> list = this.inventoryDao.list(andCondition, from, number);
 		if(list == null || list.isEmpty()){
