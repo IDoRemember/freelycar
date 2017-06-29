@@ -16,27 +16,26 @@ class IncomeDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
+            pagination: {},
             selectedRowKeys: [],
             loading: false,
             data: []
         }
     }
     componentDidMount() {
-        this.getIncomeExpend(this.props.params.mode,1,10)
+        this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
     componentWillReceiveProps(newprops) {
-        this.getIncomeExpend(this.props.params.mode,1,10)
+        this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
-    getIncomeExpend = (mode,page,number) => {
+    getIncomeExpend = (mode, page, number) => {
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
                 income: 1,
                 expend: 0,
-                page:page,
-                number:number
+                page: page,
+                number: number
             },
             success: (result) => {
                 if (result.code == "0") {
@@ -51,6 +50,12 @@ class IncomeDetail extends React.Component {
                             pagination: { total: result.realSize },
                         })
                     }
+                } else if (result.code == "2") {
+                    this.setState({
+                        expendStat: 0,
+                        data: [],
+                        pagination: { total: 0 }
+                    })
                 }
             }
         })
@@ -62,7 +67,7 @@ class IncomeDetail extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.getIncomeExpend(this.props.params.mode)
+        this.getIncomeExpend(this.props.params.mode, pagination.current, 10)
     }
     clearFilters = () => {
         this.setState({ filteredInfo: null });
@@ -123,7 +128,7 @@ class IncomeDetail extends React.Component {
                         <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
                     </div>
                     <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{this.state.incomeStat}</span></div>
-                    <Table bordered columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
+                    <Table bordered pagination={this.state.pagination} columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
                 </Card>
             </div>
         );

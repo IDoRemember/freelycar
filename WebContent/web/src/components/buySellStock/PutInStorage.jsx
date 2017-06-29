@@ -4,12 +4,14 @@ import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, I
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
+import PartsSearch from '../model/PartsSearch.jsx'
 const Option = Select.Option;
 class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            id:'',
+            id: '',
+            view:false,
             data: [{
                 key: 1,
                 index: 1,
@@ -39,7 +41,21 @@ class PutInStorage extends React.Component {
             this.setState({ option: res.data })
         })
     }
-    
+     handleCancel = () => {
+        this.setState({
+            view: false
+        })
+    }
+    handleOk = () => {
+        this.setState({
+            view: false
+        })
+    }
+    handleSelected = (data)=>{
+        this.setState({
+            data:update(this.state.data,{$push:[...data]})
+        })
+    }
     render() {
         const projectOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
@@ -59,6 +75,9 @@ class PutInStorage extends React.Component {
                         <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
                     </Col>
                 </Row>
+                <Button type="primary" style={{ marginLeft: '10px' ,marginBottom:'10px'}}  onClick={()=>{this.setState({view:true})}} size={'large'}>添加配件入库</Button>
+
+                <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk} handleSelected={this.handleSelected}></PartsSearch>
                 <Table className="accountTable" dataSource={this.state.data} bordered>
                     <Col
                         title="序号"

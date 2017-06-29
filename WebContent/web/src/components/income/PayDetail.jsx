@@ -12,48 +12,19 @@ import { Link } from 'react-router';
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
 
-//表格
-const data = [{
-    key: '1',
-    index: '1',
-    payment: '采购入库',
-    money: 32,
-    paymentTime: '2017-5-23 14:00:08',
-    Remarks: '无'
-}, {
-    key: '2',
-    index: '2',
-    payment: '固定支出',
-    money: 32,
-    paymentTime: '2017-5-23 14:00:08',
-    Remarks: '无'
-}, {
-    key: '3',
-    index: '3',
-    payment: '固定支出',
-    money: 32,
-    paymentTime: '2017-5-23 14:00:08',
-    Remarks: '无'
-}, {
-    key: '4',
-    index: '4',
-    payment: '采购入库',
-    money: 32,
-    paymentTime: '2017-5-23 14:00:08',
-    Remarks: '无'
-}];
-
 class PayDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
+            pagination: {},
             selectedRowKeys: [],
             loading: false,
         }
     }
     componentDidMount() {
+        this.getIncomeExpend(this.props.params.mode, 1, 10)
+    }
+    componentWillReceiveProps(newprops) {
         this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
     getIncomeExpend = (mode, page, number) => {
@@ -80,16 +51,24 @@ class PayDetail extends React.Component {
                             })
                         }
                     }
+                }else if (result.code == "2") {
+                    this.setState({
+                        expendStat:0,
+                        data:[],
+                        pagination:{total: 0}
+                    })
                 }
             }
         })
     }
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
         this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
+            pagination: pager
+        })
+        this.getIncomeExpend(this.props.params.mode, pagination.current, 10)
     }
     clearFilters = () => {
         this.setState({ filteredInfo: null });
@@ -117,31 +96,34 @@ class PayDetail extends React.Component {
         const columns = [{
             title: '支出项目',
             dataIndex: 'payment',
-            key: 'payment'
+            key: 'payment',
+            render:(text,record,index)=>{
+                return <span>{text=='0'?'商品入库':'其他'}</span>
+            }
         }, {
             title: '金额',
-            dataIndex: 'money',
-            key: 'money'
+            dataIndex: 'amount',
+            key: 'amount'
         }, {
             title: '支出时间',
-            dataIndex: 'paymentTime',
-            key: 'paymentTime'
+            dataIndex: 'payDate',
+            key: 'payDate'
         }, {
             title: '备注',
-            dataIndex: 'Remarks',
-            key: 'Remarks'
+            dataIndex: 'comment',
+            key: 'comment'
         }];
         return (
             <div>
                 <BreadcrumbCustom first="收支查询" second="支出明细" />
                 <Card>
                     <div className="table-operations">
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/today'>当日</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/thisweek'>本周</Link></Button>
+                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/thismonth'>本月</Link></Button>
                     </div>
-                    <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{}</span></div>
-                    <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{this.state.expendStat}</span></div>
+                    <Table bordered pagination={this.state.pagination} columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
                 </Card>
             </div>
         );
