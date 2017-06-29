@@ -156,7 +156,7 @@ public class InventoryService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String deleteInventory(Integer[] inventoryIds) {
+	public String deleteInventory(String... inventoryIds) {
 		int success = this.inventoryDao.delete(Arrays.asList(inventoryIds));
 		if(success == 0){
 			return JsonResFactory.buildOrg(RESCODE.DELETE_ERROR).toString();

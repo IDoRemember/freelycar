@@ -78,7 +78,7 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:delete")
-	public String delete(Integer... inventoryIds){
+	public String delete(String... inventoryIds){
 		return this.inventoryService.deleteInventory(inventoryIds);
 	}
 	

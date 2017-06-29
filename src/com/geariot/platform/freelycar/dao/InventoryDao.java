@@ -7,7 +7,7 @@ import com.geariot.platform.freelycar.entities.Inventory;
 public interface InventoryDao {
 	void add(Inventory inventory);
 
-	int delete(List<Integer> inventoryIds);
+	int delete(List<String> inventoryIds);
 	
 	Inventory findById(String id);
 
