@@ -29,7 +29,7 @@ public class InventoryDaoImpl implements InventoryDao {
 	}
 
 	@Override
-	public int delete(List<Integer> inventoryIds) {
+	public int delete(List<String> inventoryIds) {
 		String hql = "delete from Inventory where id in :ids";
 		return this.getSession().createQuery(hql).setParameterList("ids", inventoryIds).executeUpdate();
 	}
