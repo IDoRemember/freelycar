@@ -161,7 +161,7 @@ class ProductSearch extends React.Component {
             current: e.key,
         });
     }
-   
+    
     render() {
         const plateOptions = [...new Set(this.state.options)].map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
