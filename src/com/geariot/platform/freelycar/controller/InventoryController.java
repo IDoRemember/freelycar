@@ -103,7 +103,7 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String listInventory(String name, int typeId, int page , int number){
+	public String listInventory(String name, String typeId, int page , int number){
 		return this.inventoryService.listInventory(name, typeId, page, number);
 	}
 	
