@@ -24,4 +24,9 @@ public class CarController {
 		return this.carService.findClientByLicensePlate(licensePlate);
 	}
 	
+	@RequestMapping(value="/listbrand", method=RequestMethod.GET)
+	public String getBrands(){
+		return this.carService.listBrand();
+	}
+	
 }
