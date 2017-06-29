@@ -28,7 +28,7 @@ public class StatController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	public String selectDate(Date startTime , Date endTime , int income , int expend , int page , int number){
-		return null;
+		return statService.selectDate(startTime, endTime, income, expend, page, number);
 	}
 	
 	@RequestMapping(value = "/monthlybyyear" , method = RequestMethod.GET)
@@ -41,7 +41,7 @@ public class StatController {
 		return statService.weeklyStatDetail(income, expend, page, number);
 	}
 	
-
+	
 }
 
 

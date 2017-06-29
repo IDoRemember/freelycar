@@ -43,7 +43,6 @@ public class StaffController {
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("staff:query")
 	public String getSelectStaff(String staffId , String staffName , int page , int number){
-		//System.out.println(staffId+","+staffName);
 		return staffService.getSelectStaff(staffId, staffName, page, number);
 	}
 	
