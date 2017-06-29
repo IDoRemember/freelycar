@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.entities.Car;
+import com.geariot.platform.freelycar.entities.CarBrand;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.model.RESCODE;
@@ -50,6 +51,13 @@ public class CarServive {
 		config.setJsonPropertyFilter(filter);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				net.sf.json.JSONObject.fromObject(car.getClient(), config)).toString();
+	}
+
+	public String listBrand() {
+		List<CarBrand> list = this.carDao.listBrand();
+		JsonConfig config = JsonResFactory.dateConfig(CarBrand.class);
+		net.sf.json.JSONArray array = net.sf.json.JSONArray.fromObject(list, config);
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array).toString();
 	}
 	
 	

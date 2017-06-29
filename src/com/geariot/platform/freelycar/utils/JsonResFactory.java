@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.utils;
 
-import java.sql.Date;
+
+import java.util.Date;
 
 import org.json.JSONObject;
 
