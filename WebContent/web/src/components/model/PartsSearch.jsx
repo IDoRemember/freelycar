@@ -18,6 +18,13 @@ const columns = [{
     dataIndex: 'partName',
     key: 'partName'
 }, {
+    title: '配件类别',
+    dataIndex: 'category',
+    key: 'category',
+    render: (text, record, index) => {
+        return <span>{text.typeName}</span>
+    }
+}, {
     title: '规格属性',
     dataIndex: 'attribute',
     key: 'attribute'
@@ -39,14 +46,16 @@ class IncomeDetail extends React.Component {
         super(props)
         this.state = {
             loading: false,
+            selectedRows:[],
             visible: this.props.view,
             partName: '',
+            tradeName:'',
             pagination: {},
             data: []
         }
     }
     componentDidMount() {
-        this.getList(null, null, 1, 5)
+        this.getList(null, null, 1, 10)
     }
     componentWillReceiveProps(newProps) {
         if (newProps.view != this.state.visible) {
@@ -70,13 +79,15 @@ class IncomeDetail extends React.Component {
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
-                            key: result.data[i].id,
+                            rowKey: result.data[i].id,
                             partId: result.data[i].id,
                             partName: result.data[i].name,
                             attribute: result.data[i].property,
                             price: result.data[i].price,
                             inventory: result.data[i].amount,
-                            comment: result.data[i].comment
+                            category: result.data[i].type,
+                            comment: result.data[i].comment,
+                            providers: result.data[i].providers
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
@@ -90,13 +101,20 @@ class IncomeDetail extends React.Component {
             },
         })
     }
+    setSearchName = ()=>{
+        this.setState({
+            tradeName: e.target.value
+        })
+    }
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-               
-                this.props.handleSelected(selectedRows)
+                this.setState({
+                    selectedRows: selectedRows
+                })
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             },
+
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
@@ -105,11 +123,11 @@ class IncomeDetail extends React.Component {
             visible={this.state.visible}
             width={800}
             title="配件查询"
-            onOk={this.props.handleOk}
-            onCancel={this.props.handleCancel}
+            onOk={()=>this.props.handleOk(this.state.selectedRows)}
+            onCancel={()=>this.props.handleCancel()}
             footer={[
-                <Button key="back" size="large" onClick={this.props.handleCancel}>取消</Button>,
-                <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={this.props.handleOk}>
+                <Button key="back" size="large" onClick={()=>this.props.handleCancel()}>取消</Button>,
+                <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={()=>this.props.handleOk(this.state.selectedRows)}>
                     确认
             </Button>
             ]}
@@ -120,7 +138,7 @@ class IncomeDetail extends React.Component {
                         placeholder="可按配件名称、类型等进行搜索"
                         style={{ width: '200px', marginBottom: '10px' }}
                         onSearch={value => this.getList(value, -1, 1, 10)}
-                        onChange={e => this.setState({ tradeName: e.target.value })}
+                        onChange={e => this.setSearchName( e.target.value)}
                         value={this.state.partName}
                     />
                 </Col>
@@ -128,7 +146,7 @@ class IncomeDetail extends React.Component {
                     <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
                 </Col>
             </Row>
-            <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
+            <Table loading={this.state.data?false:true} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>
     }
 }

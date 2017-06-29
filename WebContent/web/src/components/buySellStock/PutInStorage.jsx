@@ -5,23 +5,15 @@ import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'
+import update from 'immutability-helper'
 const Option = Select.Option;
 class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             id: '',
-            view:false,
-            data: [{
-                key: 1,
-                index: 1,
-                partNumber: 'p2342232',
-                name: '玻璃水',
-                category: '美容保养',
-                specification: '通用',
-                singleSummation: '20',
-                number: '1111'
-            }],
+            view: false,
+            data: [],
             option: []
         }
     }
@@ -41,25 +33,48 @@ class PutInStorage extends React.Component {
             this.setState({ option: res.data })
         })
     }
-     handleCancel = () => {
+    handleCancel = () => {
         this.setState({
             view: false
         })
     }
-    handleOk = () => {
+    modeShow = () => {
+        console.log(this.state.view)
         this.setState({
-            view: false
+            view: true
         })
     }
-    handleSelected = (data)=>{
+    handleOk = (data) => {
+        console.log(data)
+        let datalist = this.state.data
+        if (datalist.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let same = 0;
+                for (let j = 0; j < datalist.length; j++) {
+                    if (data[i].partId == datalist[j].partId) {
+                        same++
+                    }
+                }
+                if (same == 0) {
+                    datalist.push(data[i])
+                }
+            }
+        } else {
+            datalist.push(...data)
+        }
+
         this.setState({
-            data:update(this.state.data,{$push:[...data]})
+            view: false,
+            data: datalist
+        })
+
+    }
+    changeNumber = (value, index) => {
+        this.setState({
+            data: update(this.state.data, { [index]: { ['number']: { $set: value } } })
         })
     }
     render() {
-        const projectOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
-        })
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card>
@@ -75,55 +90,62 @@ class PutInStorage extends React.Component {
                         <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
                     </Col>
                 </Row>
-                <Button type="primary" style={{ marginLeft: '10px' ,marginBottom:'10px'}}  onClick={()=>{this.setState({view:true})}} size={'large'}>添加配件入库</Button>
+                <Button type="primary" style={{ marginLeft: '10px', marginBottom: '10px' }} onClick={() => this.modeShow()} size={'large'}>添加配件入库</Button>
 
-                <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk} handleSelected={this.handleSelected}></PartsSearch>
-                <Table className="accountTable" dataSource={this.state.data} bordered>
+                <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
+                <Table loading={this.state.data?false:true} className="accountTable" dataSource={this.state.data} bordered>
                     <Col
                         title="序号"
                         dataIndex="index"
                         key="index"
+                        render={(text, record, index) => { return <span>{index + 1}</span> }}
                     />
                     <Col
                         title="配件编号"
-                        dataIndex="partNumber"
-                        key="partNumber"
+                        dataIndex="partId"
+                        key="partId"
                     />
                     <Col
                         title="配件名称"
-                        key="name"
-                        dataIndex="name"
+                        key="partName"
+                        dataIndex="partName"
                     />
                     <Col
                         title="配件类别"
-                        key="category"
+                        key=" category"
                         dataIndex="category"
+                        render={(text, record, index) => {
+                            return <span>{text.typeName}</span>
+                        }}
                     />
                     <Col
                         title="规格属性"
-                        key="specification"
-                        dataIndex="specification"
+                        key="attribute"
+                        dataIndex="attribute"
                     />
                     <Col
                         title="单价"
-                        key="singleSummation"
-                        dataIndex="singleSummation"
+                        key="price"
+                        dataIndex="price"
                     />
                     <Col
                         title="数量"
                         key="number"
                         dataIndex="number"
-                        render={() => {
-                            return <InputNumber min={1} style={{ width: '100px' }} />
+                        render={(text, record, index) => {
+                            return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeNumber(value, index)} />
                         }}
                     />
                     <Col
                         title="供应商"
                         key="supplier"
                         dataIndex="supplier"
-                        render={(text) => {
+                        render={(text, record, index) => {
+                            const providersOptions = record.providers.map((item, index) => {
+                                return <Option key={item.id} value={item.id + ''}>{item.name}</Option>
+                            })
                             if (text) {
-                                return <span> </span>
+                                return <span>{text}</span>
                             } else {
                                 return <Select showSearch
                                     style={{ width: '100px' }}
@@ -132,7 +154,7 @@ class PutInStorage extends React.Component {
                                     onChange={this.handleChange}
                                     filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 >
-                                    {projectOptions}
+                                    {providersOptions}
                                 </Select>
                             }
                         }}
@@ -141,6 +163,9 @@ class PutInStorage extends React.Component {
                         title="单项合计"
                         key="DeductionCardTime"
                         dataIndex="DeductionCardTime"
+                        render={(text, record, index) => {
+                            return <span>{record.number ? record.number * record.price : record.price}</span>
+                        }}
                     />
                     <Col
                         title="操作"
