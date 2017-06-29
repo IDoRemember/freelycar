@@ -226,7 +226,7 @@ public class InventoryService {
 	}
 
 	public String listInventory(String name, Integer typeId, int page, int number) {
-		String andCondition = new InventoryAndQueryCreator(name, typeId.toString()).createStatement();
+		String andCondition = new InventoryAndQueryCreator(name, String.valueOf(typeId)).createStatement();
 		int from = (page - 1) * number;
 		List<Inventory> list = this.inventoryDao.list(andCondition, from, number);
 		if(list == null || list.isEmpty()){
