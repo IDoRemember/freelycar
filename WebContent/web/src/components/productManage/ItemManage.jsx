@@ -49,8 +49,8 @@ class BeautyOrder extends React.Component {
             programItem: [],
             projName: '',//条件查询的项目名称
             progId: '',//条件查询的项目类别id
-            pagination:{},
-            tabkey:1
+            pagination: {},
+            tabkey: 1
         }
     }
 
@@ -99,7 +99,7 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate ,pagination: { total: res.realSize }, });
+                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
                 }
 
             }
@@ -109,10 +109,8 @@ class BeautyOrder extends React.Component {
 
 
     //获取数据的函数
-    loadDataTab2 = (page, number, proName, programId) => {
+    loadDataTab2 = (page, number) => {
         let jsonData = {};
-        jsonData.name = proName;
-        jsonData.programId = programId;
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
@@ -132,14 +130,12 @@ class BeautyOrder extends React.Component {
                         for (let item in obj) {
                             if (item == 'id')
                                 tableItem.key = obj[item];
-                            else if (item == 'program')
-                                tableItem.program = obj[item].name;
                             else
                                 tableItem[item] = obj[item];
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate ,pagination: { total: res.realSize }, });
+                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
                 }
 
             }
@@ -178,20 +174,27 @@ class BeautyOrder extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.loadData(pagination.current, 10);
+
+        let tabkey = this.state.tabkey;
+        if (tabkey == 1) {
+            this.loadData(pagination.current, 10);
+        } else if (tabkey == 2) {
+            this.loadDataTab2(pagination.current, 10);
+        }
+
     }
 
     //tab切换函数
     tabCallback = (key) => {
-        if(key==1){
+        if (key == 1) {
             this.loadData(1, 10);
             this.loadProgram();
-        }else if(key==2){
-            this.loadDataTab2(1,10);
+        } else if (key == 2) {
+            this.loadDataTab2(1, 10);
         }
 
         //async
-        this.setState({tabkey:key});
+        this.setState({ tabkey: key });
     }
 
 
@@ -278,15 +281,18 @@ class BeautyOrder extends React.Component {
     onDelete = (idArray) => {
         let tabkey = this.state.tabkey;
         let url = '';
-        if(tabkey == 1){
+        let data = {};
+        if (tabkey == 1) {
             url = '/api/project/delete';
-        } else if (tabkey == 2){
+            data = { projectIds: idArray };
+        } else if (tabkey == 2) {
             url = '/api/program/delete';
+            data = { programIds: idArray };
         }
 
         $.ajax({
             url: url,
-            data: { projectIds: idArray },
+            data: data,
             dataType: 'json',
             type: 'post',
             traditional: true,
@@ -432,8 +438,8 @@ class BeautyOrder extends React.Component {
                                     <Col span={4}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Select addonBefore="项目类别"
-                                                    style={{ width: '100%' }}
-                                                    onChange={(e)=> this.setState({progId:e})}
+                                                style={{ width: '100%' }}
+                                                onChange={(e) => this.setState({ progId: e })}
                                             >
                                                 {this.state.programItem}
                                             </Select>
@@ -465,59 +471,87 @@ class BeautyOrder extends React.Component {
                                         width='50%'
                                     >
                                         <Form onSubmit={this.changehandleSubmit}>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="项目名称"
-                                                hasFeedback
-                                            >
-                                                <Input value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="项目类别"
-                                                hasFeedback
-                                            >
-                                                {/*<Input value={this.state.form.program} onChange={(e) => this.onValueChange('program', e.target.value)} />*/}
-                                                <Select
-                                                    style={{ width: '100%' }}
-                                                    onChange={(value) => this.onValueChange('program', value)}
-                                                    labelInValue
-                                                >
-                                                    {this.state.programItem}
-                                                </Select>
 
+                                            <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                <Col span={10} offset={2}>
+                                                    <FormItem {...formItemLayout}
+                                                        label="项目名称"
+                                                        hasFeedback
+                                                    >
+                                                        <Input value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                                    </FormItem>
+                                                </Col>
+                                                <Col span={10} >
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="项目类别"
+                                                        hasFeedback
+                                                    >
+                                                        <Select
+                                                            style={{ width: '100%' }}
+                                                            onChange={(value) => this.onValueChange('program', value)}
+                                                            labelInValue
+                                                        >
+                                                            {this.state.programItem}
+                                                        </Select>
+                                                    </FormItem>
+                                                </Col>
+                                            </Row>
 
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="项目价格"
-                                                hasFeedback
-                                            >
-                                                <Input value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="参考工时"
-                                                hasFeedback
-                                            >
-                                                <Input value={this.state.form.referWorkTime} onChange={(e) => this.onValueChange('referWorkTime', e.target.value)} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="工时单价"
-                                                hasFeedback
-                                            >
-                                                <Input value={this.state.form.pricePerUnit} onChange={(e) => this.onValueChange('pricePerUnit', e.target.value)} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="备注"
-                                                hasFeedback
-                                            >
-                                                <Input value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
-                                            </FormItem>
+                                            <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                <Col span={10} offset={2}>
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="项目价格"
+                                                        hasFeedback
+                                                    >
+                                                        <Input value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
+                                                    </FormItem>
+                                                </Col>
+                                                <Col span={10} >
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="参考工时"
+                                                        hasFeedback
+                                                    >
+                                                        <Input value={this.state.form.referWorkTime} onChange={(e) => this.onValueChange('referWorkTime', e.target.value)} />
+                                                    </FormItem>
+                                                </Col>
+                                            </Row>
+
+                                            <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                <Col span={10} offset={2}>
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="备注"
+                                                        hasFeedback
+                                                    >
+                                                        <Input value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
+                                                    </FormItem>
+                                                </Col>
+                                                <Col span={10} >
+                                                    <FormItem
+                                                        {...formItemLayout}
+                                                        label="参考工时"
+                                                        hasFeedback
+                                                    >
+                                                        <Input value={this.state.form.referWorkTime} onChange={(e) => this.onValueChange('referWorkTime', e.target.value)} />
+                                                    </FormItem>
+                                                </Col>
+                                            </Row>
+
+                                            <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                <Table
+                                                    rowSelection={rowSelection}
+                                                    columns={columns}
+                                                    dataSource={this.state.data}
+                                                    bordered
+                                                    pagination={this.state.pagination}
+                                                    onChange={(pagination) => this.handleChange(pagination)}
+                                                />
+                                            </Row>
+
                                         </Form>
-
 
 
                                     </Modal>
@@ -542,23 +576,6 @@ class BeautyOrder extends React.Component {
                         </TabPane>
                         <TabPane tab="项目类别" key="2">
                             <div>
-                                <Row>
-                                    <Col span={4}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="类别名称" />
-                                        </div>
-                                    </Col>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
-                                    <Col span={5}>
-                                        <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Button type="primary" onClick={this.showModal} >查询</Button>
-                                    </Col>
-                                </Row>
-
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
@@ -576,6 +593,8 @@ class BeautyOrder extends React.Component {
                                             columns={columns_tab2}
                                             dataSource={this.state.data}
                                             bordered
+                                            pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handleChange(pagination)}
                                         />
                                     </Col>
                                 </Row>
