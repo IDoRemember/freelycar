@@ -103,8 +103,7 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/list" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String listInventory(String name, Integer typeId, int page , int number){
-System.out.println("库存查询接收到的参数: name:" + name + ", typeId:" + typeId);
+	public String listInventory(String name, String typeId, int page , int number){
 		return this.inventoryService.listInventory(name, typeId, page, number);
 	}
 	
