@@ -124,5 +124,43 @@ public class ExpendOrderDaoImpl implements ExpendOrderDao{
 		String hql = "from ExpendOrder where YEARWEEK(date_format(payDate,'%Y-%m-%d')) = YEARWEEK(now())";
 		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ExpendOrder> listByDateRange(Date startTime, Date endTime, int from, int pageSize) {
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTimeInMillis(startTime.getTime());
+		cal1.set(Calendar.DATE, 1);
+		cal1.set(Calendar.HOUR, 0);
+		cal1.set(Calendar.MINUTE, 0);
+		cal1.set(Calendar.SECOND, 0);
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTimeInMillis(endTime.getTime());
+		cal2.set(Calendar.HOUR, 23);
+		cal2.set(Calendar.MINUTE, 59);
+		cal2.set(Calendar.SECOND, 59);
+		String hql = "from ExpendOrder where payDate >= :date1 and payDate <= :date2";
+		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ExpendOrder> listByDateRange(Date startTime, Date endTime) {
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTimeInMillis(startTime.getTime());
+		cal1.set(Calendar.DATE, 1);
+		cal1.set(Calendar.HOUR, 0);
+		cal1.set(Calendar.MINUTE, 0);
+		cal1.set(Calendar.SECOND, 0);
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTimeInMillis(endTime.getTime());
+		cal2.set(Calendar.HOUR, 23);
+		cal2.set(Calendar.MINUTE, 59);
+		cal2.set(Calendar.SECOND, 59);
+		String hql = "from ExpendOrder where payDate >= :date1 and payDate <= :date2";
+		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
 	
 }
