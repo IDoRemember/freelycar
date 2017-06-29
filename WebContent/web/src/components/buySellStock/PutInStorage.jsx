@@ -74,7 +74,24 @@ class PutInStorage extends React.Component {
             data: update(this.state.data, { [index]: { ['number']: { $set: value } } })
         })
     }
+    handleSelectedChange = (value, index) => {
+        this.setState({
+            data: update(this.state.data, { [index]: { ['providerId']: { $set: value } } })
+        })
+    }
+    onDelete = (index) => {
+        const dataSource = [...this.state.data];
+        dataSource.splice(index, 1);
+        this.setState({ data:dataSource });
+    }
+    saveData = ()=>{
+        
+    }
     render() {
+        let totalPrice = 0
+        for (let item of this.state.data) {
+            totalPrice = totalPrice + (item.number ? item.price * item.number : item.price)
+        }
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card>
@@ -93,7 +110,7 @@ class PutInStorage extends React.Component {
                 <Button type="primary" style={{ marginLeft: '10px', marginBottom: '10px' }} onClick={() => this.modeShow()} size={'large'}>添加配件入库</Button>
 
                 <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
-                <Table loading={this.state.data?false:true} className="accountTable" dataSource={this.state.data} bordered>
+                <Table loading={this.state.data ? false : true} className="accountTable" dataSource={this.state.data} bordered>
                     <Col
                         title="序号"
                         dataIndex="index"
@@ -147,11 +164,15 @@ class PutInStorage extends React.Component {
                             if (text) {
                                 return <span>{text}</span>
                             } else {
-                                return <Select showSearch
+                                return <Select
+                                    mode="combobox"
+                                    showSearch
                                     style={{ width: '100px' }}
                                     placeholder="输入供应商名称"
-                                    optionFilterProp="children "
-                                    onChange={this.handleChange}
+                                    optionFilterProp="children"
+                                    optionLabelProp="children"
+                                    labelInValue
+                                    onChange={(value) => this.handleSelectedChange(value, index)}
                                     filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 >
                                     {providersOptions}
@@ -172,9 +193,6 @@ class PutInStorage extends React.Component {
                         key="action"
                         render={(text, record, index) => {
                             return <span>
-                                <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                                    <a href="javascript:void(0);">新增</a>
-                                </span>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
                                     <a href="javascript:void(0);">删除</a>
                                 </Popconfirm>
@@ -184,18 +202,18 @@ class PutInStorage extends React.Component {
                 </Table>
                 <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
                     <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
-                        <Col span={12} >合计金额：<span>23450</span>
+                        <Col span={12} >合计金额：<span>{totalPrice}</span>
                         </Col>
                         <Col span={12} >
                             合计数量：
-                        <span>20</span>
+                        <span>{this.state.data.length}</span>
                         </Col>
                     </Row>
                     <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
                         <Col span={12} >
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
-                            <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
+                            <Button onClick={()=>this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                             <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
                     </Row>
