@@ -24,4 +24,7 @@ public interface IncomeOrderDao {
 	
 	List<IncomeOrder> listByWeek();
 	
+	List<IncomeOrder> listByDateRange(Date startTime , Date endTime , int from , int pageSize);
+	
+	List<IncomeOrder> listByDateRange(Date startTime , Date endTime);
 }
