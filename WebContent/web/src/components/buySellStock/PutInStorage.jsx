@@ -77,7 +77,7 @@ class PutInStorage extends React.Component {
                 </Row>
                 <Button type="primary" style={{ marginLeft: '10px' ,marginBottom:'10px'}}  onClick={()=>{this.setState({view:true})}} size={'large'}>添加配件入库</Button>
 
-                <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
+                <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk} handleSelected={this.handleSelected}></PartsSearch>
                 <Table className="accountTable" dataSource={this.state.data} bordered>
                     <Col
                         title="序号"
