@@ -23,6 +23,7 @@ import com.geariot.platform.freelycar.entities.InventoryType;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.InventoryAndQueryCreator;
@@ -152,6 +153,7 @@ public class InventoryService {
 
 	public String addInventory(Inventory inventory) {
 		inventory.setCreateDate(new Date());
+		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
 		this.inventoryDao.add(inventory);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -182,9 +184,10 @@ public class InventoryService {
 	}
 	
 	public String inStock(InventoryOrder order) {
+		order.setId(IDGenerator.generate(IDGenerator.IN_STOCK));
 		order.setCreateDate(new Date());
 		order.setState(0);
-		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
+		List<InventoryOrderInfo> inventories = order.getInventoryInfos();
 		List<String> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){
 			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
@@ -192,7 +195,7 @@ public class InventoryService {
 				exist.setAmount(exist.getAmount() + inventory.getAmount());
 			}
 			else {
-				order.getInventoryOrderInfo().remove(inventory);
+				order.getInventoryInfos().remove(inventory);
 				fails.add(inventory.getName());
 			}
 		}
@@ -205,8 +208,9 @@ public class InventoryService {
 	}
 
 	public String outStock(InventoryOrder order) {
+		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 		order.setCreateDate(new Date());
-		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
+		List<InventoryOrderInfo> inventories = order.getInventoryInfos();
 		List<String> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){
 			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
@@ -214,7 +218,7 @@ public class InventoryService {
 				exist.setAmount(exist.getAmount() - inventory.getAmount());
 			}
 			else {
-				order.getInventoryOrderInfo().remove(inventory);
+				order.getInventoryInfos().remove(inventory);
 				fails.add(inventory.getName());
 			}
 		}
@@ -304,10 +308,10 @@ public class InventoryService {
 		}
 		exist.setOrderMaker(order.getOrderMaker());
 		//修改前单据库存项目列表
-		List<InventoryOrderInfo> existInfos = exist.getInventoryOrderInfo();
+		List<InventoryOrderInfo> existInfos = exist.getInventoryInfos();
 		List<InventoryOrderInfo> fails = new ArrayList<>();
 		//遍历新单据列表中项目
-		for(InventoryOrderInfo newInfo : order.getInventoryOrderInfo()){
+		for(InventoryOrderInfo newInfo : order.getInventoryInfos()){
 			InventoryOrderInfo existInfo = null;
 			//在原单据列表中查找该库存对应的信息
 			for(InventoryOrderInfo temp : existInfos){ 
@@ -347,13 +351,13 @@ public class InventoryService {
 			Inventory inventory = this.inventoryDao.findById(delete.getInventoryId());
 			if(inventory.getAmount() < delete.getAmount()){
 				fails.add(delete);
-				order.getInventoryOrderInfo().add(delete);
+				order.getInventoryInfos().add(delete);
 			}
 			else{
 				inventory.setAmount(inventory.getAmount() - delete.getAmount());
 			}
 		}
-		exist.setInventoryOrderInfo(order.getInventoryOrderInfo());
+		exist.setInventoryInfos(order.getInventoryInfos());
 		if(!fails.isEmpty()){
 			net.sf.json.JSONArray array = net.sf.json.JSONArray.fromObject(fails);
 			return JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS, array).toString();
