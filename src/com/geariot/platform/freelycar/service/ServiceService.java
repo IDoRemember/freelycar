@@ -14,6 +14,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.ServiceAndQueryCreator;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -28,6 +29,7 @@ public class ServiceService {
 	private ServiceDao serviceDao;
 	
 	public String addService(Service service){
+		service.setCreateDate(new Date());
 		serviceDao.save(service);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -61,7 +63,8 @@ public class ServiceService {
 		return obj.toString();
 	}
 	
-	public String getServiceList(int page , int number){
+	/*public String getServiceList(int page , int number){
+		String andCondition = new ServiceAndQueryCreator(name).createStatement();
 		int from = (page - 1) * number;
 		List<Service> list = serviceDao.listServices(from, number);
 		if(list == null || list.isEmpty()){
@@ -75,16 +78,23 @@ public class ServiceService {
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		return obj.toString();
-	}
+	}*/
 	
-	public String getSelectService(String name){
-		List<Service> list = serviceDao.queryByName(name);
+	public String getSelectService(String name , int page , int number){
+		String andCondition = new ServiceAndQueryCreator(name).createStatement();
+		int from = (page - 1) * number;
+		List<Service> list = serviceDao.listServices(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		long realSize = serviceDao.getConditionCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray).toString();
+		net.sf.json.JSONObject obj =  JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		return obj.toString();
 	}
 }

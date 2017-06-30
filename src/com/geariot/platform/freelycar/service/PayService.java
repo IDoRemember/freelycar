@@ -47,7 +47,7 @@ public class PayService {
 		}
 		//将服务信息次数复制到卡中
 		Set<CardProjectRemainingInfo> cardInfos = new HashSet<>();
-		for(ServiceProjectInfo info : service.getServiceProjectInfos()){
+		for(ServiceProjectInfo info : service.getProjectInfos()){
 			CardProjectRemainingInfo cardInfo = new CardProjectRemainingInfo();
 			cardInfo.setProject(info.getProject());
 			cardInfo.setRemaining(info.getTimes());
