@@ -14,8 +14,12 @@ long getCount();
 	
 	int delete(List<Integer> brandIds);
 	
-	List<InventoryBrand> list(int from, int pageSize);
+	/*List<InventoryBrand> list(int from, int pageSize);
 	
-	List<InventoryBrand> query(String name);
+	List<InventoryBrand> query(String name);*/
+	
+	List<InventoryBrand> getConditionQuery(String andCondition , int from , int pageSize);
+	
+	long getConditionCount(String andCondition);
 	
 }

@@ -56,16 +56,16 @@ public class InventoryController {
 		return this.inventoryService.deleteBrand(inventoryBrandIds);
 	}
 	
-	@RequestMapping(value = "/listbrand" , method = RequestMethod.GET)
+	/*@RequestMapping(value = "/listbrand" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
 	public String listBrand(int page , int number){
 		return this.inventoryService.listBrand(page, number);
-	}
+	}*/
 	
 	@RequestMapping(value = "/querybrand" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String queryBrand(String name){
-		return this.inventoryService.queryBrand(name);
+	public String queryBrand(String name , int page , int number){
+		return this.inventoryService.queryBrand(name, page, number);
 	}
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
