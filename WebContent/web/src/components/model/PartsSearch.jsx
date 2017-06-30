@@ -1,7 +1,9 @@
 import React from 'react';
-import { Row, Col, Button, Table, Modal, Input } from 'antd';
+import { Row, Col, Button, Table, Modal, Select, Input, Radio } from 'antd';
 import $ from 'jquery'
-const Search = Input.Search
+const Search = Input.Search,
+    Option = Select.Option,
+    RadioGroup = Radio.Group;
 const columns = [{
     title: '序号',
     dataIndex: 'index',
@@ -17,6 +19,10 @@ const columns = [{
     title: '配件名称',
     dataIndex: 'partName',
     key: 'partName'
+}, {
+    title: '配件品牌',
+    dataIndex: 'brand',
+    key: 'brand'
 }, {
     title: '配件类别',
     dataIndex: 'category',
@@ -46,16 +52,19 @@ class IncomeDetail extends React.Component {
         super(props)
         this.state = {
             loading: false,
-            selectedRows:[],
+            selectedRows: [],
+            typeList: [],
+            value: 1,
             visible: this.props.view,
             partName: '',
-            tradeName:'',
+            tradeName: '',
             pagination: {},
             data: []
         }
     }
     componentDidMount() {
         this.getList(null, null, 1, 10)
+        this.getTypeList(1, 99)
     }
     componentWillReceiveProps(newProps) {
         if (newProps.view != this.state.visible) {
@@ -63,6 +72,23 @@ class IncomeDetail extends React.Component {
                 visible: newProps.view
             })
         }
+    }
+    getTypeList = (page, pageSize) => {
+        $.ajax({
+            url: 'api/inventory/querytype',
+            data: {
+                page: page,
+                number: pageSize
+            },
+            success: (res) => {
+                console.log(res)
+                if (res.code == "0") {
+                    this.setState({
+                        typeList: res.data
+                    })
+                }
+            }
+        })
     }
     getList = (name, typeId, page, pageSize) => {
         $.ajax({
@@ -84,6 +110,7 @@ class IncomeDetail extends React.Component {
                             partName: result.data[i].name,
                             attribute: result.data[i].property,
                             price: result.data[i].price,
+                            brand: result.data[i].brand.name,
                             inventory: result.data[i].amount,
                             category: result.data[i].type,
                             comment: result.data[i].comment,
@@ -101,10 +128,22 @@ class IncomeDetail extends React.Component {
             },
         })
     }
-    setSearchName = ()=>{
+    setSearchName = (value) => {
         this.setState({
-            tradeName: e.target.value
+            tradeName: value
         })
+
+    }
+    setSearchType = (value) => {
+        this.setState({
+            type: value
+        })
+        this.getList(null, value, 1, 10)
+    }
+    onChange = (e) => {
+        this.setState({
+            value: e.target.value,
+        });
     }
     render() {
         const rowSelection = {
@@ -118,35 +157,64 @@ class IncomeDetail extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
-        }
+        }, partTypeOptions = this.state.typeList.map((item, index) => {
+            return <Option key={item.id} value={item.id + ''}>{item.typeName}</Option>
+        }), radioStyle = {
+            display: 'block',
+            height: '30px',
+            lineHeight: '30px',
+        };
         return <Modal
             visible={this.state.visible}
             width={800}
             title="配件查询"
-            onOk={()=>this.props.handleOk(this.state.selectedRows)}
-            onCancel={()=>this.props.handleCancel()}
+            onOk={() => this.props.handleOk(this.state.selectedRows)}
+            onCancel={() => this.props.handleCancel()}
             footer={[
-                <Button key="back" size="large" onClick={()=>this.props.handleCancel()}>取消</Button>,
-                <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={()=>this.props.handleOk(this.state.selectedRows)}>
+                <Button key="back" size="large" onClick={() => this.props.handleCancel()}>取消</Button>,
+                <Button key="submit" type="primary" size="large" loading={this.state.loading} onClick={() => this.props.handleOk(this.state.selectedRows)}>
                     确认
             </Button>
             ]}
         >
             <Row gutter={24} style={{ marginBottom: '10px' }}>
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    <Search
-                        placeholder="可按配件名称、类型等进行搜索"
-                        style={{ width: '200px', marginBottom: '10px' }}
-                        onSearch={value => this.getList(value, -1, 1, 10)}
-                        onChange={e => this.setSearchName( e.target.value)}
-                        value={this.state.partName}
-                    />
+                    <RadioGroup onChange={this.onChange} value={this.state.value}>
+                        <Radio style={radioStyle} value={1}>
+                            按配件名称进行搜索
+                            {this.state.value==1&&<Search
+                                placeholder="按配件名称进行搜索"
+                                style={{ width: '200px', marginBottom: '10px' ,marginLeft:'20px'}}
+                                onSearch={value => this.getList(value, -1, 1, 10)}
+                                onChange={e => this.setSearchName(e.target.value)}
+                                value={this.state.partName}
+                            />}
+                            </Radio>
+                        <Radio style={radioStyle} value={2}>
+                            按配件类别进行搜索
+                            {this.state.value==2&&<Select
+                                mode="combobox"
+                                showSearch
+                                style={{ width: '100px', marginLeft: '20px' }}
+                                placeholder="输入配件类别"
+                                optionFilterProp="children"
+                                optionLabelProp="children"
+                                labelInValue
+                                onChange={(value) => this.setSearchType(value)}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {partTypeOptions}
+                            </Select>}
+                        </Radio>
+                    </RadioGroup>
+
+
                 </Col>
-                <Col span={10} style={{ verticalAlign: 'middle' }}>
+                {/*<Col span={12} style={{ verticalAlign: 'middle' }}>
                     <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
-                </Col>
+                </Col>*/}
             </Row>
-            <Table loading={this.state.data?false:true} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
+            <Table loading={this.state.data ? false : true} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>
     }
 }

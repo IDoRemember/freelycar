@@ -14,7 +14,8 @@ class PutInStorage extends React.Component {
             id: '',
             view: false,
             data: [],
-            option: []
+            option: [],
+            error: ''
         }
     }
     componentDidMount() {
@@ -62,7 +63,6 @@ class PutInStorage extends React.Component {
         } else {
             datalist.push(...data)
         }
-
         this.setState({
             view: false,
             data: datalist
@@ -76,16 +76,50 @@ class PutInStorage extends React.Component {
     }
     handleSelectedChange = (value, index) => {
         this.setState({
-            data: update(this.state.data, { [index]: { ['providerId']: { $set: value } } })
+            data: update(this.state.data, { [index]: { ['selectedProvider']: { $set: value } } })
         })
     }
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ data:dataSource });
+        this.setState({ data: dataSource });
     }
-    saveData = ()=>{
-        
+    saveData = () => {
+        if (this.state.data.length < 1) {
+            this.setState({
+                error: '请新增配件入库'
+            })
+        } else {
+            for (let item of this.state.data) {
+                if (!item.selectedProvider) {
+                    this.setState({
+                        error: '请选择供应商'
+                    })
+                }
+            }
+        }
+        if (this.state.error) {
+            let instockArray = []
+            for (let item of this.state.data) {
+                let instockObject = {
+                    id:item.id,
+                    providers:item.selectedProvider,
+                    amount:item.number?item.number:1
+                }
+                instockArray.push()
+            }
+            $.ajax({
+                url: 'api/inventory/instock',
+                data: {
+                    
+                },
+                success: (result) => {
+                    
+                }
+            })
+        }
+        console.log(this.state.data)
+
     }
     render() {
         let totalPrice = 0
@@ -213,7 +247,8 @@ class PutInStorage extends React.Component {
                         <Col span={12} >
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
-                            <Button onClick={()=>this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
+                            <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
+                            <Button onClick={() => this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>添加入库</Button>
                             <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
                     </Row>
