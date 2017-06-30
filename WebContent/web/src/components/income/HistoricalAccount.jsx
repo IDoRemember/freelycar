@@ -2,113 +2,83 @@ import React from 'react';
 import { Row, Col, Card, Table, Select, InputNumber, Input } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import $ from 'jquery';
 const Option = Select.Option;
 const columns = [
-    { title: '序号', dataIndex: 'indexNum', key: 'indexNum' },
-    { title: '时间', dataIndex: 'accountMonth', key: 'accountMonth' },
-    { title: '实收金额', dataIndex: 'receiveMoney', key: 'receiveMoney' },
-    { title: '实际支出', dataIndex: 'actualOutlay', key: 'actualOutlay' },
+    {
+        title: '序号', dataIndex: 'indexNum', key: 'indexNum', render: (text, record, index) => {
+            return <span>{index + 1}</span>
+        }
+    },
+    { title: '时间', dataIndex: 'payDate', key: 'payDate' },
+    {
+        title: '实收金额', dataIndex: 'income', key: 'income',
+        render: (text, record, index) => {
+            return <Link to={`/app/incomeManage/historyIncomeDetail/${record.payDate}`}>{text}</Link>
+        }
+    },
+    {
+        title: '实际支出', dataIndex: 'expend', key: 'expend', render: (text, record, index) => {
+            return <Link to={`/app/incomeManage/historyOutcomeDetail/${record.payDate}`}>{text}</Link>
+        }
+    },
 ]
-const data = [
-    {
-        key: 1,
-        indexNum: '1',
-        accountMonth: '2017-06',
-        receiveMoney: '122345',
-        actualOutlay: '4555',
-    },
-    {
-        key: 2,
-        indexNum: '2',
-        accountMonth: '2017-05',
-        receiveMoney: '223444',
-        actualOutlay: '4000',
-    },
-    {
-        key: 3,
-        indexNum: '3',
-        accountMonth: '2017-04',
-        receiveMoney: '5421424',
-        actualOutlay: '4000',
-    },
-    {
-        key: 4,
-        indexNum: '4',
-        accountMonth: '2017-03',
-        receiveMoney: '673444',
-        actualOutlay: '4300',
-    },
-    {
-        key: 5,
-        indexNum: '5',
-        accountMonth: '2017-02',
-        receiveMoney: '89424',
-        actualOutlay: '7900',
-    },
-    {
-        key: 6,
-        indexNum: '6',
-        accountMonth: '2017-01',
-        receiveMoney: '27844',
-        actualOutlay: '4034',
-    },
-    {
-        key: 7,
-        indexNum: '7',
-        accountMonth: '2017-03',
-        receiveMoney: '673444',
-        actualOutlay: '4300',
-    },
-    {
-        key: 8,
-        indexNum: '8',
-        accountMonth: '2017-02',
-        receiveMoney: '89424',
-        actualOutlay: '7900',
-    },
-    {
-        key: 9,
-        indexNum: '9',
-        accountMonth: '2017-01',
-        receiveMoney: '27844',
-        actualOutlay: '4034',
-    },
-    
-];
 
 class HistoricalAccount extends React.Component {
-     constructor(props) {
+    constructor(props) {
         super(props)
         this.state = {
-            option: [],
+            data: []
         }
     }
-    render(){
-          function handleChange(value) {
-            console.log(`selected ${value}`);
-        }
-       return (
+    componentDidMount() {
+        let myDate = new Date()
+        this.getYearList(myDate.getFullYear() + '')
+    }
+    getYearList = (year) => {
+        $.ajax({
+            url: 'api/stat/monthlybyyear',
+            data: {
+                selectYear: new Date(year)
+            },
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let newdata = result.data
+                    for (let i = 0; i < newdata.length; i++) {
+                        newdata[i]['key'] = i
+                    }
+                    console.log(newdata)
+                    this.setState({
+                        data: newdata
+                    })
+                }
+            }
+        })
+    }
+    render() {
+
+        let nowtime = new Date()
+        return (
             <div>
                 <BreadcrumbCustom first="收支管理" second="历史收支查询" />
-                
-                    <div style={{ display: 'inline-block', marginTop: '20px'}}>选择年份:
+                <div style={{ display: 'inline-block', marginTop: '20px' }}>选择年份:
                     <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                    <Select defaultValue="2015" style={{ width: 120 }} onChange={handleChange}>
-                        <Option value="2015">2015</Option>
-                        <Option value="2016">2016</Option>
-                        <Option value="2017">2017</Option>
-                        <Option value="2018">2018</Option>
-                        <Option value="2019">2019</Option>
-                        <Option value="2020">2020</Option>
-                        <Option value="2021">2021</Option>    
-                    </Select>
+                        <Select defaultValue={nowtime.getFullYear() + ''} style={{ width: 120 }} onChange={this.getYearList}>
+                            <Option value={nowtime.getFullYear() + ''}>{nowtime.getFullYear()}</Option>
+                            <Option value={(nowtime.getFullYear() - 1) + ''}>{nowtime.getFullYear() - 1}</Option>
+                            <Option value={(nowtime.getFullYear() - 2) + ''}>{nowtime.getFullYear() - 2}</Option>
+                            <Option value={(nowtime.getFullYear() - 3) + ''}>{nowtime.getFullYear() - 3}</Option>
+                            <Option value={(nowtime.getFullYear() - 4) + ''}>{nowtime.getFullYear() - 4}</Option>
+                            <Option value={(nowtime.getFullYear() - 5) + ''}>{nowtime.getFullYear() - 5}</Option>
+                        </Select>
                     </div>
-                    </div>
-                <Card style={{marginTop:'20px'}}>
-                    <Table  className="accountTable" columns={columns} dataSource={data} ></Table>
+                </div>
+                <Card style={{ marginTop: '20px' }}>
+                    <Table className="accountTable" columns={columns} dataSource={this.state.data} ></Table>
                 </Card>
-        </div>
-       ) 
+            </div>
+        )
     }
 }
 export default HistoricalAccount

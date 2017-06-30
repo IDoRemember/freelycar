@@ -28,9 +28,16 @@ class PayDetail extends React.Component {
         this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
     getIncomeExpend = (mode, page, number) => {
+        let datastrings
+        if (mode == 'query') {
+            datastrings = localStorage.getItem('datastrings').split(',')
+        }
+        console.log(datastrings)
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
+                startTime: datastrings ? new Date(datastrings[0]) : null,
+                endTime: datastrings ? new Date(datastrings[1]) : null,
                 income: 0,
                 expend: 1,
                 page: page,
@@ -51,11 +58,11 @@ class PayDetail extends React.Component {
                             })
                         }
                     }
-                }else if (result.code == "2") {
+                } else if (result.code == "2") {
                     this.setState({
-                        expendStat:0,
-                        data:[],
-                        pagination:{total: 0}
+                        expendStat: 0,
+                        data: [],
+                        pagination: { total: 0 }
                     })
                 }
             }
@@ -97,8 +104,8 @@ class PayDetail extends React.Component {
             title: '支出项目',
             dataIndex: 'payment',
             key: 'payment',
-            render:(text,record,index)=>{
-                return <span>{text=='0'?'商品入库':'其他'}</span>
+            render: (text, record, index) => {
+                return <span>{text == '0' ? '商品入库' : '其他'}</span>
             }
         }, {
             title: '金额',
