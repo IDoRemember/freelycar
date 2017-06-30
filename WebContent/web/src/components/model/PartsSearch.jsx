@@ -109,12 +109,13 @@ class IncomeDetail extends React.Component {
                             partId: result.data[i].id,
                             partName: result.data[i].name,
                             attribute: result.data[i].property,
+                            standard:result.data[i].standard,
                             price: result.data[i].price,
                             brand: result.data[i].brand.name,
                             inventory: result.data[i].amount,
                             category: result.data[i].type,
                             comment: result.data[i].comment,
-                            providers: result.data[i].providers
+                            provider: result.data[i].provider
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
