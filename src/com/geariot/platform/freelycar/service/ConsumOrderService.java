@@ -54,6 +54,7 @@ public class ConsumOrderService {
 	private InventoryOrderDao inventoryOrderDao;
 	
 	public String book(ConsumOrder consumOrder) {
+		consumOrder.setId(IDGenerator.generate(3));
 		consumOrder.setCreateDate(new Date());
 		consumOrder.setState(0);
 		Set<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();

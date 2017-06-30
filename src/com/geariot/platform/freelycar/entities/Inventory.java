@@ -49,7 +49,7 @@ public class Inventory {
 	public String getProperty() {
 		return property;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))
 	public Provider getProvider() {
 		return provider;
