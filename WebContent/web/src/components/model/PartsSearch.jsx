@@ -79,7 +79,7 @@ class IncomeDetail extends React.Component {
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {
-                            rowKey: result.data[i].id,
+                            key: result.data[i].id,
                             partId: result.data[i].id,
                             partName: result.data[i].name,
                             attribute: result.data[i].property,

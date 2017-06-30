@@ -34,16 +34,16 @@ public class InventoryController {
 		return this.inventoryService.deleteType(inventoryTypeIds);
 	}
 	
-	@RequestMapping(value = "/listtype" , method = RequestMethod.GET)
+	/*@RequestMapping(value = "/listtype" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
 	public String listType(int page , int number){
 		return this.inventoryService.listType(page, number);
 	}
-	
+	*/
 	@RequestMapping(value = "/querytype" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String queryType(String name , Date startTime , Date endTime, int page, int number){
-		return this.inventoryService.queryType(name, startTime, endTime, page, number);
+	public String queryType(String name , int page, int number){
+		return this.inventoryService.queryType(name, page, number);
 	}
 	
 	@RequestMapping(value = "/addbrand" , method = RequestMethod.POST)

@@ -135,7 +135,7 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                    this.setState({ data: tableDate, pagination: { total: res.realSize }});
                 }
 
             }
@@ -162,7 +162,6 @@ class BeautyOrder extends React.Component {
                 }
 
             }
-
         });
     }
 
@@ -243,8 +242,6 @@ class BeautyOrder extends React.Component {
 
             }
         });
-
-
 
 
 
