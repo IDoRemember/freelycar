@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.ServiceDao;
 import com.geariot.platform.freelycar.entities.Service;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class ServiceDaoImpl implements ServiceDao{
@@ -40,13 +42,13 @@ public class ServiceDaoImpl implements ServiceDao{
 		
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Service> listServices(int from, int pageSize) {
 		String hql = "from Service";
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -58,6 +60,22 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public long getCount() {
 		String hql = "select count(*) from Service";
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Service> listServices(String andCondition, int from, int pageSize) {
+		String basic = "from Service";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getConditionCount(String andCondition) {
+		String basic = "select count(*) from Service";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 	
