@@ -60,8 +60,8 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"incomeSearch/incomedetail/:mode"} component={IncomeDetail} />
             <Route path={"incomeSearch/paydetail/:mode"} component = {PayDetail}/>
             <Route path={"historyAccount"} component={HistoricalAccount} />
-            <Route path={"historyIncomeDetail/:incomeId"} component={HistoryIncomeDetail} />
-            <Route path={"historyOutcomeDetail/:outcomeId"} component={HistoryOutcomeDetail} />
+            <Route path={"historyIncomeDetail/:Date"} component={HistoryIncomeDetail} />
+            <Route path={"historyOutcomeDetail/:Date"} component={HistoryOutcomeDetail} />
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >

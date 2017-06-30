@@ -15,41 +15,22 @@ const dateFormat = 'YYYY/MM/DD';
 //表格
 const columns = [{
     title: '时间',
-    key: 'time',
-    dataIndex: 'time'
+    key: 'payDate',
+    dataIndex: 'payDate'
 }, {
     title: '实际收入',
-    key: 'actualincome',
-    dataIndex: 'actualincome',
+    key: 'income',
+    dataIndex: 'income',
     render: (text, record, index) => {
-        let incomeId = 111
-        return <Link to={`/app/incomeManage/historyIncomeDetail/:"${incomeId}`}>{text}</Link>
+        return <Link to={`/app/incomeManage/historyIncomeDetail/${record.payDate}`}>{text}</Link>
     }
 }, {
     title: '实际支出',
-    key: 'actualpayment',
-    dataIndex: 'actualpayment',
+    key: 'expend',
+    dataIndex: 'expend',
     render: (text, record, index) => {
-        let outcomeId = 111
-        return <Link to={`/app/incomeManage/historyOutcomeDetail/:"${outcomeId}`}>{text}</Link>
+        return <Link to={`/app/incomeManage/historyOutcomeDetail/${record.payDate}`}>{text}</Link>
     }
-}];
-
-const data = [{
-    key: '1',
-    time: '2012-12-12',
-    actualincome: '￥300,000.00',
-    actualpayment: 'New York No. 1 Lake Park',
-}, {
-    key: '2',
-    time: '2012-12-12',
-    actualincome: '￥1,256,000.00',
-    actualpayment: 'London No. 1 Lake Park',
-}, {
-    key: '3',
-    time: '2012-12-12',
-    actualincome: '￥120,000.00',
-    actualpayment: 'Sidney No. 1 Lake Park',
 }];
 
 class IncomeSearch extends React.Component {
@@ -58,11 +39,13 @@ class IncomeSearch extends React.Component {
         this.state = {
             mode: 'today',
             incomeStat: '',
-            expendStat: ''
+            expendStat: '',
+            data:[]
         }
     }
     componentDidMount() {
         this.getIncomeExpend(this.state.mode)
+        this.getYearList()
     }
     getIncomeExpend = (mode) => {
         $.ajax({
@@ -79,6 +62,28 @@ class IncomeSearch extends React.Component {
                         incomeStat: result.incomeStat,
                         expendStat: result.expendStat
                     })
+                }
+            }
+        })
+    }
+    getYearList=()=>{
+        let myDate = new Date()
+        $.ajax({
+            url: 'api/stat/monthlybyyear',
+            data: {
+                selectYear:new Date(myDate.getFullYear()+'')
+            },
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let newdata = result.data.slice(0,2)
+                    for(let i=0;i<newdata.length;i++) {
+                        newdata[i]['key'] = i
+                    }
+                    console.log(newdata)
+                   this.setState({
+                       data:newdata
+                   })
                 }
             }
         })
@@ -170,11 +175,11 @@ class IncomeSearch extends React.Component {
                                 <Card title='历史收支查询' style={{ textAlign: 'left' }}>
                                     <Table
                                         columns={columns}
-                                        dataSource={data}
+                                        dataSource={this.state.data}
                                         bordered
                                         className="accountTable"
                                     />
-                                    <div style={{ marginTop: '10px', float: 'right' }}>
+                                    <div style={{ marginTop: '10px', float: 'right',paddingBottom:'20px' }}>
                                         <Link to="/app/incomeManage/historyAccount">更多>></Link>
                                     </div>
                                 </Card>

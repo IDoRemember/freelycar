@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-
+import $ from 'jquery';
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
 import moment from 'moment';
 
@@ -18,107 +18,102 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
-            selectedRowKeys: [],
             loading: false,
+            data: [],
+            pagination: {},
+            expendStat: ''
         }
     }
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
+    componentDidMount() {
+        this.getExpend(this.props.params.Date, 1, 10)
     }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
+    getExpend = (month, page, number) => {
+        $.ajax({
+            url: 'api/stat/thismonth',
+            data: {
+                month: new Date(month),
+                income: 0,
+                expend: 1,
+                page: 1,
+                number: 10
             },
-        });
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let data = result.data
+                    for (let item of data) {
+                        item['key'] = item.id
+                    }
+                    if (data[data.length - 1]['key']) {
+                        this.setState({
+                            expendStat: result.expendStat,
+                            data: data,
+                            pagination: { total: result.realSize },
+                        })
+                    }
+                } else if (result.code == "2") {
+                    this.setState({
+                        expendStat: 0,
+                        data: [],
+                        pagination: { total: 0 }
+                    })
+                }
+            }
+        })
     }
-
-
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getExpend(this.props.params.Date, pagination.current, 10)
+    }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [{
-            title:'序号',
-            dataIndex:'index',
-            key:'index'
-        },{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
             title: '支出项目',
-            dataIndex: 'project',
-            key: 'project'
+            dataIndex: 'type',
+            key: 'type',
+            render: (text, record, index) => {
+                return <span>{text == '0' ? '商品入库' : '其他'}</span>
+            }
         }, {
             title: '金额',
-            dataIndex: 'money',
-            key: 'money'
+            dataIndex: 'amount',
+            key: 'amount'
         }, {
             title: '支出时间',
-            dataIndex: 'time',
-            key: 'time'
+            dataIndex: 'payDate',
+            key: 'payDate'
         }, {
             title: '备注',
-            dataIndex: 'remark',
-            key: 'remark'
+            dataIndex: 'comment',
+            key: 'comment'
         }];
 
-
-        //表格
-        const data = [{
-            key: '1',
-            index:'1',
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park',
-            time: 32,
-            remark: 'John Brown'
-        }, {
-            key: '2',
-            index:'2',
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park',
-            time: 32,
-            remark: 'John Brown'
-        }, {
-            key: '3',
-            index:'3',
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park',
-            time: 32,
-            remark: 'John Brown'
-        }, {
-            key: '4',
-            index:'4',
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park',
-            time: 32,
-            remark: 'John Brown'
-        }];
 
         return (
             <div>
                 <BreadcrumbCustom first="收支查询" second="历史支出明细" />
                 <Card>
                     <div>
-                        <h1 style={{color:'red'}}>当月支出总金额： 4800</h1>
+                        <h1 style={{ color: 'red' }}>{this.props.params.Date}&nbsp;支出总金额：{this.state.expendStat}</h1>
                     </div>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
 
-                    <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <Table loading={this.state.data.length > 0 ? false : true} bordered onChange={this.handleTableChange} columns={columns} dataSource={this.state.data} />
                 </Card>
             </div>
         );
