@@ -19,12 +19,10 @@ class PutInStorage extends React.Component {
             id: '',
             view: false,
             data: [],
-            option: [],
             error: ''
         }
     }
     componentDidMount() {
-
         $.ajax({
             url: 'api/idgen/generate',
             data: {
@@ -35,9 +33,6 @@ class PutInStorage extends React.Component {
                     id: result.id
                 })
             }
-        })
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
         })
     }
     handleCancel = () => {
@@ -130,8 +125,7 @@ class PutInStorage extends React.Component {
                             message: '入库成功',
                             description: '',
                             style: {
-                                width: 600,
-                                marginLeft: 335 - 600,
+                                width: 200
                             },
                         });
                         this.setState({

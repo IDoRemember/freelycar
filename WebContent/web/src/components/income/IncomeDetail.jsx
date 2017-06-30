@@ -29,9 +29,16 @@ class IncomeDetail extends React.Component {
         this.getIncomeExpend(this.props.params.mode, 1, 10)
     }
     getIncomeExpend = (mode, page, number) => {
+        let datastrings
+        if (mode == 'query') {
+            datastrings = localStorage.getItem('datastrings')
+        }
+
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
+                startTime: datastrings ? new Date(datastrings[0]) : null,
+                endTime: datastrings ? new Date(datastrings[1]) : null,
                 income: 1,
                 expend: 0,
                 page: page,
@@ -122,11 +129,14 @@ class IncomeDetail extends React.Component {
             <div>
                 <BreadcrumbCustom first="收支查询" second="收入明细" />
                 <Card>
-                    <div className="table-operations">
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
-                    </div>
+                    {
+                        this.props.mode != 'query' && <div className="table-operations">
+                            <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
+                            <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
+                            <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>
+                        </div>
+                    }
+
                     <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{this.state.incomeStat}</span></div>
                     <Table bordered pagination={this.state.pagination} columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
                 </Card>
