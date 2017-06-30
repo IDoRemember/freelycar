@@ -185,15 +185,15 @@ public class InventoryService {
 		order.setCreateDate(new Date());
 		order.setState(0);
 		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
-		List<Inventory> fails = new ArrayList<>();
+		List<String> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){
-			Inventory exist = this.inventoryDao.findById(inventory.getInventory().getId());
+			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
 			if(exist != null){
 				exist.setAmount(exist.getAmount() + inventory.getAmount());
 			}
 			else {
 				order.getInventoryOrderInfo().remove(inventory);
-				fails.add(inventory.getInventory());
+				fails.add(inventory.getName());
 			}
 		}
 		this.inventoryOrderDao.save(order);
@@ -207,15 +207,15 @@ public class InventoryService {
 	public String outStock(InventoryOrder order) {
 		order.setCreateDate(new Date());
 		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
-		List<Inventory> fails = new ArrayList<>();
+		List<String> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){
-			Inventory exist = this.inventoryDao.findById(inventory.getInventory().getId());
+			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
 			if(exist != null && exist.getAmount() > inventory.getAmount()){
 				exist.setAmount(exist.getAmount() - inventory.getAmount());
 			}
 			else {
 				order.getInventoryOrderInfo().remove(inventory);
-				fails.add(inventory.getInventory());
+				fails.add(inventory.getName());
 			}
 		}
 		if(!fails.isEmpty()){
@@ -311,12 +311,12 @@ public class InventoryService {
 			InventoryOrderInfo existInfo = null;
 			//在原单据列表中查找该库存对应的信息
 			for(InventoryOrderInfo temp : existInfos){ 
-				if(temp.getInventory().getId().equals(newInfo.getInventory().getId())){
+				if(temp.getInventoryId().equals(newInfo.getInventoryId())){
 					existInfo = temp;
 					break;
 				}
 			}
-			Inventory inventory = this.inventoryDao.findById(newInfo.getInventory().getId());
+			Inventory inventory = this.inventoryDao.findById(newInfo.getInventoryId());
 			//如果没找到，说明是新增项目，直接增加数量
 			if(existInfo == null){
 				inventory.setAmount(inventory.getAmount() + newInfo.getAmount());
@@ -344,7 +344,7 @@ public class InventoryService {
 		}
 		//如果原单据列表中不为空，说明有入库信息被删除，查找库存并判断数量是否满足删除条件。
 		for(InventoryOrderInfo delete : existInfos){
-			Inventory inventory = this.inventoryDao.findById(delete.getInventory().getId());
+			Inventory inventory = this.inventoryDao.findById(delete.getInventoryId());
 			if(inventory.getAmount() < delete.getAmount()){
 				fails.add(delete);
 				order.getInventoryOrderInfo().add(delete);

@@ -1,15 +1,12 @@
 package com.geariot.platform.freelycar.entities;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -22,7 +19,7 @@ public class Inventory {
 	private String property;
 	private float price;
 	private float amount;
-	private Set<Provider> providers;
+	private Provider provider;
 	private String comment;
 	private Date createDate;
 	public float getAmount() {
@@ -52,12 +49,10 @@ public class Inventory {
 	public String getProperty() {
 		return property;
 	}
-	@ManyToMany(cascade={}, fetch=FetchType.LAZY)
-	@JoinTable(name="inventory_provider", 
-				joinColumns={@JoinColumn(name="inventoryId", foreignKey=@ForeignKey(name="none"))}, 
-				inverseJoinColumns={@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))})
-	public Set<Provider> getProviders() {
-		return providers;
+	@ManyToOne(cascade={}, fetch=FetchType.LAZY)
+	@JoinColumn(name="providerId", foreignKey=@ForeignKey(name="none"))
+	public Provider getProvider() {
+		return provider;
 	}
 	public String getStandard() {
 		return standard;
@@ -91,8 +86,8 @@ public class Inventory {
 	public void setProperty(String property) {
 		this.property = property;
 	}
-	public void setProviders(Set<Provider> providers) {
-		this.providers = providers;
+	public void setProvider(Provider provider) {
+		this.provider = provider;
 	}
 	public void setStandard(String standard) {
 		this.standard = standard;
@@ -101,10 +96,4 @@ public class Inventory {
 		this.type = type;
 	}
 	
-	@Override
-	public String toString() {
-		return "Inventory [id=" + id + ", name=" + name + ", type=" + type + ", brand=" + brand + ", standard="
-				+ standard + ", property=" + property + ", price=" + price + ", amount=" + amount + ", providers="
-				+ providers + ", comment=" + comment + ", createDate=" + createDate + "]";
-	}
 }

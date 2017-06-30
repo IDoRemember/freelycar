@@ -68,7 +68,13 @@ public class ConsumOrderService {
 			inventory.setAmount(inventory.getAmount() - info.getNumber());
 			InventoryOrderInfo temp = new InventoryOrderInfo();
 			temp.setAmount(info.getNumber());
-			temp.setInventory(info.getInventory());
+			Inventory inv = info.getInventory();
+			temp.setBrandName(inv.getBrand().getName());
+			temp.setInventoryId(inv.getId());
+			temp.setName(inv.getName());
+			temp.setProperty(inv.getProperty());
+			temp.setStandard(inv.getStandard());
+			temp.setTypeName(inv.getType().getTypeName());
 			temp.setPrice(info.getInventory().getPrice() * temp.getAmount());
 			list.add(temp);
 			totalAmount += temp.getAmount();
