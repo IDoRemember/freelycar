@@ -33,7 +33,6 @@ class IncomeDetail extends React.Component {
         if (mode == 'query') {
             datastrings = localStorage.getItem('datastrings').split(',')
         }
-        console.log(datastrings)
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
@@ -45,7 +44,6 @@ class IncomeDetail extends React.Component {
                 number: number
             },
             success: (result) => {
-            
                 if (result.code == "0") {
                     let data = result.data
                     for (let item of data) {

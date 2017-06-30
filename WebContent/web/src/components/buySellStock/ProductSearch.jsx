@@ -16,7 +16,7 @@ class ProductSearch extends React.Component {
         this.state = {
             options: [],
             pagination: {},
-            name:null,
+            name: null,
             tradeName: '',
             category: '',
             theme: 'light',
@@ -74,7 +74,7 @@ class ProductSearch extends React.Component {
         }
     }
     componentDidMount() {
-        this.getList(null,null,1, 10)
+        this.getList(null, null, 1, 10)
         this.getTypeList(1, 10)
     }
     getTypeList = (page, pageSize) => {
@@ -94,12 +94,12 @@ class ProductSearch extends React.Component {
             }
         })
     }
-    getList = (name, typeId,page, pageSize) => {
+    getList = (name, typeId, page, pageSize) => {
         $.ajax({
             url: 'api/inventory/list',
             data: {
-                name:name,
-                typeId:typeId,
+                name: name,
+                typeId: typeId,
                 page: page,
                 number: pageSize
             },
@@ -147,12 +147,12 @@ class ProductSearch extends React.Component {
         this.setState({
             pagination: pager
         })
-        if(this.state.category>-1){
-            this.getList(null,this.state.category,pagination.current, 10)
+        if (this.state.category > -1) {
+            this.getList(null, this.state.category, pagination.current, 10)
         } else {
-            this.getList(this.state.tradeName,-1,pagination.current, 10)
+            this.getList(this.state.tradeName, -1, pagination.current, 10)
         }
-        
+
     }
     handleClick = (e) => {
         console.log('click ', e);
@@ -160,7 +160,11 @@ class ProductSearch extends React.Component {
             current: e.key,
         });
     }
-    
+    setTradeName = (value) => {
+        this.setState({
+            tradeName: value,
+        });
+    }
     render() {
         const plateOptions = [...new Set(this.state.options)].map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
@@ -174,12 +178,12 @@ class ProductSearch extends React.Component {
                             商品名：<Search
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
-                                onSearch={value => this.getList(value, -1,1,10)}
-                                onChange={e => this.setState({ tradeName: e.target.value })}
+                                onSearch={value => this.getList(value, -1, 1, 10)}
+                                onChange={e => this.setTradeName(e.target.value)}
                                 value={this.state.tradeName}
                             />
                         </Col>
-                        <Col span={10} style={{ verticalAlign: 'middle' }}>
+                        <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
                             商品类别：<Select
                                 showSearch
                                 style={{ width: '200px' }}
@@ -187,10 +191,11 @@ class ProductSearch extends React.Component {
                                 optionFilterProp="children"
                                 onChange={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                getPopupContainer={() => document.getElementById('provider-area')}
                             >
                                 {plateOptions}
                             </Select>
-                            <Button onClick={() => this.getList(null, this.state.category,1,10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+                            <Button onClick={() => this.getList(null, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
 
                         </Col>
                     </Row>

@@ -4,6 +4,7 @@ import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, D
 import { Link } from 'react-router';
 import moment from 'moment';
 import AjaxGet from '../../utils/ajaxGet'
+import $ from 'jquery'
 const Option = Select.Option;
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
@@ -11,72 +12,103 @@ class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            conlums: [{
-                title: '序号',
-                dataIndex: 'index',
-                key: 'index'
-            }, {
-                title: '库存编号',
-                dataIndex: 'stockNumber',
-                key: 'stockNumber',
-                render: (text, record, index) => {
-                    return <span><Link to={"/app/buySellStock/productReceipts/"+text} >{text}</Link></span>
-                }
-            }, {
-                title: '创建时间',
-                dataIndex: 'createTime',
-                key: 'createTime'
-            }, {
-                title: '合计金额',
-                dataIndex: 'amount',
-                key: 'amount'
-            }, {
-                title: '合计数量',
-                dataIndex: 'totalNumber',
-                key: 'totalNumber'
-
-            }, {
-                title: '制单人',
-                dataIndex: 'makingPeople',
-                key: 'makingPeople'
-            }, {
-                title: '操作',
-                dataIndex: 'action',
-                key: 'action',
-                render: (text, record, index) => {
-                    return <span>
-                        <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                            <a href="javascript:void(0);">修改</a>
-                        </span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                            <a href="javascript:void(0);">删除</a>
-                        </Popconfirm>
-                    </span>
-                }
-            }],
-            data: [{
-                key: '1',
-                index: '1',
-                stockNumber: '1111222233333',
-                createTime: '涵涵',
-                category: '美容保养',
-                time: 'John Brown',
-                amount: 32,
-                totalNumber: '18362981113',
-                makingPeople: '涵涵',
-            }],
+            data: [],
             option: []
         }
     }
     componentDidMount() {
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
+        this.getList(1, 10)
+    }
+    getList = (page, number) => {
+        $.ajax({
+            url: 'api/inventory/listorder',
+            data: {
+                page: page,
+                number: number
+            },
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let data = result.data
+                    for (let item of data) {
+                        item['key'] = item.id
+                    }
+                    if (data[data.length - 1]['key']) {
+                        this.setState({
+                            data: data,
+                            pagination: { total: result.realSize },
+                        })
+                    }
+                } else if (result.code == "2") {
+                    this.setState({
+                        data: [],
+                        pagination: { total: 0 }
+                    })
+                }
+            }
         })
+    }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getList(pagination.current, 10)
     }
     render() {
         const projectOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
-        })
+        }), conlums = [{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render:(text,record,index) =>{
+                return <span>{index+1}</span>
+            }
+        }, {
+            title: '库存编号',
+            dataIndex: 'id',
+            key: 'id',
+            render: (text, record, index) => {
+                return <span><Link to={"/app/buySellStock/productReceipts/" + text} >{text}</Link></span>
+            }
+        }, {
+            title: '创建时间',
+            dataIndex: 'createDate',
+            key: 'createDate'
+        }, {
+            title: '合计金额',
+            dataIndex: 'totalPrice',
+            key: 'totalPrice'
+        }, {
+            title: '合计数量',
+            dataIndex: 'totalAmount',
+            key: 'totalAmount'
+
+        }, {
+            title: '制单人',
+            dataIndex: 'orderMaker',
+            key: 'orderMaker',
+              render: (text, record, index) => {
+                return <span>{text.name}</span>
+            }
+        }, {
+            title: '操作',
+            dataIndex: 'action',
+            key: 'action',
+            render: (text, record, index) => {
+                return <span>
+                    <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
+                        <a href="javascript:void(0);">修改</a>
+                    </span>
+                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                        <a href="javascript:void(0);">删除</a>
+                    </Popconfirm>
+                </span>
+            }
+        }]
         return <div>
             <BreadcrumbCustom first="进销存管理" second="库存单据" />
             <Card>
@@ -86,7 +118,6 @@ class PutInStorage extends React.Component {
                     <Col span={8} >
                         单据时间：
                         <DatePicker.RangePicker
-                            defaultValue={[moment(), moment()]}
                             format={dateFormat}
                             showToday={true}
                         />
@@ -98,9 +129,7 @@ class PutInStorage extends React.Component {
                         </div>
                     </Col>
                 </Row>
-
-                < Table className="accountTable" bordered columns={this.state.conlums} dataSource={this.state.data} onChange={this.handleChange} />
-
+                < Table bordered columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />
             </Card>
         </div>
     }

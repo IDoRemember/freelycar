@@ -51,15 +51,14 @@ class IncomeDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            loading: false,
+            loading: true,
             selectedRows: [],
             typeList: [],
             value: 1,
             visible: this.props.view,
             partName: '',
-            tradeName: '',
             pagination: {},
-            data: []
+            data: [],
         }
     }
     componentDidMount() {
@@ -81,7 +80,6 @@ class IncomeDetail extends React.Component {
                 number: pageSize
             },
             success: (res) => {
-                console.log(res)
                 if (res.code == "0") {
                     this.setState({
                         typeList: res.data
@@ -95,12 +93,13 @@ class IncomeDetail extends React.Component {
             url: 'api/inventory/list',
             data: {
                 name: name,
-                typeId: typeId?typeId.key:null,
+                typeId: typeId ? typeId.key : null,
                 page: page,
                 number: pageSize
             },
             success: (result) => {
                 if (result.code == "0") {
+                    this.setState({ loading: false })
                     console.log(result)
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
@@ -109,7 +108,7 @@ class IncomeDetail extends React.Component {
                             partId: result.data[i].id,
                             partName: result.data[i].name,
                             attribute: result.data[i].property,
-                            standard:result.data[i].standard,
+                            standard: result.data[i].standard,
                             price: result.data[i].price,
                             brand: result.data[i].brand.name,
                             inventory: result.data[i].amount,
@@ -125,19 +124,35 @@ class IncomeDetail extends React.Component {
                             })
                         }
                     }
+                } else if (result.code == '2') {
+                    this.setState({
+                        data: [],
+                        pagination: { total: 0 },
+                    })
                 }
             },
         })
     }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        if(this.state.type)
+        this.getList(this.state.partName,this.state.type,pagination.current, 10)
+    }
     setSearchName = (value) => {
         this.setState({
-            tradeName: value
+            partName: value,
+            type:-1
         })
-
     }
     setSearchType = (value) => {
         this.setState({
-            type: value
+            type: value,
+            partName:null
         })
         this.getList(null, value, 1, 10)
     }
@@ -152,7 +167,6 @@ class IncomeDetail extends React.Component {
                 this.setState({
                     selectedRows: selectedRows
                 })
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             },
 
             getCheckboxProps: record => ({
@@ -179,21 +193,21 @@ class IncomeDetail extends React.Component {
             ]}
         >
             <Row gutter={24} style={{ marginBottom: '10px' }}>
-                <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    <RadioGroup onChange={this.onChange} value={this.state.value}>
+                <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
+                    <RadioGroup onChange={this.onChange} value={this.state.value} >
                         <Radio style={radioStyle} value={1}>
                             按配件名称进行搜索
-                            {this.state.value==1&&<Search
+                            {this.state.value == 1 && <Search
                                 placeholder="按配件名称进行搜索"
-                                style={{ width: '200px', marginBottom: '10px' ,marginLeft:'20px'}}
+                                style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
                                 onSearch={value => this.getList(value, -1, 1, 10)}
                                 onChange={e => this.setSearchName(e.target.value)}
                                 value={this.state.partName}
                             />}
-                            </Radio>
+                        </Radio>
                         <Radio style={radioStyle} value={2}>
                             按配件类别进行搜索
-                            {this.state.value==2&&<Select
+                            {this.state.value == 2 && <Select
                                 showSearch
                                 style={{ width: '200px', marginLeft: '20px' }}
                                 placeholder="选择配件类别"
@@ -201,6 +215,7 @@ class IncomeDetail extends React.Component {
                                 optionLabelProp="children"
                                 labelInValue
                                 onChange={(value) => this.setSearchType(value)}
+                                getPopupContainer={() => document.getElementById('provider-area')}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {partTypeOptions}
@@ -214,7 +229,7 @@ class IncomeDetail extends React.Component {
                     <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
                 </Col>*/}
             </Row>
-            <Table loading={this.state.data ? false : true} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
+            <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>
     }
 }
