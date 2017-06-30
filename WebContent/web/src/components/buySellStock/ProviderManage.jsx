@@ -387,7 +387,7 @@ class ProviderManage extends React.Component {
                     </Modal>
                     <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除供应商</Button>
                 </div>
-                <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
+                <Table loading={this.state.data.length>0?false:true} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
         </div >
     }
