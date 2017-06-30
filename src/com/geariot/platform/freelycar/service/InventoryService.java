@@ -85,7 +85,7 @@ public class InventoryService {
 		String andCondition = new InventoryTypeAndQueryCreator(name).createStatement();
 		int from = (page - 1) * number;
 		List<InventoryType> list = this.inventoryTypeDao.query(andCondition, from, number);
-		if(list == null){
+		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		long realSize = this.inventoryTypeDao.getQueryCount(andCondition);
