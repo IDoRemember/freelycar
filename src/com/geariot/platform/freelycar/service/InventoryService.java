@@ -80,8 +80,8 @@ public class InventoryService {
 		return obj.toString();
 	}
 
-	public String queryType(String name, Date startTime, Date endTime, int page, int number) {
-		String andCondition = this.buildTypeQueryCondition(name, startTime, endTime);
+	public String queryType(String name , int page, int number) {
+		String andCondition = new InventoryTypeAndQueryCreator(name).createStatement();
 		int from = (page - 1) * number;
 		List<InventoryType> list = this.inventoryTypeDao.query(andCondition, from, number);
 		if(list == null){
@@ -95,7 +95,7 @@ public class InventoryService {
 		return res.toString();
 	}
 	
-	private String buildTypeQueryCondition(String name, Date startTime, Date endTime){
+	/*private String buildTypeQueryCondition(String name, Date startTime, Date endTime){
 		String start = null;
 		String end = null;
 		if(startTime != null || endTime != null){
@@ -108,7 +108,7 @@ public class InventoryService {
 			}
 		}
 		return new InventoryTypeAndQueryCreator(name, start, end).createStatement();
-	}
+	}*/
 
 	public String addBrand(InventoryBrand inventoryBrand) {
 		inventoryBrand.setCreateDate(new Date());
