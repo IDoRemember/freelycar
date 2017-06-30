@@ -27,6 +27,7 @@ import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.InventoryAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.InventoryBrandAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
 
@@ -128,7 +129,7 @@ public class InventoryService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String listBrand(int page, int number) {
+	/*public String listBrand(int page, int number) {
 		int from = (page - 1) * number;
 		List<InventoryBrand> list = this.inventoryBrandDao.list(from, number);
 		if(list == null || list.isEmpty()){
@@ -141,14 +142,21 @@ public class InventoryService {
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
-	}
+	}*/
 
-	public String queryBrand(String name) {
-		List<InventoryBrand> list = this.inventoryBrandDao.query(name);
+	public String queryBrand(String name , int page , int number) {
+		String andCondition = new InventoryBrandAndQueryCreator(name).createStatement();
+		int from = (page - 1) * number;
+		List<InventoryBrand> list = this.inventoryBrandDao.getConditionQuery(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(list, JsonResFactory.dateConfig())).toString();
+		long realSize = inventoryBrandDao.getConditionCount(andCondition);
+		int size = (int) Math.ceil(realSize/(double)number);
+		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(list, JsonResFactory.dateConfig()));
+		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		return res.toString();
 	}
 
 	public String addInventory(Inventory inventory) {
@@ -265,6 +273,7 @@ public class InventoryService {
 		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig());
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
 		return obj.toString();
 	}
 
