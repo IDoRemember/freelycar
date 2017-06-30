@@ -22,8 +22,8 @@ public class StatController {
 	}
 	
 	@RequestMapping(value = "/thismonth" , method = RequestMethod.GET)
-	public String thisMonth(int income , int expend , int page , int number){
-		return statService.thisMonth(income, expend, page, number);
+	public String thisMonth(Date month , int income , int expend , int page , int number){
+		return statService.byMonth(month, income, expend, page, number);
 	}
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
@@ -40,6 +40,8 @@ public class StatController {
 	public String weeklyStatDetail(int income , int expend , int page , int number){
 		return statService.weeklyStatDetail(income, expend, page, number);
 	}
+	
+	
 	
 	
 }

@@ -3,108 +3,93 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-
 import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
-import moment from 'moment';
-
 import { Link } from 'react-router';
-
-// 日期 format
-const dateFormat = 'YYYY/MM/DD';
-
-
-
-class BeautyOrder extends React.Component {
+import $ from 'jquery'
+class HistoryIncomeDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            filteredInfo: null,
-            sortedInfo: null,
-            selectedRowKeys: [],
-            loading: false,
+            data: [],
+            pagination: {}
         }
     }
-    handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
-        this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
+    componentDidMount() {
+        this.getIncome(this.props.params.Date, 1, 10)
     }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
+    getIncome = (month, page, number) => {
+        $.ajax({
+            url: 'api/stat/thismonth',
+            data: {
+                month: new Date(month),
+                income: 1,
+                expend: 0,
+                page: 1,
+                number: 10
             },
-        });
+            success: (result) => {
+                if (result.code == "0") {
+                    let data = result.data
+                    for (let item of data) {
+                        item['key'] = item.id
+                    }
+                    if (data[data.length - 1]['key']) {
+                        this.setState({
+                            incomeStat: result.incomeStat,
+                            data: data,
+                            pagination: { total: result.realSize },
+                        })
+                    }
+                } else if (result.code == "2") {
+                    this.setState({
+                        expendStat: 0,
+                        data: [],
+                        pagination: { total: 0 }
+                    })
+                }
+            }
+        })
     }
-
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getIncome(this.props.params.Date, pagination.current, 10)
+    }
 
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
         const columns = [{
-            title:'序号',
-            dataIndex:'index',
-            key:'index'
-        },{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
             title: '车牌号',
-            dataIndex: 'license',
-            key: 'license'
+            dataIndex: 'licensePlate',
+            key: 'licensePlate'
         }, {
             title: '时间',
-            dataIndex: 'time',
-            key: 'time'
+            dataIndex: 'payDate',
+            key: 'payDate'
         }, {
             title: '项目',
-            dataIndex: 'project',
-            key: 'project'
+            dataIndex: 'type',
+            key: 'type',
+            render: (text, record, index) => {
+                return <span>{text == 1 ? '消费' : '办卡'}</span>
+            }
         }, {
             title: '金额',
-            dataIndex: 'money',
-            key: 'money'
-        }];
-
-        //表格
-        const data = [{
-            key: '1',
-            index:'1',
-            license: 'John Brown',
-            time: 32,
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park'
-        }, {
-            key: '2',
-            index:'2',
-            license: 'John Brown',
-            time: 32,
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park'
-        }, {
-            key: '3',
-            index:'3',
-            license: 'John Brown',
-            time: 32,
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park'
-        }, {
-            key: '4',
-            index:'4',
-            license: 'John Brown',
-            time: 32,
-            project: 'New York No. 1 Lake Park',
-            money: 'New York No. 1 Lake Park'
+            dataIndex: 'amount',
+            key: 'amount'
         }];
 
         return (
@@ -112,15 +97,15 @@ class BeautyOrder extends React.Component {
                 <BreadcrumbCustom first="收支查询" second="历史收入明细" />
                 <Card>
                     <div>
-                        <h1 style={{color:'red'}}>当月收入总金额： 4800</h1>
+                        <h1 style={{ color: 'red' }}>{this.props.params.Date}&nbsp;收入总金额：{this.state.incomeStat}</h1>
                     </div>
-                    <br/>
-                    <br/>
+                    <br />
+                    <br />
 
-                    <Table bordered columns={columns} dataSource={data} onChange={this.handleChange} />
+                    <Table loading={this.state.data.length > 0 ? false : true} bordered columns={columns} onChange={this.handleTableChange} dataSource={this.state.data} />
                 </Card>
             </div>
         );
     }
 }
-export default BeautyOrder
+export default HistoryIncomeDetail

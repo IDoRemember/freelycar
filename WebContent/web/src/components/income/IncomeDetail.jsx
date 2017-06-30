@@ -31,9 +31,8 @@ class IncomeDetail extends React.Component {
     getIncomeExpend = (mode, page, number) => {
         let datastrings
         if (mode == 'query') {
-            datastrings = localStorage.getItem('datastrings')
+            datastrings = localStorage.getItem('datastrings').split(',')
         }
-
         $.ajax({
             url: 'api/stat/' + mode,
             data: {
@@ -76,23 +75,6 @@ class IncomeDetail extends React.Component {
         })
         this.getIncomeExpend(this.props.params.mode, pagination.current, 10)
     }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
-            },
-        });
-    }
     render() {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
@@ -130,7 +112,7 @@ class IncomeDetail extends React.Component {
                 <BreadcrumbCustom first="收支查询" second="收入明细" />
                 <Card>
                     {
-                        this.props.mode != 'query' && <div className="table-operations">
+                        this.props.params.mode != 'query' && <div className="table-operations">
                             <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Button>
                             <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Button>
                             <Button><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Button>

@@ -9,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.InventoryBrandDao;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class InventoryBrandDaoImpl implements InventoryBrandDao {
@@ -47,6 +49,22 @@ public class InventoryBrandDaoImpl implements InventoryBrandDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
+	public List<InventoryBrand> getConditionQuery(String andCondition, int from, int pageSize) {
+		String basic = "from InventoryBrand";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long getConditionCount(String andCondition) {
+		String basic = "select count(*) from InventoryBrand";
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	/*@SuppressWarnings("unchecked")
+	@Override
 	public List<InventoryBrand> list(int from, int pageSize) {
 		String hql = "from InventoryBrand";
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
@@ -59,6 +77,8 @@ public class InventoryBrandDaoImpl implements InventoryBrandDao {
 		String hql = "from InventoryBrand where name like :name";
 		return this.getSession().createQuery(hql).setString("name", "%"+name+"%")
 				.setCacheable(Constants.SELECT_CACHE).list();
-	}
-
+	}*/
+	
+	
+	
 }

@@ -18,6 +18,7 @@ class ProviderManage extends React.Component {
             pagination: {
 
             },
+            loading:true,
             selectedRowKeys: [],
             selectedIds: [],
             queryValue: '',
@@ -113,6 +114,9 @@ class ProviderManage extends React.Component {
                 number: pageSize
             },
             success: (result) => {
+                this.setState({
+                    loading:false
+                })
                 if (result.code == "0") {
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
@@ -387,7 +391,7 @@ class ProviderManage extends React.Component {
                     </Modal>
                     <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除供应商</Button>
                 </div>
-                <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
+                <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
         </div >
     }
