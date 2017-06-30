@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.entities;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -19,8 +20,12 @@ public class Service {
 	private int validTime;
 	private String comment;
 	private List<ServiceProjectInfo> projectInfos;
+	private Date createDate;
 	public String getComment() {
 		return comment;
+	}
+	public Date getCreateDate() {
+		return createDate;
 	}
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,7 +40,7 @@ public class Service {
 	}
 	@OneToMany
 	@JoinColumn(name="serviceId", foreignKey=@ForeignKey(name="none"))
-	public List<ServiceProjectInfo> getServiceProjectInfos() {
+	public List<ServiceProjectInfo> getProjectInfos() {
 		return projectInfos;
 	}
 	public int getType() {
@@ -44,8 +49,12 @@ public class Service {
 	public int getValidTime() {
 		return validTime;
 	}
+	
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -56,8 +65,8 @@ public class Service {
 	public void setPrice(float price) {
 		this.price = price;
 	}
-	public void setServiceProjectInfos(List<ServiceProjectInfo> serviceProjectInfos) {
-		this.projectInfos = serviceProjectInfos;
+	public void setProjectInfos(List<ServiceProjectInfo> projectInfos) {
+		this.projectInfos = projectInfos;
 	}
 	public void setType(int type) {
 		this.type = type;
