@@ -87,7 +87,7 @@ public class ConsumOrderService {
 		InventoryOrder order = new InventoryOrder();
 		order.setId(IDGenerator.generate(3));
 		order.setCreateDate(new Date());
-		order.setInventoryOrderInfo(list);
+		order.setInventoryInfos(list);
 		order.setState(0);
 		order.setTotalAmount(totalAmount);
 		order.setTotalPrice(totalPrice);

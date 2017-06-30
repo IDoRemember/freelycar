@@ -31,7 +31,7 @@ public class InventoryOrder {
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="inventoryOrderId", foreignKey=@ForeignKey(name="none"))
-	public List<InventoryOrderInfo> getInventoryOrderInfo() {
+	public List<InventoryOrderInfo> getInventoryInfos() {
 		return inventoryInfos;
 	}
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
@@ -57,8 +57,8 @@ public class InventoryOrder {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public void setInventoryOrderInfo(List<InventoryOrderInfo> inventoryOrderInfo) {
-		this.inventoryInfos = inventoryOrderInfo;
+	public void setInventoryInfos(List<InventoryOrderInfo> inventoryInfos) {
+		this.inventoryInfos = inventoryInfos;
 	}
 	public void setOrderMaker(Admin orderMaker) {
 		this.orderMaker = orderMaker;
