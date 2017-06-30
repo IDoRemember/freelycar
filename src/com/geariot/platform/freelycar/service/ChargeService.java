@@ -18,6 +18,7 @@ import com.geariot.platform.freelycar.entities.OtherExpendType;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
+import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.ChargeAndQueryCreator;
 
@@ -71,6 +72,7 @@ public class ChargeService {
 	}
 	
 	public String addCharge(OtherExpendOrder otherExpendOrder){
+		otherExpendOrder.setId(IDGenerator.generate(IDGenerator.CHARORDER_ID));
 		otherExpendOrder.setCreateDate(new Date());
 		chargeDao.save(otherExpendOrder);
 		//当有其他支出发生时,取信息存入expendOrder表

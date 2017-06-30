@@ -23,6 +23,7 @@ import com.geariot.platform.freelycar.entities.InventoryType;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.InventoryAndQueryCreator;
@@ -152,6 +153,7 @@ public class InventoryService {
 
 	public String addInventory(Inventory inventory) {
 		inventory.setCreateDate(new Date());
+		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
 		this.inventoryDao.add(inventory);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -182,6 +184,7 @@ public class InventoryService {
 	}
 	
 	public String inStock(InventoryOrder order) {
+		order.setId(IDGenerator.generate(IDGenerator.IN_STOCK));
 		order.setCreateDate(new Date());
 		order.setState(0);
 		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
@@ -205,6 +208,7 @@ public class InventoryService {
 	}
 
 	public String outStock(InventoryOrder order) {
+		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 		order.setCreateDate(new Date());
 		List<InventoryOrderInfo> inventories = order.getInventoryOrderInfo();
 		List<String> fails = new ArrayList<>();

@@ -1,7 +1,5 @@
 package com.geariot.platform.freelycar.controller;
 
-import java.util.Date;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -91,7 +89,6 @@ public class InventoryController {
 	@RequestMapping(value = "/instock" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:instock")
 	public String inStock(@RequestBody InventoryOrder inventoryOrder){
-		System.out.println(inventoryOrder);
 		return this.inventoryService.inStock(inventoryOrder);
 	}
 	
