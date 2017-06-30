@@ -45,7 +45,7 @@ class BeautyOrder extends React.Component {
                 comment: ''
             },
             brandItem: [],//配件品牌
-            typeItem:[]
+            typeItem: []
         }
     }
 
@@ -132,11 +132,12 @@ class BeautyOrder extends React.Component {
 
         let form = this.state.form;
         var obj = {};
+        obj.id = 's11100';
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.typeId = form.typeId;
-        obj.brandId = form.brandId;
+        obj.type = { id: form.typeId };
+        obj.brand = { id: form.brandId };
         obj.comment = form.comment;
         console.log(obj);
         $.ajax({
@@ -196,7 +197,7 @@ class BeautyOrder extends React.Component {
 
         this.loadData(1, 10);
         this.loadPjBrand(1, 99);
-        this.loadPjType(1,99);
+        this.loadPjType(1, 99);
 
     }
 
@@ -222,8 +223,51 @@ class BeautyOrder extends React.Component {
                         let obj = arr[i];
                         let tableItem = {};
                         for (let item in obj) {
-                            if (item == 'id')
+                            if (item == 'id') {
                                 tableItem.key = obj[item];
+                                tableItem.number = obj[item];
+                            }
+                            else if (item == 'type')
+                                tableItem.type = obj[item].typeName;
+                            else if (item == 'brand')
+                                tableItem.brand = obj[item].name;
+                            else
+                                tableItem[item] = obj[item];
+                        }
+                        tableDate.push(tableItem);
+                    }
+                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                }
+
+            }
+
+        });
+    }
+    //获取配件类型
+    loadPjData = (page, number, name) => {
+        let jsonData = {};
+        jsonData.name = name;
+        jsonData.page = page;
+        jsonData.number = number;
+        $.ajax({
+            url: '/api/inventory/querytype',
+            data: jsonData,
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+                let code = res.code;
+                if (code == '0') {
+                    let tableDate = [];//表格显示的数据
+                    let arr = res.data;
+                    for (let i = 0, len = arr.length; i < len; i++) {
+                        let obj = arr[i];
+                        let tableItem = {};
+                        for (let item in obj) {
+                            if (item == 'id') {
+                                tableItem.key = obj[item];
+                                tableItem.number = obj[item];
+                            }
                             else if (item == 'type')
                                 tableItem.type = obj[item].typeName;
                             else if (item == 'brand')
@@ -242,7 +286,7 @@ class BeautyOrder extends React.Component {
     }
 
 
-    //获取配件品牌
+    //获取配件品牌 下拉select
     loadPjBrand = (page, number) => {
         let jsonData = {};
         jsonData.page = page;
@@ -270,7 +314,7 @@ class BeautyOrder extends React.Component {
         });
     }
 
-    //获取配件类别
+    //获取配件类别 下拉
     loadPjType = (page, number) => {
         let jsonData = {};
         jsonData.page = page;
@@ -303,13 +347,13 @@ class BeautyOrder extends React.Component {
     onValueChange = (key, value) => {
         if (key == 'type') {
             this.setState({
-                form: update(this.state.form, {  ['typeId']: { $set: value } })
+                form: update(this.state.form, { ['typeId']: { $set: value } })
             })
-        } else if(key =='brand'){
+        } else if (key == 'brand') {
             this.setState({
-                form: update(this.state.form, {  ['brandId']: { $set: value } })
+                form: update(this.state.form, { ['brandId']: { $set: value } })
             })
-        } 
+        }
         else
             this.setState({
                 form: update(this.state.form, { [key]: { $set: value } })
@@ -392,8 +436,8 @@ class BeautyOrder extends React.Component {
             key: 'type'
         }, {
             title: '创建时间',
-            dataIndex: 'createTime',
-            key: 'create-time'
+            dataIndex: 'createDate',
+            key: 'createDate'
         }, {
             title: '备注',
             dataIndex: 'remark',
@@ -475,14 +519,29 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="配件管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={9}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="配件名称" />
                                         </div>
                                     </Col>
-                                    <Col span={5}>
+
+                                    <Col span={1}>
+                                        <div style={{ verticalAlign: 'middle' }}>
+                                            <span>配件类别:</span>
+                                        </div>
+                                    </Col>
+
+                                    <Col span={3}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="配件类别" />
+                                            {/*<Input addonBefore="配件类别" />*/}
+                                            <Select
+                                                addonBefore="配件类别"
+                                                style={{ width: '100%' }}
+                                                onChange={(value) => this.onValueChange('type', value)}
+                                            >
+                                                {this.state.typeItem}
+                                            </Select>
+
                                         </div>
                                     </Col>
                                     <Col span={8}>
@@ -539,7 +598,7 @@ class BeautyOrder extends React.Component {
                                                 {...formItemLayout}
                                                 label="所属分类"
                                             >
-                                                 <Select
+                                                <Select
                                                     style={{ width: '100%' }}
                                                     onChange={(value) => this.onValueChange('type', value)}
                                                 >
@@ -589,16 +648,10 @@ class BeautyOrder extends React.Component {
 
                             <div>
                                 <Row>
-                                    <Col span={9}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="配件名称" />
                                         </div>
-                                    </Col>
-                                    <Col span={1}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:</span>
-                                    </Col>
-                                    <Col span={5}>
-                                        <RangePicker defaultValue={[moment(), moment()]} format={dateFormat} />
                                     </Col>
                                     <Col span={3}>
                                         <Button type="primary">查询</Button>
