@@ -79,10 +79,9 @@ class ProductSearch extends React.Component {
     }
     getTypeList = (page, pageSize) => {
         $.ajax({
-            url: 'api/inventory/listtype',
+            url: 'api/inventory/querytype',
             data: {
                 page: page,
-                pagination: {},
                 number: pageSize
             },
             success: (result) => {
@@ -114,15 +113,15 @@ class ProductSearch extends React.Component {
                             number: result.data[i].id,
                             id: result.data[i].id,
                             name: result.data[i].name,
-                            category: result.data[i].type,
-                            brand: result.data[i].brand,
+                            category: result.data[i].type.typeName,
+                            brand: result.data[i].brand.name,
                             specification: result.data[i].standard,
                             attribute: result.data[i].property,
                             price: result.data[i].price,
                             stock: result.data[i].amount,
-                            supplier: result.data[i].providers.name,
+                            supplier: result.data[i].provider.name,
                             createDate: result.data[i].createDate,
-                            phone: result.data[i].providers.phone
+                            phone: result.data[i].provider.phone
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
