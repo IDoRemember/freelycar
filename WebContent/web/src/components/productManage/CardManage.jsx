@@ -20,27 +20,8 @@ class EditableTable extends React.Component {
             //模态框状态
             visible: false,
             //会员卡类别数据
-            data: [{
-                key: '1',
-                index: '1',
-                name: 'John Brown',
-                properties: 'dfsd',
-                valateTime: '一年',
-                price: 'New York No. 1 Lake Park',
-                createTime: 'fff',
-                remark: 'xxx',
-                operation: 'zz'
-            }, {
-                key: '2',
-                index: '2',
-                name: 'John Brown',
-                properties: 'dfsd',
-                valateTime: '一年',
-                price: 'New York No. 1 Lake Park',
-                createTime: 'fff',
-                remark: 'xxx',
-                operation: 'zz'
-            }]
+            data: [],
+            cardName:''//条件查询的卡类
         }
 
     }
@@ -52,6 +33,10 @@ class EditableTable extends React.Component {
         this.loadData(1, 10);
     }
 
+    //条件查询
+    queryData = () => {
+        this.loadData(1, 10, this.state.cardName);
+    }
 
 
     //获取数据的函数
@@ -67,6 +52,7 @@ class EditableTable extends React.Component {
             type: 'get',
             success: (res) => {
                 console.log(res);
+
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -231,11 +217,11 @@ class EditableTable extends React.Component {
                         <Row>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="卡类名称" />
+                                    <Input addonBefore="卡类名称" onChange={(e) => this.setState({cardName:e.target.value})}/>
                                 </div>
                             </Col>
                             <Col span={3}>
-                                <Button type="primary">查询</Button>
+                                <Button type="primary" onClick={this.queryData}>查询</Button>
                             </Col>
                         </Row>
 

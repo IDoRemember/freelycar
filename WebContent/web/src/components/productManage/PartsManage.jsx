@@ -45,7 +45,12 @@ class BeautyOrder extends React.Component {
                 comment: ''
             },
             brandItem: [],//配件品牌
-            typeItem: []
+            typeItem: [],
+            inventoryName: '',//条件查询的配件名称
+            inventoryTypeId: '',//条件查询的配件类别id
+            inventoryBrandName: ''//条件查询的配件品牌名称
+
+
         }
     }
 
@@ -181,10 +186,13 @@ class BeautyOrder extends React.Component {
     //切换tab 在这里调用ajax获取数组 赋值给data
     tabCallback = (key) => {
         if (key == 1) {
-            //this.loadData(1, 10);
-            //this.loadProgram();
+            this.loadData(1, 10);
+            this.loadPjBrand(1, 99);
+            this.loadPjType(1, 99);
         } else if (key == 2) {
-            //this.loadDataTab2(1, 10);
+            this.loadPjData(1, 10);
+        } else if (key == 3) {
+            this.loadPjBrandData(1, 10);
         }
 
         //async
@@ -201,8 +209,22 @@ class BeautyOrder extends React.Component {
 
     }
 
+    //条件查询
+    queryData = () => {
+        this.loadData(1, 10, this.state.inventoryName, this.state.inventoryTypeId);
+    }
+
+    //tab2条件查询
+    queryData2 = () => {
+        this.loadPjData(1, 10, this.state.inventoryName);
+    }
+    //tab3条件查询
+    queryData3 = () => {
+        this.loadPjBrandData(1, 10, this.state.inventoryBrandName);
+    }
+
     //获取数据的函数
-    loadData = (page, number, typeId, name) => {
+    loadData = (page, number, name, typeId) => {
         let jsonData = {};
         jsonData.name = name;
         jsonData.typeId = typeId;
@@ -216,8 +238,8 @@ class BeautyOrder extends React.Component {
             success: (res) => {
                 console.log(res);
                 let code = res.code;
+                let tableDate = [];//表格显示的数据
                 if (code == '0') {
-                    let tableDate = [];//表格显示的数据
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
                         let obj = arr[i];
@@ -237,6 +259,8 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                } else {
+                    this.setState({ data: tableDate });
                 }
 
             }
@@ -257,8 +281,8 @@ class BeautyOrder extends React.Component {
             success: (res) => {
                 console.log(res);
                 let code = res.code;
+                let tableDate = [];//表格显示的数据
                 if (code == '0') {
-                    let tableDate = [];//表格显示的数据
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
                         let obj = arr[i];
@@ -269,7 +293,7 @@ class BeautyOrder extends React.Component {
                                 tableItem.number = obj[item];
                             }
                             else if (item == 'type')
-                                tableItem.type = obj[item].typeName;
+                                tableItem.typeName = obj[item].typeName;
                             else if (item == 'brand')
                                 tableItem.brand = obj[item].name;
                             else
@@ -277,7 +301,54 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                    this.setState({ data: tableDate, pagination: { total: res.realSize } });
+                } else {
+                    this.setState({ data: tableDate });
+                }
+
+            }
+
+        });
+    }
+
+
+    //获取配件品牌
+    loadPjBrandData = (page, number, name) => {
+        let jsonData = {};
+        jsonData.page = page;
+        jsonData.number = number;
+        jsonData.name = name;
+        $.ajax({
+            url: '/api/inventory/querybrand',
+            data: jsonData,
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+                let code = res.code;
+                let tableDate = [];//表格显示的数据
+                if (code == '0') {
+                    let arr = res.data;
+                    for (let i = 0, len = arr.length; i < len; i++) {
+                        let obj = arr[i];
+                        let tableItem = {};
+                        for (let item in obj) {
+                            if (item == 'id') {
+                                tableItem.key = obj[item];
+                                tableItem.number = obj[item];
+                            }
+                            else if (item == 'type')
+                                tableItem.typeName = obj[item].typeName;
+                            else if (item == 'brand')
+                                tableItem.brand = obj[item].name;
+                            else
+                                tableItem[item] = obj[item];
+                        }
+                        tableDate.push(tableItem);
+                    }
+                    this.setState({ data: tableDate, pagination: { total: res.realSize } });
+                } else {
+                    this.setState({ data: tableDate });
                 }
 
             }
@@ -292,7 +363,7 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/inventory/listbrand',
+            url: '/api/inventory/querybrand',
             dataType: 'json',
             data: jsonData,
             type: 'get',
@@ -426,25 +497,21 @@ class BeautyOrder extends React.Component {
             title: '序号',
             dataIndex: 'index',
             key: 'index',
-            render:(text,record ,index) => {
-                return <span>{index+1}</span>
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
             }
         }, {
             title: '类型名称',
-            dataIndex: 'name',
-            key: 'name'
-        }, {
-            title: '所属分类',
-            dataIndex: 'type',
-            key: 'type'
+            dataIndex: 'typeName',
+            key: 'typeName'
         }, {
             title: '创建时间',
             dataIndex: 'createDate',
             key: 'createDate'
         }, {
             title: '备注',
-            dataIndex: 'remark',
-            key: 'remark'
+            dataIndex: 'comment',
+            key: 'comment'
         }, {
             title: '操作',
             dataIndex: 'operation',
@@ -466,8 +533,8 @@ class BeautyOrder extends React.Component {
             title: '序号',
             dataIndex: 'index',
             key: 'index',
-            render:(text,record,index)=>{
-                return <span>{index+1}</span>
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
             }
         }, {
             title: '配件品牌',
@@ -521,7 +588,7 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="配件名称" />
+                                            <Input addonBefore="配件名称" onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
 
@@ -533,11 +600,10 @@ class BeautyOrder extends React.Component {
 
                                     <Col span={3}>
                                         <div style={{ marginBottom: 16 }}>
-                                            {/*<Input addonBefore="配件类别" />*/}
                                             <Select
                                                 addonBefore="配件类别"
                                                 style={{ width: '100%' }}
-                                                onChange={(value) => this.onValueChange('type', value)}
+                                                onChange={(value) => this.setState({ inventoryTypeId: value })}
                                             >
                                                 {this.state.typeItem}
                                             </Select>
@@ -545,17 +611,8 @@ class BeautyOrder extends React.Component {
                                         </div>
                                     </Col>
                                     <Col span={8}>
+                                        <Button type="primary" onClick={this.queryData}>查询</Button>
 
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={8}>
-                                        <span style={{ verticalAlign: 'middle', lineHeight: '28px' }}>创建日期:&nbsp;</span>
-                                        <RangePicker defaultValue={[moment(), moment()]} format={dateFormat} />
-                                    </Col>
-                                    <Col span={8}>
-                                        <Button type="primary">查询</Button>
                                     </Col>
                                 </Row>
 
@@ -650,11 +707,11 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="配件名称" />
+                                            <Input addonBefore="配件名称" onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
                                     <Col span={3}>
-                                        <Button type="primary">查询</Button>
+                                        <Button type="primary" onClick={this.queryData2}>查询</Button>
                                     </Col>
                                 </Row>
 
@@ -687,12 +744,12 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={4}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input />
+                                            <Input onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />
                                         </div>
                                     </Col>
 
                                     <Col span={3} offset={1}>
-                                        <Button type="primary">查询</Button>
+                                        <Button type="primary" onClick={this.queryData3}>查询</Button>
                                     </Col>
                                 </Row>
 
