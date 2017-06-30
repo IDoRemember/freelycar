@@ -34,15 +34,15 @@ public class ServiceController {
 		return serviceService.modifyService(service);
 	}
 	
-	@RequestMapping(value = "/list" , method = RequestMethod.GET)
+	/*@RequestMapping(value = "/list" , method = RequestMethod.GET)
 	@PermissionRequire("service:query")
 	public String getServiceList(int page , int number){
 		return serviceService.getServiceList(page, number);
-	}
+	}*/
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("service:query")
-	public String getSelectService(String name){
-		return serviceService.getSelectService(name);
+	public String getSelectService(String name , int page , int number){
+		return serviceService.getSelectService(name, page, number);
 	}
 }

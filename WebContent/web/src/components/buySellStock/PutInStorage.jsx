@@ -1,12 +1,17 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, notification } from 'antd';
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'
 import update from 'immutability-helper'
 const Option = Select.Option;
+notification.config({
+    placement: 'topRight',
+    top: 50,
+    duration: 3,
+});
 class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
@@ -19,6 +24,7 @@ class PutInStorage extends React.Component {
         }
     }
     componentDidMount() {
+
         $.ajax({
             url: 'api/idgen/generate',
             data: {
@@ -74,11 +80,11 @@ class PutInStorage extends React.Component {
             data: update(this.state.data, { [index]: { ['number']: { $set: value } } })
         })
     }
-    handleSelectedChange = (value, index) => {
-        this.setState({
-            data: update(this.state.data, { [index]: { ['selectedProvider']: { $set: value } } })
-        })
-    }
+    // handleSelectedChange = (value, index) => {
+    //     this.setState({
+    //         data: update(this.state.data, { [index]: { ['selectedProvider']: { $set: value } } })
+    //     })
+    // }
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
@@ -89,32 +95,50 @@ class PutInStorage extends React.Component {
             this.setState({
                 error: '请新增配件入库'
             })
-        } else {
-            for (let item of this.state.data) {
-                if (!item.selectedProvider) {
-                    this.setState({
-                        error: '请选择供应商'
-                    })
-                }
-            }
         }
-        if (this.state.error) {
+        if (this.state.error == '') {
             let instockArray = []
             for (let item of this.state.data) {
                 let instockObject = {
-                    id:item.id,
-                    providers:item.selectedProvider,
-                    amount:item.number?item.number:1
+                    inventoryId: item.partId,
+                    name: item.partName,
+                    typeName: item.category.typeName,
+                    brandName: item.brand,
+                    standard: item.standard,
+                    property: item.attribute,
+                    provider: { id: item.provider.id },
+                    amount: item.number ? item.number : 1,
+                    price: item.price
                 }
-                instockArray.push()
+                instockArray.push(instockObject)
             }
+            console.log(instockArray)
             $.ajax({
                 url: 'api/inventory/instock',
-                data: {
-                    
-                },
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                type: 'post',
+                data: JSON.stringify({
+                    type: 0,
+                    state: 0,
+                    inventoryInfos: instockArray
+                }),
+                traditional: true,
                 success: (result) => {
-                    
+                    if (result.code == '0') {
+                        notification.open({
+                            message: '入库成功',
+                            description: '',
+                            style: {
+                                width: 600,
+                                marginLeft: 335 - 600,
+                            },
+                        });
+                        this.setState({
+                            data:[]
+                        })
+                    }
+                    console.log(result)
                 }
             })
         }
@@ -189,30 +213,32 @@ class PutInStorage extends React.Component {
                     />
                     <Col
                         title="供应商"
-                        key="supplier"
-                        dataIndex="supplier"
+                        key="provider"
+                        dataIndex="provider"
                         render={(text, record, index) => {
-                            const providersOptions = record.providers.map((item, index) => {
-                                return <Option key={item.id} value={item.id + ''}>{item.name}</Option>
-                            })
-                            if (text) {
-                                return <span>{text}</span>
-                            } else {
-                                return <Select
-                                    mode="combobox"
-                                    showSearch
-                                    style={{ width: '100px' }}
-                                    placeholder="输入供应商名称"
-                                    optionFilterProp="children"
-                                    optionLabelProp="children"
-                                    labelInValue
-                                    onChange={(value) => this.handleSelectedChange(value, index)}
-                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                >
-                                    {providersOptions}
-                                </Select>
-                            }
+                            return <span>{text.name}</span>
                         }}
+                    /*const providersOptions = record.provider.map((item, index) => {
+                        return <Option key={item.id} value={item.id + ''}>{item.name}</Option>
+                    })
+                    if (text) {
+                        return <span>{text}</span>
+                    } else {
+                        return <Select
+                            mode="combobox"
+                            showSearch
+                            style={{ width: '100px' }}
+                            placeholder="输入供应商名称"
+                            optionFilterProp="children"
+                            optionLabelProp="children"
+                            labelInValue
+                            onChange={(value) => this.handleSelectedChange(value, index)}
+                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                        >
+                            {providersOptions}
+                        </Select>
+                    }
+                }}*/
                     />
                     <Col
                         title="单项合计"

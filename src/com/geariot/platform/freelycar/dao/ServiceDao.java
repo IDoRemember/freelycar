@@ -12,10 +12,13 @@ public interface ServiceDao {
 	
 	void delete(int serviceId);
 	
-	List<Service> listServices(int from , int pageSize);
+	/*List<Service> listServices(int from , int pageSize);*/
 	
 	List<Service> queryByName(String name);
 	
 	long getCount();
 	
+	List<Service> listServices(String andCondition , int from , int pageSize);
+	
+	long getConditionCount(String andCondition);
 }
