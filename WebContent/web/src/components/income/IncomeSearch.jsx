@@ -94,12 +94,17 @@ class IncomeSearch extends React.Component {
     }
     onTimeSelected = (dates,dateStrings) =>{
         console.log(dates,dateStrings)
-        if(this.state.mode == 'date') {
+        localStorage.setItem('datastrings',dateStrings)
+        if(this.state.mode == 'query') {
              $.ajax({
             url: 'api/stat/query',
             data: {
-                startDate:new Date(dateStrings[0]),
-                endDate:new Date(dateStrings[1])
+                startTime:new Date(dateStrings[0]),
+                endTime:new Date(dateStrings[1]),
+                income:1,
+                expend:1,
+                page:1,
+                number:10
             },
             success: (result) => {
                 if (result.code == "0") {
@@ -122,14 +127,13 @@ class IncomeSearch extends React.Component {
                             <Radio.Group onChange={this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
                                 <Radio.Button value="today" >今日</Radio.Button>
                                 <Radio.Button value="thismonth">本月</Radio.Button>
-                                <Radio.Button value="date">区间查找</Radio.Button>
+                                <Radio.Button value="query">区间查找</Radio.Button>
                             </Radio.Group>
                         </Col>
                         {/*日期选择器*/}
                         <Col span={12}>
                             <span>选择查找日期 : </span>
                             <DatePicker.RangePicker
-                                defaultValue={[moment(), moment()]}
                                 format={dateFormat}
                                 showToday={true}
                                 onChange={(dates,dateStrings)=>{this.onTimeSelected(dates,dateStrings)}}

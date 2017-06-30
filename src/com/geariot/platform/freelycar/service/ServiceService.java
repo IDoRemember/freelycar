@@ -29,6 +29,7 @@ public class ServiceService {
 	private ServiceDao serviceDao;
 	
 	public String addService(Service service){
+		service.setCreateDate(new Date());
 		serviceDao.save(service);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

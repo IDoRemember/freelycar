@@ -48,25 +48,57 @@ class EditableTable extends React.Component {
 
 
 
-    // componentDidMount(){
-    //     var jsondata = {};
-    //     jsondata.page = 1;
-    //     jsondata.number = 10;
+    componentDidMount() {
+        this.loadData(1, 10);
+    }
 
-        
-    //     $.ajax({
-    //         url:'/api/product/list',
-    //         dataType:'json',
-    //         data:jsondata,
-    //         type:'get',
-    //         success:function(data){
-    //             console.log(data);
-    //         }
 
-    //     });
-    // }
 
-    
+    //获取数据的函数
+    loadData = (page, number, cardName) => {
+        let jsonData = {};
+        jsonData.name = cardName;
+        jsonData.page = page;
+        jsonData.number = number;
+        $.ajax({
+            url: '/api/service/query',
+            data: jsonData,
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+                let code = res.code;
+                if (code == '0') {
+                    let tableDate = [];//表格显示的数据
+                    let arr = res.data;
+                    for (let i = 0, len = arr.length; i < len; i++) {
+                        let obj = arr[i];
+                        let tableItem = {};
+                        for (let item in obj) {
+                            if (item == 'id')
+                                tableItem.key = obj[item];
+                            else if (item == 'type'){
+                                let type = obj[item];
+                                if(type==0)
+                                    type = '次卡';
+                                else if(type==1)
+                                    type = '组合卡';
+                                tableItem[item] = type;
+                            }
+                            else
+                                tableItem[item] = obj[item];
+                        }
+                        tableDate.push(tableItem);
+                    }
+                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                }
+
+            }
+
+        });
+    }
+
+
 
     // 模态框的处理函数
     showModal = () => {
@@ -122,46 +154,46 @@ class EditableTable extends React.Component {
         const columns = [{
             title: '序号',
             dataIndex: 'index',
-            key: 'index'
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
         }, {
             title: '卡类名称',
             dataIndex: 'name',
             key: 'name'
         }, {
             title: '卡类属性',
-            dataIndex: 'properties',
-            key: 'properties'
+            dataIndex: 'type',
+            key: 'type'
         }, {
             title: '售卡金额',
             dataIndex: 'price',
             key: 'price'
         }, {
             title: '有效期(年)',
-            dataIndex: 'valateTime',
+            dataIndex: 'validTime',
             key: 'valateTime'
         }, {
             title: '创建时间',
-            dataIndex: 'createTime',
+            dataIndex: 'createDate',
             key: 'create-time'
         }, {
             title: '备注',
-            dataIndex: 'remark',
-            key: 'remark'
+            dataIndex: 'comment',
+            key: 'comment'
         }, {
             title: 'operation',
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-                    this.state.data.length > 1 ?
-                        (
-                            <div>
-                                <a onClick={this.showModal}>修改</a>
-                                &nbsp;&nbsp;
-                                <Popconfirm title="Sure to delete?" onConfirm={() => this.onDelete(index)}>
-                                    <a href="#">删除</a>
-                                </Popconfirm>
-                            </div>
-                        ) : null
+                    <div>
+                        <a onClick={this.showModal}>修改</a>
+                        &nbsp;&nbsp;
+                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete(index)}>
+                            <a href="#">删除</a>
+                        </Popconfirm>
+                    </div>
                 );
             },
         }];
@@ -202,18 +234,10 @@ class EditableTable extends React.Component {
                                     <Input addonBefore="卡类名称" />
                                 </div>
                             </Col>
-                            <Col span={1} style={{ minWidth: "70px", marginLeft: "16px" }}>
-                                <span style={{ verticalAlign: 'middle', lineHeight: '28px', }}>创建日期:</span>
-                            </Col>
-                            <Col span={8}>
-                                <RangePicker defaultValue={[moment('2015/01/01', dateFormat), moment('2015/01/01', dateFormat)]} format={dateFormat} />
-                            </Col>
-                            <Col span={8}>
+                            <Col span={3}>
                                 <Button type="primary">查询</Button>
                             </Col>
                         </Row>
-
-
 
                         <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col span={2}>
@@ -239,9 +263,9 @@ class EditableTable extends React.Component {
 
                 </Card>
 
-                
-                <CardModal visible={this.state.visible} onOk={()=>this.handleOk}
-                    onCancel={()=>this.handleCancel}></CardModal>
+
+                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
+                    onCancel={() => this.handleCancel}></CardModal>
 
                 {/*模态框*/}
                 {/*<Modal
@@ -341,7 +365,7 @@ class ModalEditableTable extends React.Component {
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ data:dataSource });
+        this.setState({ data: dataSource });
     }
     handleAdd = () => {
         const { count, dataSource } = this.state;

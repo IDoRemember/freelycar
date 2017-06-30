@@ -320,7 +320,7 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/inventory/listtype',
+            url: '/api/inventory/querytype',
             dataType: 'json',
             data: jsonData,
             type: 'get',
@@ -425,7 +425,10 @@ class BeautyOrder extends React.Component {
         const columns2 = [{
             title: '序号',
             dataIndex: 'index',
-            key: 'index'
+            key: 'index',
+            render:(text,record ,index) => {
+                return <span>{index+1}</span>
+            }
         }, {
             title: '类型名称',
             dataIndex: 'name',
@@ -447,14 +450,11 @@ class BeautyOrder extends React.Component {
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-                    this.state.data.length > 1 ?
-                        (
-                            <div>
-                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete(index)}>
-                                    <a href="#">删除</a>
-                                </Popconfirm>
-                            </div>
-                        ) : null
+                    <div>
+                        <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
+                            <a href="#">删除</a>
+                        </Popconfirm>
+                    </div>
                 );
             }
         }];
@@ -465,15 +465,18 @@ class BeautyOrder extends React.Component {
         const columns3 = [{
             title: '序号',
             dataIndex: 'index',
-            key: 'index'
+            key: 'index',
+            render:(text,record,index)=>{
+                return <span>{index+1}</span>
+            }
         }, {
             title: '配件品牌',
             dataIndex: 'name',
             key: 'name'
         }, {
             title: '创建时间',
-            dataIndex: 'createTime',
-            key: 'create-time'
+            dataIndex: 'createDate',
+            key: 'createDate'
         }, {
             title: '备注',
             dataIndex: 'remark',
@@ -483,14 +486,11 @@ class BeautyOrder extends React.Component {
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
-                    this.state.data.length > 1 ?
-                        (
-                            <div>
-                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete(index)}>
-                                    <a href="#">删除</a>
-                                </Popconfirm>
-                            </div>
-                        ) : null
+                    <div>
+                        <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
+                            <a href="#">删除</a>
+                        </Popconfirm>
+                    </div>
                 );
             }
         }];

@@ -95,7 +95,7 @@ class IncomeDetail extends React.Component {
             url: 'api/inventory/list',
             data: {
                 name: name,
-                typeId: typeId,
+                typeId: typeId?typeId.key:null,
                 page: page,
                 number: pageSize
             },
@@ -194,10 +194,9 @@ class IncomeDetail extends React.Component {
                         <Radio style={radioStyle} value={2}>
                             按配件类别进行搜索
                             {this.state.value==2&&<Select
-                                mode="combobox"
                                 showSearch
-                                style={{ width: '100px', marginLeft: '20px' }}
-                                placeholder="输入配件类别"
+                                style={{ width: '200px', marginLeft: '20px' }}
+                                placeholder="选择配件类别"
                                 optionFilterProp="children"
                                 optionLabelProp="children"
                                 labelInValue
