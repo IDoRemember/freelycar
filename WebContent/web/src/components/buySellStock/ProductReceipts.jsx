@@ -92,7 +92,7 @@ class PutInStorage extends React.Component {
             dataIndex: 'orderMaker',
             key: 'orderMaker',
               render: (text, record, index) => {
-                return <span>{text.name}</span>
+                return <span>{text?text.name:''}</span>
             }
         }, {
             title: '操作',
@@ -129,7 +129,7 @@ class PutInStorage extends React.Component {
                         </div>
                     </Col>
                 </Row>
-                < Table bordered columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />
+                < Table bordered pagination={this.state.pagination} columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />
             </Card>
         </div>
     }
