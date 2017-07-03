@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -163,7 +164,7 @@ public class InventoryService {
 		inventory.setCreateDate(new Date());
 		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
 		this.inventoryDao.add(inventory);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",new JSONObject(inventory)).toString();
 	}
 
 	public String deleteInventory(String... inventoryIds) {
