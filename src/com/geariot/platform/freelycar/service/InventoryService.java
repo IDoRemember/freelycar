@@ -24,6 +24,7 @@ import com.geariot.platform.freelycar.entities.InventoryType;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
@@ -164,7 +165,10 @@ public class InventoryService {
 		inventory.setCreateDate(new Date());
 		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
 		this.inventoryDao.add(inventory);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",new JSONObject(inventory)).toString();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		net.sf.json.JSONObject obj = net.sf.json.JSONObject.fromObject(inventory, config);
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",obj).toString();
 	}
 
 	public String deleteInventory(String... inventoryIds) {
