@@ -251,7 +251,7 @@ class OtherPay extends React.Component {
                                     单据日期：
                             </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
-                                    <Input value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                    <Input />
                                 </Col>
                             </Row>
 
@@ -260,7 +260,7 @@ class OtherPay extends React.Component {
                                     支出类别：
                             </Col>
                                 <Col span={8}>
-                                    <Input value={this.state.form.linkman} onChange={(e) => this.onValueChange('linkman', e.target.value)} />
+                                    <Input/>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -268,7 +268,7 @@ class OtherPay extends React.Component {
                                     支出金额：
                             </Col>
                                 <Col span={8}>
-                                    <Input value={this.state.form.phonenumber} onChange={(e) => this.onValueChange('phonenumber', e.target.value)} />
+                                    <Input  />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -276,7 +276,7 @@ class OtherPay extends React.Component {
                                     备注：
                             </Col>
                                 <Col span={8}>
-                                    <Input type="textarea" rows={3} value={this.state.form.remarks} onChange={(e) => this.onValueChange('remarks', e.target.value)} />
+                                    <Input type="textarea" rows={3}  />
                                 </Col>
                             </Row>
                         </Modal>
