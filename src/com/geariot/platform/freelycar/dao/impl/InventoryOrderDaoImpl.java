@@ -67,8 +67,8 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 
 	@Override
 	public void deleteOrder(String orderId) {
-		String hql = "delete from InventoryOrder where id = orderId";
-		this.getSession().createQuery(hql).setString("id", orderId).executeUpdate();
+		String hql = "delete from InventoryOrder where id = :orderId";
+		this.getSession().createQuery(hql).setString("orderId", orderId).executeUpdate();
 	}
 
 

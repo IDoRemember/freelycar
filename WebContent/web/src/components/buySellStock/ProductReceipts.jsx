@@ -57,6 +57,31 @@ class PutInStorage extends React.Component {
         })
         this.getList(pagination.current, 10)
     }
+    onDelete = (id) => {
+        $.ajax({
+            type: 'post',
+            url: 'api/provider/delete',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                providerIds: id
+            },
+            traditional: true,
+            success: (result) => {
+                if (result.code == "0") {
+                    let dataSource = [...this.state.data];
+                    dataSource = dataSource.filter((obj) => {
+                        return id !== obj.id;
+                    });
+                    console.log(dataSource)
+                    this.setState({
+                        data: dataSource,
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    });
+                }
+            }
+        })
+    }
     render() {
         const projectOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
@@ -64,8 +89,8 @@ class PutInStorage extends React.Component {
             title: '序号',
             dataIndex: 'index',
             key: 'index',
-            render:(text,record,index) =>{
-                return <span>{index+1}</span>
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
             }
         }, {
             title: '库存编号',
@@ -91,8 +116,8 @@ class PutInStorage extends React.Component {
             title: '制单人',
             dataIndex: 'orderMaker',
             key: 'orderMaker',
-              render: (text, record, index) => {
-                return <span>{text?text.name:''}</span>
+            render: (text, record, index) => {
+                return <span>{text ? text.name : ''}</span>
             }
         }, {
             title: '操作',
@@ -103,7 +128,7 @@ class PutInStorage extends React.Component {
                     <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
                         <a href="javascript:void(0);">修改</a>
                     </span>
-                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(record.id)}>
                         <a href="javascript:void(0);">删除</a>
                     </Popconfirm>
                 </span>
