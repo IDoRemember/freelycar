@@ -57,7 +57,6 @@ class PutInStorage extends React.Component {
             view: false,
             data: datalist
         })
-
     }
     changeNumber = (value, index) => {
         this.setState({
@@ -255,7 +254,7 @@ class PutInStorage extends React.Component {
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
                             <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
-                            <Button onClick={() => this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>添加入库</Button>
+                            <Button onClick={() => this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                             <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
                     </Row>
