@@ -9,11 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
-import com.geariot.platform.freelycar.dao.IncomeOrderDao;
+import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Client;
-import com.geariot.platform.freelycar.entities.IncomeOrder;
+import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
@@ -36,7 +36,7 @@ public class ClientService {
 	private CarDao carDao;
 	
 	@Autowired
-	private IncomeOrderDao incomeOrderDao;
+	private ConsumOrderDao consumOrderDao;
 	
 	public String list(int page, int number) {
 		int from = (page - 1) * number;
@@ -131,7 +131,8 @@ public class ClientService {
 		config.setJsonPropertyFilter(filter);
 		JSONObject obj = JsonResFactory.buildNet(RESCODE.SUCCESS, 
 				Constants.RESPONSE_CLIENT_KEY, JSONObject.fromObject(client, config));
-		List<IncomeOrder> consumHist = this.incomeOrderDao.findByClientId(clientId);
+//		List<IncomeOrder> consumHist = this.incomeOrderDao.findByClientId(clientId);
+		List<ConsumOrder> consumHist = this.consumOrderDao.findWithClientId(clientId);
 		if(consumHist != null){
 			obj.put(Constants.RESPONSE_DATA_KEY, JSONArray.fromObject(consumHist, config));
 		}

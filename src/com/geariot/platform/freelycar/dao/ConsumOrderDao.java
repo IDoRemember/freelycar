@@ -20,4 +20,6 @@ public interface ConsumOrderDao {
 	
 	List<String> getConsumOrderIdsByStaffId(int staffId);
 	
+	List<ConsumOrder> findWithClientId(int clientId);
+	
 }

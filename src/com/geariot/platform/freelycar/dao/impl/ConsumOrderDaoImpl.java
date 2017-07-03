@@ -77,4 +77,12 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 		return this.getSession().createSQLQuery(sql).setInteger("id", staffId).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ConsumOrder> findWithClientId(int clientId) {
+		String hql = "from ConsumOrder where car.client.id = :clientId";
+		return this.getSession().createQuery(hql).setInteger("clientId", clientId)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
 }
