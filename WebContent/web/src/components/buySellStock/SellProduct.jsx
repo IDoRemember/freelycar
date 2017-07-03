@@ -12,7 +12,6 @@ class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            id:'',
             data: [{
                 key: 1,
                 index: 1,
@@ -27,17 +26,7 @@ class PutInStorage extends React.Component {
         }
     }
     componentDidMount() {
-         $.ajax({
-            url: 'api/idgen/generate',
-            data: {
-                type: 3
-            },
-            success: (result) => {
-                this.setState({
-                    id: result.id
-                })
-            }
-        })
+        
         AjaxGet('GET', 'data/LicensePlate.json', (res) => {
             this.setState({ option: res.data })
         })
@@ -50,8 +39,7 @@ class PutInStorage extends React.Component {
             <BreadcrumbCustom first="进销存管理" second="出库" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                    <Col span={8} >单据编号：<span>{this.state.id}</span>
-                    </Col>
+                   
                     <Col span={8} >
                         单据时间：
                         <DatePicker.RangePicker

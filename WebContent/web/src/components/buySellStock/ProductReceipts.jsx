@@ -5,7 +5,9 @@ import { Link } from 'react-router';
 import moment from 'moment';
 import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
-const Option = Select.Option;
+import update from 'immutability-helper'
+const Option = Select.Option,
+    Search = Input.Search
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
 class PutInStorage extends React.Component {
@@ -13,11 +15,31 @@ class PutInStorage extends React.Component {
         super(props)
         this.state = {
             data: [],
-            option: []
+            option: [],
+            orderNumber: '',
+            orderMaker: '',
+            adminList: []
         }
     }
     componentDidMount() {
         this.getList(1, 10)
+        this.getAdminList()
+    }
+    getAdminList = () => {
+        $.ajax({
+            url: 'api/admin/list',
+            data: {
+                page: 1,
+                number: 99
+            },
+            success: (result) => {
+                if (result.code == "0") {
+                    this.setState({
+                        adminList: result.data
+                    })
+                }
+            }
+        })
     }
     getList = (page, number) => {
         $.ajax({
@@ -60,11 +82,11 @@ class PutInStorage extends React.Component {
     onDelete = (id) => {
         $.ajax({
             type: 'post',
-            url: 'api/provider/delete',
+            url: 'api/inventory/delorder',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                providerIds: id
+                orderId: id
             },
             traditional: true,
             success: (result) => {
@@ -80,6 +102,43 @@ class PutInStorage extends React.Component {
                     });
                 }
             }
+        })
+    }
+    queryList = (inventoryOrderId, adminId, page, number) => {
+        $.ajax({
+            type: 'get',
+            url: 'api/inventory/query',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                inventoryOrderId: inventoryOrderId,
+                adminId: adminId,
+                page: page,
+                number: number
+            },
+            traditional: true,
+            success: (result) => {
+                if (result.code == "0") {
+                    let data = result.data
+                    for (let item of data) {
+                        item['key'] = item.id
+                    }
+                    this.setState({
+                        data: data,
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    });
+                }
+            }
+        })
+    }
+    setOrderNumber = (value) => {
+        this.setState({
+            orderNumber: value
+        })
+    }
+    setOrderMaker = (value) => {
+        this.setState({
+            orderMaker: value
         })
     }
     render() {
@@ -129,28 +188,46 @@ class PutInStorage extends React.Component {
                         <a href="javascript:void(0);">修改</a>
                     </span>
                     <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(record.id)}>
-                        <a href="javascript:void(0);">删除</a>
+                        <a href="javascript:void(0);">作废</a>
                     </Popconfirm>
                 </span>
             }
-        }]
+        }], adminList = this.state.adminList.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+        })
+
         return <div>
             <BreadcrumbCustom first="进销存管理" second="库存单据" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                    <Col span={8} >单据编号：<Input style={{ width: '200px' }} />
+                    <Col span={8} >单据编号：<Input
+                        placeholder="输入单据编号"
+                        style={{ width: '200px', marginBottom: '10px' }}
+                        value={this.state.orderNumber}
+                        onChange={(e) => this.setOrderNumber(e.target.value)}
+                    />
                     </Col>
                     <Col span={8} >
-                        单据时间：
-                        <DatePicker.RangePicker
-                            format={dateFormat}
-                            showToday={true}
-                        />
+                        <div style={{ height: '28px', lineHeight: '28px' }} id='provider-area'>
+                            制单人：
+                           <Select
+                                showSearch
+                                style={{ width: '200px' }}
+                                placeholder="选择制单人"
+                                optionFilterProp="children"
+                                onChange={(value) => this.setOrderMaker(value)}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                getPopupContainer={() => document.getElementById('provider-area')}
+                            >
+                                {adminList}
+                            </Select>
+                        </div>
                     </Col>
                     <Col span={8} >
                         <div style={{ height: '28px', lineHeight: '28px' }}>
-                            制单人：
-                            <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
+                            <Button onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
+                                查询
+                            </Button>
                         </div>
                     </Col>
                 </Row>
