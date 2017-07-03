@@ -30,10 +30,8 @@ public class ProjectService {
 		project.setCreateDate(new Date());
 		//project.getInventoryInfos();
 		projectDao.save(project);
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		net.sf.json.JSONObject obj = net.sf.json.JSONObject.fromObject(project, config);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",obj).toString();
+		JsonConfig config = JsonResFactory.dateConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(project, config)).toString();
 	}
 	
 	public String deleteProject(Integer... projectIds){

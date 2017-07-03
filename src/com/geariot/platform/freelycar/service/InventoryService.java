@@ -165,10 +165,8 @@ public class InventoryService {
 		inventory.setCreateDate(new Date());
 		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
 		this.inventoryDao.add(inventory);
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		net.sf.json.JSONObject obj = net.sf.json.JSONObject.fromObject(inventory, config);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS,"data",obj).toString();
+		JsonConfig config = JsonResFactory.dateConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(inventory, config)).toString();
 	}
 
 	public String deleteInventory(String... inventoryIds) {
