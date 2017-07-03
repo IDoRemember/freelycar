@@ -11,84 +11,123 @@ class ClientInfo extends React.Component {
         this.state = {
             option: [],
             visible: false,
-            dataSource:[],
+            dataSource: [],
+            pagination: {
+            },
+            selectedIds: [],
+            queryValue: '',
             columns: [
-            { title: '序号', dataIndex: 'index', key: 'index',render: (text, record, index) => {
-                    return <span>{index + 1}</span>
-                } },
-            {
-                title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
-                    return <Link to={'app/member/customer/' + record.uid}>{text}</Link>
-                }
-            },
-            { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-            { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
-            { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
-            { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
-            { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
-            { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
-            {
-                title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
-                    return <span>
-                        <span style={{ marginRight: '10px' }}>
-                            <Link to="" >
-                                <span >开卡</span>
-                            </Link>
-                            <Link to="">
-                                <span style={{ marginLeft: '5px' }}> 修改</span>
-                            </Link>
-                            <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                                <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
-                            </Popconfirm>
+                {
+                    title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
+                        return <span>{index + 1}</span>
+                    }
+                },
+                {
+                    title: '姓名', dataIndex: 'customerName', key: 'customerName', render: (text, record, index) => {
+                        return <Link to={'app/member/customer/' + record.id}>{text}</Link>
+                    }
+                },
+                { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+                { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
+                { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
+                { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
+                { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
+                { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
+                {
+                    title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
+                        return <span>
+                            <span style={{ marginRight: '10px' }}>
+                                <Link to="" >
+                                    <span >开卡</span>
+                                </Link>
+                                <Link to="">
+                                    <span style={{ marginLeft: '5px' }}> 修改</span>
+                                </Link>
+                                <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
+                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
+                                </Popconfirm>
+                            </span>
+
                         </span>
+                    }
+                },
+            ]
+        }
+    }
+    //渲染完成后执行
+    componentDidMount() {
+        this.getList(1, 10);
+     //   this.getName()
 
-                    </span>
+    }
+    //获取所有客户姓名模糊查询然后再去根据选择的值去筛选
+    /*name接口有没有？？？ */
+    getName = () => {
+        $.ajax({
+            url: '/api/client/name',
+            data: {
+            },
+            success: (result) => {
+                if (result == "0") {
+                    this.setState({
+                        options: result.data
+                    })
+                }
+            }
+        })
+    }
+    //获取分页
+    getList = (page, pageSize) => {
+        $.ajax({
+            url: "/api/client/list",
+            type: "GET",
+            data: {
+                page: page,
+                number: pageSize
+            },
+            //  dataType:'json',
+            success: (res) => {
+                if (res.code == "0") {
+                    //定义一个能装10条数据的容器
+                    let datalist = [];
+                    //调用接口后返回的数据
+                    var obj = res.data;
+                    //   console.log(obj);
+                    //遍历所有数据并给绑定到表格上
+                    for (let i = 0; i < obj.length; i++) {
+                        console.log(obj[i].cars);
+                        let dataItem = {
+                            key: obj[i].id,
+                            id: obj[i].id,
+                            customerName: obj[i].name,
+                            phoneNumber: obj[i].phone,
+                            busNumber: obj[i].cars[0].licensePlate,
+                            carBrand: obj[i].cars[0].type.brand.name,
+                            isMember: obj[i].cards == "" ? "否" : "是",
+                            consumeCount: obj[i].consumTimes,
+                            latelyTime: obj[i].lastVisit,
+                        }
+                        datalist.push(dataItem)
+                        //？？？为什么是要datalist==res.length呢
+                        if (datalist.length == obj.length) {
+                            this.setState({
+                                dataSource: datalist,
+                                pagination: { total: res.realSize },
+                            })
+                        }
+                    }
                 }
             },
-        ]
-        }   
-    }
-     componentDidMount(){
-        $.ajax({
-            url:"/api/client/list",
-            type:"GET",
-            data:{
-                page:1,
-                number:10
-            },
-          //  dataType:'json',
-            success:(res)=>{
-              var obj=res.data;
-              for(let i=0;i<obj.length;i++){
-                  let dataItem={
-                      key:i,
-                      customerName:obj[i].name,
-                    　phoneNumber:obj[i].phone,
-                    　busNumber: obj[i].cars.licensePlate,
-                    　carBrand: obj[i].cars.type,
-                    　isMember: obj[i].cards,
-                    　consumeCount:obj[i].consumTimes,
-                    　latelyTime: obj[i].lastVisit,
-                  }
-                  this.setState({
-                        dataSource: update(this.state.dataSource, { $push: [dataItem] }),
-                        option: update(this.state.option, { $push: [dataItem] })
-                  })
-
-              }
-            }
-
         })
 
     }
-    
 
+    //???手机号那个搜索怎么搜呢？
     handleChange = (value) => {
         console.log(`selected ${value}`)
     }
-    timeonChange = (time) => {
-        console.log(time)
-    }
+
+    //这个模态框到底要不要显示新增会员数呢？
     showModal = () => {
         this.setState({
             visible: true,
@@ -99,21 +138,100 @@ class ClientInfo extends React.Component {
             visible: false,
         });
     }
-    onDelete = (index) => {
-        const dataSource = [...this.state.dataSource];
-        dataSource.splice(index, 1);
-        this.setState({ dataSource });
-    }
-    componentWillMount(){
-        
-    }
-  
+    //删除对应行
+    onDelete = (idArray) => {
+        console.log(idArray);
+        $.ajax({
+            type: 'post',
+            url: 'api/client/delete',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                clientIds: idArray
+            },
+            traditional: true,
+            success: (result) => {
+                if (result.code == "0") {
+                    let dataSource = [...this.state.dataSource];
+                    //？看看返回值有没有对应的dataSource有没有被删去
+                    console.log(result)
+                    //过滤id    
+                    for (let id of idArray) {
+                        dataSource = dataSource.filter((obj) => {
+                            return id !== obj.id;
+                        });
+                    }
+                    console.log(dataSource)
+                    //为什么这边要加一个判断呢
+                   
+                        this.setState({
+                            dataSource: dataSource,
+                            pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        });
+                    
+                }
 
-   
+            }
+        })
+    }
+    handleSelected = (value) => {
+        this.setState({ queryValue: value })
+    }
+    startQuery = () => {
+        $.ajax({
+            url: 'api/client/query',
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                name: this.state.queryValue,
+                page: 1,
+                number: 10
+            },
+            traditional: true,
+            success: (res) => {
+                if (res.code == "0") {
+                    let datalist = [];
+                    let obj = res.data;
+                    for (let i = 0; i < obj.length; i++) {
+                        let dataItem = {
+                            key: obj[i].id,
+                            id: obj[i].id,
+                            customerName: obj[i].name,
+                            phoneNumber: obj[i].phone,
+                            busNumber: obj[i].cars[0].licensePlate,
+                            carBrand: obj[i].cars[0].type.brand.name,
+                            isMember: obj[i].cards == "" ? "否" : "是",
+                            consumeCount: obj[i].consumTimes,
+                            latelyTime: obj[i].lastVisit,
+                        }
+                        datalist.push(dataItem)
+                        if (datalist.length == obj.length) {
+                            this.setState({
+                                dataSource: datalist,
+                                pagination: { total: result.realSize },
+                            })
+                        }
+                    }
+                }
+            }
+        })
+    }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getList(pagination.current, 10)
+    }
+
+
+
 
     render() {
-      //  const { dataSource } = this.state;
-       // const columns = this.columns;
+        //  const { dataSource } = this.state;
+        // const columns = this.columns;
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -127,7 +245,7 @@ class ClientInfo extends React.Component {
                         style={{ width: '140px', marginRight: '8px' }}
                         placeholder="输入客户姓名"
                         optionFilterProp="children"
-                        onChange={this.handleChange}
+                        onChange={(value) => this.handleSelected(value)}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}
@@ -136,16 +254,7 @@ class ClientInfo extends React.Component {
                         style={{ width: '140px', marginRight: '8px', marginLeft: '26px' }}
                         placeholder="输入手机号"
                         optionFilterProp="children"
-                        onChange={this.handleChange}
-                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                    >
-                        {plateOptions}
-                    </Select>
-                    <Select showSearch
-                        style={{ width: '140px', marginRight: '8px', marginLeft: '26px' }}
-                        placeholder="输入车牌号"
-                        optionFilterProp="children"
-                        onChange={this.handleChange}
+                        onChange={()=>this.handleChange}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {plateOptions}
@@ -159,7 +268,7 @@ class ClientInfo extends React.Component {
                 </div>
                 <Card style={{ marginTop: '20px' }}>
                     <div>
-                        <Table dataSource={this.state.dataSource} columns={this.state.columns}>
+                        <Table pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} dataSource={this.state.dataSource} columns={this.state.columns}>
 
                         </Table>
                     </div>
