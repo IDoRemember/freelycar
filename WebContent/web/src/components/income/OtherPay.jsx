@@ -18,6 +18,7 @@ class OtherPay extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            view: false,
             typeList: [],
             selectedRowKeys: [],
             pagination: {},
@@ -144,6 +145,9 @@ class OtherPay extends React.Component {
             }
         })
     }
+    addPay = () => {
+
+    }
     handleCancel = () => {
         this.setState({
             visible: false
@@ -234,8 +238,49 @@ class OtherPay extends React.Component {
                 </Card>
                 <Card>
                     <div className="table-operations">
-                        <Button onClick={()=>this.setAgeSort}>增加</Button>
-                        <Button onClick={()=>this.deleteItems(this.state.selectedIds)}>删除</Button>
+                        <Button onClick={() => this.addPay()}>增加</Button>
+                        <Modal
+                            title="支出单"
+                            visible={this.state.visible}
+                            onOk={this.handleOk}
+                            onCancel={this.handleCancel}
+                        >
+
+                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                                <Col span={8} style={{ textAlign: 'right' }}>
+                                    单据日期：
+                            </Col>
+                                <Col span={8} style={{ textAlign: 'right' }}>
+                                    <Input value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                </Col>
+                            </Row>
+
+                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                                <Col span={8} style={{ textAlign: 'right' }}>
+                                    支出类别：
+                            </Col>
+                                <Col span={8}>
+                                    <Input value={this.state.form.linkman} onChange={(e) => this.onValueChange('linkman', e.target.value)} />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                                <Col span={8} style={{ textAlign: 'right' }}>
+                                    支出金额：
+                            </Col>
+                                <Col span={8}>
+                                    <Input value={this.state.form.phonenumber} onChange={(e) => this.onValueChange('phonenumber', e.target.value)} />
+                                </Col>
+                            </Row>
+                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                                <Col span={8} style={{ textAlign: 'right' }}>
+                                    备注：
+                            </Col>
+                                <Col span={8}>
+                                    <Input type="textarea" rows={3} value={this.state.form.remarks} onChange={(e) => this.onValueChange('remarks', e.target.value)} />
+                                </Col>
+                            </Row>
+                        </Modal>
+                        <Button onClick={() => this.deleteItems(this.state.selectedIds)}>删除</Button>
                     </div>
                     <Table pagination={this.state.pagination} bordered columns={conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} >
                     </Table>
