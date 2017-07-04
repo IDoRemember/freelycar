@@ -40,12 +40,12 @@ public class Client {
 	public Date getBirthday() {
 		return birthday;
 	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Set<Card> getCards() {
 		return cards;
 	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.LAZY)
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
 	public Set<Car> getCars() {
 		return cars;
