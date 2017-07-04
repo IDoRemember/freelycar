@@ -81,7 +81,8 @@ public class ChargeService {
 		expendOrder.setPayDate(otherExpendOrder.getCreateDate());
 		expendOrder.setType("其他支出");
 		expendOrderDao.save(expendOrder);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		JsonConfig config = JsonResFactory.dateConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(otherExpendOrder, config)).toString();
 		
 	}
 	
