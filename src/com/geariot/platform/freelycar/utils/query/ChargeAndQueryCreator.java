@@ -8,8 +8,8 @@ public class ChargeAndQueryCreator extends AndQueryCreator {
 	protected void init() {
 		conditionKeys = new ArrayList<ConBean>();
 		conditionKeys.add(new ConBean("otherExpendTypeId", "=="));
-    	conditionKeys.add(new ConBean("expendDate", ">"));
-    	conditionKeys.add(new ConBean("expendDate", "<"));
+    	conditionKeys.add(new ConBean("expendDate", ">="));
+    	conditionKeys.add(new ConBean("expendDate", "<="));
 	}
 
 	public ChargeAndQueryCreator(String otherExpendTypeId, String startTime, String endTime){

@@ -2,6 +2,7 @@ package com.geariot.platform.freelycar.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -97,7 +98,7 @@ public class ChargeService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String listAllCharge(int page , int number){
+	/*public String listAllCharge(int page , int number){
 		int from = (page - 1) * number;
 		List<OtherExpendOrder> list = chargeDao.listAll(from, number);
 		if(list == null || list.isEmpty()){
@@ -111,18 +112,29 @@ public class ChargeService {
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		return obj.toString();
-	}
+	}*/
 	
-	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+	public String selectCharge(String otherExpendTypeId , Date startTime , Date endTime, int page, int number){
 		String start = null;
 		String end = null;
 		if(startTime != null || endTime != null){
+			Calendar cal1 = Calendar.getInstance();
+			cal1.setTimeInMillis(startTime.getTime());
+			cal1.set(Calendar.HOUR, 0);
+			cal1.set(Calendar.MINUTE, 0);
+			cal1.set(Calendar.SECOND, 0);
+			Calendar cal2 = Calendar.getInstance();
+			cal2.setTimeInMillis(endTime.getTime());
+			cal2.set(Calendar.HOUR, 0);
+			cal2.set(Calendar.MINUTE, 0);
+			cal2.set(Calendar.SECOND, 0);
+			cal2.add(Calendar.DAY_OF_MONTH, 1);
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			if(startTime != null){
-				start = sdf.format(startTime);
+				start = sdf.format(cal1);
 			}
 			if(endTime != null){
-				end = sdf.format(endTime);
+				end = sdf.format(cal2);
 			}
 		}
 		String andCondition = new ChargeAndQueryCreator(String.valueOf(otherExpendTypeId), 
@@ -137,6 +149,7 @@ public class ChargeService {
 		JSONArray jsonArray = JSONArray.fromObject(list);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 }
