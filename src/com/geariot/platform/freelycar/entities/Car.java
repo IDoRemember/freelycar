@@ -71,7 +71,7 @@ public class Car {
 	public int getMiles() {
 		return miles;
 	}
-	@ManyToOne
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="carTypeId", foreignKey=@ForeignKey(name="none"))
 	public CarType getType() {
 		return type;
