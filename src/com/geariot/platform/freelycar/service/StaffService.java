@@ -17,7 +17,6 @@ import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
-import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Program;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Staff;

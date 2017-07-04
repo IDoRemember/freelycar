@@ -1,13 +1,13 @@
 package com.geariot.platform.freelycar.service;
 
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +24,6 @@ import com.geariot.platform.freelycar.entities.InventoryType;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
