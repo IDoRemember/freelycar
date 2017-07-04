@@ -58,12 +58,22 @@ class OtherPay extends React.Component {
         })
     }
     getList = (page, number) => {
-        $.ajax({
-            url: 'api/charge/list',
-            data: {
+        let obj = {
+            page: page,
+            number: number
+        }
+        if (this.state.queryType != '' || this.state.queryDate.length > 0) {
+            obj = {
+                otherExpendTypeId: this.state.queryType,
+                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
                 page: page,
                 number: number
-            },
+            }
+        }
+        $.ajax({
+            url: 'api/charge/query',
+            data: obj,
             success: (result) => {
                 console.log(result)
                 if (result.code == "0") {
@@ -149,6 +159,15 @@ class OtherPay extends React.Component {
             }
         })
     }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getList(pagination.current, 10)
+    }
     addPay = () => {
         this.setState({
             view: true
@@ -183,33 +202,7 @@ class OtherPay extends React.Component {
             }
         })
     }
-    queryList = (page, number) => {
-        $.ajax({
-            url: 'api/charge/query',
-            type: 'get',
-            // contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            data: {
-                otherExpendTypeId: this.state.queryType,
-                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
-                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
-                page: page,
-                number: number
-            },
-            traditional: true,
-            success: (result) => {
-                console.log(result)
-                if (result.code == "0") {
-                    let data = result.data
-                    data['key'] = data.id
-                    this.setState({
-                        data: update(this.state.data, { $push: [data] }),
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                    })
-                }
-            }
-        })
-    }
+
     handleCancel = () => {
         this.setState({
             visible: false
@@ -273,6 +266,7 @@ class OtherPay extends React.Component {
         }], typeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
+
         return (
             < div >
                 <BreadcrumbCustom first="收支管理" second="其他支出" />
@@ -305,7 +299,7 @@ class OtherPay extends React.Component {
                             />
                         </Col>
                         <Col span={8}>
-                            <Button type="primary" size={'large'} onClick={() => this.queryList(1, 10)}>查询</Button>
+                            <Button type="primary" size={'large'} onClick={() => this.getList(1, 10)}>查询</Button>
                         </Col>
                     </Row>
                 </Card>
@@ -362,7 +356,7 @@ class OtherPay extends React.Component {
                         </Modal>
                         <Button onClick={() => this.deleteItems(this.state.selectedIds)}>删除</Button>
                     </div>
-                    <Table pagination={this.state.pagination} bordered columns={conlums} dataSource={this.state.data} onChange={this.handleChange} rowSelection={rowSelection} >
+                    <Table pagination={this.state.pagination} bordered columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} rowSelection={rowSelection} >
                     </Table>
                 </Card>
             </div >

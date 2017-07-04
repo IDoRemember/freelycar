@@ -119,9 +119,9 @@ class ProductSearch extends React.Component {
                             attribute: result.data[i].property,
                             price: result.data[i].price,
                             stock: result.data[i].amount,
-                            supplier: result.data[i].provider.name,
+                            supplier: result.data[i].provider ? result.data[i].provider.name : '',
                             createDate: result.data[i].createDate,
-                            phone: result.data[i].provider.phone
+                            phone: result.data[i].provider?result.data[i].provider.phone:''
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
