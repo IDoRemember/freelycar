@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import AjaxGet from '../../utils/ajaxGet'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, Popconfirm, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, Icon, Modal } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -19,23 +19,29 @@ class OtherPay extends React.Component {
         super(props)
         this.state = {
             view: false,
+            visible: false,
             typeList: [],
             selectedRowKeys: [],
             pagination: {},
             loading: false,
-            type: [],
+            type: '',
             selectedRow: [],
             option: [],
             data: [],
             selectedIds: [],
+            queryDate: [],
+            queryType: '',
+            form: {
+                dateString: '',
+                payType: '',
+                amount: null,
+                comment: ''
+            }
         }
     }
     componentDidMount() {
         this.getType()
         this.getList(1, 10)
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
-        })
     }
     getType = () => {
         $.ajax({
@@ -43,9 +49,7 @@ class OtherPay extends React.Component {
             data: {
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
-
                     this.setState({
                         typeList: result.data,
                     })
@@ -146,12 +150,80 @@ class OtherPay extends React.Component {
         })
     }
     addPay = () => {
-
+        this.setState({
+            view: true
+        })
+    }
+    handleAddOk = () => {
+        this.setState({
+            view: false
+        });
+        $.ajax({
+            url: 'api/charge/add',
+            type: 'post',
+            contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: JSON.stringify({
+                type: { id: this.state.form.payType },
+                amount: this.state.form.amount,
+                comment: this.state.form.comment,
+                expendDate: new Date(this.state.form.dateString),
+            }),
+            traditional: true,
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let data = result.data
+                    data['key'] = data.id
+                    this.setState({
+                        data: update(this.state.data, { $push: [data] }),
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    })
+                }
+            }
+        })
+    }
+    queryList = (page, number) => {
+        $.ajax({
+            url: 'api/charge/query',
+            type: 'get',
+            // contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                otherExpendTypeId: this.state.queryType,
+                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
+                page: page,
+                number: number
+            },
+            traditional: true,
+            success: (result) => {
+                console.log(result)
+                if (result.code == "0") {
+                    let data = result.data
+                    data['key'] = data.id
+                    this.setState({
+                        data: update(this.state.data, { $push: [data] }),
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    })
+                }
+            }
+        })
     }
     handleCancel = () => {
         this.setState({
             visible: false
         });
+    }
+    handleAddCancel = () => {
+        this.setState({
+            view: false
+        });
+    }
+    setFormData = (key, data) => {
+        this.setState({
+            form: update(this.state.form, { [key]: { $set: data } })
+        })
     }
     render() {
         const rowSelection = {
@@ -201,6 +273,7 @@ class OtherPay extends React.Component {
         }], typeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
+        console.log(this.state.queryDate)
         return (
             < div >
                 <BreadcrumbCustom first="收支管理" second="其他支出" />
@@ -211,7 +284,7 @@ class OtherPay extends React.Component {
                                 style={{ width: '100px' }}
                                 placeholder="选择支出类别"
                                 optionFilterProp="children"
-                                onChange={this.handleChange}
+                                onChange={(value) => { this.setState({ queryType: value }) }}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {typeOptions}
@@ -225,14 +298,15 @@ class OtherPay extends React.Component {
                             </Modal>
                         </Col>
                         <Col span={8}>
-                            <span>查找日期 : </span>
+                            <span>单据日期 : </span>
                             <DatePicker.RangePicker
                                 format={dateFormat}
                                 showToday={true}
+                                onChange={(date, dateString) => { this.setState({ queryDate: dateString }) }}
                             />
                         </Col>
                         <Col span={8}>
-                            <Button type="primary" size={'large'}><Link to="" style={{ color: '#fff' }}>查询</Link></Button>
+                            <Button type="primary" size={'large'} onClick={() => this.queryList(1, 10)}>查询</Button>
                         </Col>
                     </Row>
                 </Card>
@@ -241,26 +315,32 @@ class OtherPay extends React.Component {
                         <Button onClick={() => this.addPay()}>增加</Button>
                         <Modal
                             title="支出单"
-                            visible={this.state.visible}
-                            onOk={this.handleOk}
-                            onCancel={this.handleCancel}
+                            visible={this.state.view}
+                            onOk={this.handleAddOk}
+                            onCancel={this.handleAddCancel}
                         >
-
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     单据日期：
-                            </Col>
+                                </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
-                                    <Input />
+                                    <DatePicker format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
                                 </Col>
                             </Row>
-
-                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                            <Row gutter={16} style={{ marginBottom: '10px' }} id="area">
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     支出类别：
                             </Col>
                                 <Col span={8}>
-                                    <Input/>
+                                    <Select
+                                        style={{ width: '150px' }}
+                                        placeholder="选择支出类别"
+                                        optionFilterProp="children"
+                                        onChange={(value) => this.setFormData('payType', value)}
+                                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                    >
+                                        {typeOptions}
+                                    </Select>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -268,15 +348,16 @@ class OtherPay extends React.Component {
                                     支出金额：
                             </Col>
                                 <Col span={8}>
-                                    <Input  />
+                                    <Input style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     备注：
-                            </Col>
+                                </Col>
                                 <Col span={8}>
-                                    <Input type="textarea" rows={3}  />
+                                    {/*<Input size="large" type="textarea" rows={3} />*/}
+                                    <Input rows={3} type="textarea" onChange={(e) => this.setFormData('comment', e.target.value)} />
                                 </Col>
                             </Row>
                         </Modal>
