@@ -125,7 +125,7 @@ class CardModal extends React.Component {
             title: '可用次数',
             dataIndex: 'restCount',
             render: (text, record, index) => (
-                <InputNumber size="large" defaultValue={1} onChange={this.onChange} />
+                <InputNumber size="large" min={1} defaultValue={1} onChange={this.onChange} />
             ),
         },
         {
@@ -193,9 +193,7 @@ class CardModal extends React.Component {
                         </FormItem>
                     </Form>
                     <Row>
-                        <Col span={24}>
-
-                        </Col>
+                       <Button type="primary">增加</Button>
                     </Row>
 
                     <ModalTable dataSource={this.state.dataSource} columns={columns}  />
