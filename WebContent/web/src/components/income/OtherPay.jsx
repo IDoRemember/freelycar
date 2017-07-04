@@ -273,7 +273,6 @@ class OtherPay extends React.Component {
         }], typeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
-        console.log(this.state.queryDate)
         return (
             < div >
                 <BreadcrumbCustom first="收支管理" second="其他支出" />
