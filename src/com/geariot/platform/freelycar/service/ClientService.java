@@ -122,6 +122,7 @@ public class ClientService {
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				JSONArray.fromObject(list, config));
 		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return res.toString();
 	}
 
