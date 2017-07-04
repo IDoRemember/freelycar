@@ -55,4 +55,11 @@ public class OtherExpendOrder {
 	public void setExpendDate(Date expendDate) {
 		this.expendDate = expendDate;
 	}
+	@Override
+	public String toString() {
+		return "OtherExpendOrder [id=" + id + ", type=" + type + ", amount=" + amount + ", comment=" + comment
+				+ ", expendDate=" + expendDate + ", createDate=" + createDate + "]";
+	}
+	
+	
 }

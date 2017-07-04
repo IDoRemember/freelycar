@@ -23,4 +23,9 @@ public class OtherExpendType {
 	public void setName(String name) {
 		this.name = name;
 	}
+	@Override
+	public String toString() {
+		return "OtherExpendType [id=" + id + ", name=" + name + "]";
+	}
+	
 }
