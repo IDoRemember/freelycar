@@ -50,15 +50,16 @@ public class ChargeController {
 		return chargeService.deleteCharge(ids);
 	}
 	
-	@RequestMapping(value = "/list" , method = RequestMethod.GET)
+	/*@RequestMapping(value = "/list" , method = RequestMethod.GET)
 	@PermissionRequire("charge:query")
 	public String listAllCharge(int page , int number){
 		return chargeService.listAllCharge(page, number);
-	}
+	}*/
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("charge:query")
-	public String selectCharge(int otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+	public String selectCharge(String otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+		//System.out.println("charge:query" + startTime);
 		return chargeService.selectCharge(otherExpendTypeId, startTime, endTime, page, number);
 	}
 		

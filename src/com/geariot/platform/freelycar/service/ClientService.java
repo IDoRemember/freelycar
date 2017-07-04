@@ -113,14 +113,16 @@ public class ClientService {
 		}
 		long realSize = this.clientDao.getQueryCount(andCondition);
 		int size = (int) Math.ceil(realSize/(double)number);
-		JsonConfig config = JsonResFactory.dateConfig();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
 		filter.setColletionProperties(CarType.class);
-		config.setJavaPropertyFilter(filter);
+		config.setJsonPropertyFilter(filter);
 		config.registerPropertyExclusions(Card.class, new String[]{"projectInfos", "service"});
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
-				JSONArray.fromObject(list, JsonResFactory.dateConfig()));
+				JSONArray.fromObject(list, config));
 		res.put(Constants.RESPONSE_SIZE_KEY, size);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return res.toString();
 	}
 

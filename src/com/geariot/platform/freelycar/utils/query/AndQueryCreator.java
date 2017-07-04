@@ -66,6 +66,12 @@ public class AndQueryCreator {
 				else if(conditionKeys.get(i).getOperator().equals("<")) {
 					content.append("'" + value + "'");
 				}
+				else if(conditionKeys.get(i).getOperator().equals("<=")) {
+					content.append("'" + value + "'");
+				}
+				else if(conditionKeys.get(i).getOperator().equals(">=")) {
+					content.append("'" + value + "'");
+				}
 				else {
 					content.append(value);
 				}
