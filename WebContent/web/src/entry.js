@@ -67,8 +67,8 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"member"} >
             <Route path={"memberShip"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
-            <Route path={"customer/:uid"} component={ClientDetail} />
-            <Route path={"customer/:uid/payhistory"} component={PayHistory} />
+            <Route path={"customer/:id"} component={ClientDetail} />
+            <Route path={"customer/:id/payhistory"} component={PayHistory} />
             <Route path={"addclient"} component={AddClient}/>
         </Route>
         <Route path={"buySellStock"} >
