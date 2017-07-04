@@ -98,6 +98,8 @@ class PutInStorage extends React.Component {
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
                     <Col span={8} >单据编号：<span>{this.props.params.receiptId}</span>
                     </Col>
+                    <Col span={8} >单据编号：<span>{this.props.params.receiptId}</span>
+                    </Col>
                 </Row>
                 < Table className="accountTable" bordered columns={conlums} dataSource={this.state.data} onChange={this.handleChange} />
 

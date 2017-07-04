@@ -184,9 +184,6 @@ class PutInStorage extends React.Component {
             key: 'action',
             render: (text, record, index) => {
                 return <span>
-                    <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                        <a href="javascript:void(0);">修改</a>
-                    </span>
                     <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(record.id)}>
                         <a href="javascript:void(0);">作废</a>
                     </Popconfirm>

@@ -25,7 +25,7 @@ class CustomerInfo extends React.Component {
         }
     }
     componentDidMount() {
-  
+        
     }
     handleChange = (value) => {
         console.log(`selected ${value}`)

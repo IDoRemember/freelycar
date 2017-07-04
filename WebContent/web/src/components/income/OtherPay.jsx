@@ -22,7 +22,11 @@ class OtherPay extends React.Component {
             visible: false,
             typeList: [],
             selectedRowKeys: [],
-            pagination: {},
+            pagination: {
+                showTotal:(total)=>{
+                    return <span style={{marginRight:'20px'}}>共&nbsp;{total}&nbsp;条</span>
+                }
+            },
             loading: false,
             type: '',
             selectedRow: [],
