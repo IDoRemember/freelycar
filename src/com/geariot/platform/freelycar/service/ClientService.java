@@ -12,6 +12,7 @@ import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
+import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
@@ -112,6 +113,11 @@ public class ClientService {
 		}
 		long realSize = this.clientDao.getQueryCount(andCondition);
 		int size = (int) Math.ceil(realSize/(double)number);
+		JsonConfig config = JsonResFactory.dateConfig();
+		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
+		filter.setColletionProperties(CarType.class);
+		config.setJavaPropertyFilter(filter);
+		config.registerPropertyExclusions(Card.class, new String[]{"projectInfos", "service"});
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				JSONArray.fromObject(list, JsonResFactory.dateConfig()));
 		res.put(Constants.RESPONSE_SIZE_KEY, size);

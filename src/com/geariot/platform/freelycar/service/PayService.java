@@ -53,7 +53,7 @@ public class PayService {
 			cardInfo.setRemaining(info.getTimes());
 			cardInfos.add(cardInfo);
 		}
-		card.setRemainingInfos(cardInfos);
+		card.setProjectInfos(cardInfos);
 		//将新增卡增加到客户卡列表中
 		Set<Card> cards = client.getCards();
 		if(cards == null){
@@ -96,7 +96,7 @@ public class PayService {
 			int projectId = order.getProject().getId();
 			CardProjectRemainingInfo info = null;
 			//查找与项目对应的info，对比剩余次数。
-			for(CardProjectRemainingInfo i : card.getRemainingInfos()){
+			for(CardProjectRemainingInfo i : card.getProjectInfos()){
 				if(i.getProject().getId() == projectId){
 					info = i;
 					break;

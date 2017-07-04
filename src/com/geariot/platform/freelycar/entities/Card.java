@@ -44,7 +44,7 @@ public class Card {
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
-	public Set<CardProjectRemainingInfo> getRemainingInfos() {
+	public Set<CardProjectRemainingInfo> getProjectInfos() {
 		return projectInfos;
 	}
 	@ManyToOne
@@ -67,8 +67,8 @@ public class Card {
 	public void setPayMethod(int payMethod) {
 		this.payMethod = payMethod;
 	}
-	public void setRemainingInfos(Set<CardProjectRemainingInfo> remainingInfos) {
-		this.projectInfos = remainingInfos;
+	public void setProjectInfos(Set<CardProjectRemainingInfo> projectInfos) {
+		this.projectInfos = projectInfos;
 	}
 	public void setService(Service service) {
 		this.service = service;
