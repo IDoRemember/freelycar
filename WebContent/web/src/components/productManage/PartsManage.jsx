@@ -39,7 +39,9 @@ class BeautyOrder extends React.Component {
             form: {
                 name: '',
                 brandId: '',
+                brandName:'',
                 typeId: '',
+                typeName:'',
                 property: '',
                 price: '',
                 comment: ''
@@ -130,21 +132,19 @@ class BeautyOrder extends React.Component {
         });
     }
     handleOk = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
 
         let form = this.state.form;
         var obj = {};
-        obj.id = 's11100';
+        //obj.id = 's11100';
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
         obj.type = { id: form.typeId };
         obj.brand = { id: form.brandId };
         obj.comment = form.comment;
-        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/inventory/add',
@@ -152,13 +152,16 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             data: JSON.stringify(obj),
             success: (result) => {
-                console.log(result);
+                //console.log(result);
                 let code = result.code;
 
                 if (code == '0') {
-                    obj.program = result.data.program.name;
-                    obj.key = result.data.id;
-
+                    let dt = result.data;
+                    obj.number = dt.id;
+                    obj.key = dt.id;
+                    obj.createDate = dt.createDate;
+                    obj.brand = this.state.form.brandName;
+                    obj.type = this.state.form.typeName;
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -418,11 +421,11 @@ class BeautyOrder extends React.Component {
     onValueChange = (key, value) => {
         if (key == 'type') {
             this.setState({
-                form: update(this.state.form, { ['typeId']: { $set: value } })
+                form: update(this.state.form, { ['typeId']: { $set: value.key },['typeName']: { $set: value.label } })
             })
         } else if (key == 'brand') {
             this.setState({
-                form: update(this.state.form, { ['brandId']: { $set: value } })
+                form: update(this.state.form, { ['brandId']: { $set: value.key } ,['brandName']: { $set: value.label } })
             })
         }
         else
@@ -647,6 +650,7 @@ class BeautyOrder extends React.Component {
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     onChange={(value) => this.onValueChange('brand', value)}
+                                                    labelInValue
                                                 >
                                                     {this.state.brandItem}
                                                 </Select>
@@ -658,6 +662,7 @@ class BeautyOrder extends React.Component {
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     onChange={(value) => this.onValueChange('type', value)}
+                                                    labelInValue
                                                 >
                                                     {this.state.typeItem}
                                                 </Select>

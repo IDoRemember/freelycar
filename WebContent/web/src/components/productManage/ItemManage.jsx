@@ -4,9 +4,10 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
+import PartsSearch from '../model/PartsSearch.jsx';
 import { Link } from 'react-router';
 const Option = Select.Option;
 const { RangePicker } = DatePicker;
@@ -50,7 +51,9 @@ class BeautyOrder extends React.Component {
             projName: '',//条件查询的项目名称
             progId: '',//条件查询的项目类别id
             pagination: {},
-            tabkey: 1
+            tabkey: 1,
+            view: false,//modal之上的modal
+            invData: []//关联的配件 
         }
     }
 
@@ -135,7 +138,7 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate, pagination: { total: res.realSize }});
+                    this.setState({ data: tableDate, pagination: { total: res.realSize } });
                 }
 
             }
@@ -207,6 +210,7 @@ class BeautyOrder extends React.Component {
 
 
     handleOk = (e) => {
+        //修改为关联配件
         this.setState({
             visible: false,
         });
@@ -220,19 +224,36 @@ class BeautyOrder extends React.Component {
         obj.comment = form.comment;
         obj.program = { id: form.programId };
 
+        let arr= [];
+        let invArray = this.state.invData;
+        for (let i = 0, len = invArray.length; i < len; i++) {
+            let obj = invArray[i];
+            let newObj = {};//传值的obj
+            newObj.number = obj.number==undefined?1:obj.number;
+
+            let inventory = {};
+            inventory.id = obj.key;
+            newObj.inventory = inventory;
+            arr.push(newObj);
+        }
+
+        obj.inventoryInfos = arr;
+
+        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/project/add',
             contentType: 'application/json;charset=utf-8',
             dataType: 'json',
             data: JSON.stringify(obj),
+            traditional:true,
             success: (result) => {
                 console.log(result);
                 let code = result.code;
 
                 if (code == '0') {
 
-                    obj.program = result.data.program.name;
+                    obj.program = this.state.form.program;
                     obj.key = result.data.id;
 
                     this.setState({
@@ -261,6 +282,20 @@ class BeautyOrder extends React.Component {
             })
     }
 
+    //改变关联的配件中的number属性
+    onInValueChange = (index, value) => {
+        this.setState({
+            invData: update(this.state.invData, { [index]: { ['number']: { $set: value } } })
+        })
+    }
+
+
+    modeShow = () => {
+        this.setState({
+            view: true
+        })
+    }
+
 
     handleCancel = (e) => {
         console.log(e);
@@ -269,6 +304,20 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    //第二个modal
+    handleCancelView = () => {
+        this.setState({
+            view: false
+        });
+    }
+    handleOkView = (selectedRows) => {
+        console.log(selectedRows);
+        this.setState({
+            view: false
+        });
+
+        this.setState({ invData: selectedRows });
+    }
     //表格删除
     onCellChange = (index, key) => {
         return (value) => {
@@ -311,13 +360,25 @@ class BeautyOrder extends React.Component {
                     });
 
                 }
-
             }
-
         });
-
-
     }
+
+    //删除关联的配件
+    onDeleteInv = (idArray) => {
+        let dataSource = [...this.state.invData];
+        for (let id of idArray) {
+            dataSource = dataSource.filter((obj) => {
+                return id !== obj.key;
+            });
+        }
+        this.setState({
+            invData: dataSource,
+            //pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+        });
+    }
+
+
 
     render() {
         const columns = [{
@@ -362,6 +423,70 @@ class BeautyOrder extends React.Component {
                 return (
                     <div>
                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
+                            <a href="#">删除</a>
+                        </Popconfirm>
+                    </div>
+                );
+            },
+        }];
+
+        //关联配件
+        const modalInv = [{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '配件编号',
+            dataIndex: 'partId',
+            key: 'partId'
+        }, {
+            title: '配件名称',
+            dataIndex: 'partName',
+            key: 'partName'
+        }, {
+            title: '配件品牌',
+            dataIndex: 'brand',
+            key: 'brand'
+        }, {
+            title: '配件类别',
+            dataIndex: 'category',
+            key: 'category',
+            render: (value, record, index) => {
+                return <span>{value.typeName}</span>
+            }
+        }, {
+            title: '规格属性',
+            dataIndex: 'attribute',
+            key: 'attribute'
+        }, {
+            title: '配件价格',
+            dataIndex: 'price',
+            key: 'price'
+        }, {
+            title: '可用库存',
+            dataIndex: 'inventory',
+            key: 'inventory'
+        }, {
+            title: '数量',
+            dataIndex: 'count',
+            key: 'count',
+            render: (value, record, index) => {
+                return <InputNumber min={1} max={100} defaultValue={1} onChange={(e) => this.onInValueChange(index, e)} />
+            }
+        }, {
+            title: '备注',
+            dataIndex: 'comment',
+            key: 'comment'
+        }, {
+            title: '操作',
+            dataIndex: 'operation',
+            render: (text, record, index) => {
+                return (
+                    <div>
+                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDeleteInv([record.key])}>
                             <a href="#">删除</a>
                         </Popconfirm>
                     </div>
@@ -529,19 +654,24 @@ class BeautyOrder extends React.Component {
                                                 <Col span={10} >
                                                     <FormItem
                                                         {...formItemLayout}
-                                                        label="参考工时"
+                                                        label="工时单价"
                                                         hasFeedback
                                                     >
-                                                        <Input value={this.state.form.referWorkTime} onChange={(e) => this.onValueChange('referWorkTime', e.target.value)} />
+                                                        <Input value={this.state.form.pricePerUnit} onChange={(e) => this.onValueChange('pricePerUnit', e.target.value)} />
                                                     </FormItem>
                                                 </Col>
                                             </Row>
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                <Button type="primary" onClick={() => this.modeShow()}>新增配件</Button>
+                                                <PartsSearch view={this.state.view} handleCancel={this.handleCancelView} handleOk={this.handleOkView}></PartsSearch>
+                                            </Row>
+
+                                            <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
                                                 <Table
                                                     rowSelection={rowSelection}
-                                                    columns={columns}
-                                                    dataSource={this.state.data}
+                                                    columns={modalInv}
+                                                    dataSource={this.state.invData}
                                                     bordered
                                                     pagination={this.state.pagination}
                                                     onChange={(pagination) => this.handleChange(pagination)}
@@ -549,11 +679,7 @@ class BeautyOrder extends React.Component {
                                             </Row>
 
                                         </Form>
-
-
                                     </Modal>
-
-
 
                                 </Row>
 
