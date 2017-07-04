@@ -20,7 +20,7 @@ class CustomerInfo extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            id:'',
+            id: '',
             option: [],
             visible: false
         }
@@ -60,7 +60,7 @@ class CustomerInfo extends React.Component {
         })
         return <div className="gutter-example" >
             <div style={{ marginBottom: '15px' }}>
-            
+
                 <div style={{ width: '30%', display: 'inline-block' }}>单据日期：
                     <span style={{ width: '150px' }}>2017-05-24 15:22:20</span>
                 </div>
@@ -193,14 +193,21 @@ class CustomerInfo extends React.Component {
                         停车位置：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6}>
+                    <Col span={6} id="area">
                         会员卡号：
-                        <Select
-                            style={{ width: '100px' }}
-                            placeholder="输入车牌号码"
+                        <Select showSearch
+                            mode="combobox"
+                            style={{ width: '200px' }}
+                            placeholder="输入车牌号"
+                            allowClear={true}
                             optionFilterProp="children"
-                            onChange={this.handleChange}
+                            value={this.state.queryValue}
+                            defaultActiveFirstOption={false}
+                            onChange={(value) => { this.setState({ queryValue: value }) }}
+                            onBlur={(value) => { this.setState({ queryValue: value }) }}
                             filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            getPopupContainer={() => document.getElementById('area')}
+                            dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
                         >
                             {plateOptions}
                         </Select>

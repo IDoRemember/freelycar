@@ -59,6 +59,7 @@ public class ChargeController {
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("charge:query")
 	public String selectCharge(String otherExpendTypeId , Date startTime , Date endTime, int page, int number){
+		//System.out.println("charge:query" + startTime);
 		return chargeService.selectCharge(otherExpendTypeId, startTime, endTime, page, number);
 	}
 		
