@@ -21,4 +21,6 @@ public interface ServiceDao {
 	List<Service> listServices(String andCondition , int from , int pageSize);
 	
 	long getConditionCount(String andCondition);
+	
+	List<Object> listName();
 }
