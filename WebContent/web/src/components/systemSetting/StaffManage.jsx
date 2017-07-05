@@ -248,7 +248,7 @@ class StaffManage extends React.Component {
                                         员工姓名：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={this.setFormData()} />
+                                        <Input value={this.state.form.name} onChange={(e)=>this.setFormData('name',e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -267,7 +267,7 @@ class StaffManage extends React.Component {
                                         手机号码：
                                     </Col>
                                     <Col span={8}>
-                                        <Input />
+                                        <Input value={this.state.form.phone} onChange={(e)=>this.setFormData('phone',e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -275,7 +275,7 @@ class StaffManage extends React.Component {
                                         职位：
                                     </Col>
                                     <Col span={8}>
-                                        <Input />
+                                        <Input value={this.state.form.position} onChange={(e)=>this.setFormData('position',e.target.value)}/>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -283,7 +283,7 @@ class StaffManage extends React.Component {
                                         级别：
                                     </Col>
                                     <Col span={8}>
-                                        <Input />
+                                        <Input value={this.state.form.level} onChange={(e)=>this.setFormData('level',e.target.value)}/>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -291,7 +291,7 @@ class StaffManage extends React.Component {
                                         备注：
                                     </Col>
                                     <Col span={8}>
-                                        <Input />
+                                        <Input value={this.state.form.comment} onChange={(e)=>this.setFormData('comment',e.target.value)}/>
                                     </Col>
                                 </Row>
                             </Modal>
