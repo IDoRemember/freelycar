@@ -35,18 +35,30 @@ public class ServiceService {
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(service, config)).toString();
 	}
 	
-	public String deleteService(int serviceId){
-		Service exist = serviceDao.findServiceById(serviceId);
-		JSONObject obj = null;
-		if(exist == null){
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteService(Integer... serviceIds){
+		int count = 0;
+		for(int serviceId : serviceIds){
+			if(serviceDao.findServiceById(serviceId) == null){
+				count++;
+			}
+			else{
+				serviceDao.delete(serviceId);;
+			}
+		}
+		if(count !=0){
+			String tips = "共"+count+"条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+			long realSize = serviceDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
 		else{
-			serviceDao.delete(serviceId);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			long realSize = serviceDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
-		return obj.toString();
-	}
+}
 	
 	public String modifyService(Service service){
 		Service exist = serviceDao.findServiceById(service.getId());

@@ -26,8 +26,8 @@ public class ServiceController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("service:delete")
-	public String deleteService(int serviceId){
-		return serviceService.deleteService(serviceId);
+	public String deleteService(Integer... serviceIds){
+		return serviceService.deleteService(serviceIds);
 	}
 	
 	@RequestMapping(value = "/modify" , method = RequestMethod.POST)
