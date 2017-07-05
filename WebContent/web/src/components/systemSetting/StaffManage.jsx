@@ -5,7 +5,7 @@ import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import $ from 'jquery'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal, Popconfirm } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 const { RangePicker } = DatePicker,
@@ -21,11 +21,13 @@ class StaffManage extends React.Component {
             loading: true,
             filteredInfo: null,
             sortedInfo: null,
-            selectedRowKeys: [],
             visible: false,
             data: [],
+            selectedIds: [],
             staffId: null,
             staffName: '',
+            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收营员', '会计'],
+            levelOptions: ['', '初级', '中级', '高级'],
             form: {
                 id: '',
                 name: '',
@@ -57,6 +59,7 @@ class StaffManage extends React.Component {
                     for (let item of datalist) {
                         item.key = item.id
                     }
+
                     this.setState({
                         data: datalist,
                         pagination: { total: result.realSize }
@@ -100,7 +103,33 @@ class StaffManage extends React.Component {
             },
         });
     }
-
+    onDelete = (idArray) => {
+        $.ajax({
+            type: 'post',
+            url: 'api/staff/delete',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                providerIds: idArray
+            },
+            traditional: true,
+            success: (result) => {
+                if (result.code == "0") {
+                    let dataSource = [...this.state.data];
+                    for (let id of idArray) {
+                        dataSource = dataSource.filter((obj) => {
+                            return id !== obj.id;
+                        });
+                    }
+                    console.log(dataSource)
+                    this.setState({
+                        data: dataSource,
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    });
+                }
+            }
+        })
+    }
     tabCallback = (key) => {
         console.log(key);
     }
@@ -114,13 +143,34 @@ class StaffManage extends React.Component {
         });
     }
     handleOk = (e) => {
-        console.log(e);
+        $.ajax({
+            url: 'api/staff/add',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                name: this.state.form.name,
+                phone: this.state.form.phone,
+                position: this.state.form.position,
+                level: this.state.form.level,
+                gender: this.state.form.gender,
+                comment: this.state.form.comment
+            },
+            success: (result) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(result)
+                if (result.code == "0") {
+                    this.getList(1, 10)
+                }
+            }
+        })
         this.setState({
             visible: false,
         });
     }
     handleCancel = (e) => {
-        console.log(e);
+        // console.log(e);
         this.setState({
             visible: false,
         });
@@ -130,7 +180,12 @@ class StaffManage extends React.Component {
         let { sortedInfo, filteredInfo } = this.state;
         sortedInfo = sortedInfo || {};
         filteredInfo = filteredInfo || {};
-        const columns = [{
+        const positionOptions = this.state.positionOptions.map((item, index) => {
+            return <Option key={index} value={item}>{item}</Option>
+        }), levelOptions = this.state.levelOptions.map((item, index) => {
+            return <Option key={index} value={item}>{item}</Option>
+        })
+        columns = [{
             title: '序号',
             dataIndex: 'index',
             key: 'index',
@@ -172,18 +227,30 @@ class StaffManage extends React.Component {
         }, {
             title: '操作',
             dataIndex: 'operation',
-            key: 'operation'
+            key: 'operation',
+            render: (text, record, index) => {
+                return <span>
+                    <span style={{ marginRight: '10px' }}> <a href="javascript:void(0);">修改</a></span>
+
+                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
+                        <a href="javascript:void(0);">删除</a>
+                    </Popconfirm>
+                </span>
+            }
         }];
 
-        // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-            }),
-        };
+                let selectedIds = []
+                for (let item of selectedRows) {
+                    selectedIds.push(item.id);
+                }
+                this.setState({
+                    selectedIds: selectedIds
+                })
+                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
+            }
+        }
         return (
             <div>
                 <BreadcrumbCustom first="产品管理" second="项目管理" />
@@ -248,7 +315,7 @@ class StaffManage extends React.Component {
                                         员工姓名：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={(e)=>this.setFormData('name',e.target.value)} />
+                                        <Input value={this.state.form.name} onChange={(e) => this.setFormData('name', e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -256,9 +323,9 @@ class StaffManage extends React.Component {
                                         性别：
                                     </Col>
                                     <Col span={8}>
-                                        <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                            <Radio value={1}>男</Radio>
-                                            <Radio value={2}>女</Radio>
+                                        <RadioGroup onChange={(e) => this.setFormData('gender', e.target.value)} value={this.state.form.gender}>
+                                            <Radio value={'男'}>男</Radio>
+                                            <Radio value={'女'}>女</Radio>
                                         </RadioGroup>
                                     </Col>
                                 </Row>
@@ -267,7 +334,7 @@ class StaffManage extends React.Component {
                                         手机号码：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.phone} onChange={(e)=>this.setFormData('phone',e.target.value)} />
+                                        <Input value={this.state.form.phone} onChange={(e) => this.setFormData('phone', e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -275,7 +342,17 @@ class StaffManage extends React.Component {
                                         职位：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.position} onChange={(e)=>this.setFormData('position',e.target.value)}/>
+                                        <Select
+                                            showSearch
+                                            style={{ width: '200px' }}
+                                            placeholder="选择商品类别进行搜索"
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.handleChange(value)}
+                                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                            getPopupContainer={() => document.getElementById('provider-area')}
+                                        >
+                                            {positionOptions}
+                                        </Select>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -283,7 +360,17 @@ class StaffManage extends React.Component {
                                         级别：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.level} onChange={(e)=>this.setFormData('level',e.target.value)}/>
+                                        <Select
+                                            showSearch
+                                            style={{ width: '200px' }}
+                                            placeholder="选择商品类别进行搜索"
+                                            optionFilterProp="children"
+                                            onChange={(value) => this.handleChange(value)}
+                                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                            getPopupContainer={() => document.getElementById('provider-area')}
+                                        >
+                                            {levelOptions}
+                                        </Select>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -291,7 +378,7 @@ class StaffManage extends React.Component {
                                         备注：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.comment} onChange={(e)=>this.setFormData('comment',e.target.value)}/>
+                                        <Input value={this.state.form.comment} onChange={(e) => this.setFormData('comment', e.target.value)} />
                                     </Col>
                                 </Row>
                             </Modal>
