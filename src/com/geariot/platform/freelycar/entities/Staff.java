@@ -14,7 +14,7 @@ public class Staff {
 	private String gender;
 	private String phone;
 	private String position;
-	private int level;
+	private String level;
 	private String comment;
 	private Date createDate;
 	public String getComment() {
@@ -31,7 +31,7 @@ public class Staff {
 	public int getId() {
 		return id;
 	}
-	public int getLevel() {
+	public String getLevel() {
 		return level;
 	}
 	public String getName() {
@@ -55,7 +55,7 @@ public class Staff {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public void setLevel(int level) {
+	public void setLevel(String level) {
 		this.level = level;
 	}
 	public void setName(String name) {
