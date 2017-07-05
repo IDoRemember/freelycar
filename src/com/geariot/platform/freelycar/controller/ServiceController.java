@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,7 +19,7 @@ public class ServiceController {
 	
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
 	@PermissionRequire("service:add")
-	public String addService(Service service){
+	public String addService(@RequestBody Service service){
 		return serviceService.addService(service);
 	}
 	
