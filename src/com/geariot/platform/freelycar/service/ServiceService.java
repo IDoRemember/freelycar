@@ -31,7 +31,8 @@ public class ServiceService {
 	public String addService(Service service){
 		service.setCreateDate(new Date());
 		serviceDao.save(service);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		JsonConfig config = JsonResFactory.dateConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(service, config)).toString();
 	}
 	
 	public String deleteService(int serviceId){
