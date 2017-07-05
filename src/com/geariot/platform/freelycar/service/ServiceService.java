@@ -32,7 +32,6 @@ public class ServiceService {
 		service.setCreateDate(new Date());
 		serviceDao.save(service);
 		JsonConfig config = JsonResFactory.dateConfig();
-		//sys
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(service, config)).toString();
 	}
 	
