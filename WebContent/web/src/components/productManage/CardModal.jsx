@@ -2,8 +2,10 @@ import React from 'react';
 import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber } from 'antd';
 import { Link } from 'react-router';
 // import ModalTable from '../productManage/ModalTable.jsx';
+import update from 'immutability-helper'
 import EditableCell from '../tables/EditableCell.jsx';
 import $ from 'jquery';
+const Option = Select.Option;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -54,31 +56,18 @@ class CardModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            visible: this.props.visible,
             visible1: false,//第二个模态框的属性
-            dataSource: [{
-                key: '1',
-                projectName: "洗车",
-                restCount: 20,
-
-            }, {
-                key: '2',
-                projectName: "打蜡",
-                restCount: 10,
-            }, {
-                key: '3',
-                projectName: "抢修",
-                restCount: 20,
-
-            }, {
-                key: '4',
-                projectName: "精洗",
-                restCount: 10,
-            }],
             itemData: [],//项目的数据
             count: 5,
-            selectedRowKeys:[],
-            selectedRows:[]
+            selectedRowKeys: [],
+            selectedRows: [],
+            form: {
+                name: '',
+                type: '',
+                price: '',
+                validTime: '',
+                comment: ''
+            }
         }
     }
     componentWillReceiveProps(newProps) {
@@ -135,16 +124,80 @@ class CardModal extends React.Component {
     }
 
 
-
     onItemOk = (arrItem) => {
         this.setState({ visible1: false });
     }
     onItemCancel = (index, key) => {
-        
-        this.setState({ visible1: false ,selectedRows:[]});
+        this.setState({ visible1: false, selectedRows: [] });
     }
 
 
+    onOk = () => {
+        let p = this.props;
+        let obj = this.state.form;
+
+        let projs = [];
+        for (let item of this.state.selectedRows) {
+            let projInfo = {};
+            let proj = {};
+            proj.id = item.key;
+            projInfo.project = proj;
+            projInfo.times = item.times == undefined ? 1 : item.tiems;
+
+            projs.push(projInfo);
+        }
+        obj.projectInfos = projs;
+        //console.log(obj);
+        $.ajax({
+            url: 'api/service/add',
+            data: JSON.stringify(obj),
+            dataType: 'json',
+            type: 'post',
+            contentType: 'application/json; charset=utf-8',
+            traditional: true,
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    //调用父类的onok
+                    obj.key = res.data.id
+                    obj.createDate = res.data.createDate;
+                    obj.type = obj.type == 0 ? '次卡' : '组合卡';
+                    p.onOk(obj)
+
+                    //清空模态框数据
+                    let form0 = {
+                        name: '',
+                        type: '',
+                        price: '',
+                        validTime: '',
+                        comment: ''
+                    }
+
+                    this.setState({ selectedRows: [], form: form0 });
+                }
+            }
+
+
+        });
+    }
+
+    //为form的赋值
+    handleChange = (key, value) => {
+        this.setState({
+            form: update(this.state.form, { [key]: { $set: value } })
+        })
+    }
+
+    //为项目中赋值times的属性
+    onChangeTimes = (index, value) => {
+        this.setState({
+            selectedRows: update(this.state.selectedRows, { [index]: { ['times']: { $set: value } } })
+        })
+    }
+
+    onCancel = () => {
+        this.setState({ visible: false });
+    }
 
     onCellChange = (index, key) => {
         return (value) => {
@@ -174,41 +227,6 @@ class CardModal extends React.Component {
     render() {
 
         const FormItem = Form.Item;
-        const columns = [{
-            title: '项目名称',
-            dataIndex: 'projectName',
-            render: (text, record, index) => (
-                <EditableCell
-                    value={text}
-                    onChange={this.onCellChange(index, 'projectName')}
-                />
-            ),
-        }, {
-            title: '可用次数',
-            dataIndex: 'restCount',
-            render: (text, record, index) => (
-                <InputNumber size="large" min={1} defaultValue={1} onChange={this.onChange} />
-            ),
-        },
-        {
-            title: '操作',
-            dataIndex: 'operation',
-            render: (text, record, index) => {
-                return (
-                    <span>
-                        <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.handleAdd}>
-                            <a href="javascript:void(0);">新增</a>
-                        </span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                            <a href="javascript:void(0);">删除</a>
-                        </Popconfirm>
-                    </span>
-
-                );
-            },
-        }];
-
-
         const Itemcolumns = [{
             title: '序号',
             dataIndex: 'index',
@@ -246,15 +264,40 @@ class CardModal extends React.Component {
             key: 'comment'
         }];
 
+
+        const Itemcolumns2 = [{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '项目名称',
+            dataIndex: 'name',
+            key: 'name'
+        }, {
+            title: '项目类别',
+            dataIndex: 'program',
+            key: 'program'
+        }, {
+            title: '可用次数',
+            dataIndex: 'times',
+            key: 'times',
+            render: (text, record, index) => {
+                return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.onChangeTimes(index, e) }} />
+            }
+
+        }];
+
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 //selectedRowKeys  key-->id
                 this.setState({
                     selectedRowKeys: selectedRowKeys,
-                    selectedRows:selectedRows
+                    selectedRows: selectedRows
                 })
-
                 //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
@@ -263,14 +306,13 @@ class CardModal extends React.Component {
         };
 
 
-
         return (
             <div>
                 <Modal
-                    title="项目查询"
-                    visible={this.state.visible}
-                    onOk={this.props.onOk()}
-                    onCancel={this.props.onCancel()}
+                    title="新增卡类"
+                    visible={this.props.visible}
+                    onOk={() => this.onOk()}
+                    onCancel={() => this.props.onCancel()}
                     width='50%' >
 
                     <Form onSubmit={this.handleSubmit}>
@@ -279,51 +321,54 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input />
+                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.state.form.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Input />
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.state.form.type}>
+                                <Option value="0">次卡</Option>
+                                <Option value="1">组合卡</Option>
+                            </Select>
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input />
+                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.state.form.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input />
+                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.state.form.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input />
+                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.state.form.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>
                         <Button type="primary" onClick={() => { this.setState({ visible1: true }) }}>关联项目</Button>
                         <Modal
-                            title="项目查询"
+                            title="关联项目"
                             visible={this.state.visible1}
-                            onOk={()=>this.onItemOk()}
-                            onCancel={()=>this.onItemCancel()}
+                            onOk={() => this.onItemOk()}
+                            onCancel={() => this.onItemCancel()}
                             width='50%' >
 
                             <Table dataSource={this.state.itemData} columns={Itemcolumns} rowSelection={rowSelection} />
                         </Modal>
                     </Row>
 
-                    <ModalTable dataSource={this.state.selectedRows} columns={Itemcolumns} />
+                    <ModalTable dataSource={this.state.selectedRows} columns={Itemcolumns2} />
 
                 </Modal>
             </div>
