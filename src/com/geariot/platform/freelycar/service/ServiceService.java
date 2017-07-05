@@ -97,4 +97,11 @@ public class ServiceService {
 		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
+	
+	public String getAllName(){
+		List<Object> list = serviceDao.listName();
+		JSONArray jsonArray = JSONArray.fromObject(list);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
+		return obj.toString();
+	}
 }

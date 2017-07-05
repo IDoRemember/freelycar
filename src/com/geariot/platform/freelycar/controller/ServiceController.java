@@ -45,4 +45,11 @@ public class ServiceController {
 	public String getSelectService(String name , int page , int number){
 		return serviceService.getSelectService(name, page, number);
 	}
+	
+	@RequestMapping(value = "/name" , method = RequestMethod.GET)
+	@PermissionRequire("service:query")
+	public String getAllName(){
+		return serviceService.getAllName();
+	}
+	
 }

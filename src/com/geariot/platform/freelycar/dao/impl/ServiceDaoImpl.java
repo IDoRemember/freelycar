@@ -78,6 +78,14 @@ public class ServiceDaoImpl implements ServiceDao{
 		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object> listName() {
+		String sql = "select id , name from Service";
+		return this.getSession().createSQLQuery(sql).list(); 
+		
+	}
 	
 	
 }
