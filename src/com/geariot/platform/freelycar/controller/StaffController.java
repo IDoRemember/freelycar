@@ -30,7 +30,7 @@ public class StaffController {
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("staff:delete")
-	public String deleteStaff(int[] staffIds ){
+	public String deleteStaff(Integer... staffIds ){
 		return staffService.deleteStaff(staffIds);
 	}
 	
