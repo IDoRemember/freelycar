@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.shiro.SecurityUtils;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,16 +43,15 @@ public class StaffService {
 	
 	public String addStaff(Staff staff){
 		Staff exist = staffDao.findStaffByPhone(staff.getPhone());
-		JSONObject obj = null;
 		if(exist != null){
-			obj = JsonResFactory.buildOrg(RESCODE.PHONE_EXIST);
+			return JsonResFactory.buildOrg(RESCODE.PHONE_EXIST).toString();
 		}
 		else{
 			staff.setCreateDate(new Date());
 			staffDao.saveStaff(staff);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			JsonConfig config = JsonResFactory.dateConfig();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(staff, config)).toString();
 		}
-		return obj.toString();
 	}
 	
 	public String deleteStaff(int[] staffIds) {
