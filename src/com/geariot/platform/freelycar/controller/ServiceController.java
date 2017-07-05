@@ -20,6 +20,7 @@ public class ServiceController {
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
 	@PermissionRequire("service:add")
 	public String addService(@RequestBody Service service){
+		System.out.println(service);
 		return serviceService.addService(service);
 	}
 	
