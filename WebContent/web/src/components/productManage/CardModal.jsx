@@ -1,8 +1,9 @@
 import React from 'react';
-import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form,InputNumber } from 'antd';
+import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber } from 'antd';
 import { Link } from 'react-router';
 // import ModalTable from '../productManage/ModalTable.jsx';
 import EditableCell from '../tables/EditableCell.jsx';
+import $ from 'jquery';
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
@@ -41,7 +42,7 @@ class ModalTable extends React.Component {
 
         return (
             <div>
-                <Table bordered size="small" pagination={{pageSize:5}} size="small" dataSource={this.state.dataSource} columns={this.state.columns} />
+                <Table bordered size="small" pagination={{ pageSize: 5 }} size="small" dataSource={this.state.dataSource} columns={this.state.columns} />
             </div>
         );
     }
@@ -54,6 +55,7 @@ class CardModal extends React.Component {
         super(props);
         this.state = {
             visible: this.props.visible,
+            visible1: false,//第二个模态框的属性
             dataSource: [{
                 key: '1',
                 projectName: "洗车",
@@ -63,7 +65,7 @@ class CardModal extends React.Component {
                 key: '2',
                 projectName: "打蜡",
                 restCount: 10,
-            },{
+            }, {
                 key: '3',
                 projectName: "抢修",
                 restCount: 20,
@@ -73,7 +75,10 @@ class CardModal extends React.Component {
                 projectName: "精洗",
                 restCount: 10,
             }],
+            itemData: [],//项目的数据
             count: 5,
+            selectedRowKeys:[],
+            selectedRows:[]
         }
     }
     componentWillReceiveProps(newProps) {
@@ -84,6 +89,63 @@ class CardModal extends React.Component {
         }
 
     }
+
+    //加载数据
+    componentDidMount() {
+        this.loadData(1, 10);
+    }
+
+
+    loadData = (page, number, proName, programId) => {
+        let jsonData = {};
+        jsonData.name = proName;
+        jsonData.programId = programId;
+        jsonData.page = page;
+        jsonData.number = number;
+        $.ajax({
+            url: '/api/project/query',
+            data: jsonData,
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+                let code = res.code;
+                if (code == '0') {
+                    let tableDate = [];//表格显示的数据
+                    let arr = res.data;
+                    for (let i = 0, len = arr.length; i < len; i++) {
+                        let obj = arr[i];
+                        let tableItem = {};
+                        for (let item in obj) {
+                            if (item == 'id')
+                                tableItem.key = obj[item];
+                            else if (item == 'program')
+                                tableItem.program = obj[item].name;
+                            else
+                                tableItem[item] = obj[item];
+                        }
+                        tableDate.push(tableItem);
+                    }
+                    this.setState({ itemData: tableDate, pagination: { total: res.realSize }, });
+                }
+
+            }
+
+        });
+    }
+
+
+
+    onItemOk = (arrItem) => {
+        this.setState({ visible1: false });
+    }
+    onItemCancel = (index, key) => {
+        
+        this.setState({ visible1: false ,selectedRows:[]});
+    }
+
+
+
     onCellChange = (index, key) => {
         return (value) => {
             const dataSource = [...this.state.dataSource];
@@ -146,6 +208,62 @@ class CardModal extends React.Component {
             },
         }];
 
+
+        const Itemcolumns = [{
+            title: '序号',
+            dataIndex: 'index',
+            key: 'index',
+            render: (text, record, index) => {
+                return <span>{index + 1}</span>
+            }
+        }, {
+            title: '项目名称',
+            dataIndex: 'name',
+            key: 'name'
+        }, {
+            title: '项目类别',
+            dataIndex: 'program',
+            key: 'program'
+        }, {
+            title: '项目价格',
+            dataIndex: 'price',
+            key: 'price'
+        }, {
+            title: '参考工时',
+            dataIndex: 'referWorkTime',
+            key: 'referWorkTime'
+        }, {
+            title: '工时单价',
+            dataIndex: 'pricePerUnit',
+            key: 'pricePerUnit'
+        }, {
+            title: '创建时间',
+            dataIndex: 'createDate',
+            key: 'createDate'
+        }, {
+            title: '备注',
+            dataIndex: 'comment',
+            key: 'comment'
+        }];
+
+        // rowSelection object indicates the need for row selection
+        const rowSelection = {
+            onChange: (selectedRowKeys, selectedRows) => {
+                //selectedRowKeys  key-->id
+                this.setState({
+                    selectedRowKeys: selectedRowKeys,
+                    selectedRows:selectedRows
+                })
+
+                //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+            },
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+            }),
+        };
+
+
+
         return (
             <div>
                 <Modal
@@ -192,11 +310,20 @@ class CardModal extends React.Component {
                             <Input />
                         </FormItem>
                     </Form>
-                    <Row>
-                       <Button type="primary">增加</Button>
+                    <Row style={{ marginBottom: '10px' }}>
+                        <Button type="primary" onClick={() => { this.setState({ visible1: true }) }}>关联项目</Button>
+                        <Modal
+                            title="项目查询"
+                            visible={this.state.visible1}
+                            onOk={()=>this.onItemOk()}
+                            onCancel={()=>this.onItemCancel()}
+                            width='50%' >
+
+                            <Table dataSource={this.state.itemData} columns={Itemcolumns} rowSelection={rowSelection} />
+                        </Modal>
                     </Row>
 
-                    <ModalTable dataSource={this.state.dataSource} columns={columns}  />
+                    <ModalTable dataSource={this.state.selectedRows} columns={Itemcolumns} />
 
                 </Modal>
             </div>
