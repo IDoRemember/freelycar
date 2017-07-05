@@ -97,6 +97,13 @@ public class ProjectDaoImpl implements ProjectDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@Override
+	public long countInventoryByIds(List<String> inventoryIds) {
+		String hql = "select count(*) from ProjectInventoriesInfo where inventory.id in :list";
+		return (long) this.getSession().createQuery(hql).setParameterList("list", inventoryIds)
+				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
 	
 	
 	

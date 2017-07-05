@@ -17,28 +17,42 @@ import javax.persistence.OneToMany;
 @Entity
 public class ConsumOrder {
 	private String id;
-	private Car car;
-	private Project project;
-	private int projectPayMethod;	//项目费支付方式：0,1=付现金,扣卡次
-	private Card payCard;
-	private int payCardTimes;
-	private Program program;
+	private int carId;
+	private String licensePlate;
+	private String carType;
+	private String carBrand;
+	private int clientId;
+	private String clientName;
+	private String gender;
+	private String phone;
+	private Set<ProjectInfo> projects;
+	private int programId;
+	private String programName;
 	private String parkingLocation;
 	private Set<Staff> staffs;
 	private Set<ConsumExtraInventoriesInfo> inventoryInfos;
 	private int state;		//0,1,2=接,完,交
-	private float workingHour;
-	private float workingPricePerHour;
 	private float totalPrice;
 	private int payState;	//0,1=未结算,已结算
 	private Date pickTime;
 	private Date finishTime;
 	private Date deliverTime;
 	private Date createDate;
-	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="carId", foreignKey=@ForeignKey(name="none"))
-	public Car getCar() {
-		return car;
+	private Admin orderMaker;
+	public String getCarBrand() {
+		return carBrand;
+	}
+	public int getCarId() {
+		return carId;
+	}
+	public String getCarType() {
+		return carType;
+	}
+	public int getClientId() {
+		return clientId;
+	}
+	public String getClientName() {
+		return clientName;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -49,6 +63,9 @@ public class ConsumOrder {
 	public Date getFinishTime() {
 		return finishTime;
 	}
+	public String getGender() {
+		return gender;
+	}
 	@Id
 	public String getId() {
 		return id;
@@ -58,35 +75,36 @@ public class ConsumOrder {
 	public Set<ConsumExtraInventoriesInfo> getInventoryInfos() {
 		return inventoryInfos;
 	}
-	public String getParkingLocation() {
-		return parkingLocation;
+	public String getLicensePlate() {
+		return licensePlate;
 	}
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="cardId", foreignKey=@ForeignKey(name="none"))
-	public Card getPayCard() {
-		return payCard;
+	@JoinColumn(name="adminId", foreignKey=@ForeignKey(name="none"))
+	public Admin getOrderMaker() {
+		return orderMaker;
 	}
-	public int getPayCardTimes() {
-		return payCardTimes;
+	public String getParkingLocation() {
+		return parkingLocation;
 	}
 	public int getPayState() {
 		return payState;
 	}
+	public String getPhone() {
+		return phone;
+	}
 	public Date getPickTime() {
 		return pickTime;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="programId", foreignKey=@ForeignKey(name="none"))
-	public Program getProgram() {
-		return program;
+	public int getProgramId() {
+		return programId;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="projectId", foreignKey=@ForeignKey(name="none"))
-	public Project getProject() {
-		return project;
+	public String getProgramName() {
+		return programName;
 	}
-	public int getProjectPayMethod() {
-		return projectPayMethod;
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@JoinColumn(name="consumOrderId", foreignKey=@ForeignKey(name="none"))
+	public Set<ProjectInfo> getProjects() {
+		return projects;
 	}
 	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinTable(name="consumOrders_staff", 
@@ -101,14 +119,20 @@ public class ConsumOrder {
 	public float getTotalPrice() {
 		return totalPrice;
 	}
-	public float getWorkingHour() {
-		return workingHour;
+	public void setCarBrand(String carBrand) {
+		this.carBrand = carBrand;
 	}
-	public float getWorkingPricePerHour() {
-		return workingPricePerHour;
+	public void setCarId(int carId) {
+		this.carId = carId;
 	}
-	public void setCar(Car car) {
-		this.car = car;
+	public void setCarType(String carType) {
+		this.carType = carType;
+	}
+	public void setClientId(int clientId) {
+		this.clientId = clientId;
+	}
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
@@ -119,35 +143,41 @@ public class ConsumOrder {
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
 	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
 	public void setId(String id) {
 		this.id = id;
 	}
 	public void setInventoryInfos(Set<ConsumExtraInventoriesInfo> inventoryInfos) {
 		this.inventoryInfos = inventoryInfos;
 	}
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
+	public void setOrderMaker(Admin orderMaker) {
+		this.orderMaker = orderMaker;
+	}
 	public void setParkingLocation(String parkingLocation) {
 		this.parkingLocation = parkingLocation;
-	}
-	public void setPayCard(Card payCard) {
-		this.payCard = payCard;
-	}
-	public void setPayCardTimes(int payCardTimes) {
-		this.payCardTimes = payCardTimes;
 	}
 	public void setPayState(int payState) {
 		this.payState = payState;
 	}
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 	public void setPickTime(Date pickTime) {
 		this.pickTime = pickTime;
 	}
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setProgramId(int programId) {
+		this.programId = programId;
 	}
-	public void setProject(Project project) {
-		this.project = project;
+	public void setProgramName(String programName) {
+		this.programName = programName;
 	}
-	public void setProjectPayMethod(int projectPayMethod) {
-		this.projectPayMethod = projectPayMethod;
+	public void setProjects(Set<ProjectInfo> projects) {
+		this.projects = projects;
 	}
 	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;
@@ -157,11 +187,5 @@ public class ConsumOrder {
 	}
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
-	}
-	public void setWorkingHour(float workingHour) {
-		this.workingHour = workingHour;
-	}
-	public void setWorkingPricePerHour(float workingPricePerHour) {
-		this.workingPricePerHour = workingPricePerHour;
 	}
 }

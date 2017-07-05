@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
+import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
@@ -69,6 +70,22 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 	public void deleteOrder(String orderId) {
 		String hql = "delete from InventoryOrder where id = :orderId";
 		this.getSession().createQuery(hql).setString("orderId", orderId).executeUpdate();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<InventoryOrder> findByMakerAccount(String account) {
+		String hql = "from InventoryOrder where orderMaker.account = :account";
+		return this.getSession().createQuery(hql).setString("account", account)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<InventoryOrderInfo> findInfoByProviderId(int providerId) {
+		String hql = "from InventoryOrderInfo where provider.id = :id";
+		return this.getSession().createQuery(hql).setInteger("id", providerId)
+				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 

@@ -22,4 +22,8 @@ public interface ConsumOrderDao {
 	
 	List<ConsumOrder> findWithClientId(int clientId);
 	
+	List<ConsumOrder> findByMakerAccount(String account);
+	
+	long countInventoryInfoByIds(List<String> inventoryIds);
+	
 }

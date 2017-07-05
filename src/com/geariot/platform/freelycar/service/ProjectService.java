@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ProjectDao;
+import com.geariot.platform.freelycar.dao.ServiceDao;
 import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -26,6 +29,12 @@ public class ProjectService {
 	@Autowired
 	private ProjectDao projectDao;
 	
+	@Autowired
+	private CardDao cardDao;
+	
+	@Autowired
+	private ServiceDao serviceDao;
+	
 	public String addProject(Project project){
 		project.setCreateDate(new Date());
 		//project.getInventoryInfos();
@@ -35,6 +44,12 @@ public class ProjectService {
 	}
 	
 	public String deleteProject(Integer... projectIds){
+		List<Integer> ids = Arrays.asList(projectIds);
+		//查找CardProjectRemainingInfo和ServiceProjectInfo，如果有该project的引用，则返回错误，删除失败
+		if(this.cardDao.countProjectByIds(ids) > 0 || this.serviceDao.countProjectByIds(ids) > 0){
+			return JsonResFactory.buildOrg(RESCODE.UNABLE_TO_DELETE).toString();
+		}
+		
 		int count = 0;
 		for(int projectId : projectIds){
 			if(projectDao.findProjectById(projectId) == null){

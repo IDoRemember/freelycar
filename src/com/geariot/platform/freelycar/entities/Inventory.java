@@ -13,8 +13,12 @@ import javax.persistence.ManyToOne;
 public class Inventory {
 	private String id;
 	private String name;
-	private InventoryType type;
-	private InventoryBrand brand;
+//	private InventoryType type;
+//	private InventoryBrand brand;
+	private int typeId;
+	private String typeName;
+	private int brandId;
+	private String brandName;
 	private String standard;
 	private String property;
 	private float price;
@@ -25,10 +29,11 @@ public class Inventory {
 	public float getAmount() {
 		return amount;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="brandId", foreignKey=@ForeignKey(name="none"))
-	public InventoryBrand getBrand() {
-		return brand;
+	public int getBrandId() {
+		return brandId;
+	}
+	public String getBrandName() {
+		return brandName;
 	}
 	public String getComment() {
 		return comment;
@@ -57,16 +62,20 @@ public class Inventory {
 	public String getStandard() {
 		return standard;
 	}
-	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
-	@JoinColumn(name="typeId", foreignKey=@ForeignKey(name="none"))
-	public InventoryType getType() {
-		return type;
+	public int getTypeId() {
+		return typeId;
+	}
+	public String getTypeName() {
+		return typeName;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
-	public void setBrand(InventoryBrand brand) {
-		this.brand = brand;
+	public void setBrandId(int brandId) {
+		this.brandId = brandId;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
@@ -92,8 +101,11 @@ public class Inventory {
 	public void setStandard(String standard) {
 		this.standard = standard;
 	}
-	public void setType(InventoryType type) {
-		this.type = type;
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
 	}
 	
 }

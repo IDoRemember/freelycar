@@ -23,6 +23,7 @@ public class Service {
 	private String comment;
 	private List<ServiceProjectInfo> projectInfos;
 	private Date createDate;
+	private boolean deleted;		//删除Service只标记这条记录为true，不在数据库中实际删掉数据。
 	public String getComment() {
 		return comment;
 	}
@@ -51,12 +52,18 @@ public class Service {
 	public int getValidTime() {
 		return validTime;
 	}
-	
+	public boolean isDeleted() {
+		return deleted;
+	}
 	public void setComment(String comment) {
 		this.comment = comment;
 	}
+	
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
+	}
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
 	}
 	public void setId(int id) {
 		this.id = id;

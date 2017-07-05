@@ -27,4 +27,6 @@ public interface ProjectDao {
 	List<Project> getConditionQuery(String andCondition , int from , int pageSize);
 	
 	long getConditionCount(String andCondition);
+	
+	long countInventoryByIds(List<String> inventoryIds);
 }

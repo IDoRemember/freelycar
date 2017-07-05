@@ -85,4 +85,19 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ConsumOrder> findByMakerAccount(String account) {
+		String hql = "from ConsumOrder where orderMaker.account = :account";
+		return this.getSession().createQuery(hql).setString("account", account)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long countInventoryInfoByIds(List<String> inventoryIds) {
+		String hql = "select count(*) from ConsumExtraInventoriesInfo where inventory.id in :list";
+		return (long) this.getSession().createQuery(hql).setParameterList("list", inventoryIds)
+				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
 }

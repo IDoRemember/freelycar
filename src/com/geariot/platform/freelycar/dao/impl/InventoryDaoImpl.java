@@ -57,4 +57,12 @@ public class InventoryDaoImpl implements InventoryDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Inventory> findByProviderId(int providerId) {
+		String hql = "from Inventory where provider.id = :id";
+		return this.getSession().createQuery(hql).setInteger("id", providerId)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
 }

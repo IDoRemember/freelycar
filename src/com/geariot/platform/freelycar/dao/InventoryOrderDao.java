@@ -3,6 +3,7 @@ package com.geariot.platform.freelycar.dao;
 import java.util.List;
 
 import com.geariot.platform.freelycar.entities.InventoryOrder;
+import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 
 public interface InventoryOrderDao {
 	
@@ -19,5 +20,9 @@ public interface InventoryOrderDao {
 	InventoryOrder findById(String inventoryOrderId);
 
 	void deleteOrder(String orderId);
+	
+	List<InventoryOrder> findByMakerAccount(String account);
+	
+	List<InventoryOrderInfo> findInfoByProviderId(int providerId);
 	
 }

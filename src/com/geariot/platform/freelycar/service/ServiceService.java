@@ -38,11 +38,13 @@ public class ServiceService {
 	public String deleteService(Integer... serviceIds){
 		int count = 0;
 		for(int serviceId : serviceIds){
-			if(serviceDao.findServiceById(serviceId) == null){
+			com.geariot.platform.freelycar.entities.Service exist = serviceDao.findServiceById(serviceId);
+			if(exist == null){
 				count++;
 			}
 			else{
-				serviceDao.delete(serviceId);;
+				//删除service只将deleted字段设为true，不在数据库中删除此条字段
+				exist.setDeleted(true);
 			}
 		}
 		if(count !=0){
