@@ -47,7 +47,7 @@ const columns = [{
     dataIndex: 'comment',
     key: 'comment'
 }];
-class PartsSearch extends React.Component {
+class ProgramSearch extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -196,7 +196,7 @@ class PartsSearch extends React.Component {
                 <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
                     <RadioGroup onChange={this.onChange} value={this.state.value} >
                         <Radio style={radioStyle} value={1}>
-                            按配件名称进行搜索
+                            按项目名称进行搜索
                             {this.state.value == 1 && <Search
                                 placeholder="按配件名称进行搜索"
                                 style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
@@ -206,7 +206,7 @@ class PartsSearch extends React.Component {
                             />}
                         </Radio>
                         <Radio style={radioStyle} value={2}>
-                            按配件类别进行搜索
+                            按项目类别进行搜索
                             {this.state.value == 2 && <Select
                                 showSearch
                                 style={{ width: '200px', marginLeft: '20px' }}
@@ -222,8 +222,6 @@ class PartsSearch extends React.Component {
                             </Select>}
                         </Radio>
                     </RadioGroup>
-
-
                 </Col>
                 {/*<Col span={12} style={{ verticalAlign: 'middle' }}>
                     <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
@@ -233,4 +231,4 @@ class PartsSearch extends React.Component {
         </Modal>
     }
 }
-export default PartsSearch
+export default ProgramSearch

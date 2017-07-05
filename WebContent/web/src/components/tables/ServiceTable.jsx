@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm ,Button} from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 const Option = Select.Option;
@@ -57,7 +57,7 @@ class ServiceTable extends React.Component {
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
+            <Button type="primary" style={{marginBottom:'10px'}}>增加服务项目</Button>
             <Table className="accountTable" dataSource={this.state.data} bordered>
                 <Col
                     title="序号"
