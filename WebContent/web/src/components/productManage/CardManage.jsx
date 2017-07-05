@@ -250,7 +250,7 @@ class EditableTable extends React.Component {
                 </Card>
 
 
-                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
+                <CardModal visible={this.state.visible}  onOk={() => this.handleOk}
                     onCancel={() => this.handleCancel}></CardModal>
 
                 {/*模态框*/}
