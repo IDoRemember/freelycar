@@ -192,6 +192,7 @@ class StaffManage extends React.Component {
             visible: false,
         });
     }
+
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
@@ -201,6 +202,7 @@ class StaffManage extends React.Component {
         })
         this.queryStaff(pagination.current, 10)
     }
+
     handleCancel = (e) => {
         // console.log(e);
         this.setState({
@@ -225,9 +227,6 @@ class StaffManage extends React.Component {
         })
     }
     render() {
-        let { sortedInfo, filteredInfo } = this.state;
-        sortedInfo = sortedInfo || {};
-        filteredInfo = filteredInfo || {};
         const positionOptions = this.state.positionOptions.map((item, index) => {
             return <Option key={index} value={item}>{item}</Option>
         }), levelOptions = this.state.levelOptions.map((item, index) => {
@@ -278,6 +277,7 @@ class StaffManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
+                        
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
@@ -318,40 +318,6 @@ class StaffManage extends React.Component {
                             <Col span={2}>
                                 <Button type="primary" onClick={() => { this.queryStaff(1, 10) }}>查询</Button>
                             </Col>
-
-                            {/*查询的模态框*/}
-                            {/*<Modal
-                                title="项目查询"
-                                visible={this.state.visible}
-                                onOk={this.handleOk}
-                                onCancel={this.handleCancel}
-                                width='80%'
-                            >
-                                <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
-                                    <Col span={5}>
-                                        <Input addonBefore="员工工号" disabled />
-                                    </Col>
-                                    <Col span={5}>
-                                        <Input addonBefore="员工姓名" />
-                                    </Col>
-                                    <Col span={5}>
-                                        <Input addonBefore="职位" />
-                                    </Col>
-                                    <Col span={2}>
-                                        <Button type="primary">查询</Button>
-                                    </Col>
-                                </Row>
-                                <Row>
-                                    <Col span={24}>
-                                        <Table
-                                            rowSelection={rowSelection}
-                                            columns={columns}
-                                            dataSource={this.state.data}
-                                            bordered
-                                        />
-                                    </Col>
-                                </Row>
-                            </Modal>*/}
                             <Modal
                                 title="新增员工"
                                 visible={this.state.visible}
