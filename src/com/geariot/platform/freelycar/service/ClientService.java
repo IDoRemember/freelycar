@@ -208,10 +208,11 @@ public class ClientService {
 	private String buildCondition(Calendar start, Calendar end){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		StringBuilder condition = new StringBuilder();
-		condition.append("createDate >= ");
+		condition.append("createDate >= '");
 		condition.append(sdf.format(start.getTime()));
-		condition.append(" and createDate < ");
+		condition.append("' and createDate < '");
 		condition.append(sdf.format(end.getTime()));
+		condition.append("'");
 		return condition.toString();
 	}
 
