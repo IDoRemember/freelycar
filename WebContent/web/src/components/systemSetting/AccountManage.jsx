@@ -23,21 +23,55 @@ class AccountManage extends React.Component {
             accountId: null,
             accountName: '',
             modifyIndex: null,
-            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收营员', '会计'],
+            staffOptions: [],
+            positionOptions: [
+                { id: 1, name: '店长' },
+                { id: 2, name: '维修工' },
+                { id: 3, name: '洗车工' },
+                { id: 4, name: '客户经理' },
+                { id: 5, name: '收营员' },
+                { id: 6, name: '会计' }],
             modalstate: 'add',
             form: {
-                id:'',
+                id: '',
                 account: '',
-                name:'',
-                roleId: '',
+                name: { key: '', label: '' },
+                role: { key: '', label: '' },
                 current: '',
+                staffId: '',
                 comment: '',
-                password:''
+                password: '',
+                password1: ''
             }
         }
     }
     componentDidMount() {
         this.queryAccount(1, 10)
+        this.queryStaff()
+    }
+    queryStaff = () => {
+        $.ajax({
+            url: 'api/staff/query',
+            data: {
+                page: 1,
+                number: 99
+            },
+            success: (result) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(result)
+                if (result.code == "0") {
+                    let datalist = result.data
+                    for (let item of datalist) {
+                        item.key = item.id
+                    }
+                    this.setState({
+                        staffOptions: datalist
+                    })
+                }
+            }
+        })
     }
     queryAccount = (page, number) => {
         $.ajax({
@@ -69,6 +103,7 @@ class AccountManage extends React.Component {
     }
 
     setFormData = (key, value) => {
+        console.log(value)
         this.setState({
             form: update(this.state.form, {
                 [key]: {
@@ -83,23 +118,6 @@ class AccountManage extends React.Component {
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
-        });
-    }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
-            },
         });
     }
 
@@ -149,28 +167,33 @@ class AccountManage extends React.Component {
         if (this.state.modalstate == 'modify') {
             obj = {
                 id: this.state.form.id,
-                name: this.state.form.name,
+                account: this.state.form.account,
+                password: this.state.form.password,
+                name: this.state.form.name.label,
+                staff: { id: this.state.form.name.key },
                 phone: this.state.form.phone,
-                position: this.state.form.position,
-                level: this.state.form.level,
-                gender: this.state.form.gender,
+                role: { roleName: this.state.form.roleId },
+                current: this.state.form.current,
                 comment: this.state.form.comment
             }
         } else {
             obj = {
+                account: this.state.form.account,
+                password: this.state.form.password,
                 name: this.state.form.name,
                 phone: this.state.form.phone,
-                position: this.state.form.position,
-                level: this.state.form.level,
-                gender: this.state.form.gender,
+                staff: { id: this.state.form.name.key },
+                role: { roleName: this.state.form.roleId },
+                current: this.state.form.current,
                 comment: this.state.form.comment
             }
         }
         $.ajax({
             url: 'api/admin/' + this.state.modalstate,
             type: 'post',
+            contentType: 'application/json;charset=utf-8',
             dataType: 'json',
-            data: obj,
+            data: JSON.stringify(obj),
             success: (result) => {
                 if (result.code == "0") {
                     if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
@@ -220,7 +243,7 @@ class AccountManage extends React.Component {
             form: {
                 id: record.id,
                 name: record.name,
-                account:record.account,
+                account: record.account,
                 current: record.current,
                 roleId: record.role.id,
                 position: record.staff.position,
@@ -230,7 +253,9 @@ class AccountManage extends React.Component {
     }
     render() {
         const positionOptions = this.state.positionOptions.map((item, index) => {
-            return <Option key={index} value={item}>{item}</Option>
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+        }), staffOptions = this.state.staffOptions.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
         }),
             columns = [{
                 title: '序号',
@@ -251,7 +276,7 @@ class AccountManage extends React.Component {
                 title: '角色',
                 dataIndex: 'staff',
                 key: 'staff',
-                render:(text,record,index) =>{
+                render: (text, record, index) => {
                     return <span>{text.position}</span>
                 }
             }, {
@@ -275,7 +300,7 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch  style={{ marginRight: '10px' }} defaultChecked={false} onChange={(value) => this.setFormData('gender', value)} />
+                        <Switch style={{ marginRight: '10px' }} defaultChecked={false} onChange={(value) => this.setFormData('gender', value)} />
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -325,7 +350,7 @@ class AccountManage extends React.Component {
                                         账号：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={(e) => this.setFormData('account', e.target.value)} />
+                                        <Input value={this.state.form.account} onChange={(e) => this.setFormData('account', e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -333,7 +358,19 @@ class AccountManage extends React.Component {
                                         姓名：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={(e) => this.setFormData('name', e.target.value)} />
+                                        <Select
+                                            showSearch
+                                            style={{ width: '150px' }}
+                                            placeholder="选择职位"
+                                            optionFilterProp="children"
+                                            value={this.state.form.name}
+                                            labelInValue
+                                            onChange={(value) => this.setFormData('name', value)}
+                                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                            getPopupContainer={() => document.getElementById('provider-area1')}
+                                        >
+                                            {staffOptions}
+                                        </Select>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -341,7 +378,7 @@ class AccountManage extends React.Component {
                                         密码：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        <Input type="password" value={this.state.form.password1} onChange={(e) => this.setFormData('password1', e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -349,7 +386,7 @@ class AccountManage extends React.Component {
                                         密码确认：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.name} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        <Input type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area1">
@@ -362,8 +399,8 @@ class AccountManage extends React.Component {
                                             style={{ width: '150px' }}
                                             placeholder="选择职位"
                                             optionFilterProp="children"
-                                            value={this.state.form.position}
-                                            onChange={(value) => this.setFormData('roleId', value)}
+                                            value={this.state.form.role}
+                                            onChange={(value) => this.setFormData('role', value)}
                                             filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                             getPopupContainer={() => document.getElementById('provider-area1')}
                                         >

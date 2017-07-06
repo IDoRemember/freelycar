@@ -2,6 +2,7 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import $ from 'jquery'
 import update from 'immutability-helper'
+import { Link } from 'react-router';
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal, Popconfirm, message } from 'antd';
 const Option = Select.Option;
 const { RangePicker } = DatePicker,
@@ -86,23 +87,7 @@ class StaffManage extends React.Component {
             sortedInfo: sorter,
         });
     }
-    clearFilters = () => {
-        this.setState({ filteredInfo: null });
-    }
-    clearAll = () => {
-        this.setState({
-            filteredInfo: null,
-            sortedInfo: null,
-        });
-    }
-    setAgeSort = () => {
-        this.setState({
-            sortedInfo: {
-                order: 'descend',
-                columnKey: 'age',
-            },
-        });
-    }
+
     onDelete = (idArray) => {
         $.ajax({
             type: 'post',
@@ -242,7 +227,10 @@ class StaffManage extends React.Component {
             }, {
                 title: '员工工号',
                 dataIndex: 'id',
-                key: 'id'
+                key: 'id',
+                render: (text, record, index) => {
+                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{text}</Link></span>
+                }
             }, {
                 title: '员工姓名',
                 dataIndex: 'name',
@@ -277,7 +265,7 @@ class StaffManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        
+
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
