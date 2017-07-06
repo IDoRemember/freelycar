@@ -97,7 +97,7 @@ public class AdminDaoImpl implements AdminDao {
 
 	@Override
 	public void deleteByStaffId(int staffId) {
-		String hql = "delete from Admin where staff.id == :id";
+		String hql = "delete from Admin where staff.id = :id";
 		this.getSession().createQuery(hql).setInteger("id", staffId).executeUpdate();
 	}
 
