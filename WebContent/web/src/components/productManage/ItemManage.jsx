@@ -36,6 +36,7 @@ class BeautyOrder extends React.Component {
             selectedRowKeys: [],
             loading: false,
             visible: false,
+            visibleType: false,
             selectedIds: [],
             data: [],
             form: {
@@ -45,6 +46,10 @@ class BeautyOrder extends React.Component {
                 price: '',
                 referWorkTime: '',
                 pricePerUnit: '',
+                comment: ''
+            },
+            form2: {
+                name: '',
                 comment: ''
             },
             programItem: [],
@@ -103,6 +108,8 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                }else{
+                    this.setState({ data: [] });
                 }
 
             }
@@ -139,6 +146,8 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize } });
+                }else{
+                    this.setState({ data: [] });
                 }
 
             }
@@ -224,12 +233,12 @@ class BeautyOrder extends React.Component {
         obj.comment = form.comment;
         obj.program = { id: form.programId };
 
-        let arr= [];
+        let arr = [];
         let invArray = this.state.invData;
         for (let i = 0, len = invArray.length; i < len; i++) {
             let obj = invArray[i];
             let newObj = {};//传值的obj
-            newObj.number = obj.number==undefined?1:obj.number;
+            newObj.number = obj.number == undefined ? 1 : obj.number;
 
             let inventory = {};
             inventory.id = obj.key;
@@ -246,7 +255,7 @@ class BeautyOrder extends React.Component {
             contentType: 'application/json;charset=utf-8',
             dataType: 'json',
             data: JSON.stringify(obj),
-            traditional:true,
+            traditional: true,
             success: (result) => {
                 console.log(result);
                 let code = result.code;
@@ -379,6 +388,50 @@ class BeautyOrder extends React.Component {
     }
 
 
+    //tab2的函数
+    //增加配额件
+    handleInvOn = () => {
+        let obj = {};
+        obj.name = this.state.form2.name;
+        obj.comment = this.state.form2.comment;
+        console.log('zzzz');
+        $.ajax({
+            url: 'api/program/add',
+            data: obj,
+            dataType: 'json',
+            type: 'post',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    obj.key = res.data.id;
+                    obj.createDate = res.data.createDate;
+                    this.setState({
+                        data: [...this.state.data, obj]
+                    });
+
+                }
+            }
+        })
+
+
+        this.setState({ visibleType: false });
+    }
+
+
+    //为state的form
+    onValueChange2 = (key, value) => {
+        if (key == 'program') {
+            console.log(value);
+            this.setState({
+                form2: update(this.state.form2, { ['program']: { $set: value.label }, ['programId']: { $set: value.key } })
+            })
+        } else
+            this.setState({
+                form2: update(this.state.form2, { [key]: { $set: value } })
+            })
+    }
+
+    
 
     render() {
         const columns = [{
@@ -552,14 +605,17 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="项目管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="项目名称" value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                         </div>
                                     </Col>
-                                    <Col span={4}>
+                                    <Col span={1}>
+                                        <span>项目类别</span>
+                                    </Col>
+                                    <Col span={2}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Select addonBefore="项目类别"
+                                            <Select
                                                 style={{ width: '100%' }}
                                                 onChange={(e) => this.setState({ progId: e })}
                                             >
@@ -702,17 +758,51 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button>新增</Button>
+                                        <Button onClick={() => this.setState({ visibleType: true })}>新增</Button>
+                                        {/*新增的模态框*/}
+                                        <Modal
+                                            title="新增类别"
+                                            visible={this.state.visibleType}
+                                            onOk={() => this.handleInvOn()}
+                                            onCancel={() => this.setState({ visibleType: false })}
+                                            width='50%'
+                                        >
+                                            <Form onSubmit={this.changehandleSubmit}>
+
+                                                <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
+                                                    <Col>
+                                                        <FormItem {...formItemLayout}
+                                                            label="类别名称"
+                                                            hasFeedback
+                                                        >
+                                                            <Input value={this.state.form2.name} onChange={(e) => this.onValueChange2('name', e.target.value)} />
+                                                        </FormItem>
+                                                    </Col>
+                                                </Row>
+                                                <Row>
+                                                    <Col>
+                                                        <FormItem
+                                                            {...formItemLayout}
+                                                            label="备注"
+                                                            hasFeedback
+                                                        >
+                                                            <Input value={this.state.form2.comment} onChange={(e) => this.onValueChange2('comment', e.target.value)} />
+                                                        </FormItem>
+                                                    </Col>
+                                                </Row>
+
+                                            </Form>
+                                        </Modal>
                                     </Col>
-                                    <Col span={8}>
+                                    {/*<Col span={8}>
                                         <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除</Button>
-                                    </Col>
+                                    </Col>*/}
                                 </Row>
 
                                 <Row>
                                     <Col span={24}>
                                         <Table
-                                            rowSelection={rowSelection}
+                                            //rowSelection={rowSelection}
                                             columns={columns_tab2}
                                             dataSource={this.state.data}
                                             bordered
