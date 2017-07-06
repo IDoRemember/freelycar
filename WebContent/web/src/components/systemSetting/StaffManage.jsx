@@ -69,7 +69,6 @@ class StaffManage extends React.Component {
         })
     }
 
-
     setFormData = (key, value) => {
         this.setState({
             form: update(this.state.form, {

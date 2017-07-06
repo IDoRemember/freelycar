@@ -1,21 +1,7 @@
 import React from 'react';
-import CustomerInfo from '../forms/CustomerInfo.jsx'
-import ServiceTable from '../tables/ServiceTable.jsx'
-import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal } from 'antd';
-import moment from 'moment';
-
-import { Link } from 'react-router';
-const { RangePicker } = DatePicker;
-
-// 日期 format
-const dateFormat = 'YYYY/MM/DD';
-const TabPane = Tabs.TabPane;
-
-
-class BeautyOrder extends React.Component {
+import { Row, Col, Card, Button, Radio, Table, Tabs, Input, Select, Icon, Modal } from 'antd';
+class AccountManage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -184,57 +170,48 @@ class BeautyOrder extends React.Component {
         return (
             <div>
                 <BreadcrumbCustom first="系统设置" second="账户管理" />
-
                 <Card>
-                    <Tabs defaultActiveKey="1" onChange={this.tabCallback}>
-                        <TabPane tab="账户管理" key="1">
-                            <div>
-                                <Row>
-                                    <Col span={9}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="账号" />
-                                        </div>
-                                    </Col>
-                                    <Col span={5}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="姓名" />
-                                        </div>
-                                    </Col>
-                              
-                                    <Col span={2}>
-                                        <Button type="primary" onClick={this.showModal} >查询</Button>
-                                    </Col>
-
-                                </Row>
-
-
-
-                                <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
-                                    <Col span={2}>
-                                        <Button>新增账号</Button>
-                                    </Col>
-                                    <Col span={8}>
-                                        <Button>删除账号</Button>
-                                    </Col>
-                                </Row>
-
-                                <Row>
-                                    <Col span={24}>
-                                        <Table
-                                            rowSelection={rowSelection}
-                                            columns={columns}
-                                            dataSource={data}
-                                            bordered
-                                        />
-                                    </Col>
-                                </Row>
-                            </div>
-                        </TabPane>
-                        
-                    </Tabs>
+                    <div>
+                        <Row>
+                            <Col span={9}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Input addonBefore="账号" />
+                                </div>
+                            </Col>
+                            <Col span={5}>
+                                <div style={{ marginBottom: 16 }}>
+                                    <Input addonBefore="姓名" />
+                                </div>
+                            </Col>
+                            <Col span={2}>
+                                <Button type="primary" onClick={this.showModal} >查询</Button>
+                            </Col>
+                        </Row>
+                        <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
+                            <Col span={2}>
+                                <Button>新增账号</Button>
+                            </Col>
+                            <Col span={8}>
+                                <Button>删除账号</Button>
+                            </Col>
+                        </Row>
+                        <Row>
+                            <Col span={24}>
+                                <Table
+                                    loading={this.state.loading}
+                                    pagination={this.state.pagination}
+                                    rowSelection={rowSelection}
+                                    onChange={(pagination) => this.handleTableChange(pagination)}
+                                    columns={columns}
+                                    dataSource={this.state.data}
+                                    bordered
+                                />
+                            </Col>
+                        </Row>
+                    </div>
                 </Card>
             </div>
         );
     }
 }
-export default BeautyOrder
+export default AccountManage
