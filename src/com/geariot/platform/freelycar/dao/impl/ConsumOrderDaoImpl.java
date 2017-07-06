@@ -100,4 +100,10 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@Override
+	public void removeStaffInConsumOrderStaffs(int staffId) {
+		String sql = "delete from consumorders_staff where staffId = :id";
+		this.getSession().createSQLQuery(sql).setInteger("id", staffId).executeUpdate();
+	}
+
 }

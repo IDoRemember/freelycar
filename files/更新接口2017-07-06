@@ -274,6 +274,19 @@
 			msg:
 			data:[name1, name2]
 		}
+	3.10 获取用户数量统计:
+		请求:GET
+		server_url/client/stat
+		参数:{
+
+		}
+		响应:{
+			code:
+			msg:
+			realSize:
+			thisMonth:
+			today
+		}
 
 4. 项目类别接口:/program/
 	4.1 新增项目类别:
@@ -735,71 +748,6 @@
 		请求:POST
 		server_url/order/book
 		参数:{
-			consumOrder=
-		}
-		响应:{
-			"code":0
-			"msg":
-		}
-	9.2 消费单据列表:
-		请求:GET
-		server_url/order/list
-		参数:{
-			page=1
-			number=10
-		}
-		响应:{
-			"code":0
-			"msg":
-			"data":{ConsumOrders1, ConsumOrders2...}
-			"size":
-		}
-		
-	9.3 消费单据修改:
-		请求:POST
-		server_url/order/modify
-		参数:{
-			consumOrder=
-		}
-		响应:{
-			"code":
-			"msg":
-		}
-	9.4 完工:
-		请求:POST
-		server_url/order/finish
-		参数:{
-			consumOrderId=
-		}
-		响应:{
-			"code":
-			"msg":
-		}
-	9.5 交车:
-		请求:POST
-		server_url/order/deliver
-		参数:{
-			consumOrderId=
-		}
-		响应:{
-			"code":
-			"msg":
-		}
-	9.6 根据条件查询:
-		请求:{
-
-		}
-		响应:{
-			"code":
-			"msg":
-			"data":
-		}
-
-9. 消费开单相关接口:/order/
-	9.1 消费下单:
-		请求:POST
-		server_url/order/book
-		参数:{
 			@RequestBody consumOrder=()
 		}
 		响应:{
@@ -1127,3 +1075,17 @@
 			data:{CarBrand1, CarBrand2...}
 		}
 	}
+
+15. 会员卡相关：/card
+	15.1 获取有效会员卡:
+		请求:GET
+		参数:{
+			clientId=
+			projectId=
+		}
+		响应:{
+			code:
+			msg:
+			data:{Card1, Card2...}
+		}
+		0,2

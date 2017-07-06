@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.AdminDao;
+import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.StaffDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
@@ -41,6 +42,9 @@ public class StaffService {
 	@Autowired
 	private AdminDao adminDao;
 	
+	@Autowired
+	private ConsumOrderDao consumOrderDao;
+	
 	public String addStaff(Staff staff){
 		Staff exist = staffDao.findStaffByPhone(staff.getPhone());
 		if(exist != null){
@@ -59,9 +63,15 @@ public class StaffService {
 		Admin curAdmin = adminDao.findAdminByAccount(curUser);
 		boolean delSelf = false;
 		for (int staffId : staffIds) {
+			//如果要删除的员工是当前登陆账号所绑定的员工，则不能删除
 			if (curAdmin.getStaff().getId() == staffId) {
 				delSelf = true;
 			} else {
+				//删除员工要将与员工绑定的Admin登陆账号删除
+				//并且将ConsumOrder施工人员中有该员工的订单中去除该员工
+				this.adminDao.deleteByStaffId(staffId);
+				this.consumOrderDao.removeStaffInConsumOrderStaffs(staffId);
+				
 				staffDao.deleteStaff(staffId);
 			}
 		}

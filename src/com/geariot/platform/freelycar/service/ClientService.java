@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.service;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -169,6 +171,42 @@ public class ClientService {
 	public String getClientNames(String name) {
 		List<String> names = this.clientDao.getClientNames(name);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(names)).toString();
+	}
+
+	public String stat() {
+		//当前日期
+		Calendar now = Calendar.getInstance();
+		now.setTimeInMillis(System.currentTimeMillis());
+		//会员总数
+		long all = this.clientDao.getQueryCount(null);
+		//本月新增
+		Calendar monthStart = (Calendar) now.clone();
+		monthStart.set(monthStart.get(Calendar.YEAR), monthStart.get(Calendar.MONTH), 1, 0, 0, 0);
+		Calendar monthEnd = (Calendar) monthStart.clone();
+		monthEnd.add(Calendar.MONTH, 1);
+		long thisMonth = this.clientDao.getQueryCount(this.buildCondition(monthStart, monthEnd));
+		//本日新增
+		Calendar dayStart = (Calendar) now.clone();
+		dayStart.set(dayStart.get(Calendar.YEAR), dayStart.get(Calendar.MONTH), dayStart.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
+		Calendar dayEnd = (Calendar) dayStart.clone();
+		dayEnd.add(Calendar.DAY_OF_MONTH, 1);
+		long today = this.clientDao.getQueryCount(this.buildCondition(dayStart, dayEnd));
+		
+		org.json.JSONObject res = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+		res.put(Constants.RESPONSE_REAL_SIZE_KEY, all);
+		res.put("thisMonth", thisMonth);
+		res.put("today", today);
+		return res.toString();
+	}
+	
+	private String buildCondition(Calendar start, Calendar end){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		StringBuilder condition = new StringBuilder();
+		condition.append("createDate >= ");
+		condition.append(sdf.format(start.getTime()));
+		condition.append(" and createDate < ");
+		condition.append(sdf.format(end.getTime()));
+		return condition.toString();
 	}
 
 }
