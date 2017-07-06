@@ -5,32 +5,6 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CarTable from '../tables/CarTable.jsx';
 import $ from 'jquery';
 const { MonthPicker, RangePicker } = DatePicker;
-//卡的表头
-
-// const cardData = [
-//     {
-//         key: 1,
-//         cardNum: '100010',
-//         cardClasses: '次卡',
-//         transactionTime: '2017-06-12',
-//         resCount: '15',
-//         makePeople: '小易',
-//     }
-// ]
-
-// const carData = [
-//     {
-//         key: 1,
-//         carNum: "苏A123456",
-//         brand: "保时捷",
-//         carType: "911",
-//         mileageNum: "3000",
-//         newcar: "否",
-//         insuranceMoney: "3000",
-//         insuranceTime: "2018-5-23",
-//         other: "",
-//     }
-// ]
 const payData = [
     {
         key: 1,
@@ -57,7 +31,11 @@ class ClientDetail extends React.Component {
                 title: '卡号',
                 dataIndex: 'cardNum',
                 key: 'cardNum'
-            }, {
+            },  {
+                title: '卡名称',
+                dataIndex: 'cardname',
+                key: 'cardname'
+            },{
                 title: '会员卡类',
                 dataIndex: 'cardClasses',
                 key: 'cardClasses'
@@ -65,10 +43,6 @@ class ClientDetail extends React.Component {
                 title: '开卡时间',
                 dataIndex: 'transactionTime',
                 key: 'transactionTime'
-            }, {
-                title: '剩余次数',
-                dataIndex: 'resCount',
-                key: 'resCount'
             }, {
                 title: '制单人',
                 dataIndex: 'makePeople',
@@ -224,8 +198,8 @@ class ClientDetail extends React.Component {
                             key: objcard[j].id,
                             cardNum: objcard[j].id,
                             cardClasses: objcard[j].service.type ? "次卡" : "组合次卡",
-                            transactionTime: objcard[j].payDate.substring(0, 10),
-                            resCount: objcard[j].remainingInfos[j].remaining,
+                            transactionTime: objcard[j].payDate,
+                            cardname:objcard[j].service.name,
                             makePeople: objcard[j].orderMaker.name,
                         }
                         cardlist.push(cardItem);

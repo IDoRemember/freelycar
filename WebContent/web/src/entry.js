@@ -65,7 +65,7 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"otherPay"} component={OtherPay} />
         </Route>
         <Route path={"member"} >
-            <Route path={"memberShip"} component={BuyCard} />
+            <Route path={"memberShip(/:id)"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:id"} component={ClientDetail} />
             <Route path={"customer/:id/payhistory"} component={PayHistory} />

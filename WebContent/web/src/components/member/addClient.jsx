@@ -17,6 +17,8 @@ class AddClient extends React.Component {
             type:[],
             value: '男',
             carvalue:'true',
+            carId:'',
+            typeId:'',
             form: {
                 name: '',
                 age: '',
@@ -51,7 +53,7 @@ class AddClient extends React.Component {
                 
                 this.setState({
                    option:res.data ,
-                   carband:res.data,
+                
 
                 })
                 console.log(this.state.option)
@@ -82,13 +84,13 @@ class AddClient extends React.Component {
                 cars: [{
                     //select选择
                     type: {
-                        id: 2,
+                        id: this.state.carId,
                         // CarBrand:{
                         //     // name:'lambor',
                         //     // id:'3',
 
                         // },
-                        type: 'lp700',
+                        type: this.state.typeId,
                     },
                     licensePlate: forms.licensePlate,
                     //时间选择
@@ -131,12 +133,16 @@ class AddClient extends React.Component {
     }
     TypehandleChange = (value)=>{
        console.log(`selected ${value}`);
+       this.setState({
+           typeId:value
+       })
     }
     
     handleChange = (e) => {
         let typelist=this.state.option[e-1].types;
         console.log(this.state.option[e-1].types)
         this.setState({
+            carId:e,
             type:typelist
         })
         // $.ajax({
