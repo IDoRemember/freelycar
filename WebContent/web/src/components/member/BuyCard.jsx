@@ -229,9 +229,10 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '150px', marginLeft: '14px' }} />
                             </Col>
                         </Row>
+                        <Button type="primary">保存</Button>
                     </Card>
 
-                    <Regclient clientId={this.state.clientId}></Regclient>
+                    <Regclient clientId={this.state.clientId}  style={{display:'none'}}></Regclient>
 
                     <Card title="会员信息" style={{ marginTop: '15px' }}  >
                         <Row gutter={16} style={{ marginBottom: '15px' }}>
