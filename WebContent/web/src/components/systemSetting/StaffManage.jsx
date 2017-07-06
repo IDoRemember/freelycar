@@ -2,7 +2,7 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import $ from 'jquery'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal, Popconfirm } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal, Popconfirm, message } from 'antd';
 const Option = Select.Option;
 const { RangePicker } = DatePicker,
     RadioGroup = Radio.Group;
@@ -22,6 +22,7 @@ class StaffManage extends React.Component {
             selectedIds: [],
             staffId: null,
             staffName: '',
+            modifyIndex: null,
             positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收营员', '会计'],
             levelOptions: ['', '初级', '中级', '高级'],
             modalstate: 'add',
@@ -143,25 +144,48 @@ class StaffManage extends React.Component {
         });
     }
     handleOk = (e) => {
-        $.ajax({
-            url: 'api/staff/' + this.state.modalstate,
-            type: 'post',
-            dataType: 'json',
-            data: {
-                id: this.state.modalstate == 'modify' ? this.state.form.id : null,
+        let obj = {}
+        if (this.state.modalstate == 'modify') {
+            obj = {
+                id: this.state.form.id,
                 name: this.state.form.name,
                 phone: this.state.form.phone,
                 position: this.state.form.position,
                 level: this.state.form.level,
                 gender: this.state.form.gender,
                 comment: this.state.form.comment
-            },
+            }
+        } else {
+            obj = {
+                name: this.state.form.name,
+                phone: this.state.form.phone,
+                position: this.state.form.position,
+                level: this.state.form.level,
+                gender: this.state.form.gender,
+                comment: this.state.form.comment
+            }
+        }
+        $.ajax({
+            url: 'api/staff/' + this.state.modalstate,
+            type: 'post',
+            dataType: 'json',
+            data: obj,
             success: (result) => {
                 if (result.code == "0") {
-                    result.data.key = result.data.id
-                    this.setState({
-                        data: update(this.state.data, { $push: [result.data] })
-                    })
+                    if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
+                        this.setState({
+                            data: update(this.state.data, { [this.state.modifyIndex]: { $merge: this.state.form } })
+                        })
+                        message.success('修改成功', 5);
+                    } else {
+                        result.data.key = result.data.id
+                        this.setState({
+                            data: update(this.state.data, { $push: [result.data] })
+                        })
+                        message.success('增加成功', 5)
+                    }
+                } else {
+                    message.error(res.message, 5);
                 }
             }
         })
@@ -169,17 +193,27 @@ class StaffManage extends React.Component {
             visible: false,
         });
     }
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.queryStaff(pagination.current, 10)
+    }
     handleCancel = (e) => {
         // console.log(e);
         this.setState({
             visible: false,
         });
     }
-    modifyInfo = (record) => {
-        console.log(record)
+    modifyInfo = (record, index) => {
+        console.log(record, index)
         this.setState({
             visible: true,
             modalstate: 'modify',
+            modifyIndex: index,
             form: {
                 id: record.id,
                 name: record.name,
@@ -245,7 +279,7 @@ class StaffManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record) }}> <a href="javascript:void(0);">修改</a></span>
+                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -405,14 +439,16 @@ class StaffManage extends React.Component {
                                 <Button onClick={() => { this.showModal() }}>新增员工</Button>
                             </Col>
                             <Col span={8}>
-                                <Button onClick={() => { this.onDelete() }}>删除员工</Button>
+                                <Button onClick={() => { this.onDelete(this.state.selectedIds) }}>删除员工</Button>
                             </Col>
                         </Row>
                         <Row>
                             <Col span={24}>
                                 <Table
                                     loading={this.state.loading}
+                                    pagination={this.state.pagination}
                                     rowSelection={rowSelection}
+                                    onChange={(pagination) => this.handleTableChange(pagination)}
                                     columns={columns}
                                     dataSource={this.state.data}
                                     bordered

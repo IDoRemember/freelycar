@@ -90,6 +90,7 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"systemSet"} >
             <Route path={"staffManage"} component={StaffManage} />
             <Route path={"accountManage"} component={AccountManage} />
+            <Route path={"staffManage/:id"} component={StaffManage} />
         </Route>
         <Route path="/dashboard/index" component={IndexPage} />
     </Route>
