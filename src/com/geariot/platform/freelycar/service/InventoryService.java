@@ -17,6 +17,7 @@ import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryTypeDao;
 import com.geariot.platform.freelycar.dao.ProjectDao;
+import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
@@ -288,7 +289,9 @@ public class InventoryService {
 		}
 		long realSize = this.inventoryOrderDao.getCount();
 		int size = (int) Math.ceil(realSize/(double)number);
-		JSONArray jsonArray = JSONArray.fromObject(list, JsonResFactory.dateConfig());
+		JsonConfig config = JsonResFactory.dateConfig();
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
+		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
@@ -307,6 +310,7 @@ public class InventoryService {
 		JsonConfig config = JsonResFactory.dateConfig();
 		JsonPropertyFilter filter = new JsonPropertyFilter(Set.class);
 		config.setJsonPropertyFilter(filter);
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		res.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
@@ -320,6 +324,7 @@ public class InventoryService {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		JsonConfig config = JsonResFactory.dateConfig();
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		JsonPropertyFilter filter = new JsonPropertyFilter();
 		filter.setColletionProperties(Provider.class);
 		config.setJsonPropertyFilter(filter);

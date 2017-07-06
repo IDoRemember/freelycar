@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
+import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
@@ -108,6 +109,7 @@ public class ConsumOrderService {
 		JsonPropertyFilter filter = new JsonPropertyFilter();
 		filter.setColletionProperties(CarType.class, Provider.class);
 		config.setJsonPropertyFilter(filter);
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -166,6 +168,7 @@ public class ConsumOrderService {
 		JsonPropertyFilter filter = new JsonPropertyFilter();
 		filter.setColletionProperties(Car.class, CarType.class, Card.class, ProjectInventoriesInfo.class, Project.class);
 		config.setJsonPropertyFilter(filter);
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		res.put(Constants.RESPONSE_SIZE_KEY, size);

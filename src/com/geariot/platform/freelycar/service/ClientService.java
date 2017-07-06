@@ -2,9 +2,11 @@ package com.geariot.platform.freelycar.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.jasper.tagplugins.jstl.core.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
+import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
@@ -54,6 +57,7 @@ public class ClientService {
 		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
 		filter.setColletionProperties(CarType.class);
 		config.setJsonPropertyFilter(filter);
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -77,7 +81,9 @@ public class ClientService {
 		}
 		client.setCreateDate(new Date());
 		clientDao.save(client);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		Client added = this.carDao.findByLicense(client.getCars().iterator().next().getLicensePlate()).getClient();
+		JsonConfig config = JsonResFactory.dateConfig(Collection.class);
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(added, config)).toString();
 	}
 
 	public String modify(Client client) {
@@ -120,7 +126,7 @@ public class ClientService {
 		JsonPropertyFilter filter = new JsonPropertyFilter(Client.class);
 		filter.setColletionProperties(CarType.class);
 		config.setJsonPropertyFilter(filter);
-		config.registerPropertyExclusions(Card.class, new String[]{"projectInfos", "service"});
+		config.registerPropertyExclusions(Card.class, new String[]{"projectInfos", "service", "orderMaker"});
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				JSONArray.fromObject(list, config));
 		res.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -143,6 +149,7 @@ public class ClientService {
 				Constants.RESPONSE_CLIENT_KEY, JSONObject.fromObject(client, config));
 //		List<IncomeOrder> consumHist = this.incomeOrderDao.findByClientId(clientId);
 		List<ConsumOrder> consumHist = this.consumOrderDao.findWithClientId(clientId);
+		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
 		if(consumHist != null){
 			obj.put(Constants.RESPONSE_DATA_KEY, JSONArray.fromObject(consumHist, config));
 		}

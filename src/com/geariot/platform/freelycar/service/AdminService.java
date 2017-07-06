@@ -139,21 +139,23 @@ public class AdminService {
 				delSelf = true;
 			}
 			else{
+				//找到所有与admin相关的数据，将其中的admin字段设为空。
+				for(InventoryOrder inventoryOrder : this.inventoryOrderDao.findByMakerAccount(account)){
+					System.out.println("inventoryOrder:" + inventoryOrder);
+					inventoryOrder.setOrderMaker(null);
+				}
+				for(Card card : this.cardDao.findByMakerAccount(account)){
+					System.out.println("card:" + card);
+					card.setOrderMaker(null);
+				}
+				for(ConsumOrder consumOrder : this.consumOrderDao.findByMakerAccount(account)){
+					System.out.println("consumOrder:" + consumOrder);
+					consumOrder.setOrderMaker(null);
+				}
 				adminDao.delete(account);
 			}
 		}
-		//找到所有与admin相关的数据，将其中的admin字段设为空。
-		for(String account : accounts){
-			for(InventoryOrder inventoryOrder : this.inventoryOrderDao.findByMakerAccount(account)){
-				inventoryOrder.setOrderMaker(null);
-			}
-			for(Card card : this.cardDao.findByMakerAccount(account)){
-				card.setOrderMaker(null);
-			}
-			for(ConsumOrder consumOrder : this.consumOrderDao.findByMakerAccount(account)){
-				consumOrder.setOrderMaker(null);
-			}
-		}
+		
 		if(delSelf){
 			return JsonResFactory.buildOrg(RESCODE.CANNOT_DELETE_SELF).toString();
 		}
