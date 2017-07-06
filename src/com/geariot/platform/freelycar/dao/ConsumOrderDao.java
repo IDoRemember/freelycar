@@ -26,4 +26,6 @@ public interface ConsumOrderDao {
 	
 	long countInventoryInfoByIds(List<String> inventoryIds);
 	
+	void removeStaffInConsumOrderStaffs(int staffId);
+	
 }

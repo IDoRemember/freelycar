@@ -78,4 +78,10 @@ public class ClientController {
 		return this.clientService.getClientNames(name);
 	}
 	
+	@RequestMapping(value="/stat", method=RequestMethod.GET)
+	@PermissionRequire("client:query")
+	public String stat(){
+		return this.clientService.stat();
+	}
+	
 }

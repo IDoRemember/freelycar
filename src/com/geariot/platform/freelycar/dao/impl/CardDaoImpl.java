@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.dao.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -49,6 +50,23 @@ public class CardDaoImpl implements CardDao {
 		String hql = "select count(*) from CardProjectRemainingInfo where project.id in :list";
 		return (long) this.getSession().createQuery(hql).setParameterList("list", ids)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> getAvailableCardId(int projectId) {
+		String sql = "select cardId from cardprojectremaininginfo where remaining > 0 and projectId = :id";
+		return this.getSession().createSQLQuery(sql).setInteger("id", projectId)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Card> getAvailableCard(int clientId, List<Integer> cardIds) {
+		String sql = "select * from card where clientId = :clientId and id in :cardIds and expirationDate > :now";
+		Date now = new Date(System.currentTimeMillis());
+		return this.getSession().createSQLQuery(sql).setInteger("clientId", clientId).setParameterList("cardIds", cardIds)
+				.setTime("now", now).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 }

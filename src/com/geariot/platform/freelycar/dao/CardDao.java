@@ -15,4 +15,8 @@ public interface CardDao {
 	
 	long countProjectByIds(List<Integer> ids);
 	
+	List<Integer> getAvailableCardId(int projectId);
+	
+	List<Card> getAvailableCard(int clientId, List<Integer> cardIds);
+	
 }

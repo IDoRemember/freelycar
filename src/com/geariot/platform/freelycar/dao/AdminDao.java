@@ -28,4 +28,6 @@ public interface AdminDao {
 	long getQueryCount(String andCondition);
 	
 	void save(Role role);
+	
+	void deleteByStaffId(int staffId);
 }
