@@ -21,7 +21,8 @@ class EditableTable extends React.Component {
             visible: false,
             //会员卡类别数据
             data: [],
-            cardName:''//条件查询的卡类
+            cardName: '',//条件查询的卡类,
+            selectedRowKeys:[]
         }
 
     }
@@ -63,11 +64,11 @@ class EditableTable extends React.Component {
                         for (let item in obj) {
                             if (item == 'id')
                                 tableItem.key = obj[item];
-                            else if (item == 'type'){
+                            else if (item == 'type') {
                                 let type = obj[item];
-                                if(type==0)
+                                if (type == 0)
                                     type = '次卡';
-                                else if(type==1)
+                                else if (type == 1)
                                     type = '组合卡';
                                 tableItem[item] = type;
                             }
@@ -88,18 +89,24 @@ class EditableTable extends React.Component {
 
     // 模态框的处理函数
     showModal = () => {
+        console.log('zzz');
         this.setState({
             visible: true,
         });
     }
-    handleOk = (e) => {
-        console.log(e);
+    handleOk = (obj) => {
         this.setState({
             visible: false,
         });
+
+        console.log(obj);
+        this.setState({
+            data: [...this.state.data, obj],
+        });
+
     }
+
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -113,27 +120,53 @@ class EditableTable extends React.Component {
             this.setState({ data: dataSource });
         };
     }
-    onDelete = (index) => {
-        const dataSource = [...this.state.data];
-        dataSource.splice(index, 1);
-        this.setState({ data: dataSource });
+    onDelete = (idArray) => {
+        $.ajax({
+            url:'api/service/delete',
+            type:'post',
+            data:{serviceIds:idArray},
+            traditional:true,
+            dataType:'json',
+            success:(res)=>{
+                console.log(res);
+                let code = res.code;
+                if (code == '0' || code == '18') {
+                    let dataSource = [...this.state.data];
+
+                    for (let id of idArray) {
+                        dataSource = dataSource.filter((obj) => {
+                            return id !== obj.key;
+                        });
+                    }
+                    //console.log(dataSource)
+                    this.setState({
+                        data: dataSource,
+                        //pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    });
+
+                }
+            }
+
+
+        });
     }
     handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
+        console.log('zzz');
+        // const { count, dataSource } = this.state;
+        // const newData = {
+        //     key: count,
+        //     index: count,
+        //     name: `Edward King ${count}`,
+        //     properties: `Edward King ${count}`,
+        //     valateTime: `Edward King ${count}`,
+        //     price: `Edward King ${count}`,
+        //     createTime: `Edward King ${count}`,
+        //     remark: `Edward King ${count}`,
+        // };
+        // this.setState({
+        //     dataSource: [...dataSource, newData],
+        //     count: count + 1,
+        // });
     }
     render() {
         //卡类的表头
@@ -176,7 +209,7 @@ class EditableTable extends React.Component {
                     <div>
                         <a onClick={this.showModal}>修改</a>
                         &nbsp;&nbsp;
-                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete(index)}>
+                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
                             <a href="#">删除</a>
                         </Popconfirm>
                     </div>
@@ -189,6 +222,7 @@ class EditableTable extends React.Component {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
                 console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+                this.setState({selectedRowKeys:selectedRowKeys});
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
@@ -217,7 +251,7 @@ class EditableTable extends React.Component {
                         <Row>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="卡类名称" onChange={(e) => this.setState({cardName:e.target.value})}/>
+                                    <Input addonBefore="卡类名称" onChange={(e) => this.setState({ cardName: e.target.value })} />
                                 </div>
                             </Col>
                             <Col span={3}>
@@ -230,7 +264,7 @@ class EditableTable extends React.Component {
                                 <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
                             </Col>
                             <Col span={8}>
-                                <Button>删除卡类</Button>
+                                <Button onClick={()=>{this.onDelete(this.state.selectedRowKeys)}}>删除卡类</Button>
                             </Col>
                         </Row>
 
@@ -246,69 +280,9 @@ class EditableTable extends React.Component {
                         </Row>
 
                     </div>
-
                 </Card>
-
-
-                <CardModal visible={this.state.visible}  onOk={() => this.handleOk}
-                    onCancel={() => this.handleCancel}></CardModal>
-
-                {/*模态框*/}
-                {/*<Modal
-                    title="项目查询"
-                    visible={this.state.visible}
-                    onOk={this.changehandleOk}
-                    onCancel={this.changehandleCancel}
-                    width='50%' >
-
-
-                    <Form onSubmit={this.changehandleSubmit}>
-                        <FormItem
-                            {...formItemLayout}
-                            label="卡类名称"
-                            hasFeedback
-                        >
-                            <Input />
-                        </FormItem>
-                        <FormItem
-                            {...formItemLayout}
-                            label="卡类属性"
-                            hasFeedback
-                        >
-                            <Input />
-                        </FormItem>
-                        <FormItem
-                            {...formItemLayout}
-                            label="售卡金额"
-                            hasFeedback
-                        >
-                            <Input />
-                        </FormItem>
-                        <FormItem
-                            {...formItemLayout}
-                            label="有效期(年)"
-                            hasFeedback
-                        >
-                            <Input />
-                        </FormItem>
-                        <FormItem
-                            {...formItemLayout}
-                            label="备注"
-                            hasFeedback
-                        >
-                            <Input />
-                        </FormItem>
-                    </Form>
-
-
-                    <Row>
-                        <Col span={24}>
-                            <ModalEditableTable />
-                        </Col>
-                    </Row>
-
-                </Modal>*/}
-
+                <CardModal visible={this.state.visible} onOk={this.handleOk}
+                    onCancel={this.handleCancel}></CardModal>
 
             </div>
         );

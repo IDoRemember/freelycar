@@ -10,7 +10,7 @@ public interface ServiceDao {
 	
 	void save(Service service);
 	
-	void delete(int serviceId);
+//	void delete(int serviceId);
 	
 	/*List<Service> listServices(int from , int pageSize);*/
 	
@@ -23,4 +23,7 @@ public interface ServiceDao {
 	long getConditionCount(String andCondition);
 	
 	List<Object> listName();
+	
+	long countProjectByIds(List<Integer> ids);
+	
 }

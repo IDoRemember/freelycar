@@ -1,17 +1,12 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, notification } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message} from 'antd';
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'
 import update from 'immutability-helper'
 const Option = Select.Option;
-notification.config({
-    placement: 'topRight',
-    top: 50,
-    duration: 3,
-});
 class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
@@ -109,13 +104,7 @@ class PutInStorage extends React.Component {
                 traditional: true,
                 success: (result) => {
                     if (result.code == '0') {
-                        notification.open({
-                            message: '入库成功',
-                            description: '',
-                            style: {
-                                width: 200
-                            },
-                        });
+                        message.success('入库成功', 5);
                         this.setState({
                             data: []
                         })

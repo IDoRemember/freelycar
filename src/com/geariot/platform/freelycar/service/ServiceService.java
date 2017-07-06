@@ -35,18 +35,32 @@ public class ServiceService {
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(service, config)).toString();
 	}
 	
-	public String deleteService(int serviceId){
-		Service exist = serviceDao.findServiceById(serviceId);
-		JSONObject obj = null;
-		if(exist == null){
-			obj = JsonResFactory.buildOrg(RESCODE.NOT_FOUND);
+	public String deleteService(Integer... serviceIds){
+		int count = 0;
+		for(int serviceId : serviceIds){
+			com.geariot.platform.freelycar.entities.Service exist = serviceDao.findServiceById(serviceId);
+			if(exist == null){
+				count++;
+			}
+			else{
+				//删除service只将deleted字段设为true，不在数据库中删除此条字段
+				exist.setDeleted(true);
+			}
+		}
+		if(count !=0){
+			String tips = "共"+count+"条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
+			long realSize = serviceDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
 		else{
-			serviceDao.delete(serviceId);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			long realSize = serviceDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			return obj.toString();
 		}
-		return obj.toString();
-	}
+}
 	
 	public String modifyService(Service service){
 		Service exist = serviceDao.findServiceById(service.getId());

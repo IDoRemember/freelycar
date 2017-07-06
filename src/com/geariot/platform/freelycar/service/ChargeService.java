@@ -75,10 +75,7 @@ public class ChargeService {
 	public String addCharge(OtherExpendOrder otherExpendOrder){
 		otherExpendOrder.setId(IDGenerator.generate(IDGenerator.CHARORDER_ID));
 		otherExpendOrder.setCreateDate(new Date());
-		OtherExpendType type = chargeDao.findById(otherExpendOrder.getType().getId());
-		otherExpendOrder.setType(type);
 		chargeDao.save(otherExpendOrder);
-		//System.out.println(otherExpendOrder.toString());
 		//当有其他支出发生时,取信息存入expendOrder表
 		ExpendOrder expendOrder = new ExpendOrder();
 		expendOrder.setAmount(otherExpendOrder.getAmount());

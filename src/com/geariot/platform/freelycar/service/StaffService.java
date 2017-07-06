@@ -54,7 +54,7 @@ public class StaffService {
 		}
 	}
 	
-	public String deleteStaff(int[] staffIds) {
+	public String deleteStaff(Integer... staffIds) {
 		String curUser = (String) SecurityUtils.getSubject().getPrincipal();
 		Admin curAdmin = adminDao.findAdminByAccount(curUser);
 		boolean delSelf = false;

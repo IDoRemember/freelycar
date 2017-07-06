@@ -3,15 +3,13 @@ package com.geariot.platform.freelycar.entities;
 import java.util.Date;
 
 import javax.persistence.Entity;
-import javax.persistence.ForeignKey;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 
 @Entity
 public class OtherExpendOrder {
 	private String id;
-	private OtherExpendType type;
+	private String typeName;
+	private int typeId;
 	private float amount;
 	private String comment;
 	private Date expendDate;
@@ -25,14 +23,18 @@ public class OtherExpendOrder {
 	public Date getCreateDate() {
 		return createDate;
 	}
+	public Date getExpendDate() {
+		return expendDate;
+	}
 	@Id
 	public String getId() {
 		return id;
 	}
-	@ManyToOne(cascade={})
-	@JoinColumn(name="otherExpendTypeId", foreignKey=@ForeignKey(name="none"))
-	public OtherExpendType getType() {
-		return type;
+	public int getTypeId() {
+		return typeId;
+	}
+	public String getTypeName() {
+		return typeName;
 	}
 	public void setAmount(float amount) {
 		this.amount = amount;
@@ -43,23 +45,17 @@ public class OtherExpendOrder {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public void setId(String id) {
-		this.id = id;
-	}
-	public void setType(OtherExpendType type) {
-		this.type = type;
-	}
-	public Date getExpendDate() {
-		return expendDate;
-	}
 	public void setExpendDate(Date expendDate) {
 		this.expendDate = expendDate;
 	}
-	@Override
-	public String toString() {
-		return "OtherExpendOrder [id=" + id + ", type=" + type + ", amount=" + amount + ", comment=" + comment
-				+ ", expendDate=" + expendDate + ", createDate=" + createDate + "]";
+	public void setId(String id) {
+		this.id = id;
 	}
-	
+	public void setTypeId(int typeId) {
+		this.typeId = typeId;
+	}
+	public void setTypeName(String typeName) {
+		this.typeName = typeName;
+	}
 	
 }

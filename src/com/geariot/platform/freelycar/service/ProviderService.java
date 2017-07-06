@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.InventoryDao;
+import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.dao.ProviderDao;
+import com.geariot.platform.freelycar.entities.Inventory;
+import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -25,6 +29,12 @@ public class ProviderService {
 
 	@Autowired
 	private ProviderDao providerDao;
+	
+	@Autowired
+	private InventoryDao inventoryDao;
+	
+	@Autowired
+	private InventoryOrderDao inventoryOrderDao;
 	
 	public String addProvider(Provider provider){
 		provider.setCreateDate(new Date());
@@ -48,6 +58,13 @@ public class ProviderService {
 				count++;
 			}
 			else{
+				//删除供应商需要把Inventory和InventoryOrderInfo中相应的Provider字段设置为空。
+				for(Inventory inv : this.inventoryDao.findByProviderId(providerId)){
+					inv.setProvider(null);
+				}
+				for(InventoryOrderInfo invOrder : this.inventoryOrderDao.findInfoByProviderId(providerId)){
+					invOrder.setProvider(null);
+				}
 				providerDao.delete(providerId);
 			}
 		}

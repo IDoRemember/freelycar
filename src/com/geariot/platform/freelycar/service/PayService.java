@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
@@ -18,8 +19,10 @@ import com.geariot.platform.freelycar.entities.CardProjectRemainingInfo;
 import com.geariot.platform.freelycar.entities.Client;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
+import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.ServiceProjectInfo;
 import com.geariot.platform.freelycar.model.RESCODE;
+import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
 @Service
@@ -34,6 +37,9 @@ public class PayService {
 	
 	@Autowired
 	private ServiceDao serviceDao;
+	
+	@Autowired
+	private CardDao cardDao;
 	
 	@Autowired
 	private ConsumOrderDao consumOrderDao;
@@ -87,42 +93,41 @@ public class PayService {
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		//如果项目是用会员卡付款
-		if(order.getProjectPayMethod() == 1){
-			Card card = order.getPayCard();
-			if(card == null){
-				return JsonResFactory.buildOrg(RESCODE.NOT_SET_PAY_CARD).toString();
-			}
-			int projectId = order.getProject().getId();
-			CardProjectRemainingInfo info = null;
-			//查找与项目对应的info，对比剩余次数。
-			for(CardProjectRemainingInfo i : card.getProjectInfos()){
-				if(i.getProject().getId() == projectId){
-					info = i;
-					break;
+		//判断项目付款方式
+		Set<ProjectInfo> projects = order.getProjects();
+		for(ProjectInfo info : projects){
+			//如果用卡付款，根据设置的卡id与项目id查找剩余次数信息
+			if(info.getPayMethod() == Constants.PROJECT_WITH_CARD){
+				CardProjectRemainingInfo remain = this.cardDao.getProjectRemainingInfo(info.getCardId(), info.getProjectId());
+				//没有找到，卡未设置或卡中没有对应的项目信息
+				if(remain == null){
+					return JsonResFactory.buildOrg(RESCODE.NOT_SET_PAY_CARD).toString();
+				}
+				else {
+					//找到剩余次数信息，但剩余次数不够支付卡次的，返回次数不足
+					if(remain.getRemaining() < info.getPayCardTimes()){
+						return JsonResFactory.buildOrg(RESCODE.CARD_REMAINING_NOT_ENOUGH).toString();
+					}
 				}
 			}
-			//如果没找到项目对应的info，或剩余次数所需次数少，返回失败。
-			if(info == null || info.getRemaining() < order.getPayCardTimes()){
-				return JsonResFactory.buildOrg(RESCODE.CARD_REMAINING_NOT_ENOUGH).toString();
-			}
-			//否则，扣除会员卡相应的次数，并将订单总金额减少项目费用。
-			info.setRemaining(info.getRemaining() - order.getPayCardTimes());
-			order.setTotalPrice(order.getTotalPrice() - order.getProject().getPrice());
+			/*else if(info.getPayMethod() == Constants.PROJECT_WITH_CASH){
+				totalPrice += info.getProjectPrice();
+			}*/
 		}
+		
 		//现金支付的情况，直接进行结算
 		order.setPayState(1);
 		
 		//结算完成后，记录到IncomeOrder。
 		IncomeOrder recoder = new IncomeOrder();
 		recoder.setAmount(order.getTotalPrice());
-		recoder.setClientId(order.getCar().getClient().getId());
-		recoder.setLicensePlate(order.getCar().getLicensePlate());
+		recoder.setClientId(order.getClientId());
+		recoder.setLicensePlate(order.getLicensePlate());
 		recoder.setPayDate(new Date());
 		recoder.setType(1);
 		this.incomeOrderDao.save(recoder);
 		
-		Client client = order.getCar().getClient();
+		Client client = this.clientDao.findById(order.getClientId());
 		client.setConsumTimes(client.getConsumTimes() + 1);
 		client.setConsumAmout(client.getConsumAmout() + recoder.getAmount());
 		client.setLastVisit(new Date());

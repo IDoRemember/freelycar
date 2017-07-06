@@ -70,12 +70,12 @@ public class ConsumOrderService {
 			InventoryOrderInfo temp = new InventoryOrderInfo();
 			temp.setAmount(info.getNumber());
 			Inventory inv = info.getInventory();
-			temp.setBrandName(inv.getBrand().getName());
+			temp.setBrandName(inv.getBrandName());
 			temp.setInventoryId(inv.getId());
 			temp.setName(inv.getName());
 			temp.setProperty(inv.getProperty());
 			temp.setStandard(inv.getStandard());
-			temp.setTypeName(inv.getType().getTypeName());
+			temp.setTypeName(inv.getTypeName());
 			temp.setPrice(info.getInventory().getPrice() * temp.getAmount());
 			list.add(temp);
 			totalAmount += temp.getAmount();
@@ -91,7 +91,7 @@ public class ConsumOrderService {
 		order.setState(0);
 		order.setTotalAmount(totalAmount);
 		order.setTotalPrice(totalPrice);
-		order.setType(consumOrder.getProgram().getId());
+		order.setType(consumOrder.getProgramId());
 		inventoryOrderDao.save(order);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -140,15 +140,16 @@ public class ConsumOrderService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		exist.setCar(consumOrder.getCar());
+		exist.setLicensePlate(consumOrder.getLicensePlate());
+		exist.setCarId(consumOrder.getCarId());
+		exist.setCarBrand(consumOrder.getCarBrand());
+		exist.setCarType(consumOrder.getCarType());
 		exist.setInventoryInfos(consumOrder.getInventoryInfos());
 		exist.setParkingLocation(consumOrder.getParkingLocation());
 		exist.setPickTime(consumOrder.getPickTime());
-		exist.setProjectPayMethod(consumOrder.getProjectPayMethod());
 		exist.setStaffs(consumOrder.getStaffs());
 		exist.setTotalPrice(consumOrder.getTotalPrice());
-		exist.setWorkingHour(consumOrder.getWorkingHour());
-		exist.setWorkingPricePerHour(consumOrder.getWorkingPricePerHour());
+		exist.setProjects(consumOrder.getProjects());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
@@ -176,11 +177,11 @@ public class ConsumOrderService {
 		ConsumOrder order = condition.getConsumOrder();
 		String licensePlate = null;
 		int programId = -1;
-		if(order.getCar() != null){
-			licensePlate = order.getCar().getLicensePlate();
+		if(order.getLicensePlate() != null){
+			licensePlate = order.getLicensePlate();
 		}
-		if(order.getProgram() != null){
-			programId = order.getProgram().getId();
+		if(order.getProgramName() != null){
+			programId = order.getProgramId();
 		}
 		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
 				String.valueOf(programId), String.valueOf(order.getPayState())).createStatement();

@@ -20,13 +20,14 @@ public class ServiceController {
 	@RequestMapping(value = "/add" , method = RequestMethod.POST)
 	@PermissionRequire("service:add")
 	public String addService(@RequestBody Service service){
+		System.out.println(service);
 		return serviceService.addService(service);
 	}
 	
 	@RequestMapping(value = "/delete" , method = RequestMethod.POST)
 	@PermissionRequire("service:delete")
-	public String deleteService(int serviceId){
-		return serviceService.deleteService(serviceId);
+	public String deleteService(Integer... serviceIds){
+		return serviceService.deleteService(serviceIds);
 	}
 	
 	@RequestMapping(value = "/modify" , method = RequestMethod.POST)

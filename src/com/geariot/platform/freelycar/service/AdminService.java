@@ -19,7 +19,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.AdminDao;
+import com.geariot.platform.freelycar.dao.CardDao;
+import com.geariot.platform.freelycar.dao.ConsumOrderDao;
+import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.Card;
+import com.geariot.platform.freelycar.entities.ConsumOrder;
+import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.entities.Role;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -38,6 +44,15 @@ public class AdminService {
 	
 	@Autowired
 	private AdminDao adminDao;
+	
+	@Autowired
+	private InventoryOrderDao inventoryOrderDao;
+	
+	@Autowired
+	private CardDao cardDao;
+	
+	@Autowired
+	private ConsumOrderDao consumOrderDao;
 	
 	public Admin findAdminByAccount(String account) {
 		return adminDao.findAdminByAccount(account);
@@ -125,6 +140,18 @@ public class AdminService {
 			}
 			else{
 				adminDao.delete(account);
+			}
+		}
+		//找到所有与admin相关的数据，将其中的admin字段设为空。
+		for(String account : accounts){
+			for(InventoryOrder inventoryOrder : this.inventoryOrderDao.findByMakerAccount(account)){
+				inventoryOrder.setOrderMaker(null);
+			}
+			for(Card card : this.cardDao.findByMakerAccount(account)){
+				card.setOrderMaker(null);
+			}
+			for(ConsumOrder consumOrder : this.consumOrderDao.findByMakerAccount(account)){
+				consumOrder.setOrderMaker(null);
 			}
 		}
 		if(delSelf){

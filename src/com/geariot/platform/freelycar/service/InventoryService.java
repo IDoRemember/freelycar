@@ -7,15 +7,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryBrandDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryTypeDao;
+import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
@@ -50,6 +51,12 @@ public class InventoryService {
 	
 	@Autowired
 	private InventoryOrderDao inventoryOrderDao;
+	
+	@Autowired
+	private ConsumOrderDao consumOrderDao;
+	
+	@Autowired
+	private ProjectDao projectDao;
 
 	public String addType(InventoryType inventoryType) {
 		inventoryType.setCreateDate(new Date());
@@ -169,7 +176,14 @@ public class InventoryService {
 	}
 
 	public String deleteInventory(String... inventoryIds) {
-		int success = this.inventoryDao.delete(Arrays.asList(inventoryIds));
+		List<String> ids = Arrays.asList(inventoryIds);
+		//查找ConsumExtraInventoriesInfo及ProjectInventoriesInfo，如果有与该配件关联的信息，则无法删除，返回错误
+		if(this.consumOrderDao.countInventoryInfoByIds(ids) > 0 ||
+				this.projectDao.countInventoryByIds(ids) > 0){
+			return JsonResFactory.buildOrg(RESCODE.UNABLE_TO_DELETE).toString();
+		}
+		
+		int success = this.inventoryDao.delete(ids);
 		if(success == 0){
 			return JsonResFactory.buildOrg(RESCODE.DELETE_ERROR).toString();
 		}
@@ -184,12 +198,14 @@ public class InventoryService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		exist.setBrand(inventory.getBrand());
+		exist.setBrandName(inventory.getBrandName());
+		exist.setBrandId(inventory.getBrandId());
 		exist.setComment(inventory.getComment());
 		exist.setName(inventory.getName());
 		exist.setProperty(inventory.getProperty());
 		exist.setStandard(inventory.getStandard());
-		exist.setType(inventory.getType());
+		exist.setTypeId(inventory.getTypeId());
+		exist.setTypeName(inventory.getTypeName());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	

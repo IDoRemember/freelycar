@@ -15,4 +15,6 @@ public interface InventoryDao {
 
 	long getCount(String andCondition);
 
+	List<Inventory> findByProviderId(int providerId);
+	
 }
