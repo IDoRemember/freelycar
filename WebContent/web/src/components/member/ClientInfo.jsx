@@ -11,6 +11,8 @@ class ClientInfo extends React.Component {
         this.state = {
             option: [],
             visible: false,
+            clientName: '',
+            clientPhone: '',
             dataSource: [],
             pagination: {
             },
@@ -37,12 +39,10 @@ class ClientInfo extends React.Component {
                     title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
                         return <span>
                             <span style={{ marginRight: '10px' }}>
-                                <Link to="" >
+                                <Link to={'app/member/memberShip/'+record.id} >
                                     <span >开卡</span>
                                 </Link>
-                                <Link to="">
-                                    <span style={{ marginLeft: '5px' }}> 修改</span>
-                                </Link>
+                                
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                                     <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
                                 </Popconfirm>
@@ -57,37 +57,42 @@ class ClientInfo extends React.Component {
     //渲染完成后执行
     componentDidMount() {
         this.getList(1, 10);
-     //   this.getName()
+        this.getName()
 
     }
     //获取所有客户姓名模糊查询然后再去根据选择的值去筛选
     /*name接口有没有？？？ */
     getName = () => {
         $.ajax({
-            url: '/api/client/name',
+            url: '/api/client/querynames',
             data: {
+                name: "",
             },
             success: (result) => {
-                if (result == "0") {
-                    this.setState({
-                        options: result.data
-                    })
-                }
+                console.log(result.data);
+                this.setState({
+                    option: result.data,
+                })
             }
         })
     }
-    //获取分页
-    getList = (page, pageSize) => {
+    
+    queryData = () => {
+        this.loadData(1, 10, this.state.clientName, this.state.clientPhone);
+    }
+    loadData = (page, number, clientName, clientPhone) => {
+        let jsonData = {};
+        jsonData.name = clientName;
+        jsonData.phone = clientPhone;
+        jsonData.page = page;
+        jsonData.number = number;
         $.ajax({
-            url: "/api/client/list",
-            type: "GET",
-            data: {
-                page: page,
-                number: pageSize
-            },
-            //  dataType:'json',
-            success: (res) => {
-                if (res.code == "0") {
+            url:'/api/client/query',
+            data:jsonData,
+            type:'get',
+            success:(res) => {
+                console.log(res);
+                 if (res.code == "0") {
                     //定义一个能装10条数据的容器
                     let datalist = [];
                     //调用接口后返回的数据
@@ -109,6 +114,60 @@ class ClientInfo extends React.Component {
                         }
                         datalist.push(dataItem)
                         //？？？为什么是要datalist==res.length呢
+                        if (datalist.length == obj.length) {
+                            this.setState({
+                                dataSource: datalist,
+                                pagination: { total: res.realSize },
+                            })
+                        }
+                    }
+                }else if(res.code=="2"){
+                    let datalist=[];
+                    this.setState({
+                    dataSource:datalist
+                        
+                    })
+                }
+            },
+            
+        })
+
+
+    }
+
+
+    //获取分页
+    getList = (page, pageSize) => {
+        $.ajax({
+            url: "/api/client/list",
+            type: "GET",
+            data: {
+                page: page,
+                number: pageSize
+            },
+            //  dataType:'json',
+            success: (res) => {
+                if (res.code == "0") {
+                    //定义一个能装10条数据的容器
+                    let datalist = [];
+                    //调用接口后返回的数据
+                    var obj = res.data;
+                    //   console.log(obj);
+                    //遍历所有数据并给绑定到表格上
+                    for (let i = 0; i < obj.length; i++) {
+                    //   console.log(obj[i].cars);
+                        let dataItem = {
+                            key: obj[i].id,
+                            id: obj[i].id,
+                            customerName: obj[i].name,
+                            phoneNumber: obj[i].phone,
+                            busNumber: obj[i].cars[0].licensePlate,
+                            carBrand: obj[i].cars[0].type.brand.name,
+                            isMember: obj[i].cards == "" ? "否" : "是",
+                            consumeCount: obj[i].consumTimes,
+                            latelyTime: obj[i].lastVisit,
+                        }
+                        datalist.push(dataItem)
                         if (datalist.length == obj.length) {
                             this.setState({
                                 dataSource: datalist,
@@ -163,12 +222,12 @@ class ClientInfo extends React.Component {
                     }
                     console.log(dataSource)
                     //为什么这边要加一个判断呢
-                   
-                        this.setState({
-                            dataSource: dataSource,
-                            pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                        });
-                    
+
+                    this.setState({
+                        dataSource: dataSource,
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                    });
+
                 }
 
             }
@@ -233,7 +292,7 @@ class ClientInfo extends React.Component {
         //  const { dataSource } = this.state;
         // const columns = this.columns;
         const plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+            return <Option key={index} value={item.index}>{item.value}</Option>
         })
         return (
             <div>
@@ -241,25 +300,14 @@ class ClientInfo extends React.Component {
 
                 <div style={{ display: 'inline-block', marginBottom: '25px' }}>
 
-                    <Select showSearch
-                        style={{ width: '140px', marginRight: '8px' }}
-                        placeholder="输入客户姓名"
-                        optionFilterProp="children"
-                        onChange={(value) => this.handleSelected(value)}
-                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                    >
-                        {plateOptions}
-                    </Select>
-                    <Select showSearch
-                        style={{ width: '140px', marginRight: '8px', marginLeft: '26px' }}
-                        placeholder="输入手机号"
-                        optionFilterProp="children"
-                        onChange={()=>this.handleChange}
-                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                    >
-                        {plateOptions}
-                    </Select>
-                    <Button type="primary">查询</Button>
+                    <Col span={8} style={{ marginBottom: 16 }}>
+                        <Input placeholder="请输入姓名" value={this.state.clientName} onChange={(e) => this.setState({ clientName: e.target.value })} />
+                    </Col>
+                    <Col span={8} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
+                        <Input placeholder="请输入手机号" value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
+                    </Col>
+                
+                    <Button type="primary" onClick={this.queryData}>查询</Button>
                 </div>
 
                 <div>
