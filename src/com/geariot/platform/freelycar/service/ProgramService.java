@@ -31,16 +31,16 @@ public class ProgramService {
 	
 	public String addProgram(Program program){
 		Program exist = programDao.findProgramByName(program.getName());
-		JSONObject obj = null;
 		if(exist != null){
-			obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST);
+			return JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST).toString();
 		}
 		else {
 			program.setCreateDate(new Date());
 			programDao.save(program);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			JsonConfig config = JsonResFactory.dateConfig();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(program, config)).toString();
 		}
-		return obj.toString();
+		
 	}
 	
 	public String getProgramList(int page , int number){
