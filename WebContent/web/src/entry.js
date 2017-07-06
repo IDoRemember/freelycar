@@ -43,6 +43,7 @@ import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
 //system
 import StaffManage from './components/systemSetting/StaffManage.jsx';
 import AccountManage from './components/systemSetting/AccountManage.jsx';
+import StaffDetail from './components/systemSetting/StaffDetail.jsx';
 
 
 const routes = < Route path={"/"} components={Page} >
@@ -90,7 +91,7 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"systemSet"} >
             <Route path={"staffManage"} component={StaffManage} />
             <Route path={"accountManage"} component={AccountManage} />
-            <Route path={"staffManage/:id"} component={StaffManage} />
+            <Route path={"staffManage/:id"} component={StaffDetail} />
         </Route>
         <Route path="/dashboard/index" component={IndexPage} />
     </Route>
