@@ -108,8 +108,8 @@ class ServiceTable extends React.Component {
                 />
                 <Col
                     title="工时单价"
-                    key="price"
-                    dataIndex="price"
+                    key="singlePrice"
+                    dataIndex="singlePrice"
                 />
                 <Col
                     title="单项小计"
