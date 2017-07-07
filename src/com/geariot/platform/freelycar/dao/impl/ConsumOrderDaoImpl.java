@@ -80,7 +80,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ConsumOrder> findWithClientId(int clientId) {
-		String hql = "from ConsumOrder where car.client.id = :clientId";
+		String hql = "from ConsumOrder where clientId = :clientId";
 		return this.getSession().createQuery(hql).setInteger("clientId", clientId)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
