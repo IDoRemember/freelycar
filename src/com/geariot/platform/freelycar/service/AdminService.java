@@ -121,10 +121,22 @@ public class AdminService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		exist.setComment(admin.getComment());
-		exist.setName(admin.getName());
-		exist.setRole(admin.getRole());
-		exist.setPassword(MD5.compute(admin.getPassword()));
+		String psw = admin.getPassword();
+		String comment = admin.getComment();
+		String name = admin.getName();
+		Role role = admin.getRole();
+		if(comment != null && !comment.isEmpty()){
+			exist.setComment(comment);
+		}
+		if(name != null && !name.isEmpty()){
+			exist.setName(name);
+		}
+		if(role != null){
+			exist.setRole(admin.getRole());
+		}
+		if(psw != null && !psw.isEmpty()){
+			exist.setPassword(MD5.compute(psw));
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
