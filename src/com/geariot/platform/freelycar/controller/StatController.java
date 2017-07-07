@@ -41,9 +41,20 @@ public class StatController {
 		return statService.weeklyStatDetail(income, expend, page, number);
 	}
 	
+	@RequestMapping(value = "/paytoday" , method = RequestMethod.GET)
+	public String byPayMethodToday(){
+		return statService.payMethodToday();
+	}
 	
+	@RequestMapping(value = "/paymonth" , method = RequestMethod.GET)
+	public String byPayMethodMonth(){
+		return statService.payMethodMonth();
+	}
 	
-	
+	@RequestMapping(value = "/payrange" , method = RequestMethod.GET)
+	public String byPayMethodRange(Date startTime , Date endTime){
+		return statService.payMethodRange(startTime, endTime);
+	}
 }
 
 

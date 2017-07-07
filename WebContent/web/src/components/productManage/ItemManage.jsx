@@ -15,7 +15,7 @@ const FormItem = Form.Item
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 8 }
     },
     wrapperCol: {
         xs: { span: 24 },
@@ -599,30 +599,26 @@ class BeautyOrder extends React.Component {
         return (
             <div >
                 <BreadcrumbCustom first="产品管理" second="项目管理" />
-
                 <Card>
                     <Tabs defaultActiveKey="1" onChange={this.tabCallback}>
                         <TabPane tab="项目管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={5}>
+                                    <Col span={8}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="项目名称" value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                         </div>
                                     </Col>
-                                    <Col span={1}>
-                                        <span>项目类别</span>
-                                    </Col>
-                                    <Col span={2}>
+                
+                                    <Col span={8}>
                                         <div style={{ marginBottom: 16 }}>
+                                            <span>项目类别：</span>
                                             <Select
-                                                style={{ width: '100%' }}
+                                                style={{ width: '200px' }}
                                                 onChange={(e) => this.setState({ progId: e })}
                                             >
                                                 {this.state.programItem}
                                             </Select>
-
-
                                         </div>
                                     </Col>
                                     <Col span={8}>

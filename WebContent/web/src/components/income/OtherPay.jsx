@@ -250,11 +250,8 @@ class OtherPay extends React.Component {
             key: 'expendDate'
         }, {
             title: '支出类别',
-            dataIndex: 'type',
-            key: 'type',
-            render: (text, record, index) => {
-                return <span>{text.name}</span>
-            }
+            dataIndex: 'typeName',
+            key: 'typeName',
         }, {
             title: '支出金额',
             dataIndex: 'amount',
