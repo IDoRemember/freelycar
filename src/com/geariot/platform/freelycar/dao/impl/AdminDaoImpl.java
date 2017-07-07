@@ -40,7 +40,9 @@ public class AdminDaoImpl implements AdminDao {
 	
 	@Override
 	public void save(Admin admin) {
-		this.getSession().save(admin);
+		Session session = this.getSession();
+		session.save(admin);
+		session.evict(admin);	//detach对象，保存之后会立即重新从数据库中获取数据
 	}
 
 	@Override
