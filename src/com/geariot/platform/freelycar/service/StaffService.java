@@ -151,6 +151,7 @@ public class StaffService {
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,list.size());
+			obj.put("staffInfo",exist);
 			return obj.toString();
 		}
 	}
