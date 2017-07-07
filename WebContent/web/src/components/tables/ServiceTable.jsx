@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm ,Button} from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 const Option = Select.Option;
@@ -12,6 +12,7 @@ class ServiceTable extends React.Component {
                 index: 1,
                 project: '洗车',
                 price: '20.00',
+                memberCard: 'lala',
                 number: '20',
                 singleSummation: '20',
                 DeductionCardTime: '1',
@@ -57,7 +58,7 @@ class ServiceTable extends React.Component {
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <Button type="primary" style={{marginBottom:'10px'}}>增加服务项目</Button>
+            <Button type="primary" style={{ marginBottom: '10px' }}>增加服务项目</Button>
             <Table className="accountTable" dataSource={this.state.data} bordered>
                 <Col
                     title="序号"
@@ -101,9 +102,39 @@ class ServiceTable extends React.Component {
                     dataIndex="number"
                 />
                 <Col
-                    title="单项合计"
+                    title="参考工时"
+                    key="time"
+                    dataIndex="time"
+                />
+                <Col
+                    title="工时单价"
+                    key="price"
+                    dataIndex="price"
+                />
+                <Col
+                    title="单项小计"
                     key="singleSummation"
                     dataIndex="singleSummation"
+                />
+                <Col
+                    title="会员卡号"
+                    key="memberCard"
+                    dataIndex="memberCard"
+                    render={(text) => {
+                        if (!text) {
+                            return <span> </span>
+                        } else {
+                            return <Select showSearch
+                                style={{ width: '100px' }}
+                                placeholder="输入项目名称"
+                                optionFilterProp="children "
+                                onChange={this.handleChange}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {projectOptions}
+                            </Select>
+                        }
+                    }}
                 />
                 <Col
                     title="抵扣卡次"

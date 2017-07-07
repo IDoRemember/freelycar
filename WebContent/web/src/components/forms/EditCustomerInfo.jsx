@@ -70,7 +70,7 @@ class CustomerInfo extends React.Component {
             </div>
             <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
                 <Row gutter={16} style={{ marginBottom: "10px" }}>
-                    <Col span={6} >车牌号码：
+                    <Col span={8} >车牌号码：
                         <Select showSearch
                             style={{ width: '100px' }}
                             placeholder="输入车牌号码"
@@ -80,8 +80,8 @@ class CustomerInfo extends React.Component {
                         >
                             {plateOptions}
                         </Select>
-                        <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
-                        <Modal title="新增车辆" visible={this.state.visible}
+                        <Link to='/app/member/addclient' ><Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} /></Link>
+                        {/*<Modal title="新增车辆" visible={this.state.visible}
                             onOk={this.handleOk} onCancel={this.handleCancel}
                             okText="保存" cancelText="取消">
                             <h3>客户信息：</h3>
@@ -174,9 +174,9 @@ class CustomerInfo extends React.Component {
                                     发动机号：<Input style={{ width: '100px' }} />
                                 </Col>
                             </Row>
-                        </Modal>
+                        </Modal>*/}
                     </Col>
-                    <Col span={6} >
+                    <Col span={8} >
                         客户姓名：
                         <Select showSearch
                             style={{ width: '100px' }}
@@ -189,86 +189,62 @@ class CustomerInfo extends React.Component {
                         </Select>
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
-                    <Col span={6} >
+                    <Col span={8} >
                         停车位置：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6} id="area">
-                        会员卡号：
-                        <Select showSearch
-                            mode="combobox"
-                            style={{ width: '200px' }}
-                            placeholder="输入车牌号"
-                            allowClear={true}
-                            optionFilterProp="children"
-                            value={this.state.queryValue}
-                            defaultActiveFirstOption={false}
-                            onChange={(value) => { this.setState({ queryValue: value }) }}
-                            onBlur={(value) => { this.setState({ queryValue: value }) }}
-                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                            getPopupContainer={() => document.getElementById('area')}
-                            dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
-                        >
-                            {plateOptions}
-                        </Select>
-                    </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6} >
-                        车辆型号：
+                    <Col span={8} >
+                        品牌型号：
                         <span style={{ width: '100px' }}>奥迪A6</span>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         手机号码：
                         <span style={{ width: '100px' }}>18362981113</span>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         接车时间：
                         <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.timeonChange} />
                     </Col>
-                    <Col span={6}>
-                        会员卡种：
-                        <span style={{ width: '100px' }}>铂金卡</span>
-                    </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6}>
+                    <Col span={8}>
                         上次里程：
                         <span style={{ width: '100px' }}>8888km</span>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         历史消费：
                         <span style={{ width: '100px' }}>￥19999</span>
                     </Col>
-                    <Col span={6}>
-                        施工人员：
+                    <Col span={8}>
+                        接车人员：
                           <Select mode="multiple"
                             style={{ width: '200px' }}
                             onChange={this.handleChange}>
                             {plateOptions}
                         </Select>
                     </Col>
-                    <Col span={6}>
-                        剩余次数:
-                        <span style={{ width: '100px' }}>100</span>
-                    </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6}>
+                    <Col span={8}>
                         本次里程：
                         <Input style={{ width: '100px' }} />
                     </Col>
-                    <Col span={6} style={{ height: '28px', lineHeight: '28px' }}>
+                    <Col span={8} style={{ height: '28px', lineHeight: '28px' }}>
                         提示信息：
                         <span style={{ width: '100px' }} >
                             共消费2次,  最近消费2017-05-24 15:22
                         </span>
                     </Col>
-                    <Col span={6} >
+                    <Col span={8}>
+                        接车人员：
+                          <Select mode="multiple"
+                            style={{ width: '200px' }}
+                            onChange={this.handleChange}>
+                            {plateOptions}
+                        </Select>
                     </Col>
-                    {this.props.MemberButton && <Col span={6} >
-                        <Button type="primary" style={{ width: '100px', height: '50px' }} size={'large'}><Link to="/app/member/membership" style={{ color: '#fff' }}>会员办理</Link></Button>
-                    </Col>}
                 </Row>
             </Card>
         </div>
