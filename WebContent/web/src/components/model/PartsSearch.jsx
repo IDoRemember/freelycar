@@ -26,10 +26,7 @@ const columns = [{
 }, {
     title: '配件类别',
     dataIndex: 'category',
-    key: 'category',
-    render: (text, record, index) => {
-        return <span>{text.typeName}</span>
-    }
+    key: 'category'
 }, {
     title: '规格属性',
     dataIndex: 'attribute',
@@ -110,9 +107,9 @@ class PartsSearch extends React.Component {
                             attribute: result.data[i].property,
                             standard: result.data[i].standard,
                             price: result.data[i].price,
-                            brand: result.data[i].brand.name,
+                            brand: result.data[i].brandName,
                             inventory: result.data[i].amount,
-                            category: result.data[i].type,
+                            category: result.data[i].typeName,
                             comment: result.data[i].comment,
                             provider: result.data[i].provider
                         }
@@ -140,19 +137,19 @@ class PartsSearch extends React.Component {
         this.setState({
             pagination: pager
         })
-        if(this.state.type)
-        this.getList(this.state.partName,this.state.type,pagination.current, 10)
+        if (this.state.type)
+            this.getList(this.state.partName, this.state.type, pagination.current, 10)
     }
     setSearchName = (value) => {
         this.setState({
             partName: value,
-            type:-1
+            type: -1
         })
     }
     setSearchType = (value) => {
         this.setState({
             type: value,
-            partName:null
+            partName: null
         })
         this.getList(null, value, 1, 10)
     }

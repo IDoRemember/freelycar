@@ -121,14 +121,22 @@ public class AdminService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		if(adminDao.findAdminByAccount(admin.getAccount()) != null){
-			return JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST).toString();
+		String psw = admin.getPassword();
+		String comment = admin.getComment();
+		String name = admin.getName();
+		Role role = admin.getRole();
+		if(comment != null && !comment.isEmpty()){
+			exist.setComment(comment);
 		}
-		exist.setComment(admin.getComment());
-		exist.setName(admin.getName());
-		exist.setRole(admin.getRole());
-		exist.setStaff(admin.getStaff());
-		exist.setPassword(MD5.compute(admin.getPassword()));
+		if(name != null && !name.isEmpty()){
+			exist.setName(name);
+		}
+		if(role != null){
+			exist.setRole(admin.getRole());
+		}
+		if(psw != null && !psw.isEmpty()){
+			exist.setPassword(MD5.compute(psw));
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 

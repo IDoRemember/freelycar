@@ -59,7 +59,7 @@ class AccountManage extends React.Component {
                 if (result.code == "0") {
 
                     let arr = result.data;
-                    for(let item of arr){
+                    for (let item of arr) {
                         item.key = item.id;
                     }
 
@@ -128,8 +128,8 @@ class AccountManage extends React.Component {
             dataIndex: 'projects',
             key: 'projects',
             render: (text, record, index) => {
-                let project = text.map((item,index)=>{
-                    if(index<text.length-1){
+                let project = text.map((item, index) => {
+                    if (index < text.length - 1) {
                         return <span key={index}>{item.projectName} 、</span>
                     } else {
                         return <span key={index}>{item.projectName}</span>
@@ -168,25 +168,37 @@ class AccountManage extends React.Component {
                         <Row>
                             <Col span={4}  >
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="员工工号" value={this.state.form.id} disabled />
+                                    员工工号：
+                                    <span>
+                                        {this.state.form.id}
+                                    </span>
                                 </div>
                             </Col>
 
                             <Col span={4} >
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="员工姓名" value={this.state.form.name} disabled />
+                                    员工姓名：
+                                    <span>
+                                        {this.state.form.name}
+                                    </span>
                                 </div>
                             </Col>
 
                             <Col span={4} >
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="职位" value={this.state.form.position} disabled />
+                                    职位：
+                                    <span>
+                                        {this.state.form.position}
+                                    </span>
                                 </div>
                             </Col>
 
                             <Col span={4} >
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="等级" value={this.state.form.level} disabled />
+                                    等级：
+                                    <span>
+                                        {this.state.form.level}
+                                    </span>
                                 </div>
                             </Col>
 
