@@ -27,7 +27,8 @@ public enum RESCODE {
 	CARD_REMAINING_NOT_ENOUGH(22, "所选会员卡对应项目剩余次数不足"),
 	INVENTORY_NOT_ENOUGH(23, "库存不足"),
 	DISABLE_CURRENT_USER(24, "无法禁用当前登陆账户"),
-	UNABLE_TO_DELETE(25, "所选项目被其他引用，无法删除")
+	UNABLE_TO_DELETE(25, "所选项目被其他引用，无法删除"),
+	UNSUPPORT_TYPE(26, "不支持该操作")
 	;
 	
 	// 定义私有变量

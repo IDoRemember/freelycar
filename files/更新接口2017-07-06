@@ -87,28 +87,18 @@
 			"realSize":总条目数
 		}
 
-	1.8 禁用账户:
+	1.8 更改用户状态(启用与禁用账户):
 		请求:POST
-		server_url/admin/disable
+		server_url/admin/changestate
 		参数:{
 			account=
+			type=(0,1=禁用,启用)
 		}
 		响应:{
-			"code":0
-			"msg":
+			code:
+			msg:
 		}
-		0,2,24=
-	1.9 启用账户:
-		请求:POST
-		server_url/admin/enable
-		参数:{
-			adminId=adminId
-		}
-		响应:{
-			"code":0
-			"msg":
-		}
-		0,2=
+		0,2,24,26
 
 2. 员工接口:/staff/
 	2.1 新增员工

@@ -32,7 +32,7 @@ public class PermissionsList {
 		return br;
 	}
 	
-	public static Set<Permission> getPermissions(){
+	/*public static Set<Permission> getPermissions(){
 		Set<Permission> permissions = new HashSet<>();
         try {
 			BufferedReader br = getReader();
@@ -54,7 +54,10 @@ public class PermissionsList {
 			e.printStackTrace();
 		}
 		return permissions;
-	}
+	}*/
+	
+	private static final String DES_SPLITER = ",";
+	private static final String PER_SPLITER = ";";
 	
 	public static Set<Role> getRoles(){
 		Set<Role> roles = new HashSet<>();
@@ -65,12 +68,13 @@ public class PermissionsList {
 				if(line.trim().equals(ROLE_START)){
 					while((line = br.readLine()) != null){
 						String[] role_per = line.split("=");
-						String[] role = role_per[0].split(",");
+						String[] role = role_per[0].split(DES_SPLITER);
 						Role temp = new Role();
-						temp.setRoleName(role[0]);
-						temp.setDescription(role[1]);
+						temp.setId(Integer.parseInt(role[0]));
+						temp.setRoleName(role[1]);
+						temp.setDescription(role[2]);
 						Set<Permission> tempPer = new HashSet<>();
-						for(String per : role_per[1].split(",")){
+						for(String per : role_per[1].split(PER_SPLITER)){
 							Permission perTemp = new Permission();
 							perTemp.setPermission(per);
 							tempPer.add(perTemp);
