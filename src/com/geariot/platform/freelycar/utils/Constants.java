@@ -21,7 +21,8 @@ public class Constants {
 	public static final int PROJECT_WITH_CARD = 0;
 	public static final int PROJECT_WITH_CASH = 1;
 	
-
+	public static final String CARD_PROGRAM = "Card";
+	
 	/*是否开启查询缓存*/
 	public static boolean SELECT_CACHE = false;
 	

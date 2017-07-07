@@ -79,6 +79,8 @@ public class PayService {
 		order.setType(0);
 		order.setLicensePlate(null);
 		order.setPayDate(new Date());
+		order.setProgramName(Constants.CARD_PROGRAM);
+		order.setPayMethod(card.getPayMethod());
 		this.incomeOrderDao.save(order);
 		//更新客户的消费次数与消费情况信息。
 		client.setConsumTimes(client.getConsumTimes() + 1);
@@ -124,6 +126,8 @@ public class PayService {
 		recoder.setClientId(order.getClientId());
 		recoder.setLicensePlate(order.getLicensePlate());
 		recoder.setPayDate(new Date());
+		recoder.setProgramName(order.getProgramName());
+		recoder.setPayMethod(order.getPayMethod());
 		recoder.setType(1);
 		this.incomeOrderDao.save(recoder);
 		

@@ -27,6 +27,7 @@ public class ConsumOrder {
 	private String phone;
 	private Set<ProjectInfo> projects;
 	private int programId;
+	private int payMethod;
 	private String programName;
 	private String parkingLocation;
 	private Set<Staff> staffs;
@@ -85,6 +86,9 @@ public class ConsumOrder {
 	}
 	public String getParkingLocation() {
 		return parkingLocation;
+	}
+	public int getPayMethod() {
+		return payMethod;
 	}
 	public int getPayState() {
 		return payState;
@@ -160,6 +164,9 @@ public class ConsumOrder {
 	}
 	public void setParkingLocation(String parkingLocation) {
 		this.parkingLocation = parkingLocation;
+	}
+	public void setPayMethod(int payMethod) {
+		this.payMethod = payMethod;
 	}
 	public void setPayState(int payState) {
 		this.payState = payState;
