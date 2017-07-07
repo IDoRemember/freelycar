@@ -111,7 +111,7 @@ public class AdminService {
 			adminDao.save(admin);
 			Admin added = this.adminDao.findAdminByAccount(admin.getAccount());
 			JsonConfig config = JsonResFactory.dateConfig();
-			config.registerPropertyExclusions(Admin.class, new String[]{"password", "staff", "role"});
+			config.registerPropertyExclusions(Admin.class, new String[]{"password", "staff"});
 			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(added, config)).toString();
 		}
 	}
