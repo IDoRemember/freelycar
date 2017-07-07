@@ -124,7 +124,6 @@ public class AdminService {
 		exist.setComment(admin.getComment());
 		exist.setName(admin.getName());
 		exist.setRole(admin.getRole());
-		exist.setStaff(admin.getStaff());
 		exist.setPassword(MD5.compute(admin.getPassword()));
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
