@@ -26,12 +26,10 @@ class AccountManage extends React.Component {
             staffOptions: [],
             passwordError: '',
             positionOptions: [
-                { id: 1, name: '店长' },
-                { id: 2, name: '维修工' },
-                { id: 3, name: '洗车工' },
-                { id: 4, name: '客户经理' },
-                { id: 5, name: '收营员' },
-                { id: 6, name: '会计' }],
+                { id: 1, name: '超级管理员' },
+                { id: 2, name: '管理员' },
+                { id: 3, name: '技师' },
+                { id: 4, name: '财务' }],
             modalstate: 'add',
             form: {
                 id: '',
@@ -45,42 +43,28 @@ class AccountManage extends React.Component {
             }
         }
     }
+
     componentDidMount() {
         this.queryAccount(1, 10)
         this.queryStaff()
     }
 
-    enableAccount(adminId) {
+    enableAccount(account, type, index) {
         $.ajax({
-            url: 'api/admin/enable',
+            url: 'api/admin/changestate',
+            type: 'post',
+            // contentType: 'application/json;charset=utf-8',
+            dataType: 'json',
             data: {
-                adminId: adminId
+                account: account,
+                type: type ? 1 : 0
             },
             success: (result) => {
-                this.setState({
-                    loading: false
-                })
                 console.log(result)
                 if (result.code == "0") {
-
-                }
-            }
-        })
-    }
-
-    disableAccount(adminId) {
-        $.ajax({
-            url: 'api/admin/disable',
-            data: {
-                adminId: adminId
-            },
-            success: (result) => {
-                this.setState({
-                    loading: false
-                })
-                console.log(result)
-                if (result.code == "0") {
-
+                    this.setState({
+                        data: update(this.state.data, { [index]: { $merge: { current: type } } })
+                    })
                 }
             }
         })
@@ -130,7 +114,6 @@ class AccountManage extends React.Component {
                     for (let item of datalist) {
                         item.key = item.id
                     }
-
                     this.setState({
                         data: datalist,
                         pagination: { total: result.realSize }
@@ -256,7 +239,7 @@ class AccountManage extends React.Component {
                         message.success('增加成功', 5)
                     }
                 } else {
-                    message.error(res.message, 5);
+                    message.error(result.message, 5);
                 }
             }
         })
@@ -289,10 +272,10 @@ class AccountManage extends React.Component {
             modifyIndex: index,
             form: {
                 id: record.id,
-                name: { label: record.name, key: record.staff.id },
+                name: {key: record.staff.id+'', label: record.name  },
                 account: record.account,
                 current: record.current,
-                role: { label: record.role.roleName, key: record.role.id },
+                role: { label: record.role.roleName, key: record.role.id+'' },
                 comment: record.comment
             }
         })
@@ -312,25 +295,25 @@ class AccountManage extends React.Component {
                 }
             }, {
                 title: '账号',
-                dataIndex: 'id',
-                key: 'id'
+                dataIndex: 'account',
+                key: 'account'
             }, {
                 title: '姓名',
                 dataIndex: 'name',
                 key: 'name'
             }, {
                 title: '角色',
-                dataIndex: 'staff',
-                key: 'staff',
-                render: (text, record, index) => {
-                    return <span>{text.position}</span>
-                }
-            }, {
-                title: '状态',
                 dataIndex: 'role',
                 key: 'role',
                 render: (text, record, index) => {
-                    return <span>{text.roleName}</span>
+                    return <span>{text?text.roleName:''}</span>
+                }
+            }, {
+                title: '状态',
+                dataIndex: 'current',
+                key: 'current',
+                render:(text,record,index)=>{
+                    return <span>{text?'启用':'禁用'}</span>
                 }
             }, {
                 title: '创建时间',
@@ -346,7 +329,7 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch style={{ marginRight: '10px' }} value={record.current} defaultChecked={false} onChange={(value) => this.setFormData('current', value)} />
+                        <Switch style={{ marginRight: '10px' }} checked={record.current}   onChange={(value) => this.enableAccount(record.account, value, index)} />
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -375,12 +358,12 @@ class AccountManage extends React.Component {
                         <Row>
                             <Col span={9}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
+                                    <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} disabled={this.state.modalstate=="modify"}/>
                                 </div>
                             </Col>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="姓名" value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
+                                    <Input addonBefore="姓名" value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }}  disabled={this.state.modalstate=="modify"} />
                                 </div>
                             </Col>
                             <Col span={2}>
@@ -407,7 +390,7 @@ class AccountManage extends React.Component {
                                         <Select
                                             showSearch
                                             style={{ width: '150px' }}
-                                            placeholder="选择职位"
+                                            placeholder="选择员工"
                                             optionFilterProp="children"
                                             value={this.state.form.name}
                                             labelInValue
@@ -432,8 +415,8 @@ class AccountManage extends React.Component {
                                         密码确认：
                                     </Col>
                                     <Col span={8}>
-                                        <Input onBlur={() => { this.comparePassword }} type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
-                                        {(this.state.passwordError!='') && <span style={{ color: 'red' }}>{this.state.passwordError}</span>}
+                                        <Input onBlur={() =>  this.comparePassword } type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        {(this.state.passwordError != '') && <span style={{ color: 'red' }}>{this.state.passwordError}</span>}
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area1">
@@ -444,7 +427,7 @@ class AccountManage extends React.Component {
                                         <Select
                                             showSearch
                                             style={{ width: '150px' }}
-                                            placeholder="选择职位"
+                                            placeholder="选择角色"
                                             optionFilterProp="children"
                                             value={this.state.form.role}
                                             labelInValue
