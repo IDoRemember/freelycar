@@ -17,8 +17,6 @@ import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
-import com.geariot.platform.freelycar.entities.Program;
-import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -148,7 +146,7 @@ public class StaffService {
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JsonPropertyFilter filter = new JsonPropertyFilter();
-			filter.setColletionProperties(CarType.class , Car.class , ProjectInventoriesInfo.class , Card.class , Program.class , Staff.class , Inventory.class);
+			filter.setColletionProperties(CarType.class , Car.class , Card.class , Staff.class , Inventory.class);
 			config.setJsonPropertyFilter(filter);
 			JSONArray jsonArray = JSONArray.fromObject(list , config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
