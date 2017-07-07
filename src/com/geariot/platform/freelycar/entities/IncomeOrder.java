@@ -15,6 +15,8 @@ public class IncomeOrder {
 	private String licensePlate;
 	private float amount;
 	private Date payDate;
+	private String payMethod;
+	
 	public float getAmount() {
 		return amount;
 	}
@@ -52,5 +54,11 @@ public class IncomeOrder {
 	}
 	public void setType(int type) {
 		this.type = type;
+	}
+	public String getPayMethod() {
+		return payMethod;
+	}
+	public void setPayMethod(String payMethod) {
+		this.payMethod = payMethod;
 	}
 }

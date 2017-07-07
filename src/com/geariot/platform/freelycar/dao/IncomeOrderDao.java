@@ -27,4 +27,10 @@ public interface IncomeOrderDao {
 	List<IncomeOrder> listByDateRange(Date startTime , Date endTime , int from , int pageSize);
 	
 	List<IncomeOrder> listByDateRange(Date startTime , Date endTime);
+	
+	List<Object[]> listByPayMethodToday();
+	
+	List<Object[]> listByPayMethodMonth();
+	
+	List<Object[]> listByPayMethodRange(Date startTime , Date endTime);
 }
