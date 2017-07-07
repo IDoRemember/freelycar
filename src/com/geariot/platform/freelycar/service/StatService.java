@@ -20,6 +20,7 @@ import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.MonthStat;
 import com.geariot.platform.freelycar.utils.query.PayMethodStat;
+import com.geariot.platform.freelycar.utils.query.ProgramPayStat;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -335,44 +336,70 @@ public class StatService {
 	}
 	
 	public String payMethodToday() {
-		List<Object[]> rss = this.incomeOrderDao.listByPayMethodToday();
-		if(rss == null || rss.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		Date today = new Date();
+		List<IncomeOrder> incomeOrders = incomeOrderDao.listByDate(today);
+		if(incomeOrders == null || incomeOrders.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NO_INCOME).toString();
 		}
 		else{
-			List<PayMethodStat> list = new ArrayList<>();
-			for (Object[] rs : rss) {
-				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			List<Object[]> payMethods = this.incomeOrderDao.listByPayMethodToday();
+			List<PayMethodStat> payMethodDetail = new ArrayList<>();
+			for (Object[] payMethod : payMethods) {
+				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+			List<Object[]> programNames = this.incomeOrderDao.programNameToday();
+			List<ProgramPayStat> programPayDetail = new ArrayList<>();
+			for(Object[] programName : programNames){
+				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
+			}
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
+		obj.put("programPayDetail", programPayDetail);
+		return obj.toString();
 		}
 	}
 	
 	public String payMethodMonth() {
-		List<Object[]> rss = this.incomeOrderDao.listByPayMethodMonth();
-		if(rss == null || rss.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		Date today = new Date();
+		List<IncomeOrder> incomeOrders = incomeOrderDao.listByMonth(today);
+		if(incomeOrders == null || incomeOrders.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NO_INCOME).toString();
 		}
 		else{
-			List<PayMethodStat> list = new ArrayList<>();
-			for (Object[] rs : rss) {
-				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			List<Object[]> payMethods = this.incomeOrderDao.listByPayMethodMonth();
+			List<PayMethodStat> payMethodDetail = new ArrayList<>();
+			for (Object[] payMethod : payMethods) {
+				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+			List<Object[]> programNames = this.incomeOrderDao.programNameMonth();
+			List<ProgramPayStat> programPayDetail = new ArrayList<>();
+			for(Object[] programName : programNames){
+				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
+			}
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
+			obj.put("programPayDetail", programPayDetail);
+			return obj.toString();
 		}
-	}
+}
 	
 	public String payMethodRange(Date startTime , Date endTime) {
-		List<Object[]> rss = this.incomeOrderDao.listByPayMethodRange(startTime, endTime);
-		if(rss == null || rss.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		List<IncomeOrder> incomeOrders = incomeOrderDao.listByDateRange(startTime, endTime);
+		if(incomeOrders == null || incomeOrders.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NO_INCOME).toString();
 		}
 		else{
-			List<PayMethodStat> list = new ArrayList<>();
-			for (Object[] rs : rss) {
-				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			List<Object[]> payMethods = this.incomeOrderDao.listByPayMethodRange(startTime, endTime);
+			List<PayMethodStat> payMethodDetail = new ArrayList<>();
+			for (Object[] payMethod : payMethods) {
+				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+			List<Object[]> programNames = this.incomeOrderDao.programNameRange(startTime, endTime);
+			List<ProgramPayStat> programPayDetail = new ArrayList<>();
+			for(Object[] programName : programNames){
+				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
+			}
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
+			obj.put("programPayDetail", programPayDetail);
+			return obj.toString();
 		}
 	}
 	

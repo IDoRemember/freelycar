@@ -3,8 +3,8 @@ package com.geariot.platform.freelycar.utils.query;
 public class PayMethodStat {
 	
 	public PayMethodStat(String payMethod , double value){
-		this.setPayMethod(payMethod);
-		this.setValue(value);
+		this.payMethod = payMethod;
+		this.value = value;
 	}
 	
 	private String payMethod;

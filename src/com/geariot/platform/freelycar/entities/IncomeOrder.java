@@ -16,6 +16,7 @@ public class IncomeOrder {
 	private float amount;
 	private Date payDate;
 	private String payMethod;
+	private String programName;
 	
 	public float getAmount() {
 		return amount;
@@ -60,5 +61,11 @@ public class IncomeOrder {
 	}
 	public void setPayMethod(String payMethod) {
 		this.payMethod = payMethod;
+	}
+	public String getProgramName() {
+		return programName;
+	}
+	public void setProgramName(String programName) {
+		this.programName = programName;
 	}
 }
