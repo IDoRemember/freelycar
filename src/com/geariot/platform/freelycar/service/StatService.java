@@ -19,6 +19,7 @@ import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.MonthStat;
+import com.geariot.platform.freelycar.utils.query.PayMethodStat;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -331,7 +332,48 @@ public class StatService {
 		} else {
 			return JsonResFactory.buildOrg(RESCODE.WRONG_PARAM).toString();
 		}
-
+	}
+	
+	public String payMethodToday() {
+		List<Object[]> rss = this.incomeOrderDao.listByPayMethodToday();
+		if(rss == null || rss.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		else{
+			List<PayMethodStat> list = new ArrayList<>();
+			for (Object[] rs : rss) {
+				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+		}
+	}
+	
+	public String payMethodMonth() {
+		List<Object[]> rss = this.incomeOrderDao.listByPayMethodMonth();
+		if(rss == null || rss.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		else{
+			List<PayMethodStat> list = new ArrayList<>();
+			for (Object[] rs : rss) {
+				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+		}
+	}
+	
+	public String payMethodRange(Date startTime , Date endTime) {
+		List<Object[]> rss = this.incomeOrderDao.listByPayMethodRange(startTime, endTime);
+		if(rss == null || rss.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		else{
+			List<PayMethodStat> list = new ArrayList<>();
+			for (Object[] rs : rss) {
+				list.add(new PayMethodStat(String.valueOf(rs[1]), Double.valueOf(String.valueOf(rs[0]))));
+			}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(list)).toString();
+		}
 	}
 	
 }
