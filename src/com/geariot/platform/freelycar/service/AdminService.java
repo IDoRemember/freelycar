@@ -121,9 +121,6 @@ public class AdminService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		if(adminDao.findAdminByAccount(admin.getAccount()) != null){
-			return JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST).toString();
-		}
 		exist.setComment(admin.getComment());
 		exist.setName(admin.getName());
 		exist.setRole(admin.getRole());
