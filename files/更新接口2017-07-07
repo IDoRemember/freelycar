@@ -1053,7 +1053,7 @@
 		}
 		0,2
 
-	14.3 获取车辆品牌:{
+	14.3 获取车辆品牌:
 		请求:GET
 		server_url/car/listbrand
 		参数:{
@@ -1064,7 +1064,26 @@
 			msg:
 			data:{CarBrand1, CarBrand2...}
 		}
-	}
+	14.4 获取车牌号:
+		server_url/car/license
+		参数:{
+			licensePlate=模糊(必须提供部分)
+		}
+		响应:{
+			code:
+			msg:
+			data:[]
+		}
+	14.5 根据车牌号获取客户:
+		server_url/car/getcar
+		参数:{
+			licensePlate=精确
+		}
+		响应:{
+			code:
+			msg:
+			data:Client
+		}
 
 15. 会员卡相关：/card
 	15.1 获取有效会员卡:
