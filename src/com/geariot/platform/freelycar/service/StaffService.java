@@ -141,7 +141,7 @@ public class StaffService {
 			int from = (page - 1) * number;
 			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId, from , number);
 			if(list == null || list.isEmpty()){
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND,"staffInfo",exist).toString();
+				return JsonResFactory.buildNetWithData(RESCODE.NOT_FOUND,exist).toString();
 			}
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
