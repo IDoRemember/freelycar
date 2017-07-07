@@ -24,6 +24,7 @@ class AccountManage extends React.Component {
             accountName: '',
             modifyIndex: null,
             staffOptions: [],
+            passwordError: '',
             positionOptions: [
                 { id: 1, name: '店长' },
                 { id: 2, name: '维修工' },
@@ -38,7 +39,6 @@ class AccountManage extends React.Component {
                 name: { key: '', label: '' },
                 role: { key: '', label: '' },
                 current: '',
-                staffId: '',
                 comment: '',
                 password: '',
                 password1: ''
@@ -49,6 +49,43 @@ class AccountManage extends React.Component {
         this.queryAccount(1, 10)
         this.queryStaff()
     }
+
+    enableAccount(adminId) {
+        $.ajax({
+            url: 'api/admin/enable',
+            data: {
+                adminId: adminId
+            },
+            success: (result) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(result)
+                if (result.code == "0") {
+
+                }
+            }
+        })
+    }
+
+    disableAccount(adminId) {
+        $.ajax({
+            url: 'api/admin/disable',
+            data: {
+                adminId: adminId
+            },
+            success: (result) => {
+                this.setState({
+                    loading: false
+                })
+                console.log(result)
+                if (result.code == "0") {
+
+                }
+            }
+        })
+    }
+
     queryStaff = () => {
         $.ajax({
             url: 'api/staff/query',
@@ -73,6 +110,7 @@ class AccountManage extends React.Component {
             }
         })
     }
+
     queryAccount = (page, number) => {
         $.ajax({
             url: 'api/admin/query',
@@ -128,7 +166,7 @@ class AccountManage extends React.Component {
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                accountIds: idArray
+                accounts: idArray
             },
             traditional: true,
             success: (result) => {
@@ -162,6 +200,15 @@ class AccountManage extends React.Component {
         });
     }
 
+    comparePassword = () => {
+        if (this.state.form.password && this.state.form.password1) {
+            if (this.state.form.password !== this.state.form.password1) {
+                this.setState({
+                    passwordError: '两次输入的密码不一致'
+                })
+            }
+        }
+    }
     handleOk = (e) => {
         let obj = {}
         if (this.state.modalstate == 'modify') {
@@ -172,7 +219,7 @@ class AccountManage extends React.Component {
                 name: this.state.form.name.label,
                 staff: { id: this.state.form.name.key },
                 phone: this.state.form.phone,
-                role: { roleName: this.state.form.roleId },
+                role: { id: this.state.form.role.key },
                 current: this.state.form.current,
                 comment: this.state.form.comment
             }
@@ -180,10 +227,10 @@ class AccountManage extends React.Component {
             obj = {
                 account: this.state.form.account,
                 password: this.state.form.password,
-                name: this.state.form.name,
+                name: this.state.form.name.label,
                 phone: this.state.form.phone,
                 staff: { id: this.state.form.name.key },
-                role: { roleName: this.state.form.roleId },
+                role: { id: this.state.form.role.key },
                 current: this.state.form.current,
                 comment: this.state.form.comment
             }
@@ -242,11 +289,10 @@ class AccountManage extends React.Component {
             modifyIndex: index,
             form: {
                 id: record.id,
-                name: record.name,
+                name: { label: record.name, key: record.staff.id },
                 account: record.account,
                 current: record.current,
-                roleId: record.role.id,
-                position: record.staff.position,
+                role: { label: record.role.roleName, key: record.role.id },
                 comment: record.comment
             }
         })
@@ -300,7 +346,7 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch style={{ marginRight: '10px' }} defaultChecked={false} onChange={(value) => this.setFormData('gender', value)} />
+                        <Switch style={{ marginRight: '10px' }} value={record.current} defaultChecked={false} onChange={(value) => this.setFormData('current', value)} />
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -386,7 +432,8 @@ class AccountManage extends React.Component {
                                         密码确认：
                                     </Col>
                                     <Col span={8}>
-                                        <Input type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        <Input onBlur={() => { this.comparePassword }} type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        {(this.state.passwordError!='') && <span style={{ color: 'red' }}>{this.state.passwordError}</span>}
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area1">
@@ -400,6 +447,7 @@ class AccountManage extends React.Component {
                                             placeholder="选择职位"
                                             optionFilterProp="children"
                                             value={this.state.form.role}
+                                            labelInValue
                                             onChange={(value) => this.setFormData('role', value)}
                                             filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                             getPopupContainer={() => document.getElementById('provider-area1')}
