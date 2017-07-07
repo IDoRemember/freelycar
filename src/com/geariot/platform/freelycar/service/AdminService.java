@@ -102,17 +102,18 @@ public class AdminService {
 
 	public String addAdmin(Admin admin) {
 		Admin exist = adminDao.findAdminByAccount(admin.getAccount());
-		JSONObject obj = null;
 		if(exist != null){
-			obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST);
+			return JsonResFactory.buildOrg(RESCODE.ACCOUNT_EXIST).toString();
 		}
 		else {
 			admin.setCreateDate(new Date());
 			admin.setPassword(MD5.compute(admin.getPassword()));
 			adminDao.save(admin);
-			obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+			Admin added = this.adminDao.findAdminByAccount(admin.getAccount());
+			JsonConfig config = JsonResFactory.dateConfig();
+			config.registerPropertyExclusions(Admin.class, new String[]{"password", "staff", "role"});
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(added, config)).toString();
 		}
-		return obj.toString();
 	}
 
 	public String modify(Admin admin) {

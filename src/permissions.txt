@@ -1,10 +1,6 @@
-[Permissions]
-*
-admin:add
-admin:modify
-admin:delete
-admin:query
-
+#角色配置文件，以[Roles]为行开头，配置紧跟下面
+#Role配置以逗号(",",在PermissionList中DES_SPLITER参数指定)分隔，第一个参数为Role的Id，与前端写死的Id对应；第一个参数为角色名字；第三个参数为角色描述
+#角色对应权限用分号(";",在PermissionList中PER_SPLITER参数指定)分隔
 [Roles]
-test,superAdmin=*
-owner,admin=*
+1,test,superAdmin=*
+2,owner,admin=admin:query;client:*;pay:buycard
