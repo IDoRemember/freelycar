@@ -28,7 +28,8 @@ public enum RESCODE {
 	INVENTORY_NOT_ENOUGH(23, "库存不足"),
 	DISABLE_CURRENT_USER(24, "无法禁用当前登陆账户"),
 	UNABLE_TO_DELETE(25, "所选项目被其他引用，无法删除"),
-	NO_INCOME(26, "无对应日期订单记录")
+	NO_INCOME(26, "无对应日期订单记录"),
+	UNSUPPORT_TYPE(26, "不支持该操作")
 	;
 	
 	// 定义私有变量

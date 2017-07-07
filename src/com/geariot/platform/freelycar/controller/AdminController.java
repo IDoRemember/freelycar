@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.service.AdminService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
+import com.geariot.platform.freelycar.utils.JsonResFactory;
 
 @RestController
 @RequestMapping("/admin")
@@ -64,16 +66,14 @@ public class AdminController {
 		return adminService.query(account, name, page, number);
 	}
 	
-	@RequestMapping(value="/disable", method=RequestMethod.POST)
+	@RequestMapping(value="/changestate", method=RequestMethod.POST)
 	@PermissionRequire("admin:modify")
-	public String disable(String account){
-		return adminService.disable(account);
-	}
-	
-	@RequestMapping(value="/enable", method=RequestMethod.POST)
-	@PermissionRequire("admin:modify")
-	public String enable(String account){
-		return adminService.enable(account);
+	public String changeAdminCurrent(String account, int type){
+		switch(type){
+		case 0: return this.adminService.disable(account);
+		case 1: return this.adminService.enable(account);
+		default: return JsonResFactory.buildOrg(RESCODE.UNSUPPORT_TYPE).toString();
+		}
 	}
 	
 	@RequestMapping(value="/readRoles", method=RequestMethod.GET)

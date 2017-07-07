@@ -29,4 +29,14 @@ public class CarController {
 		return this.carService.listBrand();
 	}
 	
+	@RequestMapping(value="/license", method=RequestMethod.GET)
+	public String getAllLicense(String licensePlate){
+		return this.carService.queryLicensePlate(licensePlate);
+	}
+	
+	@RequestMapping(value="/getcar", method=RequestMethod.GET)
+	public String getCar(String licensePlate){
+		return this.carService.findClientByLicensePlate(licensePlate);
+	}
+	
 }

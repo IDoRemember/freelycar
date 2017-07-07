@@ -10,8 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Role {
@@ -24,15 +23,11 @@ public class Role {
 		return description;
 	}
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
-	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
-	@JoinTable(name="role_permission", 
-				joinColumns={@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))}, 
-				inverseJoinColumns={@JoinColumn(name="permissionId", foreignKey=@ForeignKey(name="none"))})	
 	public Set<Permission> getPermissions() {
 		return permissions;
 	}

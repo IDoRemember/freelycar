@@ -31,7 +31,6 @@ public class CarServive {
 	
 	public String queryLicensePlate(String queryText) {
 		List<String> license = carDao.queryLicensePlate(queryText);
-		System.out.println(license);
 		if(license == null || license.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
@@ -59,7 +58,5 @@ public class CarServive {
 		net.sf.json.JSONArray array = net.sf.json.JSONArray.fromObject(list, config);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array).toString();
 	}
-	
-	
 	
 }
