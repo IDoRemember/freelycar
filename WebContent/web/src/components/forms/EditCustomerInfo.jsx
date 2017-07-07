@@ -22,16 +22,45 @@ class CustomerInfo extends React.Component {
         this.state = {
             id: '',
             option: [],
-            visible: false
+            visible: false,
+            carInfo:{
+                clientName:'',
+                brandName:'',
+                phone:'',
+                consumAmout:'',
+                tips:''
+            }
         }
     }
     componentDidMount() {
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
-        })
+        // let data = {};
+        // data.licensePlate = '';
+        // $.ajax({
+        //     url:'api/car/license',
+        //     data:data,
+        //     type:'get',
+        //     dataType:'json',
+        //     success:(res) => {
+        //         console.log(res);
+        //     }
+        // });
     }
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
+    licenseChange = (value) => {
+        console.log(value.length);
+        if (value.length == 7) {
+            let data = {};
+            data.licensePlate = value;
+            $.ajax({
+                url: 'api/car/getcar',
+                data: data,
+                type: 'get',
+                dataType: 'json',
+                success: (res) => {
+                    console.log(res);
+                }
+            });
+        }
+
     }
     timeonChange = (time) => {
         console.log(time)
@@ -71,28 +100,12 @@ class CustomerInfo extends React.Component {
             <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
                 <Row gutter={16} style={{ marginBottom: "10px" }}>
                     <Col span={8} >车牌号码：
-                        <Select showSearch
-                            style={{ width: '100px' }}
-                            placeholder="输入车牌号码"
-                            optionFilterProp="children"
-                            onChange={this.handleChange}
-                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                        >
-                            {plateOptions}
-                        </Select>
+                        <Input onChange={(e) => { this.licenseChange(e.target.value) }} style={{ width: '100px' }} />
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} /></Link>
                     </Col>
                     <Col span={8} >
                         客户姓名：
-                        <Select showSearch
-                            style={{ width: '100px' }}
-                            placeholder="输入车牌号码"
-                            optionFilterProp="children"
-                            onChange={this.handleChange}
-                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                        >
-                            {plateOptions}
-                        </Select>
+                        <span style={{ width: '100px' }}>{this.carInfo.clientName}</span>
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
                     <Col span={8} >
@@ -103,11 +116,11 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8} >
                         品牌型号：
-                        <span style={{ width: '100px' }}>奥迪A6</span>
+                        <span style={{ width: '100px' }}>{this.carInfo.brandName}</span>
                     </Col>
                     <Col span={8}>
                         手机号码：
-                        <span style={{ width: '100px' }}>18362981113</span>
+                        <span style={{ width: '100px' }}>{this.carInfo.phone}</span>
                     </Col>
                     <Col span={8}>
                         接车时间：
@@ -121,7 +134,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         历史消费：
-                        <span style={{ width: '100px' }}>￥19999</span>
+                        <span style={{ width: '100px' }}>￥{this.carInfo.consumAmout}</span>
                     </Col>
                     <Col span={8}>
                         接车人员：
