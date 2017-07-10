@@ -12,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
-import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.Client;
-import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -243,9 +241,9 @@ public class ClientService {
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		long realSize = this.incomeOrderDao.countAmountByClientId(condition, clientId);
+		long realSize = this.incomeOrderDao.countIncomeOrderByClientId(condition, clientId);
 		int size = (int) Math.ceil(realSize/(double)number);
-		long amount = this.incomeOrderDao.countAmountByClientId(condition, clientId);
+		double amount = this.incomeOrderDao.countAmountByClientId(condition, clientId);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
 				net.sf.json.JSONObject.fromObject(list, JsonResFactory.dateConfig()));
 		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);

@@ -44,6 +44,6 @@ public interface IncomeOrderDao {
 	
 	long countIncomeOrderByClientId(String condition, int clientId);
 	
-	long countAmountByClientId(String condition, int clientId);
+	double countAmountByClientId(String condition, int clientId);
 	
 }

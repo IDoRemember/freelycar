@@ -354,10 +354,10 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	}
 
 	@Override
-	public long countAmountByClientId(String condition, int clientId) {
+	public double countAmountByClientId(String condition, int clientId) {
 		StringBuffer basic = new StringBuffer("select sum(amount) from IncomeOrder where clientId = :clientId");
 		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
-		return (long) this.getSession().createQuery(hql).setInteger("clientId", clientId)
+		return (double) this.getSession().createQuery(hql).setInteger("clientId", clientId)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 	

@@ -277,6 +277,24 @@
 			thisMonth:
 			today
 		}
+	3.11 客户消费历史:
+		请求:GET
+		server_url/client/consumhist
+		参数:{
+			clientId=
+			startTime=
+			endTime=
+			page=1
+			number=10
+		}
+		响应:{
+			code:
+			msg:
+			data:
+			realSize:
+			size:
+			amount:
+		}
 
 4. 项目类别接口:/program/
 	4.1 新增项目类别:

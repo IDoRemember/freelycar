@@ -57,15 +57,22 @@ public class ConsumOrderService {
 	
 	public String book(ConsumOrder consumOrder) {
 		consumOrder.setId(IDGenerator.generate(IDGenerator.MAINTAIN_CONSUM));
+		log.debug("客户id：" + consumOrder.getClientId() + ", 客户姓名:" + consumOrder.getClientName() + ", 尝试创建消费订单");
 		consumOrder.setCreateDate(new Date());
 		consumOrder.setState(0);
 		Set<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();
 		List<InventoryOrderInfo> list = new ArrayList<>();
 		float totalAmount = 0.0f;
 		float totalPrice = 0.0f;
+		//比较消耗数量与库存实际数量
 		for(ConsumExtraInventoriesInfo info : infos){
 			Inventory inventory = inventoryDao.findById(info.getInventory().getId());
+			log.debug("订单需要消耗库存(id:" + inventory.getId() + ", 名称：" +  inventory.getName() 
+			+ ")总计" + info.getNumber() + inventory.getStandard());
+			log.debug("实际库存剩余：" + inventory.getAmount() + inventory.getStandard());
+			//如果库存不足，抛出异常，操作回滚
 			if(inventory.getAmount() < info.getNumber()){
+				log.debug("实际库存不足，当前操作回滚，订单添加失败");
 				throw new ForRollbackException(RESCODE.INVENTORY_NOT_ENOUGH.getMsg(), RESCODE.INVENTORY_NOT_ENOUGH.getValue());
 			}
 			inventory.setAmount(inventory.getAmount() - info.getNumber());
@@ -84,10 +91,10 @@ public class ConsumOrderService {
 			totalPrice += temp.getPrice();
 		}
 		this.orderDao.save(consumOrder);
-		
+		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
 		//创建出库订单并保存
 		InventoryOrder order = new InventoryOrder();
-		order.setId(IDGenerator.generate(3));
+		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 		order.setCreateDate(new Date());
 		order.setInventoryInfos(list);
 		order.setState(0);
@@ -95,6 +102,7 @@ public class ConsumOrderService {
 		order.setTotalPrice(totalPrice);
 		order.setType(consumOrder.getProgramId());
 		inventoryOrderDao.save(order);
+		log.debug("出库订单(id:" + order.getId() + ")保存成功");
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
@@ -122,6 +130,7 @@ public class ConsumOrderService {
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
+		log.debug("消费订单(id:" + order.getId() + ")施工完成");
 		order.setState(1);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
@@ -132,8 +141,10 @@ public class ConsumOrderService {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		if(order.getState() < 1){
+			log.debug("消费订单(id:" + order.getId() + ")施工未完成，无法交车");
 			return JsonResFactory.buildOrg(RESCODE.WORK_NOT_FINISH).toString();
 		}
+		log.debug("消费订单(id:" + order.getId() + ")交车完成");
 		order.setState(2);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

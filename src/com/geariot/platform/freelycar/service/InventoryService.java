@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +42,8 @@ import net.sf.json.JsonConfig;
 @Service
 @Transactional
 public class InventoryService {
+	
+	private static final Logger log = LogManager.getLogger(InventoryService.class);
 	
 	@Autowired
 	private InventoryTypeDao inventoryTypeDao;
@@ -181,6 +185,7 @@ public class InventoryService {
 		//查找ConsumExtraInventoriesInfo及ProjectInventoriesInfo，如果有与该配件关联的信息，则无法删除，返回错误
 		if(this.consumOrderDao.countInventoryInfoByIds(ids) > 0 ||
 				this.projectDao.countInventoryByIds(ids) > 0){
+			log.debug("ConsumExtraInventoriesInfo或ProjectInventoriesInfo有对库存的引用，无法删除");
 			return JsonResFactory.buildOrg(RESCODE.UNABLE_TO_DELETE).toString();
 		}
 		
@@ -212,6 +217,7 @@ public class InventoryService {
 	
 	public String inStock(InventoryOrder order) {
 		order.setId(IDGenerator.generate(IDGenerator.IN_STOCK));
+		log.debug("入库中，生成入库单id:" + order.getId());
 		order.setCreateDate(new Date());
 		order.setState(0);
 		List<InventoryOrderInfo> inventories = order.getInventoryInfos();
@@ -219,14 +225,19 @@ public class InventoryService {
 		for(InventoryOrderInfo inventory : inventories){
 			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
 			if(exist != null){
+				log.debug("库存产品(id:" + inventory.getInventoryId() + 
+						",名称: " + inventory.getName() + ")增加" + inventory.getAmount() + inventory.getStandard());
 				exist.setAmount(exist.getAmount() + inventory.getAmount());
 			}
 			else {
+				log.debug("库存产品(id:" + inventory.getInventoryId() + 
+						",名称: " + inventory.getName() + ")未找到，增加失败");
 				order.getInventoryInfos().remove(inventory);
 				fails.add(inventory.getName());
 			}
 		}
 		this.inventoryOrderDao.save(order);
+		log.debug("入库单(id:" + order.getId() + ")保存成功");
 		if(!fails.isEmpty()){
 			JSONArray array = JSONArray.fromObject(fails);
 			return JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS, array).toString();
@@ -236,15 +247,22 @@ public class InventoryService {
 
 	public String outStock(InventoryOrder order) {
 		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
+		log.debug("出库中，生成出库单id:" + order.getId());
 		order.setCreateDate(new Date());
 		List<InventoryOrderInfo> inventories = order.getInventoryInfos();
 		List<String> fails = new ArrayList<>();
 		for(InventoryOrderInfo inventory : inventories){
 			Inventory exist = this.inventoryDao.findById(inventory.getInventoryId());
 			if(exist != null && exist.getAmount() > inventory.getAmount()){
+				log.debug("库存产品(id:" + inventory.getInventoryId() + 
+						",名称: " + inventory.getName() + ")减少" + inventory.getAmount() + inventory.getStandard());
 				exist.setAmount(exist.getAmount() - inventory.getAmount());
 			}
 			else {
+				log.debug("库存产品(id:" + inventory.getInventoryId() + 
+						",名称: " + inventory.getName() + ")库存数量:" + exist.getAmount() + exist.getStandard());
+				log.debug("库存产品(id:" + inventory.getInventoryId() + 
+						",名称: " + inventory.getName() + ")出库失败，库存未找到或库存产品少入出库数量");
 				order.getInventoryInfos().remove(inventory);
 				fails.add(inventory.getName());
 			}
