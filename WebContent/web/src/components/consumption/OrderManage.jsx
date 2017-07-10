@@ -3,6 +3,7 @@ import { Row, Col, Card, Table, Select, InputNumber, Input, Button, DatePicker }
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import OrderTable from './OrderTable.jsx'
+import $ from 'jquery'
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
 class OrderManage extends React.Component {
@@ -19,7 +20,22 @@ class OrderManage extends React.Component {
         })
     }
     componentDidMount() {
-        console.log('didmount')
+        this.getList()
+    }
+
+    getList = () => {
+        $.ajax({
+            url: 'api/order/list',
+            // contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {
+                page:1,
+                number:10
+            },
+            success:(res)=>{
+                console.log(res)
+            }
+        })
     }
     render() {
         const plateOptions = this.state.option.map((item, index) => {

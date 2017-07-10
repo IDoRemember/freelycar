@@ -794,7 +794,7 @@
 		0,2,20
 	9.6 根据条件查询:
 		请求:{
-			@RequestBody condition={ConsumOrder:{id:,licensePlate:,programId,payState:}, startDate:, endDate:, dateType:0,1,2,3=单据,交车,接车,完工,page:1,number:10}
+			@RequestBody condition={ConsumOrder:{id:,licensePlate:,programId,payState:,clientId:}, startDate:, endDate:, dateType:0,1,2,3=单据,交车,接车,完工,page:1,number:10}
 		}
 		响应:{
 			"code":
