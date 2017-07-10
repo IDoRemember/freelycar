@@ -178,16 +178,11 @@ public class ConsumOrderService {
 	private String buildAndCondition(ConsumOrderQueryCondition condition){
 		//生成条件查询and后缀语句
 		ConsumOrder order = condition.getConsumOrder();
-		String licensePlate = null;
-		int programId = -1;
-		if(order.getLicensePlate() != null){
-			licensePlate = order.getLicensePlate();
-		}
-		if(order.getProgramName() != null){
-			programId = order.getProgramId();
-		}
+		String licensePlate = order.getLicensePlate();
+		int programId = order.getProgramId();
+		int clientId = order.getClientId();
 		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
-				String.valueOf(programId), String.valueOf(order.getPayState())).createStatement();
+				String.valueOf(programId), String.valueOf(order.getPayState()), String.valueOf(clientId)).createStatement();
 		StringBuilder sb = new StringBuilder(temp.trim());
 		Date startDate = condition.getStartDate();
 		Date endDate = condition.getEndDate();
