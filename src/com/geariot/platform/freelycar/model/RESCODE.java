@@ -29,7 +29,8 @@ public enum RESCODE {
 	DISABLE_CURRENT_USER(24, "无法禁用当前登陆账户"),
 	UNABLE_TO_DELETE(25, "所选项目被其他引用，无法删除"),
 	NO_INCOME(26, "无对应日期订单记录"),
-	UNSUPPORT_TYPE(27, "不支持该操作")
+	UNSUPPORT_TYPE(27, "不支持该操作"),
+	NO_RECORD(28,"数据库无记录")
 	;
 	
 	// 定义私有变量

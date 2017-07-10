@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.ProjectAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.ProjectBean;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -138,5 +140,30 @@ public class ProjectService {
 		exist.setPricePerUnit(project.getPricePerUnit());
 		exist.setReferWorkTime(project.getReferWorkTime());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+	}
+	
+	public String getProjectName(){
+		List<Object[]> exists = projectDao.getProjectName();
+		if(exists == null || exists.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
+		}
+		else{
+			List<ProjectBean> projectBeans = new ArrayList<>();
+			for(Object[] exist : exists){
+				projectBeans.add(new ProjectBean(Integer.valueOf(String.valueOf(exist[0])), String.valueOf(exist[1])));
+			}
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(projectBeans)).toString();
+		}
+	}
+	
+	public String getProject(int projectId){
+		Project exist = projectDao.findProjectById(projectId);
+		if(exist == null){
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
+		}
+		else{
+			JsonConfig config = JsonResFactory.dateConfig();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(exist, config)).toString();
+		}
 	}
 }

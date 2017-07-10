@@ -60,14 +60,6 @@ public class ProjectDaoImpl implements ProjectDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public List<Project> queryByNameAndId(String name, int programId) {
-		String hql = "from Project where name like :name and programId like :programId";
-		return this.getSession().createQuery(hql).setString("name", name).setInteger("programId", programId)
-				.list();
-	}*/
-
 	@Override
 	public void deleteByprogramId(int programId) {
 		String sql = "delete from project where programId =:programId";
@@ -102,6 +94,13 @@ public class ProjectDaoImpl implements ProjectDao {
 		String hql = "select count(*) from ProjectInventoriesInfo where inventory.id in :list";
 		return (long) this.getSession().createQuery(hql).setParameterList("list", inventoryIds)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> getProjectName() {
+		String sql = "select id , name from Project ";
+		return this.getSession().createSQLQuery(sql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	
