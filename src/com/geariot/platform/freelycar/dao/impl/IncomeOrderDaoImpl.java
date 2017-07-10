@@ -11,7 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
+import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
 public class IncomeOrderDaoImpl implements IncomeOrderDao {
@@ -331,6 +333,32 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IncomeOrder> listIncomeOrderByClientId(String condition, int clientId, int from, int pageSize) {
+		StringBuffer basic = new StringBuffer("from IncomeOrder where clientId = :clientId");
+		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
+		return this.getSession().createQuery(hql).setInteger("clientId", clientId)
+				.setFirstResult(from).setMaxResults(pageSize)
+				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public long countIncomeOrderByClientId(String condition, int clientId) {
+		StringBuffer basic = new StringBuffer("select count(*) from IncomeOrder where clientId = :clientId");
+		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setInteger("clientId", clientId)
+				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
+	}
+
+	@Override
+	public long countAmountByClientId(String condition, int clientId) {
+		StringBuffer basic = new StringBuffer("select sum(amount) from IncomeOrder where clientId = :clientId");
+		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
+		return (long) this.getSession().createQuery(hql).setInteger("clientId", clientId)
+				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 	
 }

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
@@ -42,6 +44,8 @@ import net.sf.json.JsonConfig;
 @Transactional
 public class AdminService {
 	
+	private static final Logger log = LogManager.getLogger(AdminService.class);
+	
 	@Autowired
 	private AdminDao adminDao;
 	
@@ -59,6 +63,7 @@ public class AdminService {
 	}
 	
 	public String login(String account, String password, boolean rememberMe) {
+		log.debug("账户：" + account + " 尝试登陆");
 		JSONObject obj = null;
 		Subject curUser = SecurityUtils.getSubject();
 		if (!curUser.isAuthenticated()) {
@@ -88,6 +93,7 @@ public class AdminService {
 		else {
 			obj = JsonResFactory.buildOrg(RESCODE.ALREADY_LOGIN);
 		}
+		log.debug("账号：" + account + " 登陆结果：" + obj);
 		curUser = SecurityUtils.getSubject();
 		return obj.toString();
 	}
@@ -144,21 +150,23 @@ public class AdminService {
 		String curUser = (String) SecurityUtils.getSubject().getPrincipal();
 		boolean delSelf = false;
 		for(String account : accounts){
+			log.debug("删除账号：" + account + ", 将inventoryOrder、card、consumOrder中相关制单人设为空");
 			if(StringUtils.equalsIgnoreCase(curUser, account)){
+				log.debug("尝试删除当前登陆账号，删除失败");
 				delSelf = true;
 			}
 			else{
 				//找到所有与admin相关的数据，将其中的admin字段设为空。
 				for(InventoryOrder inventoryOrder : this.inventoryOrderDao.findByMakerAccount(account)){
-					System.out.println("inventoryOrder:" + inventoryOrder);
+					log.debug("inventoryOrder id为:" + inventoryOrder.getId() + "的订单制单人设为空");
 					inventoryOrder.setOrderMaker(null);
 				}
 				for(Card card : this.cardDao.findByMakerAccount(account)){
-					System.out.println("card:" + card);
+					log.debug("card id为:" + card.getId() + "的制单人设为空");
 					card.setOrderMaker(null);
 				}
 				for(ConsumOrder consumOrder : this.consumOrderDao.findByMakerAccount(account)){
-					System.out.println("consumOrder:" + consumOrder);
+					log.debug("consumOrder id为:" + consumOrder.getId() + "的制单人设为空");
 					consumOrder.setOrderMaker(null);
 				}
 				adminDao.delete(account);
@@ -207,11 +215,12 @@ public class AdminService {
 
 	public String disable(String account) {
 		Admin admin = adminDao.findAdminByAccount(account);
+		Subject curUser = SecurityUtils.getSubject();
+		log.debug("当前登陆账号：" + (String) curUser.getPrincipal() + " 尝试禁用账号：" + account);
 		if(admin == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		Subject curUser = SecurityUtils.getSubject();
-		if(account.equals(curUser.getPrincipal())){
+		if(account.equals((String) curUser.getPrincipal())){
 			return JsonResFactory.buildOrg(RESCODE.DISABLE_CURRENT_USER).toString();
 		}
 		admin.setCurrent(false);

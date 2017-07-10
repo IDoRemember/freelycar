@@ -221,4 +221,37 @@ public class ClientService {
 		return condition.toString();
 	}
 
+	public String consumHistory(int clientId, Date startTime, Date endTime, int page, int number) {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		StringBuilder con = new StringBuilder();
+		if(startTime != null){
+			con.append("payDate >= '");
+			con.append(sdf.format(startTime));
+			con.append("'");
+		}
+		if(endTime != null){
+			if(con.length() > 0){
+				con.append(" and ");
+			}
+			con.append("payDate < '");
+			con.append(sdf.format(endTime));
+			con.append("'");
+		}
+		String condition = con.toString();
+		int from = (page - 1) * number;
+		List<IncomeOrder> list = this.incomeOrderDao.listIncomeOrderByClientId(condition.toString(), clientId, from, number);
+		if(list == null || list.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		long realSize = this.incomeOrderDao.countAmountByClientId(condition, clientId);
+		int size = (int) Math.ceil(realSize/(double)number);
+		long amount = this.incomeOrderDao.countAmountByClientId(condition, clientId);
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+				net.sf.json.JSONObject.fromObject(list, JsonResFactory.dateConfig()));
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_AMOUNT_KEY, amount);
+		return obj.toString();
+	}
+
 }

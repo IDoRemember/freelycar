@@ -182,8 +182,10 @@ public class ConsumOrderService {
 		String licensePlate = order.getLicensePlate();
 		int programId = order.getProgramId();
 		int clientId = order.getClientId();
+		int state = order.getState();
 		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
-				String.valueOf(programId), String.valueOf(order.getPayState()), String.valueOf(clientId)).createStatement();
+				String.valueOf(programId), String.valueOf(order.getPayState()), 
+				String.valueOf(clientId), String.valueOf(state)).createStatement();
 		StringBuilder sb = new StringBuilder(temp.trim());
 		Date startDate = condition.getStartDate();
 		Date endDate = condition.getEndDate();

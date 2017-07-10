@@ -11,9 +11,10 @@ public class ConsumOrderAndQueryCreator extends AndQueryCreator {
     	conditionKeys.add(new ConBean("programId", "=="));
     	conditionKeys.add(new ConBean("payState", "=="));
     	conditionKeys.add(new ConBean("clientId", "=="));
+    	conditionKeys.add(new ConBean("state", "=="));
 	}
 	
-	public ConsumOrderAndQueryCreator(String id, String licensePlate, String programId, String payState, String clientId){
-		super(new String[]{id, licensePlate, programId, payState, clientId});
+	public ConsumOrderAndQueryCreator(String id, String licensePlate, String programId, String payState, String clientId, String state){
+		super(new String[]{id, licensePlate, programId, payState, clientId, state});
 	}
 }

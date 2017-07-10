@@ -17,6 +17,7 @@ public class Constants {
 	public static final String RESPONSE_SIZE_KEY = "size"; //返回对象里的size的key名称
 	public static final String RESPONSE_CLIENT_KEY = "client";
 	public static final String RESPONSE_REAL_SIZE_KEY = "realSize";
+	public static final String RESPONSE_AMOUNT_KEY = "amount";
 	
 	public static final int PROJECT_WITH_CARD = 0;
 	public static final int PROJECT_WITH_CASH = 1;

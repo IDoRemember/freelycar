@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
 import java.util.Arrays;
+import java.util.Date;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -82,6 +83,12 @@ public class ClientController {
 	@PermissionRequire("client:query")
 	public String stat(){
 		return this.clientService.stat();
+	}
+	
+	@RequestMapping(value="/consumhist", method=RequestMethod.GET)
+	@PermissionRequire("client:query")
+	public String consumHistory(int clientId, Date startTime, Date endTime, int page, int number){
+		return this.clientService.consumHistory(clientId, startTime, endTime, page, number);
 	}
 	
 }

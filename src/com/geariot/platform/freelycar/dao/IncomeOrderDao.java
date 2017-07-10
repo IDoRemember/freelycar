@@ -39,4 +39,11 @@ public interface IncomeOrderDao {
 	List<Object[]> programNameMonth();
 	
 	List<Object[]> programNameRange(Date startTime , Date endTime);
+	
+	List<IncomeOrder> listIncomeOrderByClientId(String condition, int clientId, int from, int pageSize);
+	
+	long countIncomeOrderByClientId(String condition, int clientId);
+	
+	long countAmountByClientId(String condition, int clientId);
+	
 }
