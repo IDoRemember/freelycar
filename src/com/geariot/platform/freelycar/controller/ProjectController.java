@@ -46,7 +46,7 @@ public class ProjectController {
 		return projectService.getProjectName();
 	}
 	
-	@RequestMapping(value = "/id" , method = RequestMethod.GET)
+	@RequestMapping(value = "/getbyid" , method = RequestMethod.GET)
 	public String getProject(int projectId){
 		return projectService.getProject(projectId);
 	}
