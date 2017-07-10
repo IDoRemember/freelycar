@@ -324,13 +324,9 @@ class ClientInfo extends React.Component {
                     <Col span={8} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
                         <Input placeholder="请输入手机号" value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
                     </Col>
-<<<<<<< HEAD
 
-                    <Button type="primary" onClick={this.queryData}>查询</Button>
-=======
                 
                     <Button type="primary" onClick={()=>this.queryData}>查询</Button>
->>>>>>> 759efd4f107bce33fc6b55ffe06ce1b4c0221a41
                 </div>
 
                 <div>
