@@ -29,7 +29,9 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	
 	@Override
 	public void save(ConsumOrder consumOrder) {
-		this.getSession().save(consumOrder);
+		Session session = this.getSession();
+		session.save(consumOrder);
+		session.evict(consumOrder);
 	}
 
 	@SuppressWarnings("unchecked")

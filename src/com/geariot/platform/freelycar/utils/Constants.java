@@ -23,6 +23,8 @@ public class Constants {
 	
 	public static final String CARD_PROGRAM = "Card";
 	
+	public static final String STAFF_NAME_SPLIT = ";";
+	
 	/*是否开启查询缓存*/
 	public static boolean SELECT_CACHE = false;
 	

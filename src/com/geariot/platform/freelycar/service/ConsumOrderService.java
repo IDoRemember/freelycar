@@ -27,6 +27,7 @@ import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Provider;
+import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;

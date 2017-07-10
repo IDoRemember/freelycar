@@ -9,11 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.AdminDao;
 import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.dao.ServiceDao;
+import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.CardProjectRemainingInfo;
 import com.geariot.platform.freelycar.entities.Client;
@@ -21,6 +23,7 @@ import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.ServiceProjectInfo;
+import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
@@ -40,6 +43,9 @@ public class PayService {
 	
 	@Autowired
 	private CardDao cardDao;
+	
+	@Autowired
+	private AdminDao adminDao;
 	
 	@Autowired
 	private ConsumOrderDao consumOrderDao;
@@ -80,6 +86,8 @@ public class PayService {
 		order.setPayDate(new Date());
 		order.setProgramName(Constants.CARD_PROGRAM);
 		order.setPayMethod(card.getPayMethod());
+		Admin admin = this.adminDao.findAdminById(card.getOrderMaker().getId());
+		order.setStaffNames(admin.getStaff().getName());
 		this.incomeOrderDao.save(order);
 		//更新客户的消费次数与消费情况信息。
 		client.setConsumTimes(client.getConsumTimes() + 1);
@@ -127,6 +135,12 @@ public class PayService {
 		recoder.setPayDate(new Date());
 		recoder.setProgramName(order.getProgramName());
 		recoder.setPayMethod(order.getPayMethod());
+		StringBuilder staffNames = new StringBuilder();
+		for(Staff staff : order.getStaffs()){
+			staffNames.append(staff.getName());
+			staffNames.append(Constants.STAFF_NAME_SPLIT);
+		}
+		recoder.setStaffNames(staffNames.substring(0, staffNames.length() - 1));
 		this.incomeOrderDao.save(recoder);
 		
 		Client client = this.clientDao.findById(order.getClientId());
