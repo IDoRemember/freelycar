@@ -10,7 +10,6 @@ import javax.persistence.Id;
 @Entity
 public class IncomeOrder {
 	private int id;
-	private int type;
 	private int clientId;
 	private String licensePlate;
 	private float amount;
@@ -41,9 +40,6 @@ public class IncomeOrder {
 	public String getProgramName() {
 		return programName;
 	}
-	public int getType() {
-		return type;
-	}
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
@@ -64,8 +60,5 @@ public class IncomeOrder {
 	}
 	public void setProgramName(String programName) {
 		this.programName = programName;
-	}
-	public void setType(int type) {
-		this.type = type;
 	}
 }

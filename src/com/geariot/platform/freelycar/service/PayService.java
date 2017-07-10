@@ -76,7 +76,6 @@ public class PayService {
 		IncomeOrder order = new IncomeOrder();
 		order.setAmount(service.getPrice());
 		order.setClientId(clientId);
-		order.setType(0);
 		order.setLicensePlate(null);
 		order.setPayDate(new Date());
 		order.setProgramName(Constants.CARD_PROGRAM);
@@ -128,7 +127,6 @@ public class PayService {
 		recoder.setPayDate(new Date());
 		recoder.setProgramName(order.getProgramName());
 		recoder.setPayMethod(order.getPayMethod());
-		recoder.setType(1);
 		this.incomeOrderDao.save(recoder);
 		
 		Client client = this.clientDao.findById(order.getClientId());
