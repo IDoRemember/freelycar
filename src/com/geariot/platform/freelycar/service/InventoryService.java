@@ -30,6 +30,7 @@ import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.InventoryAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.InventoryBean;
 import com.geariot.platform.freelycar.utils.query.InventoryBrandAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
@@ -401,5 +402,29 @@ public class InventoryService {
 		this.inventoryOrderDao.deleteOrder(orderId);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
-
+	
+	public String getInventoryName(){
+		List<Object[]> exists = inventoryDao.getInventoryName();
+		if(exists == null || exists.isEmpty()){
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
+		}
+		else{
+			List<InventoryBean> inventoryBeans = new ArrayList<>();
+			for(Object[] exist : exists){
+				inventoryBeans.add(new InventoryBean(String.valueOf(exist[0]), String.valueOf(exist[1])));
+			}
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(inventoryBeans)).toString();
+		}
+	}
+	
+	public String getInventory(String inventoryId){
+		Inventory exist = inventoryDao.findById(inventoryId);
+		if(exist == null){
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
+		}
+		else{
+			JsonConfig config = JsonResFactory.dateConfig();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(exist, config)).toString();
+		}
+	}
 }

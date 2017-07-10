@@ -65,4 +65,12 @@ public class InventoryDaoImpl implements InventoryDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Object[]> getInventoryName() {
+		String sql = "select id , name from Inventory";
+		return this.getSession().createSQLQuery(sql).setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	
 }

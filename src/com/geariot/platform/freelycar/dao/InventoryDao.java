@@ -17,4 +17,6 @@ public interface InventoryDao {
 
 	List<Inventory> findByProviderId(int providerId);
 	
+	List<Object[]> getInventoryName();
+	
 }

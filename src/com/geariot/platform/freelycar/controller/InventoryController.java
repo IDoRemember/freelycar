@@ -140,4 +140,13 @@ public class InventoryController {
 		return this.inventoryService.deleteOrder(orderId);
 	}
 	
+	@RequestMapping(value = "/name" , method = RequestMethod.GET)
+	public String getInventoryName(){
+		return inventoryService.getInventoryName();
+	}
+	
+	@RequestMapping(value = "/getbyid" , method = RequestMethod.GET)
+	public String getInventory(String inventoryId){
+		return inventoryService.getInventory(inventoryId);
+	}
 }
