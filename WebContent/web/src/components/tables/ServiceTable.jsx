@@ -1,7 +1,9 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button, InputNumber } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import update from 'immutability-helper'
+import $ from 'jquery'
 const Option = Select.Option;
 class ServiceTable extends React.Component {
     constructor(props) {
@@ -10,11 +12,13 @@ class ServiceTable extends React.Component {
             data: [{
                 key: 1,
                 index: 1,
-                project: '洗车',
-                price: '20.00',
-                memberCard: 'lala',
-                number: '20',
-                singleSummation: '20',
+                name: '',
+                price: '0',
+                referWorkTime: '0',
+                pricePerUnit: '0',
+                memberCard: '',
+                number: '',
+                singleSummation: '',
                 DeductionCardTime: '1',
             }, {
                 key: '',
@@ -27,10 +31,60 @@ class ServiceTable extends React.Component {
         }
     }
     componentDidMount() {
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
+        $.ajax({
+            url: 'api/project/name',
+            type: 'get',
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    this.setState({
+                        option: res.data
+                    });
+                }
+            }
+
+
+        });
+    }
+
+    numberChange = (index, value) => {
+        console.log(index, value);
+        let price = this.state.data[index].price;
+        this.setState({
+            data: update(this.state.data, { [index]: { singleSummation : {$set: price*value} } })
+        }, () => {
+            console.log(this.state.data);
         })
     }
+
+    handleChange = (index, value) => {
+        $.ajax({
+            url: 'api/project/getbyid',
+            type: 'get',
+            data: { projectId: value },
+            dataType: 'json',
+            success: (res) => {
+                //console.log(res);
+                if (res.code == '0') {
+                    let obj = res.data;
+                    obj.key = obj.id;
+                    obj.index = index;
+                    obj.singleSummation = obj.price;
+                    this.setState({
+                        data: update(this.state.data, { [index]: { $set: obj } })
+                    }, () => {
+                        console.log(this.state.data);
+                    })
+                }
+            }
+
+
+        });
+    }
+
+    
+
     addOneROw = () => {
         let oneRow = {
             key: this.state.data.length,
@@ -54,7 +108,7 @@ class ServiceTable extends React.Component {
     }
     render() {
         const projectOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
@@ -64,6 +118,9 @@ class ServiceTable extends React.Component {
                     title="序号"
                     dataIndex="index"
                     key="index"
+                    render={(text, record, index) => {
+                        return <span>{index + 1}</span>
+                    }}
                 />
                 <Col
                     title=""
@@ -72,23 +129,17 @@ class ServiceTable extends React.Component {
                 />
                 <Col
                     title="项目名称"
-                    key="project"
-                    dataIndex="project"
-                    render={(text) => {
-                        if (!text) {
-                            return <span> </span>
-                        } else {
-                            return <Select showSearch
-                                style={{ width: '100px' }}
-                                placeholder="输入项目名称"
-                                optionFilterProp="children "
-                                onChange={this.handleChange}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                            >
-                                {projectOptions}
-                            </Select>
-                        }
-
+                    key="name"
+                    dataIndex="name"
+                    render={(text, record, index) => {
+                        return <Select showSearch
+                            style={{ width: '100px' }}
+                            placeholder="输入项目名称"
+                            defaultValue={this.state.data[index].name}
+                            onSelect={(e) => this.handleChange(index, e)}
+                        >
+                            {projectOptions}
+                        </Select>
                     }}
                 />
                 <Col
@@ -99,17 +150,19 @@ class ServiceTable extends React.Component {
                 <Col
                     title="数量"
                     key="number"
-                    dataIndex="number"
+                    render={(text, record, index) => {
+                        return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
+                    }}
                 />
                 <Col
                     title="参考工时"
-                    key="time"
-                    dataIndex="time"
+                    key="referWorkTime"
+                    dataIndex="referWorkTime"
                 />
                 <Col
                     title="工时单价"
-                    key="singlePrice"
-                    dataIndex="singlePrice"
+                    key="pricePerUnit"
+                    dataIndex="pricePerUnit"
                 />
                 <Col
                     title="单项小计"

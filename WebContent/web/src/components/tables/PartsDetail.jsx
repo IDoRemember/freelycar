@@ -1,8 +1,10 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm,InputNumber } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import EditableCell from './EditableCell.jsx'
+import update from 'immutability-helper'
+import $ from 'jquery'
 const Option = Select.Option;
 class PartsDetail extends React.Component {
     constructor(props) {
@@ -11,11 +13,12 @@ class PartsDetail extends React.Component {
             data: [{
                 key: 1,
                 index: 1,
-                partName: '洗车',
+                name: '洗车',
+                brandName: '',
                 price: '20.00',
                 number: '20',
-                singleSummation: '20',
-                DeductionCardTime: '1'
+                amount: '0',
+                standard: '',
             }, {
                 key: '',
                 index: '',
@@ -27,10 +30,58 @@ class PartsDetail extends React.Component {
         }
     }
     componentDidMount() {
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
+        $.ajax({
+            url: 'api/inventory/name',
+            type: 'get',
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    this.setState({
+                        option: res.data
+                    });
+                }
+            }
+
+
+        });
+    }
+
+    handleInvChange = (index, value) => {
+        $.ajax({
+            url: 'api/inventory/getbyid',
+            type: 'get',
+            data: { inventoryId: value },
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    let obj = res.data;
+                    obj.key = obj.id;
+                    obj.index = index;
+                    this.setState({
+                        data: update(this.state.data, { [index]: { $set: obj } })
+                    }, () => {
+                        // console.log(this.state.data);
+                    })
+                }
+            }
+
+
+        });
+    }
+
+    numberChange = (index, value) => {
+        console.log(index, value);
+        let price = this.state.data[index].price;
+        this.setState({
+            data: update(this.state.data, { [index]: { singleSummation: { $set: price * value } } })
+        }, () => {
+            console.log(this.state.data);
         })
     }
+
+
     addOneROw = () => {
         let oneRow = {
             key: this.state.data.length,
@@ -61,7 +112,7 @@ class PartsDetail extends React.Component {
     }
     render() {
         const projectOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
@@ -79,39 +130,34 @@ class PartsDetail extends React.Component {
                 />
                 <Col
                     title="配件名称"
-                    key="partName"
-                    dataIndex="partName"
-                    render={(text) => {
-                        if (!text) {
-                            return <span> </span>
-                        } else {
-                            return <Select showSearch
-                                style={{ width: '100px' }}
-                                placeholder="输入配件名称"
-                                optionFilterProp="children "
-                                onChange={this.handleChange}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                            >
-                                {projectOptions}
-                            </Select>
-                        }
+                    key="name"
+                    dataIndex="name"
+                    render={(text, record, index) => {
+                        return <Select showSearch
+                            style={{ width: '100px' }}
+                            placeholder="输入配件名称"
+                            defaultValue={this.state.data[index].name}
+                            onSelect={(e) => this.handleInvChange(index, e)}
+                        >
+                            {projectOptions}
+                        </Select>
 
                     }}
                 />
                 <Col
                     title="配件品牌"
-                    key="brand"
-                    dataIndex="brand"
+                    key="brandName"
+                    dataIndex="brandName"
                 />
                 <Col
                     title="规格"
-                    key="specification"
-                    dataIndex="specification"
+                    key="standard"
+                    dataIndex="standard"
                 />
                 <Col
                     title="属性"
-                    key="attribute"
-                    dataIndex="attribute"
+                    key="property"
+                    dataIndex="property"
                 />
                 <Col
                     title="配件价格"
@@ -121,19 +167,16 @@ class PartsDetail extends React.Component {
 
                 <Col
                     title="可用库存"
-                    key="inventory"
-                    dataIndex="inventory"
+                    key="amount"
+                    dataIndex="amount"
                 />
                 <Col
                     title="数量"
                     key="number"
                     dataIndex="number"
-                    render={(text, record, index) => (
-                        <EditableCell
-                            value={text}
-                            onChange={this.onCellChange(index, 'name')}
-                        />
-                    )}
+                    render={(text, record, index) => {
+                        return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
+                    }}
                 />
                 <Col
                     title="单项合计"

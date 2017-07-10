@@ -29,22 +29,15 @@ class CustomerInfo extends React.Component {
                 brandName: '',
                 phone: '',
                 consumAmout: '',
-                tips: ''
+                tips: '',
+                lastMiles:'',
+                consumTimes:'',
+                lastVisit:''
             }
         }
     }
     componentDidMount() {
-        // let data = {};
-        // data.licensePlate = '';
-        // $.ajax({
-        //     url:'api/car/license',
-        //     data:data,
-        //     type:'get',
-        //     dataType:'json',
-        //     success:(res) => {
-        //         console.log(res);
-        //     }
-        // });
+ 
     }
     licenseChange = (value) => {
         console.log(value.length);
@@ -63,15 +56,27 @@ class CustomerInfo extends React.Component {
 
                         let cars = data.cars;
                         let brandName;
+                        let lastMiles;
                         for(let item of cars){
                             if(item.licensePlate==value){
                                 brandName = item.type.brand.name;
+                                lastMiles = item.lastMiles;
+                                console.log(lastMiles);
                             }
                         }
 
-
                         this.setState({
-                            carInfo: update(this.state.carInfo, { ['clientName']: { $set: data.name }, ['brandName']: { $set: brandName } })
+                            carInfo: update(this.state.carInfo, 
+                            { 
+                                ['clientName']: { $set: data.name }, 
+                                ['brandName']: { $set: brandName },
+                                ['phone']: { $set: data.phone },
+                                ['lastMiles']: { $set: lastMiles },
+                                ['consumAmout']: { $set: data.consumAmout },
+                                ['consumTimes']: { $set: data.consumTimes },
+                                ['lastVisit']: { $set: data.lastVisit }
+                                                                
+                            })
                         })
                     }
                 }
@@ -147,7 +152,7 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8}>
                         上次里程：
-                        <span style={{ width: '100px' }}>8888km</span>
+                        <span style={{ width: '100px' }}>{this.state.carInfo.lastMiles}km </span>
                     </Col>
                     <Col span={8}>
                         历史消费：
@@ -170,7 +175,7 @@ class CustomerInfo extends React.Component {
                     <Col span={8} style={{ height: '28px', lineHeight: '28px' }}>
                         提示信息：
                         <span style={{ width: '100px' }} >
-                            共消费2次,  最近消费2017-05-24 15:22
+                            共消费{this.state.carInfo.consumTimes}次,  最近消费{this.state.carInfo.lastVisit}
                         </span>
                     </Col>
                     <Col span={8}>
