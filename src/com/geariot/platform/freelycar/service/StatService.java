@@ -42,7 +42,7 @@ public class StatService {
 			List<ExpendOrder> orders = expendOrderDao.listByDate(today);
 			List<ExpendOrder> list = expendOrderDao.listByDate(today, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float expendStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -64,7 +64,7 @@ public class StatService {
 			List<IncomeOrder> orders = incomeOrderDao.listByDate(today);
 			List<IncomeOrder> list = incomeOrderDao.listByDate(today, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float incomeStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -120,7 +120,7 @@ public class StatService {
 			List<ExpendOrder> orders = expendOrderDao.listByMonth(month);
 			List<ExpendOrder> list = expendOrderDao.listByMonth(month, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float expendStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -142,7 +142,7 @@ public class StatService {
 			List<IncomeOrder> orders = incomeOrderDao.listByMonth(month);
 			List<IncomeOrder> list = incomeOrderDao.listByMonth(month, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float incomeStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -215,7 +215,7 @@ public class StatService {
 			List<ExpendOrder> orders = expendOrderDao.listByWeek();
 			List<ExpendOrder> list = expendOrderDao.listByWeek(from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float expendStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -237,7 +237,7 @@ public class StatService {
 			List<IncomeOrder> orders = incomeOrderDao.listByWeek();
 			List<IncomeOrder> list = incomeOrderDao.listByWeek(from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float incomeStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -267,7 +267,7 @@ public class StatService {
 			List<ExpendOrder> orders = expendOrderDao.listByDateRange(startTime, endTime);
 			List<ExpendOrder> list = expendOrderDao.listByDateRange(startTime, endTime, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float expendStat = 0;
 			if (orders == null || orders.isEmpty()) {
@@ -289,7 +289,7 @@ public class StatService {
 			List<IncomeOrder> orders = incomeOrderDao.listByDateRange(startTime, endTime);
 			List<IncomeOrder> list = incomeOrderDao.listByDateRange(startTime, endTime, from, number);
 			if (list == null || list.isEmpty()) {
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			float incomeStat = 0;
 			if (orders == null || orders.isEmpty()) {

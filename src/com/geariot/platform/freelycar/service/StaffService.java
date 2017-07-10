@@ -83,7 +83,7 @@ public class StaffService {
 		int from = (page - 1) * number;
 		List<Staff> list = staffDao.listStaffs(from, number);
 		if(list == null || list.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		long realSize = staffDao.getCount();
 		int size=(int) Math.ceil(realSize/(double)number);
@@ -101,7 +101,7 @@ public class StaffService {
 		int from = (page - 1) * number;
 		List<Staff> list = staffDao.getConditionQuery(andCondition , from , number);
 		if(list == null || list.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		long realSize = (long) staffDao.getConditionCount(andCondition);
 		int size=(int) Math.ceil(realSize/(double)number);
@@ -117,7 +117,7 @@ public class StaffService {
 	public String modifyStaff(Staff staff){
 		Staff exist = staffDao.findStaffByStaffId(staff.getId());
 		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		else{
 			exist.setName(staff.getName());
@@ -133,7 +133,7 @@ public class StaffService {
 	public String staffServiceDetail(int staffId , int page , int number){
 		Staff exist = staffDao.findStaffByStaffId(staffId);
 		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		else{
 			int from = (page - 1) * number;

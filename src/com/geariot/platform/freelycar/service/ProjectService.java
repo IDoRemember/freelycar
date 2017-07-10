@@ -76,29 +76,13 @@ public class ProjectService {
 		}
 	}
 	
-	/*public String getProjectList(int page , int number){
-		int from = (page - 1) * number;
-		List<Project> list = projectDao.listProjects(from, number);
-		if(list == null || list.isEmpty()){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
-		}
-		long realSize = projectDao.getCount();
-		int size=(int) Math.ceil(realSize/(double)number);
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
-		JSONArray jsonArray = JSONArray.fromObject(list, config);
-		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
-		obj.put(Constants.RESPONSE_SIZE_KEY, size);
-		return obj.toString();
-	}*/
-	
 	public String getSelectProject(String name , String programId , int page ,int number){
 		if((name == null || name.isEmpty()|| name.trim().isEmpty())&&(programId==null||programId.isEmpty()||programId.trim().isEmpty()))
 		{
 			int from = (page - 1) * number;
 			List<Project> list = projectDao.listProjects(from, number);
 			if(list == null || list.isEmpty()){
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			long realSize = projectDao.getCount();
 			int size=(int) Math.ceil(realSize/(double)number);
@@ -115,7 +99,7 @@ public class ProjectService {
 			int from = (page - 1) * number;
 			List<Project> list = projectDao.getConditionQuery(andCondition, from, number);
 			if(list == null || list.isEmpty()){
-				return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			long realSize = (long) projectDao.getConditionCount(andCondition);
 			int size=(int) Math.ceil(realSize/(double)number);
@@ -132,7 +116,7 @@ public class ProjectService {
 	public String modifyProject(Project project){
 		Project exist = projectDao.findProjectById(project.getId());
 		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		exist.setName(project.getName());
 		exist.setComment(project.getComment());
