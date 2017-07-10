@@ -6,6 +6,7 @@ import CardModal from '../productManage/CardModal.jsx';
 import Regclient from './Regclient.jsx'
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import update from 'immutability-helper';
 import $ from 'jquery'
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
@@ -21,10 +22,11 @@ class BuyCard extends React.Component {
             female: 'female',
             value: 1,
             vaild: '',
+            type:'',
             price: '',
             orderMaker: '',
-            serviceId:'',
-            clientId:parseInt(this.props.params.id),
+            serviceId: '',
+            clientId: parseInt(this.props.params.id),
             form: {
                 name: '',
                 phone: '',
@@ -39,8 +41,16 @@ class BuyCard extends React.Component {
                 price: '',
                 vaild: '',
                 type: '',
-            }
-
+            },
+            clientInfo: {
+                name: '',
+                phone: '',
+                gender: '',
+                recommendName: '',
+                licensePlate: '',
+            },
+            carId: '',
+            payMethod:'',
         }
     }
 
@@ -51,6 +61,7 @@ class BuyCard extends React.Component {
         });
     }
     componentDidMount() {
+        this.getCarBrand();
         this.getService();
         this.getStaff();
     }
@@ -127,176 +138,253 @@ class BuyCard extends React.Component {
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
-                    serviceId:res.data[0].id,
+                    type:res.data[0].type,
+                    serviceId: res.data[0].id,
                 })
             }
         })
     }
+    SaveClient = () => {
+        let clientInfos = this.state.clientInfo;
+        $.ajax({
+            type: 'post',
+            url: '/api/client/add',
+            datatype: 'json',
+            contentType: 'application/json;charset=utf-8',
+            data: JSON.stringify({
+                name: clientInfos.name,
+                phone: clientInfos.phone,
+                gender: clientInfos.gender,
+                recommendName: clientInfos.recommendName,
+                cars: [{
+                    //select选择
+                    type: {
+                        id: this.state.carId,
+                        
+                    },
+                    licensePlate: clientInfos.licensePlate,
+                }]
+            }),
+            success: (res) => {
+                console.log(res);
+                if (res.code == "0") {
+                    this.setState({
+                        clientId:res.data.id
+                    });
+                    console.log(this.state.clientId)
+                }
+            }
 
+        })
+    }
+    genderonChange = (e) => {
+        console.log(e.target.value);
+        this.setState({
+            value: e.target.value,
+        });
+        this.state.clientInfo.gender = e.target.value
+    }
     StaffhandleChange = (value) => {
         console.log(value)
         this.setState({
-            orderMaker:parseInt(value),
+            orderMaker: parseInt(value),
         })
     }
     SaveCard = () => {
         console.log('111')
-            $.ajax({
-                url:'api/pay/buycard',
-                type:'POST',
-                contentType:"application/json;charset=utf-8",
-                data:JSON.stringify({
-                        clientId:this.state.clientId,
-                        card:{
-                            service:{
-                                id:this.state.serviceId
+        $.ajax({
+            url: 'api/pay/buycard',
+            type: 'POST',
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify({
+                clientId: this.state.clientId,
+                card: {
+                    service: {
+                        id: this.state.serviceId
 
-                            },
-                            orderMaker:{id:this.state.orderMaker}
-                        }
-                })
+                    },
+                    orderMaker: { id: this.state.orderMaker },
+                    payMethod:this.state.payMethod,
+
+
+                }
             })
-         }
-
-        handleOk = () => {
-            this.setState({
-                visible: false
-            });
-        }
-        handleCancel = () => {
-            this.setState({
-                visible: false
-            });
-        }
-        render() {
-            const plateOptions = this.state.option.map((item, index) => {
-                return <Option key={index} value={item.value}>{item.text}</Option>
-            })
-
-            const CardOptions = this.state.cardList.map((item, index) => {
-                return <Option key={index} value={item.name}>{item.name}</Option>
-            })
-            const StaffOptions = this.state.adminList.map((item, index) => {
-                let staffId=item.id+'';
-                return <Option key={index} value={staffId}>{item.name}</Option>
-            })
-            return (
-                <div>
-                    <BreadcrumbCustom first="会员管理" second="会员办理" />
-                    <Card title='客户信息'  style={{display:'none'}}>
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4}>客户姓名：
-                            <Select showSearch
-                                    style={{ width: '140px', marginRight: '8px' }}
-
-                                    optionFilterProp="children"
-                                    onChange={this.handleChange}
-                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                >
-
-                                </Select>
-                            </Col>
-                            <Col span={8}>性别：
-                            <div style={{ display: 'inline-block', marginLeft: '26px' }}>
-                                    <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                        <Radio value={this.state.man}>男</Radio>
-                                        <Radio value={this.state.female}>女</Radio>
-                                    </RadioGroup>
-                                </div>
-                            </Col>
-                        </Row>
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4}>手机号:
-                            <Input style={{ width: '140px', marginLeft: '21px' }} />
-                            </Col>
-                            <Col span={8} >车牌号：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} />
-                            </Col>
-                        </Row>
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4}>车辆品牌:
-                            <Select showSearch
-                                    style={{ width: '140px', marginLeft: '10px' }}
-                                    placeholder="输入车牌号码"
-                                    optionFilterProp="children"
-                                    onChange={this.handleChange}
-                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                >
-                                    {plateOptions}
-                                </Select>
-                            </Col>
-                            <Col span={8} >推荐人：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} />
-                            </Col>
-                        </Row>
-                        <Button type="primary">保存</Button>
-                    </Card>
-
-                    <Regclient clientId={this.state.clientId}  style={{display:'none'}}></Regclient>
-
-                    <Card title="会员信息" style={{ marginTop: '15px' }}  >
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4}>
-                                会员卡类：
-                        <Select
-                                    style={{ width: '140px', marginLeft: '13px' }}
-
-                                    optionFilterProp="children"
-                                    onChange={this.CardhandleChange}
-                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                >
-                                    {CardOptions}
-                                </Select>
-                                <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
-                            </Col>
-                            <Col span={8} >卡类价格：
-                            <Input style={{ width: '140px', marginLeft: '14px', color: 'red' }} value={this.state.price == '' ? '' : this.state.price + '元'} disabled />
-                            </Col>
-                        </Row>
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4}>有效期：
-                            <Input style={{ width: '140px', marginLeft: '25px', color: 'red' }} value={this.state.vaild == '' ? '' : this.state.vaild + '年'} disabled />
-                            </Col>
-                            <Col span={8} >会员卡号：
-                            <Input style={{ width: '140px', marginLeft: '14px' }} />
-                            </Col>
-                        </Row>
-                        <Row gutter={16} style={{ marginBottom: '15px' }}>
-                            <Col span={8} offset={4} >
-                                <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Select defaultValue="现金" style={{ width: 140, marginLeft: 15 }} onChange={this.handleChange} >
-                                            <Option value="cash">现金</Option>
-                                            <Option value="wechatpay">微信</Option>
-                                            <Option value="alipay">支付宝</Option>
-                                            <Option value="suningpay">易付宝</Option>
-                                        </Select>
-                                    </div>
-                                </div>
-                            </Col>
-                            <Col span={8} >
-                                <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Select showSearch
-                                            style={{ width: '140px', marginLeft: '10px' }}
-                                            placeholder="选择办卡人员"
-                                            optionFilterProp="children"
-                                            onChange={this.StaffhandleChange}
-                                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                        >
-                                            {StaffOptions}
-                                        </Select>
-                                    </div>
-                                </div>
-                            </Col>
-                        </Row>
-                    </Card>
-                    <CardModal visible={this.state.visible} onOk={() => this.handleOk}
-                        onCancel={() => this.handleCancel}>
-                    </CardModal>
-                    <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={this.SaveCard}>办理</Button>
-                </div>
-            )
-        }
+        })
     }
-    export default BuyCard
+    getCarBrand=()=>{
+         $.ajax({
+            type: 'GET',
+            url: '/api/car/listbrand',
+            datatype: 'json',
+            contentType: 'application/json;charset=utf-8',
+            data: {},
+            success: (res) => {
+
+                this.setState({
+                    option: res.data,
+
+
+                })
+                console.log(this.state.option)
+            }
+        })
+    }
+    onValueChange = (key, value) => {
+        this.setState({
+            clientInfo: update(this.state.clientInfo, { [key]: { $set: value } })
+        })
+    }
+    payhandleChange=(e)=>{
+        console.log(e);
+        this.setState({
+            payMethod:e
+        })
+    }
+    handleChange = (e) => {
+        let typelist=this.state.option[e-1].types;
+        console.log(this.state.option[e-1].types)
+        this.setState({
+            carId:e,
+           
+        })
+    }
+    handleOk = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    handleCancel = () => {
+        this.setState({
+            visible: false
+        });
+    }
+    render() {
+        const plateOptions = this.state.option.map((item, index) => {
+            return <Option key={index} value={item.value}>{item.text}</Option>
+        })
+          const brandOptions = this.state.option.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+        })
+        const CardOptions = this.state.cardList.map((item, index) => {
+            return <Option key={index} value={item.name}>{item.name}</Option>
+        })
+        const StaffOptions = this.state.adminList.map((item, index) => {
+            let staffId = item.id + '';
+            return <Option key={index} value={staffId}>{item.name}</Option>
+        })
+        return (
+            <div >
+                <BreadcrumbCustom first="会员管理" second="会员办理" />
+                {!this.props.params.id&&<Card title='客户信息'  >
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} offset={4}>客户姓名：
+                            <Input style={{ width: '140px' }} value={this.state.clientInfo.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                        </Col>
+                        <Col span={8}>性别：
+                            <div style={{ display: 'inline-block', marginLeft: '26px' }}>
+                                <RadioGroup onChange={this.genderonChange} value={this.state.value}>
+                                    <Radio value={'男'}>男</Radio>
+                                    <Radio value={'女'}>女</Radio>
+                                </RadioGroup>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} offset={4}>手机号:
+                            <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
+                        </Col>
+                        <Col span={8} >车牌号：
+                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8}  offset={4}>车辆品牌:
+                            <Select showSearch
+                                style={{ width: '140px',marginLeft:'10px'}}
+                                placeholder="请选择车辆品牌"
+                                optionFilterProp="children"
+                                onChange={this.handleChange}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {brandOptions}
+                            </Select>
+                        </Col>
+                        <Col span={8} >推荐人：
+                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.recommendName} onChange={(e) => this.onValueChange('recommendName', e.target.value)} />
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col offset={18}><Button type="primary" onClick={this.SaveClient} >保存</Button></Col>
+                    </Row>
+
+                </Card>}
+
+                {this.props.params.id&&<Regclient clientId={this.state.clientId} style={{ display: 'none' }}></Regclient>}
+
+                <Card title="会员信息" style={{ marginTop: '15px' }}  >
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} offset={4}>
+                            会员卡类：
+                        <Select
+                                style={{ width: '140px', marginLeft: '13px' }}
+
+                                optionFilterProp="children"
+                                onChange={this.CardhandleChange}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {CardOptions}
+                            </Select>
+                            <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
+                        </Col>
+                        <Col span={8} >卡类价格：
+                            <Input style={{ width: '140px', marginLeft: '14px', color: 'red' }} value={this.state.price == '' ? '' : this.state.price + '元'} disabled />
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} offset={4}>有效期：
+                            <Input style={{ width: '140px', marginLeft: '25px', color: 'red' }} value={this.state.vaild == '' ? '' : this.state.vaild + '年'} disabled />
+                        </Col>
+                        <Col span={8} >会员卡种：
+                             <Input style={{ width: '140px', marginLeft: '15px', color: 'red' }} value={this.state.type == '0' ? '组合次卡' : '次卡'} disabled />
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} offset={4} >
+                            <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
+                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15 }} onChange={this.payhandleChange} >
+                                        <Option value="0">现金</Option>
+                                        <Option value="1">微信</Option>
+                                        <Option value="2">支付宝</Option>
+                                        <Option value="3">易付宝</Option>
+                                    </Select>
+                                </div>
+                            </div>
+                        </Col>
+                        <Col span={8} >
+                            <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
+                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                                    <Select showSearch
+                                        style={{ width: '140px', marginLeft: '10px' }}
+                                        placeholder="选择办卡人员"
+                                        optionFilterProp="children"
+                                        onChange={this.StaffhandleChange}
+                                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                    >
+                                        {StaffOptions}
+                                    </Select>
+                                </div>
+                            </div>
+                        </Col>
+                    </Row>
+                </Card>
+                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
+                    onCancel={() => this.handleCancel}>
+                </CardModal>
+
+                <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={this.SaveCard}>办理</Button>
+            </div >
+        )
+    }
+}
+export default BuyCard

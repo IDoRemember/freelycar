@@ -14,11 +14,11 @@ class AddClient extends React.Component {
         super(props);
         this.state = {
             option: [],
-            type:[],
+            type: [],
             value: '男',
-            carvalue:'true',
-            carId:'',
-            typeId:'',
+            carvalue: 'true',
+            carId: '',
+            typeId: '',
             form: {
                 name: '',
                 age: '',
@@ -39,7 +39,7 @@ class AddClient extends React.Component {
                 lastMiles: '',
                 miles: '',
             },
-          
+
         }
     }
     componentDidMount() {
@@ -49,11 +49,11 @@ class AddClient extends React.Component {
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
-            success:(res)=>{
-                
+            success: (res) => {
+
                 this.setState({
-                   option:res.data ,
-                
+                    option: res.data,
+
 
                 })
                 console.log(this.state.option)
@@ -124,31 +124,31 @@ class AddClient extends React.Component {
         });
         this.state.form.gender = e.target.value
     }
-    isnewcar  = (e) => {
+    isnewcar = (e) => {
         console.log(e.target.value);
         this.setState({
             carvalue: e.target.value,
         });
         this.state.form.newCar = e.target.value
     }
-    TypehandleChange = (value)=>{
-       console.log(`selected ${value}`);
-       this.setState({
-           typeId:value
-       })
-    }
-    
-    handleChange = (e) => {
-        let typelist=this.state.option[e-1].types;
-        console.log(this.state.option[e-1].types)
+    TypehandleChange = (value) => {
+        console.log(`selected ${value}`);
         this.setState({
-            carId:e,
-            type:typelist
+            typeId: value
+        })
+    }
+
+    handleChange = (e) => {
+        let typelist = this.state.option[e - 1].types;
+        console.log(this.state.option[e - 1].types)
+        this.setState({
+            carId: e,
+            type: typelist
         })
         // $.ajax({
         //     url:'/api/'
         // })
-        
+
     }
     //时间选择函数
     birthdayonChange = (time) => {
@@ -175,10 +175,10 @@ class AddClient extends React.Component {
 
     render() {
         const brandOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.id+''}>{item.name}</Option>
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
-        const typeOptions = this.state.type.map((item,index)=>{
-            return <Option key={index} value={item.id+''}>{item.type}</Option>
+        const typeOptions = this.state.type.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.type}</Option>
         })
         return (
             <div>
@@ -255,7 +255,7 @@ class AddClient extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                       <Col span={8}  offset={4}>车辆型号:
+                        <Col span={8} offset={4}>车辆型号:
                             <Select showSearch
                                 style={{ width: '150px', marginLeft: '10px' }}
                                 placeholder="请选择车辆型号"
@@ -266,7 +266,7 @@ class AddClient extends React.Component {
                                 {typeOptions}
                             </Select>
                         </Col>
-                       
+
                         <Col span={8}>保险截止日期:
                             <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px' }} />
                         </Col>

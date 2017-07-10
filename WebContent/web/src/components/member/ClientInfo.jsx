@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm,message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
@@ -13,6 +13,9 @@ class ClientInfo extends React.Component {
             visible: false,
             clientName: '',
             clientPhone: '',
+            realSize: '',
+            thisMonth: '',
+            todayCount: '',
             dataSource: [],
             pagination: {
             },
@@ -39,10 +42,10 @@ class ClientInfo extends React.Component {
                     title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
                         return <span>
                             <span style={{ marginRight: '10px' }}>
-                                <Link to={'app/member/memberShip/'+record.id} >
+                                <Link to={'app/member/memberShip/' + record.id} >
                                     <span >开卡</span>
                                 </Link>
-                                
+
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                                     <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
                                 </Popconfirm>
@@ -76,7 +79,7 @@ class ClientInfo extends React.Component {
             }
         })
     }
-    
+
     queryData = () => {
         this.loadData(1, 10, this.state.clientName, this.state.clientPhone);
     }
@@ -87,12 +90,12 @@ class ClientInfo extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url:'/api/client/query',
-            data:jsonData,
-            type:'get',
-            success:(res) => {
+            url: '/api/client/query',
+            data: jsonData,
+            type: 'get',
+            success: (res) => {
                 console.log(res);
-                 if (res.code == "0") {
+                if (res.code == "0") {
                     //定义一个能装10条数据的容器
                     let datalist = [];
                     //调用接口后返回的数据
@@ -106,7 +109,7 @@ class ClientInfo extends React.Component {
                             id: obj[i].id,
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
-                            busNumber: obj[i].cars[0].licensePlate,
+                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+' ,  '+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -121,15 +124,15 @@ class ClientInfo extends React.Component {
                             })
                         }
                     }
-                }else if(res.code=="2"){
-                    let datalist=[];
+                } else if (res.code == "2") {
+                    let datalist = [];
                     this.setState({
-                    dataSource:datalist
-                        
+                        dataSource: datalist
+
                     })
                 }
             },
-            
+
         })
 
 
@@ -155,13 +158,13 @@ class ClientInfo extends React.Component {
                     //   console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
-                    //   console.log(obj[i].cars);
+                        //   console.log(obj[i].cars);
                         let dataItem = {
                             key: obj[i].id,
                             id: obj[i].id,
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
-                            busNumber: obj[i].cars[0].licensePlate,
+                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -188,8 +191,23 @@ class ClientInfo extends React.Component {
 
     //这个模态框到底要不要显示新增会员数呢？
     showModal = () => {
+        $.ajax({
+            url: 'api/client/stat',
+            type: 'GET',
+            dataType: 'json',
+            data: {},
+            success: (res) => {
+                console.log(res)
+                this.setState({
+                    realSize: res.realSize,
+                    thisMonth: res.thisMonth,
+                    todayCount:res.today
+                })
+            }
+        })
         this.setState({
             visible: true,
+            
         });
     }
     hideModal = () => {
@@ -227,7 +245,7 @@ class ClientInfo extends React.Component {
                         dataSource: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
-
+                    message.success('删除成功',5)
                 }
 
             }
@@ -306,7 +324,7 @@ class ClientInfo extends React.Component {
                     <Col span={8} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
                         <Input placeholder="请输入手机号" value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
                     </Col>
-                
+
                     <Button type="primary" onClick={this.queryData}>查询</Button>
                 </div>
 
@@ -331,9 +349,9 @@ class ClientInfo extends React.Component {
                     width='25%'
                 >
                     <div>
-                        <p style={{ fontSize: '16px' }}>会员总数：<span>500</span></p>
-                        <p style={{ fontSize: '16px' }}>本月新增：<span>30</span></p>
-                        <p style={{ fontSize: '16px' }}>今日新增：<span>5</span></p>
+                        <p style={{ fontSize: '16px' }}>会员总数：<span>{this.state.realSize}</span></p>
+                        <p style={{ fontSize: '16px' }}>本月新增：<span>{this.state.thisMonth}</span></p>
+                        <p style={{ fontSize: '16px' }}>今日新增：<span>{this.state.todayCount}</span></p>
 
                     </div>
                 </Modal>
