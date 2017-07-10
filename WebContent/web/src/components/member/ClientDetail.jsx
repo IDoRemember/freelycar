@@ -196,7 +196,7 @@ class ClientDetail extends React.Component {
                     var obj = res.client;
                     var objcar = obj.cars;
                     var objcard = obj.cards;
-                    // var objpay = res.data;
+                     var objpay = res.data;
                     // console.log(objpay)
                     let carlist = [];
                     let cardlist = [];
@@ -241,6 +241,7 @@ class ClientDetail extends React.Component {
                             })
                         }
                     }
+                   
                     let clientInfo = {
                         name: obj.name,
                         phone: obj.phone,
@@ -257,27 +258,27 @@ class ClientDetail extends React.Component {
 
                     })
 
-                    // 获取消费记录
-                    //         for (let k = 0; k < objpay.length; k++) {
-                    //             let payItem = {
-                    //                 key: objpay[k].id,
-                    //                 indexNum: objpay[k].id,
-                    //                 maintainItem: (objpay[k].type == 0) ? '买卡' : '消费',
-                    //                 payMoney: objpay[k].amount,
-                    //                 payType: "支付宝",
-                    //                 carType: "911",
-                    //                 servicePeople: "小易,小爱",
-                    //                 serviceTime: "2017-5-23",
-                    //                 insuranceMoney: "3000",
-                    //                 serviceState: "已完成",
-                    //             }
-                    //              paylist.push(payItem);
-                    //             if (paylist.length == objpay.length) {
-                    //                 this.setState({
-                    //                     payData: paylist,
-                    //                 })
-                    //             }
-                    //         }
+                    //获取消费记录
+                            for (let k = 0; k < objpay.length; k++) {
+                                let payItem = {
+                                    key: objpay[k].id,
+                                    indexNum: objpay[k].id,
+                                    maintainItem: (objpay[k].type == 0) ? '买卡' : '消费',
+                                    payMoney: objpay[k].amount,
+                                    payType: "支付宝",
+                                    carType: "911",
+                                    servicePeople: "小易,小爱",
+                                    serviceTime: objpay[k].payDate,
+                                    insuranceMoney:objpay[k].amount,
+                                    serviceState: "已完成",
+                                }
+                                 paylist.push(payItem);
+                                if (paylist.length == objpay.length) {
+                                    this.setState({
+                                        payData: paylist,
+                                    })
+                                }
+                            }
                 }
             }
         })
