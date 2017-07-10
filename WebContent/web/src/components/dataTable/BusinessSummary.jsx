@@ -11,6 +11,7 @@ class BusinessSummary extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            mode: 'paytoday',
             data: [{
                 key: 1,
                 index: 1,
@@ -46,20 +47,52 @@ class BusinessSummary extends React.Component {
         }
     }
     componentDidMount() {
+        this.getIncomeExpend(this.state.mode)
+    }
+
+    getIncomeExpend = (mode) => {
         $.ajax({
-            url: 'api/stat/today',
+            url: 'api/stat/' + mode,
             data: {
-                today:new Date(),
-                income: 1,
-                expend: 0
+
             },
             success: (result) => {
-                console.log(result);
-                console.log(result.data[0])
-            },
-
+                if (result.code == "0") {
+                    console.log(result)
+                }
+            }
         })
     }
+
+    handleModeChange = (e) => {
+        const mode = e.target.value;
+        this.setState({ mode: mode });
+        if (mode == 'today') {
+            this.getIncomeExpend(mode)
+        } else if (mode == 'thismonth') {
+            this.getIncomeExpend(mode)
+        } 
+    }
+
+    onTimeSelected = (dates, dateStrings) => {
+        console.log(dates, dateStrings)
+        localStorage.setItem('datastrings', dateStrings)
+        if (this.state.mode == 'payrange') {
+            $.ajax({
+                url: 'api/stat/payrange',
+                data: {
+                    startTime: new Date(dateStrings[0]),
+                    endTime: new Date(dateStrings[1]),
+                },
+                success: (result) => {
+                    if (result.code == "0") {
+                        console.log(result)
+                    }
+                }
+            })
+        }
+    }
+
     render() {
         return <div>
             <BreadcrumbCustom first="数据报表" second="营业汇总" />
@@ -67,20 +100,20 @@ class BusinessSummary extends React.Component {
                 <div>
                     <Row>
                         <Col span={12}>
-                            <Radio.Group onChange={this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
-                                <Radio.Button value="top">今日</Radio.Button>
-                                <Radio.Button value="left">本月</Radio.Button>
+                            <Radio.Group onChange={()=>this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
+                                <Radio.Button value="paytoday">今日</Radio.Button>
+                                <Radio.Button value="paymonth">本月</Radio.Button>
+                                <Radio.Button value="payrange">区间查找</Radio.Button>
                             </Radio.Group>
                         </Col>
-
                         {/*日期选择器*/}
                         <Col span={12}>
                             <div>
                                 <span>查找日期 : </span>
                                 <DatePicker.RangePicker
-                                    defaultValue={[moment(), moment()]}
                                     format={dateFormat}
                                     showToday={true}
+                                    onChange={(dates, dateStrings) => { this.onTimeSelected(dates, dateStrings) }}
                                 />
                             </div>
                         </Col>
