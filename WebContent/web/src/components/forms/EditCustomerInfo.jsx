@@ -5,6 +5,7 @@ import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal,
 import styled from "styled-components"
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
+import update from 'immutability-helper'
 import $ from 'jquery'
 const Option = Select.Option;
 const { MonthPicker, RangePicker } = DatePicker;
@@ -23,12 +24,12 @@ class CustomerInfo extends React.Component {
             id: '',
             option: [],
             visible: false,
-            carInfo:{
-                clientName:'',
-                brandName:'',
-                phone:'',
-                consumAmout:'',
-                tips:''
+            carInfo: {
+                clientName: '',
+                brandName: '',
+                phone: '',
+                consumAmout: '',
+                tips: ''
             }
         }
     }
@@ -57,6 +58,22 @@ class CustomerInfo extends React.Component {
                 dataType: 'json',
                 success: (res) => {
                     console.log(res);
+                    if (res.code == '0') {
+                        let data = res.data;
+
+                        let cars = data.cars;
+                        let brandName;
+                        for(let item of cars){
+                            if(item.licensePlate==value){
+                                brandName = item.type.brand.name;
+                            }
+                        }
+
+
+                        this.setState({
+                            carInfo: update(this.state.carInfo, { ['clientName']: { $set: data.name }, ['brandName']: { $set: brandName } })
+                        })
+                    }
                 }
             });
         }
@@ -105,7 +122,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8} >
                         客户姓名：
-                        <span style={{ width: '100px' }}>{this.carInfo.clientName}</span>
+                        <span style={{ width: '100px' }}>{this.state.carInfo.clientName}</span>
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
                     <Col span={8} >
@@ -116,11 +133,11 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8} >
                         品牌型号：
-                        <span style={{ width: '100px' }}>{this.carInfo.brandName}</span>
+                        <span style={{ width: '100px' }}>{this.state.carInfo.brandName}</span>
                     </Col>
                     <Col span={8}>
                         手机号码：
-                        <span style={{ width: '100px' }}>{this.carInfo.phone}</span>
+                        <span style={{ width: '100px' }}>{this.state.carInfo.phone}</span>
                     </Col>
                     <Col span={8}>
                         接车时间：
@@ -134,7 +151,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         历史消费：
-                        <span style={{ width: '100px' }}>￥{this.carInfo.consumAmout}</span>
+                        <span style={{ width: '100px' }}>￥{this.state.carInfo.consumAmout}</span>
                     </Col>
                     <Col span={8}>
                         接车人员：
