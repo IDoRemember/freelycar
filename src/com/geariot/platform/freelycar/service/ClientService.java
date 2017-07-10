@@ -245,7 +245,7 @@ public class ClientService {
 		int size = (int) Math.ceil(realSize/(double)number);
 		double amount = this.incomeOrderDao.countAmountByClientId(condition, clientId);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
-				net.sf.json.JSONObject.fromObject(list, JsonResFactory.dateConfig()));
+				net.sf.json.JSONArray.fromObject(list, JsonResFactory.dateConfig()));
 		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
 		obj.put(Constants.RESPONSE_AMOUNT_KEY, amount);
