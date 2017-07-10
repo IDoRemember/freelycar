@@ -11,7 +11,8 @@ class OrderManage extends React.Component {
         super(props)
         this.state = {
             option: [],
-            type: '美容'
+            type: '美容',
+            data:[]
         }
     }
     handleSelectChange = (value) => {
@@ -33,7 +34,15 @@ class OrderManage extends React.Component {
                 number:10
             },
             success:(res)=>{
-                console.log(res)
+                if(res.code=='0') {
+                    let dataArray = res.data
+                    for (let item of dataArray) {
+                        item.key = item.id
+                    }
+                   this.setState({
+                       data:dataArray
+                   }) 
+                }
             }
         })
     }
@@ -124,7 +133,7 @@ class OrderManage extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <OrderTable />
+                <OrderTable data={this.state.data}/>
             </div>
         )
     }

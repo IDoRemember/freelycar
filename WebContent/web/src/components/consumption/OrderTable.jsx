@@ -8,19 +8,19 @@ const columns = [
             return <div><Icon type="delete" style={{cursor:'pointer'}}/></div>
         }
     },
-    { title: '单据编号', dataIndex: 'receiptNumber', key: 'receiptNumber',render:(text,record,index)=>{
+    { title: '单据编号', dataIndex: 'id', key: 'id',render:(text,record,index)=>{
         return <div><Link to={`/app/consumption/ordermanage/${text}`}>{text}</Link></div>
     } },
-    { title: '单据时间', dataIndex: 'receiptTime', key: 'receiptTime' },
-    { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
-    { title: '客户名称', dataIndex: 'customerName', key: 'customerName' },
-    { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-    { title: '项目类别', dataIndex: 'itemClassification', key: 'itemClassification' },
-    { title: '车辆状态', dataIndex: 'carState', key: 'carState' },
-    { title: '停车位置', dataIndex: 'carPark', key: 'carPark' },
-    { title: '接车时间', dataIndex: 'receiveCarTime', key: 'receiveCarTime' },
-    { title: '交车时间', dataIndex: 'handCarTime', key: 'handCarTime' },
-    { title: '结算状态', dataIndex: 'closeState', key: 'closeState' },
+    { title: '单据时间', dataIndex: 'createDate', key: 'createDate' },
+    { title: '车牌号码', dataIndex: 'licensePlate', key: 'licensePlate' },
+    { title: '客户名称', dataIndex: 'clientName', key: 'clientName' },
+    { title: '手机号码', dataIndex: 'phone', key: 'phone' },
+    { title: '项目类别', dataIndex: 'programName', key: 'programName' },
+    { title: '车辆状态', dataIndex: 'state', key: 'state' },
+    { title: '停车位置', dataIndex: 'parkingLocation', key: 'parkingLocation' },
+    { title: '接车时间', dataIndex: 'pickTime', key: 'pickTime' },
+    { title: '交车时间', dataIndex: 'deliverTime', key: 'deliverTime' },
+    { title: '结算状态', dataIndex: 'payState', key: 'payState' },
     {
         title: '操作', dataIndex: 'operation', key: 'operation', render: (text, record, index) => {
             return <span>
@@ -82,7 +82,7 @@ class OrderTable extends React.Component {
                 <Row gutter={8}>
                    <div className="gutter-box">
                        <Card bordered>
-                           <Table columns={columns} dataSource={data} ></Table>
+                           <Table columns={columns} dataSource={this.props.data} ></Table>
                        </Card>
                    </div>
                 </Row>
