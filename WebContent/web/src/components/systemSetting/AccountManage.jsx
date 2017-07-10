@@ -227,8 +227,17 @@ class AccountManage extends React.Component {
             success: (result) => {
                 if (result.code == "0") {
                     if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
+                        let obj = {
+                            name: this.state.form.name.label,
+                            role: { id: this.state.form.role.key, roleName: this.state.form.role.label },
+                            account: this.state.form.account,
+                            password1: this.state.form.password,
+                            password: this.state.form.password,
+                            comment: this.state.form.comment,
+                            current: this.state.form.current
+                        }
                         this.setState({
-                            data: update(this.state.data, { [this.state.modifyIndex]: { $merge: this.state.form } })
+                            data: update(this.state.data, { [this.state.modifyIndex]: { $merge: obj } })
                         })
                         message.success('修改成功', 5);
                     } else {
@@ -272,10 +281,10 @@ class AccountManage extends React.Component {
             modifyIndex: index,
             form: {
                 id: record.id,
-                name: {key: record.staff.id+'', label: record.name  },
+                name: { key: record.staff.id + '', label: record.name },
                 account: record.account,
                 current: record.current,
-                role: { label: record.role.roleName, key: record.role.id+'' },
+                role: { label: record.role.roleName, key: record.role.id + '' },
                 comment: record.comment
             }
         })
@@ -306,14 +315,14 @@ class AccountManage extends React.Component {
                 dataIndex: 'role',
                 key: 'role',
                 render: (text, record, index) => {
-                    return <span>{text?text.roleName:''}</span>
+                    return <span>{text ? text.roleName : ''}</span>
                 }
             }, {
                 title: '状态',
                 dataIndex: 'current',
                 key: 'current',
-                render:(text,record,index)=>{
-                    return <span>{text?'启用':'禁用'}</span>
+                render: (text, record, index) => {
+                    return <span>{text ? '启用' : '禁用'}</span>
                 }
             }, {
                 title: '创建时间',
@@ -329,7 +338,7 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch style={{ marginRight: '10px' }} checked={record.current}   onChange={(value) => this.enableAccount(record.account, value, index)} />
+                        <Switch style={{ marginRight: '10px' }} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -358,12 +367,12 @@ class AccountManage extends React.Component {
                         <Row>
                             <Col span={9}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} disabled={this.state.modalstate=="modify"}/>
+                                    <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="姓名" value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }}  disabled={this.state.modalstate=="modify"} />
+                                    <Input addonBefore="姓名" value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={2}>
@@ -379,7 +388,7 @@ class AccountManage extends React.Component {
                                         账号：
                                     </Col>
                                     <Col span={8}>
-                                        <Input value={this.state.form.account} onChange={(e) => this.setFormData('account', e.target.value)} />
+                                        <Input value={this.state.form.account} onChange={(e) => this.setFormData('account', e.target.value)} disabled={this.state.modalstate == "modify"} />
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -394,6 +403,7 @@ class AccountManage extends React.Component {
                                             optionFilterProp="children"
                                             value={this.state.form.name}
                                             labelInValue
+                                            disabled={this.state.modalstate == "modify"}
                                             onChange={(value) => this.setFormData('name', value)}
                                             filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                             getPopupContainer={() => document.getElementById('provider-area1')}
@@ -415,7 +425,7 @@ class AccountManage extends React.Component {
                                         密码确认：
                                     </Col>
                                     <Col span={8}>
-                                        <Input onBlur={() =>  this.comparePassword } type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
+                                        <Input onBlur={() => this.comparePassword} type="password" value={this.state.form.password} onChange={(e) => this.setFormData('password', e.target.value)} />
                                         {(this.state.passwordError != '') && <span style={{ color: 'red' }}>{this.state.passwordError}</span>}
                                     </Col>
                                 </Row>

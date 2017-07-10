@@ -307,12 +307,12 @@ class ClientInfo extends React.Component {
                         <Input placeholder="请输入手机号" value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
                     </Col>
                 
-                    <Button type="primary" onClick={this.queryData}>查询</Button>
+                    <Button type="primary" onClick={()=>this.queryData}>查询</Button>
                 </div>
 
                 <div>
                     <Button ><Link to={'app/member/addclient'}><Icon type='plus'></Icon>新增客户</Link></Button>
-                    <Button style={{ marginLeft: '30px' }} onClick={this.showModal}>会员统计</Button>
+                    <Button style={{ marginLeft: '30px' }} onClick={()=>this.showModal}>会员统计</Button>
                 </div>
                 <Card style={{ marginTop: '20px' }}>
                     <div>
@@ -324,8 +324,8 @@ class ClientInfo extends React.Component {
                 <Modal
                     title="会员统计"
                     visible={this.state.visible}
-                    onOk={this.hideModal}
-                    onCancel={this.hideModal}
+                    onOk={()=>this.hideModal}
+                    onCancel={()=>this.hideModal}
                     okText="确认"
                     cancelText="取消"
                     width='25%'
