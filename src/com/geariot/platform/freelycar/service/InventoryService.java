@@ -68,7 +68,7 @@ public class InventoryService {
 	public String addType(InventoryType inventoryType) {
 		inventoryType.setCreateDate(new Date());
 		this.inventoryTypeDao.add(inventoryType);
-		JsonConfig config = new JsonConfig();
+		JsonConfig config = JsonResFactory.dateConfig();
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(inventoryType,config)).toString();
 	}
 
