@@ -207,7 +207,7 @@ class PayHistory extends React.Component {
                                     showToday={true}
                                     onChange={(dates, dateStrings) => { this.onTimeSelected(dates, dateStrings) }}
                                 />
-                            <Button type="primary"  onClick={this.queryTime}>查询</Button>
+                            <Button type="primary"  onClick={this.queryTime} style={{marginLeft:'10px'}}>查询</Button>
                             <Table columns={this.state.Columns} dataSource={this.state.payData} style={{ marginTop: '20px' }} bordered></Table>
                         </Card>
                     </TabPane>
