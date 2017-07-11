@@ -12,8 +12,8 @@ class BeautyOrder extends React.Component {
         super(props)
         this.state = {
             dataService: [{
-                key: 1,
-                index: 1,
+                key: -1,
+                index: -1,
                 name: '',
                 price: '0',
                 referWorkTime: '0',
@@ -32,8 +32,8 @@ class BeautyOrder extends React.Component {
             optionService: [],
 
             dataInventory: [{
-                key: 1,
-                index: 1,
+                key: -1,
+                index: -1,
                 name: '',
                 brandName: '',
                 price: '',
@@ -70,6 +70,20 @@ class BeautyOrder extends React.Component {
                 }
             }
         });
+
+        $.ajax({
+            url: 'api/inventory/name',
+            type: 'get',
+            dataType: 'json',
+            success: (res) => {
+                //console.log(res);
+                if (res.code == '0') {
+                    this.setState({
+                        optionInventory: res.data
+                    });
+                }
+            }
+        });
     }
 
 
@@ -86,6 +100,30 @@ class BeautyOrder extends React.Component {
                     obj.key = obj.id;
                     obj.index = index;
                     obj.singleSummation = obj.price * (this.state.dataService[index].number);
+
+
+                    // console.log(res);
+                    // //关联的配件
+                    // let invs = obj.inventoryInfos;
+                    // let dataInventory = this.state.dataInventory;
+                    // for (let item of invs) {
+                    //     let inv = {};
+                    //     inv.number = item.number;
+                    //     inv.key = item.id;
+                    //     inv.name = item.inventory.name;
+                    //     inv.brandName = item.inventory.brandName;
+                    //     inv.standard = item.inventory.standard;
+                    //     inv.property = item.inventory.property;
+                    //     inv.price = item.inventory.price;
+                    //     inv.amount = item.inventory.amount;
+                    //     dataInventory.splice(0, 0, inv);
+                    // }
+
+                    // this.setState({
+                    //     dataInventory: dataInventory
+                    // })
+
+
                     this.setState({
                         dataService: update(this.state.dataService, { [index]: { $set: obj } })
                     }, () => {
@@ -96,14 +134,49 @@ class BeautyOrder extends React.Component {
 
         });
     }
-
+    combineParts = () => {
+        let dataInventory = []
+        console.log(this.state.dataService)
+        for (let item of this.state.dataService) {
+            console.log(item.inventoryInfos)
+            dataInventory.push(item.inventoryInfos)
+        }
+        
+        this.setState({
+            dataInventory: dataInventory
+        })
+    }
+    //选择改变配件名称
+    changeInvSelect = (index, value) => {
+        $.ajax({
+            url: 'api/inventory/getbyid',
+            type: 'get',
+            data: { inventoryId: value },
+            dataType: 'json',
+            success: (res) => {
+                //console.log(res);
+                if (res.code == '0') {
+                    let obj = res.data;
+                    obj.key = obj.id;
+                    obj.index = index;
+                    // obj.singleSummation = obj.price * this.state.data[index].number;
+                    this.setState({
+                        data: update(this.state.data, { [index]: { $set: obj } })
+                    }, () => {
+                        // console.log(this.state.data);
+                    })
+                }
+            }
+        });
+    }
 
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo MemberButton={true} type={1} />
             <ServiceTable optionService={this.state.optionService} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
-            <PartsDetail />
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() =>  this.combineParts()}>确定</Button>
+            <PartsDetail optionInventory={this.state.optionInventory} dataInventory={this.state.dataInventory} changeInvSelect={this.changeInvSelect} />
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额
