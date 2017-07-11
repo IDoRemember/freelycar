@@ -24,7 +24,7 @@ class IndexPage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            checkedKeys:[],
+            checkedKeys: [],
             shadowStyle: false,
             tab: [
                 {
@@ -151,8 +151,11 @@ class IndexPage extends React.Component {
                     }]
                 }
             ],
-            nowTab: []
+            nowTab: localStorage.getItem('nowTab') ? JSON.parse(localStorage.getItem('nowTab')) : []
         }
+    }
+    componentWillUnmount = () => {
+        localStorage.setItem('nowTab', JSON.stringify(this.state.nowTab));
     }
     deleteTab = (index) => {
         let nowTab = this.state.nowTab
@@ -161,6 +164,7 @@ class IndexPage extends React.Component {
             nowTab: nowTab
         })
     }
+
     showIcon = (index) => {
         let nowTab = this.state.nowTab
         nowTab[index]['over'] = 'block'
@@ -168,6 +172,7 @@ class IndexPage extends React.Component {
             nowTab: nowTab
         })
     }
+
     hiddenIcon = (index) => {
         let nowTab = this.state.nowTab
         nowTab[index]['over'] = 'none'
@@ -201,12 +206,12 @@ class IndexPage extends React.Component {
         });
     }
     onSelect = (selectedKeys, info) => {
-        
+
         console.log('selected', selectedKeys, info);
     }
     onCheck = (checkedKeys, info) => {
         this.setState({
-            checkedKeys:checkedKeys
+            checkedKeys: checkedKeys
         })
         console.log('onCheck', checkedKeys, info, this.state.nowTab);
     }
@@ -249,7 +254,6 @@ class IndexPage extends React.Component {
                         >
                             {treenode}
                         </Tree>
-
                     </div>
                 </Modal>
             </div>
