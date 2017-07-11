@@ -237,10 +237,8 @@ public class ConsumOrderService {
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
-				net.sf.json.JSONObject.fromObject(order, config)).toString();
+				net.sf.json.JSONObject.fromObject(order, JsonResFactory.dateConfig())).toString();
 	}
 	
 }
