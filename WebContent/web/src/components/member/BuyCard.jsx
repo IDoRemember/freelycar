@@ -22,7 +22,7 @@ class BuyCard extends React.Component {
             female: 'female',
             value: 1,
             vaild: '',
-            type:'',
+            type: '',
             price: '',
             orderMaker: '',
             serviceId: '',
@@ -50,7 +50,7 @@ class BuyCard extends React.Component {
                 licensePlate: '',
             },
             carId: '',
-            payMethod:'',
+            payMethod: '',
         }
     }
 
@@ -138,7 +138,7 @@ class BuyCard extends React.Component {
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
-                    type:res.data[0].type,
+                    type: res.data[0].type,
                     serviceId: res.data[0].id,
                 })
             }
@@ -160,7 +160,7 @@ class BuyCard extends React.Component {
                     //select选择
                     type: {
                         id: this.state.carId,
-                        
+
                     },
                     licensePlate: clientInfos.licensePlate,
                 }]
@@ -169,7 +169,7 @@ class BuyCard extends React.Component {
                 console.log(res);
                 if (res.code == "0") {
                     this.setState({
-                        clientId:res.data.id
+                        clientId: res.data.id
                     });
                     console.log(this.state.clientId)
                 }
@@ -204,15 +204,15 @@ class BuyCard extends React.Component {
 
                     },
                     orderMaker: { id: this.state.orderMaker },
-                    payMethod:this.state.payMethod,
+                    payMethod: this.state.payMethod,
 
 
                 }
             })
         })
     }
-    getCarBrand=()=>{
-         $.ajax({
+    getCarBrand = () => {
+        $.ajax({
             type: 'GET',
             url: '/api/car/listbrand',
             datatype: 'json',
@@ -234,18 +234,18 @@ class BuyCard extends React.Component {
             clientInfo: update(this.state.clientInfo, { [key]: { $set: value } })
         })
     }
-    payhandleChange=(e)=>{
+    payhandleChange = (e) => {
         console.log(e);
         this.setState({
-            payMethod:e
+            payMethod: e
         })
     }
     handleChange = (e) => {
-        let typelist=this.state.option[e-1].types;
-        console.log(this.state.option[e-1].types)
+        let typelist = this.state.option[e - 1].types;
+        console.log(this.state.option[e - 1].types)
         this.setState({
-            carId:e,
-           
+            carId: e,
+
         })
     }
     handleOk = () => {
@@ -262,7 +262,7 @@ class BuyCard extends React.Component {
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
-          const brandOptions = this.state.option.map((item, index) => {
+        const brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
         const CardOptions = this.state.cardList.map((item, index) => {
@@ -275,7 +275,7 @@ class BuyCard extends React.Component {
         return (
             <div >
                 <BreadcrumbCustom first="会员管理" second="会员办理" />
-                {!this.props.params.id&&<Card title='客户信息'  >
+                {!this.props.params.id && <Card title='客户信息'  >
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}>客户姓名：
                             <Input style={{ width: '140px' }} value={this.state.clientInfo.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
@@ -298,13 +298,14 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8}  offset={4}>车辆品牌:
+                        <Col span={8} offset={4} id="car-brand">车辆品牌:
                             <Select showSearch
-                                style={{ width: '140px',marginLeft:'10px'}}
+                                style={{ width: '140px', marginLeft: '10px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
                                 onChange={this.handleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                getPopupContainer={() => document.getElementById('car-brand')}
                             >
                                 {brandOptions}
                             </Select>
@@ -319,7 +320,7 @@ class BuyCard extends React.Component {
 
                 </Card>}
 
-                {this.props.params.id&&<Regclient clientId={this.state.clientId} style={{ display: 'none' }}></Regclient>}
+                {this.props.params.id && <Regclient clientId={this.state.clientId} style={{ display: 'none' }}></Regclient>}
 
                 <Card title="会员信息" style={{ marginTop: '15px' }}  >
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -361,7 +362,7 @@ class BuyCard extends React.Component {
                                 </div>
                             </div>
                         </Col>
-                        <Col span={8} >
+                        <Col span={8} id='staff'>
                             <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
                                  <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                                     <Select showSearch
@@ -370,6 +371,7 @@ class BuyCard extends React.Component {
                                         optionFilterProp="children"
                                         onChange={this.StaffhandleChange}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                         getPopupContainer={() => document.getElementById('staff')}
                                     >
                                         {StaffOptions}
                                     </Select>
