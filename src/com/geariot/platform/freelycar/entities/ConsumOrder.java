@@ -39,6 +39,8 @@ public class ConsumOrder {
 	private Date finishTime;
 	private Date deliverTime;
 	private Date createDate;
+	private int lastMiles;
+	private int miles;
 	private Admin orderMaker;
 	public String getCarBrand() {
 		return carBrand;
@@ -76,8 +78,14 @@ public class ConsumOrder {
 	public Set<ConsumExtraInventoriesInfo> getInventoryInfos() {
 		return inventoryInfos;
 	}
+	public int getLastMiles() {
+		return lastMiles;
+	}
 	public String getLicensePlate() {
 		return licensePlate;
+	}
+	public int getMiles() {
+		return miles;
 	}
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="adminId", foreignKey=@ForeignKey(name="none"))
@@ -156,8 +164,14 @@ public class ConsumOrder {
 	public void setInventoryInfos(Set<ConsumExtraInventoriesInfo> inventoryInfos) {
 		this.inventoryInfos = inventoryInfos;
 	}
+	public void setLastMiles(int lastMiles) {
+		this.lastMiles = lastMiles;
+	}
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
+	}
+	public void setMiles(int miles) {
+		this.miles = miles;
 	}
 	public void setOrderMaker(Admin orderMaker) {
 		this.orderMaker = orderMaker;
