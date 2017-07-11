@@ -42,6 +42,7 @@ public class ConsumOrder {
 	private int lastMiles;
 	private int miles;
 	private Admin orderMaker;
+	private String comment;
 	public String getCarBrand() {
 		return carBrand;
 	}
@@ -56,6 +57,9 @@ public class ConsumOrder {
 	}
 	public String getClientName() {
 		return clientName;
+	}
+	public String getComment() {
+		return comment;
 	}
 	public Date getCreateDate() {
 		return createDate;
@@ -145,6 +149,9 @@ public class ConsumOrder {
 	}
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
