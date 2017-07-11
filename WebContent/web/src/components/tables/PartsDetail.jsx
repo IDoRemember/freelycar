@@ -15,8 +15,8 @@ class PartsDetail extends React.Component {
                 index: 1,
                 name: '',
                 brandName: '',
-                price: '20.00',
-                number: '20',
+                price: '',
+                number: '0',
                 amount: '0',
                 singleSummation: '0',
                 standard: '',
@@ -24,7 +24,7 @@ class PartsDetail extends React.Component {
                 key: '',
                 index: '',
                 total: '合计',
-                singleSummation: '20',
+                singleSummation: '0',
                 DeductionCardTime: '1'
             }],
             option: []
@@ -41,10 +41,6 @@ class PartsDetail extends React.Component {
                     this.setState({
                         option: res.data
                     });
-                    //为配件名称下拉第一个赋值
-                    this.setState({
-                        data: update(this.state.data, { [0]: { name: { $set: res.data[0].name } } })
-                    })
                 }
             }
 
@@ -64,6 +60,7 @@ class PartsDetail extends React.Component {
                     let obj = res.data;
                     obj.key = obj.id;
                     obj.index = index;
+                    obj.singleSummation = obj.price * this.state.data[index].number;
                     this.setState({
                         data: update(this.state.data, { [index]: { $set: obj } })
                     }, () => {
@@ -143,7 +140,6 @@ class PartsDetail extends React.Component {
                                 style={{ width: '100px' }}
                                 placeholder="输入配件名称"
                                 defaultValue={this.state.data[index].name}
-                                value={this.state.data[index].name}
                                 onSelect={(e) => this.handleInvChange(index, e)}
                             >
                                 {projectOptions}
