@@ -227,4 +227,12 @@ public class ConsumOrderService {
 		return andCondition;
 	}
 	
+	public String getOrderById(String consumOrderId) {
+		ConsumOrder order = this.orderDao.findById(consumOrderId);
+		if(order == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(order)).toString();
+	}
+	
 }

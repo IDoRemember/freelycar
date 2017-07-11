@@ -64,4 +64,10 @@ public class ConsumOrderController {
 		return this.orderService.query(condition);
 	}
 	
+	@RequestMapping(value="/queryid", method=RequestMethod.GET)
+	@PermissionRequire("order:query")
+	public String queryById(String consumOrderId){
+		return this.orderService.getOrderById(consumOrderId);
+	}
+	
 }
