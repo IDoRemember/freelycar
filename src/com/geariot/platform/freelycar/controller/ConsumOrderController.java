@@ -1,5 +1,7 @@
 package com.geariot.platform.freelycar.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -47,15 +49,14 @@ public class ConsumOrderController {
 	
 	@RequestMapping(value = "/finish", method = RequestMethod.POST)
 	@PermissionRequire("order:finish")
-	public String finish(String consumOrderId){
-		System.out.println(consumOrderId);
-		return this.orderService.finish(consumOrderId);
+	public String finish(String consumOrderId, Date date, String comment){
+		return this.orderService.finish(consumOrderId, date, comment);
 	}
 	
 	@RequestMapping(value = "/deliver", method = RequestMethod.POST)
 	@PermissionRequire("order:deliver")
-	public String deliverCar(String consumOrderId){
-		return this.orderService.deliverCar(consumOrderId);
+	public String deliverCar(String consumOrderId, Date date, String comment){
+		return this.orderService.deliverCar(consumOrderId, date, comment);
 	}
 	
 	@RequestMapping(value = "/query", method = RequestMethod.POST)
