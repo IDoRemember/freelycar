@@ -811,7 +811,9 @@
 		}
 		0,2,20
 	9.6 根据条件查询:
-		请求:{
+		请求:POST
+		server_url/order/query
+		参数:{
 			@RequestBody condition={ConsumOrder:{id:,licensePlate:,programId,payState:,clientId:}, startDate:, endDate:, dateType:0,1,2,3=单据,交车,接车,完工,page:1,number:10}
 		}
 		响应:{
@@ -821,6 +823,18 @@
 			"size":
 			"realSize":
 		}
+	9.7 根据id查询特定消费订单:
+		请求:GET
+		server_url/order/queryId
+		参数:{
+			consumOrderId=
+		}
+		响应:{
+			code:
+			msg:
+			data:
+		}
+
 
 10. 结算接口:/pay/
 	10.1 购买会员卡:
@@ -1034,6 +1048,7 @@
 				"msg":
 				"data":{ExpendOrder1, ExpendOrder2...}
 
+/*
 13. 单据Id生成接口:/idgen
 	13.1 生成id:
 		请求:GET
@@ -1044,6 +1059,7 @@
 		响应:{
 			"id":id
 		}
+*/
 
 14. 车辆相关接口:/car
 	14.1 车牌号查询:
