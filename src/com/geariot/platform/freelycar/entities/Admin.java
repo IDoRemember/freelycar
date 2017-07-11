@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Admin {
 	private int id;
@@ -40,9 +42,11 @@ public class Admin {
 	public String getName() {
 		return name;
 	}
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
+	@JsonIgnore
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
 	public Role getRole() {
