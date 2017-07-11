@@ -22,7 +22,7 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/addtype" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:addtype")
-	public String addType(@RequestBody InventoryType inventoryType){
+	public String addType(InventoryType inventoryType){
 		return this.inventoryService.addType(inventoryType);
 	}
 	
