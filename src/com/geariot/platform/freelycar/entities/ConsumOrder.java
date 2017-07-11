@@ -43,6 +43,8 @@ public class ConsumOrder {
 	private int miles;
 	private Admin orderMaker;
 	private String comment;
+	private String faultDesc;
+	private String repairAdvice;
 	public String getCarBrand() {
 		return carBrand;
 	}
@@ -66,6 +68,9 @@ public class ConsumOrder {
 	}
 	public Date getDeliverTime() {
 		return deliverTime;
+	}
+	public String getFaultDesc() {
+		return faultDesc;
 	}
 	public Date getFinishTime() {
 		return finishTime;
@@ -122,6 +127,9 @@ public class ConsumOrder {
 	public Set<ProjectInfo> getProjects() {
 		return projects;
 	}
+	public String getRepairAdvice() {
+		return repairAdvice;
+	}
 	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
@@ -158,6 +166,9 @@ public class ConsumOrder {
 	}
 	public void setDeliverTime(Date deliverTime) {
 		this.deliverTime = deliverTime;
+	}
+	public void setFaultDesc(String faultDesc) {
+		this.faultDesc = faultDesc;
 	}
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
@@ -206,6 +217,9 @@ public class ConsumOrder {
 	}
 	public void setProjects(Set<ProjectInfo> projects) {
 		this.projects = projects;
+	}
+	public void setRepairAdvice(String repairAdvice) {
+		this.repairAdvice = repairAdvice;
 	}
 	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;
