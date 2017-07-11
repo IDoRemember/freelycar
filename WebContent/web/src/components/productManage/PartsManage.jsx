@@ -50,7 +50,8 @@ class BeautyOrder extends React.Component {
             },
             form2: {
                 typeName: '',
-                comment: ''
+                comment: '',
+                name:''
             },
             brandItem: [],//配件品牌
             typeItem: [],
@@ -266,6 +267,45 @@ class BeautyOrder extends React.Component {
     queryData3 = () => {
         this.loadPjBrandData(1, 10, this.state.inventoryBrandName);
     }
+
+    showModal3 = () => {
+        this.setState({
+            visible3: true,
+        });
+    }
+    handleOk3 = (e) => {
+        this.setState({
+            visible3: false,
+        });
+
+        let form = this.state.form2;
+        var obj = {};
+        obj.typeName = form.name;
+        obj.comment = form.comment;
+        $.ajax({
+            type: 'post',
+            url: 'api/inventory/addbrand',
+            dataType: 'json',
+            data: obj,
+            success: (result) => {
+                if(result.code=='0'){
+                    let obj = result.data;
+                    obj.key = obj.id;
+                    this.setState({
+                        data: [...this.state.data, obj],
+                    });
+                }
+            }
+        });
+
+    }
+    handleCancel = (e) => {
+        this.setState({
+            visible: false,
+        });
+    }
+
+
 
     //获取数据的函数
     loadData = (page, number, name, typeId) => {
@@ -834,11 +874,36 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button>新增</Button>
+                                        <Button onClick={this.showModal3}>新增</Button>
                                     </Col>
                                     <Col span={8}>
                                         <Button>删除</Button>
                                     </Col>
+
+                                     {/*查询的模态框*/}
+                                    <Modal
+                                        title="新增品牌"
+                                        visible={this.state.visible3}
+                                        onOk={this.handleOk3}
+                                        onCancel={this.handleCancel3}
+                                        width='50%' >
+
+                                        <Form onSubmit={this.handleSubmit} className="login-form">
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="品牌名称"
+                                            >
+                                                <Input placeholder="" value={this.state.form2.name} onChange={(e) => this.onValueChange2('name', e.target.value)} />
+                                            </FormItem>
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="备注"
+                                            >
+                                                <Input placeholder="" value={this.state.form2.comment} onChange={(e) => this.onValueChange2('comment', e.target.value)} />
+                                            </FormItem>
+
+                                        </Form>
+                                    </Modal>
                                 </Row>
 
                                 <Row>
