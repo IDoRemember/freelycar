@@ -48,6 +48,10 @@ class BeautyOrder extends React.Component {
                 price: '',
                 comment: ''
             },
+            form2: {
+                typeName: '',
+                comment: ''
+            },
             brandItem: [],//配件品牌
             typeItem: [],
             inventoryName: '',//条件查询的配件名称
@@ -74,8 +78,8 @@ class BeautyOrder extends React.Component {
             url = '/api/inventory/delete';
             data = { inventoryIds: idArray };
         } else if (tabkey == 2) {
-            url = '/api/program/delete';
-            data = { programIds: idArray };
+            url = '/api/inventory/deltype';
+            data = { inventoryTypeIds: idArray };
         }
         $.ajax({
             url: url,
@@ -230,6 +234,34 @@ class BeautyOrder extends React.Component {
     queryData2 = () => {
         this.loadPjData(1, 10, this.state.inventoryName);
     }
+
+    handleOk2 = (e) => {
+        this.setState({
+            visible2: false,
+        });
+
+        let form = this.state.form2;
+        var obj = {};
+        obj.typeName = form.typeName;
+        obj.comment = form.comment;
+        $.ajax({
+            type: 'post',
+            url: 'api/inventory/addtype',
+            dataType: 'json',
+            data: obj,
+            success: (result) => {
+                if(result.code=='0'){
+                    let obj = result.data;
+                    obj.key = obj.id;
+                    this.setState({
+                        data: [...this.state.data, obj],
+                    });
+                }
+            }
+        });
+
+    }
+
     //tab3条件查询
     queryData3 = () => {
         this.loadPjBrandData(1, 10, this.state.inventoryBrandName);
@@ -441,6 +473,13 @@ class BeautyOrder extends React.Component {
             this.setState({
                 form: update(this.state.form, { [key]: { $set: value } })
             })
+    }
+
+    //为state的form2
+    onValueChange2 = (key, value) => {
+        this.setState({
+            form2: update(this.state.form2, { [key]: { $set: value } })
+        })
     }
 
 
@@ -735,7 +774,7 @@ class BeautyOrder extends React.Component {
                                         <Button onClick={this.showModal2}>新增配件</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button>删除配件</Button>
+                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除配件</Button>
                                     </Col>
 
 
@@ -743,7 +782,7 @@ class BeautyOrder extends React.Component {
                                     <Modal
                                         title="新增配件"
                                         visible={this.state.visible2}
-                                        onOk={this.handleOk}
+                                        onOk={this.handleOk2}
                                         onCancel={this.handleCancel2}
                                         width='50%' >
 
@@ -752,25 +791,13 @@ class BeautyOrder extends React.Component {
                                                 {...formItemLayout}
                                                 label="类别名称"
                                             >
-                                                <Input placeholder="" value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
-                                            </FormItem>
-                                            <FormItem
-                                                {...formItemLayout}
-                                                label="所属分类"
-                                            >
-                                                <Select
-                                                    style={{ width: '100%' }}
-                                                    onChange={(value) => this.onValueChange('type', value)}
-                                                    labelInValue
-                                                >
-                                                    {this.state.typeItem}
-                                                </Select>
+                                                <Input placeholder="" value={this.state.form2.typeName} onChange={(e) => this.onValueChange2('typeName', e.target.value)} />
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
                                                 label="备注"
                                             >
-                                                <Input placeholder="" value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
+                                                <Input placeholder="" value={this.state.form2.comment} onChange={(e) => this.onValueChange2('comment', e.target.value)} />
                                             </FormItem>
 
                                         </Form>
