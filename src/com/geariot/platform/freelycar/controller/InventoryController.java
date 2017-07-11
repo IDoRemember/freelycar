@@ -46,7 +46,7 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/addbrand" , method = RequestMethod.POST)
 	@PermissionRequire("inventory:addbrand")
-	public String addBrand(@RequestBody InventoryBrand inventoryBrand){
+	public String addBrand(InventoryBrand inventoryBrand){
 		return this.inventoryService.addBrand(inventoryBrand);
 	}
 	

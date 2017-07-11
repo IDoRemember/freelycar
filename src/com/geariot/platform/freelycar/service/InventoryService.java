@@ -131,7 +131,8 @@ public class InventoryService {
 	public String addBrand(InventoryBrand inventoryBrand) {
 		inventoryBrand.setCreateDate(new Date());
 		this.inventoryBrandDao.add(inventoryBrand);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		JsonConfig config = JsonResFactory.dateConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(inventoryBrand,config)).toString();
 	}
 
 	public String deleteBrand(Integer[] inventoryBrandIds) {
