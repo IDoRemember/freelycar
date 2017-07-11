@@ -34,14 +34,16 @@ class BeautyOrder extends React.Component {
             selectedRowKeys: [],
             loading: false,
             visible: false,
+            visible2: false,
+            visible3: false,
             data: [],
             tabkey: 1,
             form: {
                 name: '',
                 brandId: '',
-                brandName:'',
+                brandName: '',
                 typeId: '',
-                typeName:'',
+                typeName: '',
                 property: '',
                 price: '',
                 comment: ''
@@ -170,13 +172,8 @@ class BeautyOrder extends React.Component {
             }
         });
 
-
-
-
-
     }
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -218,6 +215,18 @@ class BeautyOrder extends React.Component {
     }
 
     //tab2条件查询
+    showModal2 = () => {
+        this.setState({
+            visible2: true,
+        });
+    }
+
+    handleCancel2 = (e) => {
+        this.setState({
+            visible2: false,
+        });
+    }
+
     queryData2 = () => {
         this.loadPjData(1, 10, this.state.inventoryName);
     }
@@ -421,11 +430,11 @@ class BeautyOrder extends React.Component {
     onValueChange = (key, value) => {
         if (key == 'type') {
             this.setState({
-                form: update(this.state.form, { ['typeId']: { $set: value.key },['typeName']: { $set: value.label } })
+                form: update(this.state.form, { ['typeId']: { $set: value.key }, ['typeName']: { $set: value.label } })
             })
         } else if (key == 'brand') {
             this.setState({
-                form: update(this.state.form, { ['brandId']: { $set: value.key } ,['brandName']: { $set: value.label } })
+                form: update(this.state.form, { ['brandId']: { $set: value.key }, ['brandName']: { $set: value.label } })
             })
         }
         else
@@ -723,11 +732,49 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button>新增配件</Button>
+                                        <Button onClick={this.showModal2}>新增配件</Button>
                                     </Col>
                                     <Col span={8}>
                                         <Button>删除配件</Button>
                                     </Col>
+
+
+                                    {/*查询的模态框*/}
+                                    <Modal
+                                        title="新增配件"
+                                        visible={this.state.visible2}
+                                        onOk={this.handleOk}
+                                        onCancel={this.handleCancel2}
+                                        width='50%' >
+
+                                        <Form onSubmit={this.handleSubmit} className="login-form">
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="类别名称"
+                                            >
+                                                <Input placeholder="" value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                            </FormItem>
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="所属分类"
+                                            >
+                                                <Select
+                                                    style={{ width: '100%' }}
+                                                    onChange={(value) => this.onValueChange('type', value)}
+                                                    labelInValue
+                                                >
+                                                    {this.state.typeItem}
+                                                </Select>
+                                            </FormItem>
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="备注"
+                                            >
+                                                <Input placeholder="" value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
+                                            </FormItem>
+
+                                        </Form>
+                                    </Modal>
                                 </Row>
 
                                 <Row>

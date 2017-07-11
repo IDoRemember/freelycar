@@ -1,8 +1,8 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Modal } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Modal, DatePicker } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
-
+import $ from 'jquery'
 
 class OrderTable extends React.Component {
     constructor(props) {
@@ -11,19 +11,35 @@ class OrderTable extends React.Component {
             option: [],
             finishModal: false,
             reverseModal: false,
+            consumOrderId: null,
             reverseCar: {
-                workman: '',
-                phone: '',
                 finishTime: '',
                 comment: ''
             },
             finishWork: {
-                workman: '',
-                phone: '',
                 finishTime: '',
                 comment: ''
             }
         }
+    }
+
+    componentDidMount() {
+        this.gitStaffList(1, 10)
+    }
+
+    gitStaffList = (page, number) => {
+        $.ajax({
+            url: '/api/staff/list',
+            data: {
+                page: page,
+                number: number
+            },
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+            }
+        })
     }
 
     openFinishModal = () => {
@@ -38,15 +54,40 @@ class OrderTable extends React.Component {
         });
     }
 
+    setTime = (key, value) => {
+        this.setState(update(this.state, { [key]: { finishTime: { $set: value._d } } }))
+        console.log(value._d, new Date())
+    }
+
     onValueChange = (key, value) => {
         this.setState({
             finishWork: update(this.state.finishWork, { [key]: { $set: value } })
         })
+        console.log(this.state.finishWork)
+    }
+
+    onInfoChange = (key, value) => {
+        this.setState({
+            reverseCar: update(this.state.reverseCar, { [key]: { $set: value } })
+        })
     }
 
     reverseCar = () => {
+
         this.setState({ reverseModal: false })
+        $.ajax({
+            url: '/api/order/deliver',
+            data: {
+                consumOrderId: this.state.consumOrderId
+            },
+            dataType: 'json',
+            type: 'get',
+            success: (res) => {
+                console.log(res);
+            }
+        })
     }
+
     render() {
         const columns = [
             {
@@ -87,7 +128,7 @@ class OrderTable extends React.Component {
                     let innertext = ''
                     if (record.payState == 0) {
                         switch (record.state) {
-                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true })}>完工</a>;
+                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrderId: record.id })}>完工</a>;
                                 break;
                             case 1: innertext = <span><Link to="" style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
                                 break;
@@ -128,26 +169,15 @@ class OrderTable extends React.Component {
                 >
                     <Row gutter={16} style={{ marginBottom: '10px' }}>
                         <Col span={8} style={{ textAlign: 'right' }}>
-                            客户姓名：
-                        </Col>
-                        <Col span={8} style={{ textAlign: 'right' }}>
-                            <Input value={this.state.finishWork.workman} onChange={(e) => this.onValueChange('workman', e.target.value)} />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '10px' }}>
-                        <Col span={8} style={{ textAlign: 'right' }}>
-                            手机号码：
-                            </Col>
-                        <Col span={8}>
-                            <Input value={this.state.finishWork.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '10px' }}>
-                        <Col span={8} style={{ textAlign: 'right' }}>
                             交车时间：
                             </Col>
                         <Col span={8}>
-                            <Input value={this.state.finishWork.finishTime} onChange={(e) => this.onValueChange('finishTime', e.target.value)} />
+                            <DatePicker
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                placeholder="选择时间"
+                                onChange={(value) => this.setTime('reverseCar', value)}
+                            />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -155,7 +185,7 @@ class OrderTable extends React.Component {
                             备注：
                             </Col>
                         <Col span={8}>
-                            <Input type="textarea" rows={3} value={this.state.finishWork.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
+                            <Input type="textarea" rows={3} value={this.state.reverseCar.comment} onChange={(e) => this.onInfoChange('comment', e.target.value)} />
                         </Col>
                     </Row>
                 </Modal>
@@ -167,26 +197,15 @@ class OrderTable extends React.Component {
                 >
                     <Row gutter={16} style={{ marginBottom: '10px' }}>
                         <Col span={8} style={{ textAlign: 'right' }}>
-                            施工人员：
-                        </Col>
-                        <Col span={8} style={{ textAlign: 'right' }}>
-                            <Input value={this.state.finishWork.workman} onChange={(e) => this.onValueChange('workman', e.target.value)} />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '10px' }}>
-                        <Col span={8} style={{ textAlign: 'right' }}>
-                            手机号码：
-                            </Col>
-                        <Col span={8}>
-                            <Input value={this.state.finishWork.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '10px' }}>
-                        <Col span={8} style={{ textAlign: 'right' }}>
                             完工时间：
                             </Col>
                         <Col span={8}>
-                            <Input value={this.state.finishWork.finishTime} onChange={(e) => this.onValueChange('finishTime', e.target.value)} />
+                            <DatePicker
+                                showTime
+                                format="YYYY-MM-DD HH:mm:ss"
+                                placeholder="选择时间"
+                                onChange={(value) => this.setTime('finishWork', value)}
+                            />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '10px' }}>

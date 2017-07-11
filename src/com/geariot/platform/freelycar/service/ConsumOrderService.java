@@ -30,6 +30,7 @@ import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
@@ -124,17 +125,19 @@ public class ConsumOrderService {
 		return obj.toString();
 	}
 
-	public String finish(String consumOrderId) {
+	public String finish(String consumOrderId, Date date, String comment) {
 		ConsumOrder order = this.orderDao.findById(consumOrderId);
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		log.debug("消费订单(id:" + order.getId() + ")施工完成");
+		log.debug("消费订单(id:" + order.getId() + ")施工完成, 完成时间:" + date + ", 备注:" + comment);
+		order.setFinishTime(date);
+		order.setComment(comment);
 		order.setState(1);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String deliverCar(String consumOrderId) {
+	public String deliverCar(String consumOrderId, Date date, String comment) {
 		ConsumOrder order = this.orderDao.findById(consumOrderId);
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
@@ -143,8 +146,10 @@ public class ConsumOrderService {
 			log.debug("消费订单(id:" + order.getId() + ")施工未完成，无法交车");
 			return JsonResFactory.buildOrg(RESCODE.WORK_NOT_FINISH).toString();
 		}
-		log.debug("消费订单(id:" + order.getId() + ")交车完成");
+		log.debug("消费订单(id:" + order.getId() + ")交车, 时间:" + date + ", 备注:" + comment);
 		order.setState(2);
+		order.setDeliverTime(date);
+		order.setComment(comment);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
@@ -232,7 +237,8 @@ public class ConsumOrderService {
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(order)).toString();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+				net.sf.json.JSONObject.fromObject(order, JsonResFactory.dateConfig())).toString();
 	}
 	
 }

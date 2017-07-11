@@ -39,7 +39,12 @@ public class ConsumOrder {
 	private Date finishTime;
 	private Date deliverTime;
 	private Date createDate;
+	private int lastMiles;
+	private int miles;
 	private Admin orderMaker;
+	private String comment;
+	private String faultDesc;
+	private String repairAdvice;
 	public String getCarBrand() {
 		return carBrand;
 	}
@@ -55,11 +60,17 @@ public class ConsumOrder {
 	public String getClientName() {
 		return clientName;
 	}
+	public String getComment() {
+		return comment;
+	}
 	public Date getCreateDate() {
 		return createDate;
 	}
 	public Date getDeliverTime() {
 		return deliverTime;
+	}
+	public String getFaultDesc() {
+		return faultDesc;
 	}
 	public Date getFinishTime() {
 		return finishTime;
@@ -76,8 +87,14 @@ public class ConsumOrder {
 	public Set<ConsumExtraInventoriesInfo> getInventoryInfos() {
 		return inventoryInfos;
 	}
+	public int getLastMiles() {
+		return lastMiles;
+	}
 	public String getLicensePlate() {
 		return licensePlate;
+	}
+	public int getMiles() {
+		return miles;
 	}
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="adminId", foreignKey=@ForeignKey(name="none"))
@@ -110,6 +127,9 @@ public class ConsumOrder {
 	public Set<ProjectInfo> getProjects() {
 		return projects;
 	}
+	public String getRepairAdvice() {
+		return repairAdvice;
+	}
 	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinTable(name="consumOrders_staff", 
 				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
@@ -138,11 +158,17 @@ public class ConsumOrder {
 	public void setClientName(String clientName) {
 		this.clientName = clientName;
 	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
 	public void setDeliverTime(Date deliverTime) {
 		this.deliverTime = deliverTime;
+	}
+	public void setFaultDesc(String faultDesc) {
+		this.faultDesc = faultDesc;
 	}
 	public void setFinishTime(Date finishTime) {
 		this.finishTime = finishTime;
@@ -156,8 +182,14 @@ public class ConsumOrder {
 	public void setInventoryInfos(Set<ConsumExtraInventoriesInfo> inventoryInfos) {
 		this.inventoryInfos = inventoryInfos;
 	}
+	public void setLastMiles(int lastMiles) {
+		this.lastMiles = lastMiles;
+	}
 	public void setLicensePlate(String licensePlate) {
 		this.licensePlate = licensePlate;
+	}
+	public void setMiles(int miles) {
+		this.miles = miles;
 	}
 	public void setOrderMaker(Admin orderMaker) {
 		this.orderMaker = orderMaker;
@@ -185,6 +217,9 @@ public class ConsumOrder {
 	}
 	public void setProjects(Set<ProjectInfo> projects) {
 		this.projects = projects;
+	}
+	public void setRepairAdvice(String repairAdvice) {
+		this.repairAdvice = repairAdvice;
 	}
 	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;

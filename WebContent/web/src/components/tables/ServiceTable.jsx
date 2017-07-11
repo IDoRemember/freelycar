@@ -9,81 +9,25 @@ class ServiceTable extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [{
-                key: 1,
-                index: 1,
-                name: '',
-                price: '0',
-                referWorkTime: '0',
-                pricePerUnit: '0',
-                memberCard: '',
-                number: '',
-                singleSummation: '',
-                DeductionCardTime: '1',
-            }, {
-                key: '',
-                index: '',
-                total: '合计',
-                singleSummation: '20',
-                DeductionCardTime: '1',
-            }],
-            option: []
         }
     }
     componentDidMount() {
-        $.ajax({
-            url: 'api/project/name',
-            type: 'get',
-            dataType: 'json',
-            success: (res) => {
-                console.log(res);
-                if (res.code == '0') {
-                    this.setState({
-                        option: res.data
-                    });
-                }
-            }
-
-
-        });
     }
 
     numberChange = (index, value) => {
         console.log(index, value);
         let price = this.state.data[index].price;
         this.setState({
-            data: update(this.state.data, { [index]: { singleSummation : {$set: price*value} } })
+            data: update(this.state.data, { [index]: { singleSummation: { $set: price * value } } })
         }, () => {
             console.log(this.state.data);
         })
     }
 
     handleChange = (index, value) => {
-        $.ajax({
-            url: 'api/project/getbyid',
-            type: 'get',
-            data: { projectId: value },
-            dataType: 'json',
-            success: (res) => {
-                //console.log(res);
-                if (res.code == '0') {
-                    let obj = res.data;
-                    obj.key = obj.id;
-                    obj.index = index;
-                    obj.singleSummation = obj.price;
-                    this.setState({
-                        data: update(this.state.data, { [index]: { $set: obj } })
-                    }, () => {
-                        console.log(this.state.data);
-                    })
-                }
-            }
-
-
-        });
+        this.props.changeProjectSelect(index,value);
     }
 
-    
 
     addOneROw = () => {
         let oneRow = {
@@ -107,13 +51,13 @@ class ServiceTable extends React.Component {
         this.setState({ data: dataSource });
     }
     render() {
-        const projectOptions = this.state.option.map((item, index) => {
+        const projectOptions = this.props.optionService.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
             <Button type="primary" style={{ marginBottom: '10px' }}>增加服务项目</Button>
-            <Table className="accountTable" dataSource={this.state.data} bordered>
+            <Table className="accountTable" dataSource={this.props.dataService} bordered>
                 <Col
                     title="序号"
                     dataIndex="index"
@@ -132,14 +76,16 @@ class ServiceTable extends React.Component {
                     key="name"
                     dataIndex="name"
                     render={(text, record, index) => {
-                        return <Select showSearch
-                            style={{ width: '100px' }}
-                            placeholder="输入项目名称"
-                            defaultValue={this.state.data[index].name}
-                            onSelect={(e) => this.handleChange(index, e)}
-                        >
-                            {projectOptions}
-                        </Select>
+                        if (index + 1 < this.props.dataService.length) {
+                            return <Select showSearch
+                                style={{ width: '100px' }}
+                                placeholder="输入项目名称"
+                                defaultValue={this.props.dataService[index].name}
+                                onSelect={(e) => this.handleChange(index, e)}
+                            >
+                                {projectOptions}
+                            </Select>
+                        }
                     }}
                 />
                 <Col
@@ -151,7 +97,9 @@ class ServiceTable extends React.Component {
                     title="数量"
                     key="number"
                     render={(text, record, index) => {
-                        return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
+                        if (index + 1 < this.props.dataService.length) {
+                            return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
+                        }
                     }}
                 />
                 <Col
@@ -173,10 +121,8 @@ class ServiceTable extends React.Component {
                     title="会员卡号"
                     key="memberCard"
                     dataIndex="memberCard"
-                    render={(text) => {
-                        if (!text) {
-                            return <span> </span>
-                        } else {
+                    render={(text, record, index) => {
+                        if (index + 1 < this.props.dataService.length) {
                             return <Select showSearch
                                 style={{ width: '100px' }}
                                 placeholder="输入项目名称"
