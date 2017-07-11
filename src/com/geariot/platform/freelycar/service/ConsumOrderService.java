@@ -30,6 +30,7 @@ import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
@@ -232,7 +233,10 @@ public class ConsumOrderService {
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(order)).toString();
+		JsonConfig config = new JsonConfig();
+		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor("yyyy-MM-dd"));
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+				net.sf.json.JSONObject.fromObject(order, config)).toString();
 	}
 	
 }
