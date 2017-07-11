@@ -38,6 +38,7 @@ import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 @Service
@@ -67,7 +68,8 @@ public class InventoryService {
 	public String addType(InventoryType inventoryType) {
 		inventoryType.setCreateDate(new Date());
 		this.inventoryTypeDao.add(inventoryType);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		JsonConfig config = new JsonConfig();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(inventoryType,config)).toString();
 	}
 
 	public String deleteType(Integer[] inventoryTypeIds) {
