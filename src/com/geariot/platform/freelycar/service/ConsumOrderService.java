@@ -27,7 +27,6 @@ import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Provider;
-import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -226,6 +225,14 @@ public class ConsumOrderService {
 		String andCondition = sb.toString();
 		log.debug("消费订单查询语句生成条件：" + andCondition);
 		return andCondition;
+	}
+	
+	public String getOrderById(String consumOrderId) {
+		ConsumOrder order = this.orderDao.findById(consumOrderId);
+		if(order == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(order)).toString();
 	}
 	
 }

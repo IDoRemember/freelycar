@@ -184,7 +184,7 @@ class AddClient extends React.Component {
             <div>
                 <BreadcrumbCustom first="会员管理" second="新增客户" />
 
-                <Card title='客户信息' style={{ marginTop: '15px' }}>
+                <Card title='客户信息' style={{ marginTop: '15px',marginBottom:'15px' }}>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}>姓名:
                             <Input style={{ width: '150px', marginLeft: '22px' }} value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
@@ -208,8 +208,10 @@ class AddClient extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
-                        <Col span={8} offset={4}><span style={{ marginRight: '15px' }}>生日：</span>
-                            <DatePicker onChange={this.birthdayonChange} />
+                        <Col span={8} offset={4}  id="birthday"><span style={{ marginRight: '15px' }}>生日：</span>
+                            <DatePicker onChange={this.birthdayonChange} 
+                              getCalendarContainer={() => document.getElementById('birthday')}
+                            />
                         </Col>
                         <Col span={8}>身份证号:
                             <Input style={{ width: '150px', marginLeft: '12px' }} value={this.state.form.idNumber} onChange={(e) => this.onValueChange('idNumber', e.target.value)} />
@@ -229,13 +231,14 @@ class AddClient extends React.Component {
                         <Col span={8} offset={4}>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                         </Col>
-                        <Col span={8}>车辆品牌:
+                        <Col span={8}  id="car-brand">车辆品牌:
                             <Select showSearch
                                 style={{ width: '140px', marginLeft: '35px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
                                 onChange={this.handleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                 getPopupContainer={() => document.getElementById('car-brand')}
                             >
                                 {brandOptions}
                             </Select>
@@ -250,25 +253,30 @@ class AddClient extends React.Component {
                                 </RadioGroup>
                             </div>
                         </Col>
-                        <Col span={8}>保险开始日期:
-                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }} />
+                        <Col span={8} id='startTime'>保险开始日期:
+                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }} 
+                            getCalendarContainer={() => document.getElementById('startTime')}
+                            />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>车辆型号:
+                        <Col span={8} offset={4}  id="provider-area">车辆型号:
                             <Select showSearch
                                 style={{ width: '150px', marginLeft: '10px' }}
                                 placeholder="请选择车辆型号"
                                 optionFilterProp="children"
                                 onChange={this.TypehandleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                 getPopupContainer={() => document.getElementById('provider-area')}
                             >
                                 {typeOptions}
                             </Select>
                         </Col>
 
-                        <Col span={8}>保险截止日期:
-                            <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px' }} />
+                        <Col span={8} id='endTime'>保险截止日期:
+                            <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px' }} 
+                             getCalendarContainer={() => document.getElementById('endTime')}
+                           />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -283,9 +291,11 @@ class AddClient extends React.Component {
                         <Col span={8} offset={4}>里程数：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
                         </Col>
-                        <Col span={8}>上牌时间:
-                            <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px' }} />
-
+                        <Col span={8} id="licTime">上牌时间:
+                            <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px' }} 
+                             getCalendarContainer={() => document.getElementById('licTime')}
+                            />
+                            
                         </Col>
 
                     </Row>

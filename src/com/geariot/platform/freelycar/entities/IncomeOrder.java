@@ -17,6 +17,8 @@ public class IncomeOrder {
 	private int payMethod;
 	private String programName;
 	private String staffNames;
+	private boolean member; 
+	
 	public float getAmount() {
 		return amount;
 	}
@@ -66,5 +68,11 @@ public class IncomeOrder {
 	}
 	public void setStaffNames(String staffNames) {
 		this.staffNames = staffNames;
+	}
+	public boolean isMember() {
+		return member;
+	}
+	public void setMember(boolean member) {
+		this.member = member;
 	}
 }
