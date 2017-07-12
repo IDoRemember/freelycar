@@ -159,7 +159,7 @@ class OrderManage extends React.Component {
                         <Select style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
                                 <Option value="0">挂单中</Option>
                                 <Option value=" 1">已结算</Option>
-                            </Select>
+                        </Select>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: "10px" }} id="area">
@@ -170,7 +170,7 @@ class OrderManage extends React.Component {
                                 <Option value="1">接车时间</Option>
                                 <Option value="2">交车时间</Option>
                                 <Option value="3">完工时间</Option>
-                            </Select>
+                        </Select>
                         </Col>
                         <Col span={8} id="timepicker">
                             <div>

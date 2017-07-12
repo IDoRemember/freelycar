@@ -100,30 +100,6 @@ class BeautyOrder extends React.Component {
                     obj.key = obj.id;
                     obj.index = index;
                     obj.singleSummation = obj.price * (this.state.dataService[index].number);
-
-
-                    // console.log(res);
-                    // //关联的配件
-                    // let invs = obj.inventoryInfos;
-                    // let dataInventory = this.state.dataInventory;
-                    // for (let item of invs) {
-                    //     let inv = {};
-                    //     inv.number = item.number;
-                    //     inv.key = item.id;
-                    //     inv.name = item.inventory.name;
-                    //     inv.brandName = item.inventory.brandName;
-                    //     inv.standard = item.inventory.standard;
-                    //     inv.property = item.inventory.property;
-                    //     inv.price = item.inventory.price;
-                    //     inv.amount = item.inventory.amount;
-                    //     dataInventory.splice(0, 0, inv);
-                    // }
-
-                    // this.setState({
-                    //     dataInventory: dataInventory
-                    // })
-
-
                     this.setState({
                         dataService: update(this.state.dataService, { [index]: { $set: obj } })
                     }, () => {

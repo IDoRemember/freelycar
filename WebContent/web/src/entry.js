@@ -76,7 +76,6 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"productSearch"} component={ProductSearch} />
             <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={SellProduct} />
-            <Route path={"productReceipts"} component={ProductReceipts} />
             <Route path={"providerManage"} component={ProviderManage} />
             <Route path={"productReceipts/:receiptId"} component={ReceiptDetail}/>
         </Route>

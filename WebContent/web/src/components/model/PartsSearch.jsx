@@ -51,7 +51,7 @@ class PartsSearch extends React.Component {
             loading: true,
             selectedRows: [],
             typeList: [],
-            value: 1,
+            type: '',
             visible: this.props.view,
             partName: '',
             pagination: {},
@@ -142,16 +142,13 @@ class PartsSearch extends React.Component {
     }
     setSearchName = (value) => {
         this.setState({
-            partName: value,
-            type: -1
+            partName: value
         })
     }
     setSearchType = (value) => {
         this.setState({
-            type: value,
-            partName: null
+            type: value
         })
-        this.getList(null, value, 1, 10)
     }
     onChange = (e) => {
         this.setState({
@@ -191,40 +188,30 @@ class PartsSearch extends React.Component {
         >
             <Row gutter={24} style={{ marginBottom: '10px' }}>
                 <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
-                    <RadioGroup onChange={this.onChange} value={this.state.value} >
-                        <Radio style={radioStyle} value={1}>
-                            按配件名称进行搜索
-                            {this.state.value == 1 && <Search
-                                placeholder="按配件名称进行搜索"
-                                style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
-                                onSearch={value => this.getList(value, -1, 1, 10)}
-                                onChange={e => this.setSearchName(e.target.value)}
-                                value={this.state.partName}
-                            />}
-                        </Radio>
-                        <Radio style={radioStyle} value={2}>
-                            按配件类别进行搜索
-                            {this.state.value == 2 && <Select
-                                showSearch
-                                style={{ width: '200px', marginLeft: '20px' }}
-                                placeholder="选择配件类别"
-                                optionFilterProp="children"
-                                optionLabelProp="children"
-                                labelInValue
-                                onChange={(value) => this.setSearchType(value)}
-                                getPopupContainer={() => document.getElementById('provider-area')}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                            >
-                                {partTypeOptions}
-                            </Select>}
-                        </Radio>
-                    </RadioGroup>
-
-
+                    按配件名称进行搜索
+                    <Input
+                        style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
+                        onSearch={value => this.getList(value, -1, 1, 10)}
+                        onChange={e => this.setSearchName(e.target.value)}
+                        value={this.state.partName}
+                    />
                 </Col>
-                {/*<Col span={12} style={{ verticalAlign: 'middle' }}>
-                    <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
-                </Col>*/}
+                <Col span={12} style={{ verticalAlign: 'middle' }}>
+                    按配件类别进行搜索
+                        <Select
+                        showSearch
+                        style={{ width: '120px', marginLeft: '20px' }}
+                        optionFilterProp="children"
+                        optionLabelProp="children"
+                        labelInValue
+                        onChange={(value) => this.setSearchType(value)}
+                        getPopupContainer={() => document.getElementById('provider-area')}
+                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                    >
+                        {partTypeOptions}
+                    </Select>
+                </Col>
+                <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
             </Row>
             <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>

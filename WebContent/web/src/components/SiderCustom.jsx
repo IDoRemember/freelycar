@@ -99,7 +99,6 @@ class SiderCustom extends Component {
                         <Menu.Item key="/app/buySellStock/productSearch"><Link to={'/app/buySellStock/productSearch'}>库存查询</Link></Menu.Item>
                         <Menu.Item key="/app/buySellStock/buyProduct"><Link to={'/app/buySellStock/buyProduct'}>入库</Link></Menu.Item>
                         <Menu.Item key="/app/buySellStock/sellProduct"><Link to={'/app/buySellStock/sellProduct'}>出库</Link></Menu.Item>
-                        <Menu.Item key="/app/buySellStock/productReceipts"><Link to={'/app/buySellStock/productReceipts'}>库存单据</Link></Menu.Item>
                         <Menu.Item key="/app/buySellStock/providerManage"><Link to={'/app/buySellStock/providerManage'}>供应商管理</Link></Menu.Item>
                     </SubMenu>
                     <SubMenu

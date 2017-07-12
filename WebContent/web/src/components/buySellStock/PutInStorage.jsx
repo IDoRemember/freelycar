@@ -1,8 +1,9 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message} from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message } from 'antd';
 import { Link } from 'react-router';
 import AjaxGet from '../../utils/ajaxGet'
+import ProductReceipts from './ProductReceipts.jsx'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'
 import update from 'immutability-helper'
@@ -68,7 +69,7 @@ class PutInStorage extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ data: dataSource });
     }
-    saveData = () => {
+    saveData = (totalPrice,totalAmount) => {
         if (this.state.data.length < 1) {
             this.setState({
                 error: '请新增配件入库'
@@ -99,6 +100,9 @@ class PutInStorage extends React.Component {
                 data: JSON.stringify({
                     type: 0,
                     state: 0,
+                    totalAmount:totalAmount,
+                    totalPrice:totalPrice,
+                    
                     inventoryInfos: instockArray
                 }),
                 traditional: true,
@@ -123,7 +127,7 @@ class PutInStorage extends React.Component {
         }
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
-            <Card>
+            <Card style={{ marginBottom: '10px' }}>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
                     <Col span={8} >
                         单据时间：
@@ -230,7 +234,7 @@ class PutInStorage extends React.Component {
                     />
                 </Table>
                 <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
-                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
+                    <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
                         <Col span={12} >合计金额：<span>{totalPrice}</span>
                         </Col>
                         <Col span={12} >
@@ -238,17 +242,19 @@ class PutInStorage extends React.Component {
                         <span>{this.state.data.length}</span>
                         </Col>
                     </Row>
-                    <Row gutter={24} style={{ margin: "40px 0", fontSize: '18px' }}>
+                    <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
                         <Col span={12} >
                         </Col>
                         <Col span={12} style={{ textAlign: 'right' }}>
                             <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
-                            <Button onClick={() => this.saveData()} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
+                            <Button onClick={() => this.saveData(totalPrice,this.state.data.length)} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                             <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                         </Col>
                     </Row>
                 </div>
+
             </Card>
+            <ProductReceipts></ProductReceipts>
         </div>
     }
 }

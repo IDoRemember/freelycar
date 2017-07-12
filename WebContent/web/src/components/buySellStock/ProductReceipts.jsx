@@ -194,7 +194,6 @@ class PutInStorage extends React.Component {
         })
 
         return <div>
-            <BreadcrumbCustom first="进销存管理" second="库存单据" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
                     <Col span={8} >单据编号：<Input
