@@ -24,9 +24,20 @@ class CustomerInfo extends React.Component {
             visible: false
         }
     }
-    componentDidMount() {
-        
-    }
+    // componentDidMount() {
+    //     $.ajax({
+    //         url: 'api/order/queryId',
+    //         dataType: 'json',
+    //         type: 'GET',
+    //         contentType: 'application/json;charset=utf-8',
+    //         data:{
+    //             consumOrderId:this.props.params.id
+    //         },
+    //         success:(res)=>{
+    //             console.log(res)
+    //         }
+    //     })
+    // }
     handleChange = (value) => {
         console.log(`selected ${value}`)
     }
@@ -56,87 +67,72 @@ class CustomerInfo extends React.Component {
         return <div className="gutter-example" >
             <div style={{ marginBottom: '15px' }}>
               
-                <div style={{ width: '30%', display: 'inline-block' }}>单据日期：
-                    <span style={{ width: '150px' }}>2017-05-24 15:22:20</span>
+                <div style={{ width: '30%', display: 'inline-block' }}>单据时间：
+                    <span style={{ width: '150px' }}>{this.props.form.createDate}</span>
                 </div>
                 <div style={{ width: '30%', display: 'inline-block' }}>开单人：
-                    <span style={{ width: '150px' }}>小易爱车</span>
+                    <span style={{ width: '150px' }}>{this.props.form.orderMaker}</span>
                 </div>
             </div>
             <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
                 <Row gutter={16} style={{ marginBottom: "10px" }}>
-                    <Col span={6} >车牌号码：
-                        <span style={{ width: '100px' }}>苏A12345</span>
+                    <Col span={8} >车牌号码：
+                        <span style={{ width: '100px' }}>{this.props.form.licensePlate}</span>
                     </Col>
-                    <Col span={6} >
+                    <Col span={8} >
                         客户姓名：
-                        <span style={{ width: '100px' }}>张蕾西</span>
+                        <span style={{ width: '100px' }}>{this.props.form.name}</span>
                     </Col>
-                    <Col span={6} >
+                    <Col span={8} >
                         停车位置：
-                        <span style={{ width: '100px' }}>B276</span>
+                        <span style={{ width: '100px' }}>{this.props.form.parkingLocation}</span>
                     </Col>
-                    <Col span={6}>
-                        会员卡号：
-                        <span style={{ width: '100px' }}>12343443</span>
-                    </Col>
+                    
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6} >
+                    <Col span={8} >
                         车辆型号：
-                        <span style={{ width: '100px' }}>奥迪A6</span>
+                        <span style={{ width: '100px' }}>{this.props.form.brand}-{this.props.form.carType}</span>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         手机号码：
-                        <span style={{ width: '100px' }}>18362981113</span>
+                        <span style={{ width: '100px' }}>{this.props.form.phone}</span>
                     </Col>
-                    <Col span={6}>
+                    <Col span={8}>
                         接车时间：
-                        <span style={{ width: '100px' }}>2017-05-24</span>
+                        <span style={{ width: '100px' }}>{this.props.form.deliverTime}</span>
                     </Col>
-                    <Col span={6}>
-                        会员卡种：
-                        <span style={{ width: '100px' }}>铂金卡</span>
-                    </Col>
+                    
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6}>
+                    <Col span={8}>
                         上次里程：
-                        <span style={{ width: '100px' }}>8888km</span>
+                        <span style={{ width: '100px' }}>{this.props.form.lastMiles}km</span>
                     </Col>
-                    <Col span={6}>
+                    {/*<Col span={8}>
                         历史消费：
                         <span style={{ width: '100px' }}>￥19999</span>
-                    </Col>
-                    <Col span={6}>
+                    </Col>*/}
+                    <Col span={8}>
                         施工人员：
-                          <span style={{ width: '100px' }}>阿俊、阿康</span>
+                          <span style={{ width: '100px' }}>{this.props.form.staffs}</span>
                     </Col>
-                    <Col span={6}>
-                        剩余次数:
-                        <span style={{ width: '100px' }}>100</span>
-                    </Col>
+                    
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
-                    <Col span={6}>
+                    <Col span={8}>
                         本次里程：
-                        <span style={{ width: '100px' }}>9000km</span>
+                        <span style={{ width: '100px' }}>{this.props.form.Miles}km</span>
                     </Col>
-                    <Col span={6}>
+                    {/*<Col span={8}>
                         实时积分：
                         <span style={{ width: '100px' }}>5000</span>
-                    </Col>
-                    <Col span={6} >
+                    </Col>*/}
+                    <Col span={8} >
                         交车时间：
-                        <span style={{ width: '100px' }}>2017-06-20</span>
+                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
                     </Col>
-                    <Col span={6}>
-                        提示信息：
-                        <span style={{ width: '100px' }} >
-                            共消费2次,  最近消费2017-05-24 15:22
-                        </span>
-                    </Col>
-
+                   
                 </Row>
             </Card>
         </div>

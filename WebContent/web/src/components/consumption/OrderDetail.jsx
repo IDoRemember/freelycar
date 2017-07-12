@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx';
 import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import $ from 'jquery';
 import { Row, Col, Card, Button, Input, Steps, Table, Icon } from 'antd';
 const Step = Steps.Step;
 const serviceColumns = [{
@@ -84,7 +85,29 @@ class BeautyDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            current: 1,
+            current:2,
+            programId:0,
+            faultDesc:'',
+            repairAdvice:'',
+            form: {
+                orderMaker: '',
+                licensePlate: '',
+                carType: '',
+                brand: '',
+                lastMiles: '',
+                Miles: '',
+
+                name: '',
+                phone: '',
+              //  drivingLicense: '',
+
+                parkingLocation: '',
+                createDate:'',
+                deliverTime: '',
+                finishTime: '',
+                staffs: ''
+            },
+
             serviceData: [{
                 key: 1,
                 index: 1,
@@ -118,6 +141,72 @@ class BeautyDetail extends React.Component {
 
         }
     }
+    componentDidMount() {
+        console.log("hahhahahha ")
+        $.ajax({
+            url: 'api/order/queryid',
+            dataType: 'json',
+            type: 'GET',
+            contentType: 'application/json;charset=utf-8',
+            data: {
+                consumOrderId: this.props.params.orderId
+            },
+            success: (res) => {
+                let obj = res.data;
+                let stateType=obj.state;
+                let programId= obj.programId;
+                let faultDesc=obj.faultDesc;
+                let repairAdvice=obj.repairAdvice;
+                let createDate=obj.createDate;
+                let staffList = obj.staffs;
+                let orderMaker = obj.orderMaker.name;
+                let licensePlate = obj.licensePlate;
+                let carType = obj.carType;
+                let brand = obj.carBrand;
+                let lastMiles = obj.lastMiles;
+                let Miles = obj.miles;
+
+                let name = obj.clientName;
+                let phone = obj.phone;
+
+                let parkingLocation = obj.parkingLocation;
+                let deliverTime = obj.deliverTime;
+                let finishTime = obj.finishTime;
+                let staffString = ''
+                for (let i = 0; i < staffList.length; i++) {
+                    staffString += staffList[i].name+' 、 ';
+                    
+                }
+                    staffString=staffString.substring(0,staffString.length-2)
+                console.log(res);
+
+                this.setState({
+                    current:stateType,
+                    programId:programId,
+                    repairAdvice:repairAdvice,
+                    faultDesc:faultDesc,
+                    form: {
+                        orderMaker: orderMaker,
+                        licensePlate: licensePlate,
+                        carType: carType,
+                        brand: brand,
+                        lastMiles: lastMiles,
+                        Miles: Miles,
+                        createDate:createDate,
+                        name: name,
+                        phone: phone,
+                        // drivingLicense: '',
+
+                        parkingLocation: parkingLocation,
+                        deliverTime: deliverTime,
+                        finishTime: finishTime,
+                        staffs: staffString,
+                    },
+
+                })
+            }
+        })
+    }
 
     render() {
         return <div>
@@ -129,13 +218,14 @@ class BeautyDetail extends React.Component {
                     <Step title="交车" />
                 </Steps>
             </Card>
-            <CustomerInfo />
-            <Card style={{marginBottom:'10px'}}>
+            <CustomerInfo form={this.state.form}/>
+           {this.state.programId==2 && <Card style={{ marginBottom: '10px' }}>
                 <h3>故障描述：</h3>
-                <p>你这不行</p>
+                <p>{this.state.faultDesc}</p>
                 <h3>维修建议：</h3>
-                <p>你这不行</p>
+                <p>{this.state.repairAdvice}</p>
             </Card>
+           }
             <Card style={{ marginBottom: '10px' }}>
                 <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
                 <Table className="accountTable" columns={serviceColumns} dataSource={this.state.serviceData} bordered />
