@@ -51,7 +51,7 @@ class BeautyOrder extends React.Component {
             form2: {
                 typeName: '',
                 comment: '',
-                name:''
+                name: ''
             },
             brandItem: [],//配件品牌
             typeItem: [],
@@ -81,6 +81,9 @@ class BeautyOrder extends React.Component {
         } else if (tabkey == 2) {
             url = '/api/inventory/deltype';
             data = { inventoryTypeIds: idArray };
+        } else if (tabkey == 3) {
+            url = '/api/inventory/delbrand';
+            data = { inventoryBrandIds: idArray };
         }
         $.ajax({
             url: url,
@@ -251,7 +254,7 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             data: obj,
             success: (result) => {
-                if(result.code=='0'){
+                if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
                     this.setState({
@@ -280,7 +283,7 @@ class BeautyOrder extends React.Component {
 
         let form = this.state.form2;
         var obj = {};
-        obj.typeName = form.name;
+        obj.name = form.name;
         obj.comment = form.comment;
         $.ajax({
             type: 'post',
@@ -288,7 +291,7 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             data: obj,
             success: (result) => {
-                if(result.code=='0'){
+                if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
                     this.setState({
@@ -877,10 +880,10 @@ class BeautyOrder extends React.Component {
                                         <Button onClick={this.showModal3}>新增</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button>删除</Button>
+                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除</Button>
                                     </Col>
 
-                                     {/*查询的模态框*/}
+                                    {/*查询的模态框*/}
                                     <Modal
                                         title="新增品牌"
                                         visible={this.state.visible3}
