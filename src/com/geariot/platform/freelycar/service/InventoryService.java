@@ -1,6 +1,7 @@
 package com.geariot.platform.freelycar.service;
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -320,9 +321,38 @@ public class InventoryService {
 		return obj.toString();
 	}
 
-	public String queryOrder(String inventoryOrderId, String adminId, String type, int page, int number) {
+	public String queryOrder(String inventoryOrderId, String adminId, String type, 
+			Date startTime, Date endTime, int page, int number) {
+		log.debug("查询库存订单，输入参数：(id:" + inventoryOrderId + "; adminId:" + adminId + "; type:" + 
+			type + "; startTime:" + startTime + "; endTime:" + endTime + ")");
 		int from = (page - 1) * number;
-		String andCondition = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId, type).createStatement();
+		String temp = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId, type).createStatement();
+		String andCondition = null;
+		if(startTime != null || endTime != null){
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			StringBuilder sb = new StringBuilder(temp.trim());
+			if(sb.length() != 0){
+				sb.append(" and ");
+			}
+			if(startTime != null){
+				sb.append("createDate > '");
+				sb.append(sdf.format(startTime));
+				sb.append("'");
+			}
+			if(sb.length() != 0){
+				sb.append(" and ");
+			}
+			if(endTime != null){
+				sb.append("createDate < '");
+				sb.append(sdf.format(endTime));
+				sb.append("'");
+			}
+			andCondition = sb.toString();
+		}
+		else {
+			andCondition = temp;
+		}
+		log.debug("生产的and条件语句:" + andCondition);
 		List<InventoryOrder> list = this.inventoryOrderDao.query(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
