@@ -92,16 +92,18 @@ public class ConsumOrderService {
 		this.orderDao.save(consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
 		//创建出库订单并保存
-		InventoryOrder order = new InventoryOrder();
-		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
-		order.setCreateDate(new Date());
-		order.setInventoryInfos(list);
-		order.setState(0);
-		order.setTotalAmount(totalAmount);
-		order.setTotalPrice(totalPrice);
-		order.setType(consumOrder.getProgramId());
-		inventoryOrderDao.save(order);
-		log.debug("出库订单(id:" + order.getId() + ")保存成功");
+		if(list != null && !list.isEmpty()){
+			InventoryOrder order = new InventoryOrder();
+			order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
+			order.setCreateDate(new Date());
+			order.setInventoryInfos(list);
+			order.setState(0);
+			order.setTotalAmount(totalAmount);
+			order.setTotalPrice(totalPrice);
+			order.setType(consumOrder.getProgramId());
+			inventoryOrderDao.save(order);
+			log.debug("出库订单(id:" + order.getId() + ")保存成功");
+		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
