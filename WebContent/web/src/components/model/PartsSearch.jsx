@@ -130,6 +130,7 @@ class PartsSearch extends React.Component {
             },
         })
     }
+
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
@@ -140,16 +141,19 @@ class PartsSearch extends React.Component {
         if (this.state.type)
             this.getList(this.state.partName, this.state.type, pagination.current, 10)
     }
+
     setSearchName = (value) => {
         this.setState({
             partName: value
         })
     }
+
     setSearchType = (value) => {
         this.setState({
             type: value
         })
     }
+
     onChange = (e) => {
         this.setState({
             value: e.target.value,
@@ -167,7 +171,7 @@ class PartsSearch extends React.Component {
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
         }, partTypeOptions = this.state.typeList.map((item, index) => {
-            return <Option key={item.id} value={item.id + ''}>{item.typeName}</Option>
+            return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
         }), radioStyle = {
             display: 'block',
             height: '30px',
@@ -186,32 +190,31 @@ class PartsSearch extends React.Component {
             </Button>
             ]}
         >
-            <Row gutter={24} style={{ marginBottom: '10px' }}>
-                <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
+            <Row gutter={24} style={{ marginBottom: '10px' }} id="parts-area">
+                <Col span={10} style={{ verticalAlign: 'middle' }}>
                     按配件名称进行搜索
                     <Input
                         style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
-                        onSearch={value => this.getList(value, -1, 1, 10)}
                         onChange={e => this.setSearchName(e.target.value)}
                         value={this.state.partName}
                     />
                 </Col>
-                <Col span={12} style={{ verticalAlign: 'middle' }}>
+                <Col span={10} style={{ verticalAlign: 'middle' }} >
                     按配件类别进行搜索
-                        <Select
+                    <Select
                         showSearch
                         style={{ width: '120px', marginLeft: '20px' }}
                         optionFilterProp="children"
-                        optionLabelProp="children"
-                        labelInValue
+                        getPopupContainer={() => document.getElementById('parts-area')}
                         onChange={(value) => this.setSearchType(value)}
-                        getPopupContainer={() => document.getElementById('provider-area')}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {partTypeOptions}
                     </Select>
                 </Col>
-                <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
+                <Col span={2}>
+                    <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
+                </Col>
             </Row>
             <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>
