@@ -90,7 +90,7 @@ class PartsSearch extends React.Component {
             url: 'api/inventory/list',
             data: {
                 name: name,
-                typeId: typeId ? typeId.key : null,
+                typeId: typeId ,
                 page: page,
                 number: pageSize
             },
@@ -159,6 +159,7 @@ class PartsSearch extends React.Component {
             value: e.target.value,
         });
     }
+
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
