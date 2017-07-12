@@ -7,7 +7,7 @@ public class InventoryAndQueryCreator extends AndQueryCreator {
 	protected void init() {
 		conditionKeys = new ArrayList<ConBean>();
 		conditionKeys.add(new ConBean("name", "like"));
-    	conditionKeys.add(new ConBean("type.id", "=="));
+    	conditionKeys.add(new ConBean("typeId", "=="));
 	}
 	
 	public InventoryAndQueryCreator(String name, String typeId){
