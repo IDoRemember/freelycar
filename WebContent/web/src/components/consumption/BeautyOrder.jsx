@@ -11,6 +11,7 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            parts:[],
             dataService: [{
                 key: -1,
                 index: -1,
@@ -117,7 +118,7 @@ class BeautyOrder extends React.Component {
             console.log(item.inventoryInfos)
             dataInventory.push(item.inventoryInfos)
         }
-        
+
         this.setState({
             dataInventory: dataInventory
         })
@@ -146,13 +147,18 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    getPartsDetail = (Parts) => {
+        this.setState({
+            parts: Parts
+        })
+    }
+
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo MemberButton={true} type={1} />
-            <ServiceTable optionService={this.state.optionService} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() =>  this.combineParts()}>确定</Button>
-            <PartsDetail optionInventory={this.state.optionInventory} dataInventory={this.state.dataInventory} changeInvSelect={this.changeInvSelect} />
+            <ServiceTable getPartsDetail={this.getPartsDetail} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
+            <PartsDetail optionInventory={this.state.optionInventory} programId={1} dataInventory={this.state.dataInventory} changeInvSelect={this.changeInvSelect} />
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额

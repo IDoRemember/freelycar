@@ -1,17 +1,33 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button, InputNumber } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button, InputNumber, Icon } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import update from 'immutability-helper'
 import $ from 'jquery'
+import ProgramSearch from '../model/ProgramSearch.jsx'
 const Option = Select.Option;
+const total = {
+    key: '',
+    index: '',
+    total: '合计',
+    singleSummation: '0'
+}
 class ServiceTable extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            view: false,
+            data: []
         }
     }
+
     componentDidMount() {
+    }
+
+    handleCancel = () => {
+        this.setState({
+            view: false
+        })
     }
 
     numberChange = (index, value) => {
@@ -25,9 +41,43 @@ class ServiceTable extends React.Component {
     }
 
     handleChange = (index, value) => {
-        this.props.changeProjectSelect(index,value);
+        this.props.changeProjectSelect(index, value);
     }
 
+    handleOk = (data) => {
+        console.log(data)
+        let datalist = this.state.data,
+            parts = []
+        if (datalist.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let same = 0;
+                for (let j = 0; j < datalist.length; j++) {
+                    if (data[i].partId == datalist[j].partId) {
+                        same++
+                    }
+                }
+                if (same == 0) {
+                    datalist.push(data[i])
+                    datalist.push(total)
+                }
+            }
+        } else {
+            datalist.push(...data)
+            datalist.push(total)
+        }
+        for (let item of datalist) {
+            // parts.push(item.inventoryInfos)
+            if(item.inventoryInfos) {
+                 parts.push(...item.inventoryInfos)
+            }
+        }
+        console.log(parts)
+        this.props.getPartsDetail(parts)
+        this.setState({
+            view: false,
+            data: datalist
+        })
+    }
 
     addOneROw = () => {
         let oneRow = {
@@ -56,8 +106,11 @@ class ServiceTable extends React.Component {
         })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <Button type="primary" style={{ marginBottom: '10px' }}>增加服务项目</Button>
-            <Table className="accountTable" dataSource={this.props.dataService} bordered>
+            <div style={{ fontSize: '16px', marginBottom: '10px' }}> 服务项目&nbsp;&nbsp;&nbsp;
+            <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }} onClick={() => { this.setState({ view: true }) }}><Icon type="plus-circle-o" />&nbsp;增加</div>
+            </div>
+            <ProgramSearch programId={this.props.programId} view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></ProgramSearch>
+            <Table className="accountTable" dataSource={this.state.data} bordered>
                 <Col
                     title="序号"
                     dataIndex="index"
@@ -76,17 +129,18 @@ class ServiceTable extends React.Component {
                     key="name"
                     dataIndex="name"
                     render={(text, record, index) => {
-                        if (index + 1 < this.props.dataService.length) {
+                        if ((index + 1) < this.state.data.length) {
                             return <Select showSearch
                                 style={{ width: '100px' }}
+                                defaultValue={text}
                                 placeholder="输入项目名称"
-                                defaultValue={this.props.dataService[index].name}
                                 onSelect={(e) => this.handleChange(index, e)}
                             >
                                 {projectOptions}
                             </Select>
                         }
-                    }}
+                    }
+                    }
                 />
                 <Col
                     title="项目价格"
@@ -95,23 +149,23 @@ class ServiceTable extends React.Component {
                 />
                 <Col
                     title="数量"
-                    key="number"
+                    key="amount"
                     render={(text, record, index) => {
-                        if (index + 1 < this.props.dataService.length) {
+                        if ((index + 1) < this.state.data.length) {
                             return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
                         }
                     }}
                 />
-                <Col
+                {this.props.programId == '2' && <Col
                     title="参考工时"
                     key="referWorkTime"
                     dataIndex="referWorkTime"
-                />
-                <Col
+                />}
+                {this.props.programId == '2' && <Col
                     title="工时单价"
-                    key="pricePerUnit"
-                    dataIndex="pricePerUnit"
-                />
+                    key="price"
+                    dataIndex="price"
+                />}
                 <Col
                     title="单项小计"
                     key="singleSummation"
@@ -122,7 +176,7 @@ class ServiceTable extends React.Component {
                     key="memberCard"
                     dataIndex="memberCard"
                     render={(text, record, index) => {
-                        if (index + 1 < this.props.dataService.length) {
+                        if ((index + 1) < this.state.data.length) {
                             return <Select showSearch
                                 style={{ width: '100px' }}
                                 placeholder="输入项目名称"
@@ -146,9 +200,6 @@ class ServiceTable extends React.Component {
                     render={(text, record, index) => {
                         if (!record.total) {
                             return <span>
-                                <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                                    <a href="javascript:void(0);">新增</a>
-                                </span>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
                                     <a href="javascript:void(0);">删除</a>
                                 </Popconfirm>

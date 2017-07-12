@@ -12,36 +12,29 @@ const columns = [{
         return <span>{index + 1}</span>
     }
 }, {
-    title: '配件编号',
-    dataIndex: 'partId',
-    key: 'partId'
+    title: '项目名称',
+    dataIndex: 'name',
+    key: 'name'
 }, {
-    title: '配件名称',
-    dataIndex: 'partName',
-    key: 'partName'
-}, {
-    title: '配件品牌',
-    dataIndex: 'brand',
-    key: 'brand'
-}, {
-    title: '配件类别',
-    dataIndex: 'category',
-    key: 'category',
+    title: '项目类别',
+    dataIndex: 'program',
+    key: 'program',
     render: (text, record, index) => {
-        return <span>{text.typeName}</span>
+        return <span>{text.name}</span>
     }
+
 }, {
-    title: '规格属性',
-    dataIndex: 'attribute',
-    key: 'attribute'
-}, {
-    title: '配件价格',
+    title: '项目价格',
     dataIndex: 'price',
     key: 'price'
 }, {
-    title: '可用库存',
-    dataIndex: 'inventory',
-    key: 'inventory'
+    title: '参考工时',
+    dataIndex: 'referWorkTime',
+    key: 'referWorkTime'
+}, {
+    title: '工时单价',
+    dataIndex: 'pricePerUnit',
+    key: 'pricePerUnit'
 }, {
     title: '备注',
     dataIndex: 'comment',
@@ -74,7 +67,7 @@ class ProgramSearch extends React.Component {
     }
     getTypeList = (page, pageSize) => {
         $.ajax({
-            url: 'api/inventory/querytype',
+            url: 'api/program/list',
             data: {
                 page: page,
                 number: pageSize
@@ -90,10 +83,10 @@ class ProgramSearch extends React.Component {
     }
     getList = (name, typeId, page, pageSize) => {
         $.ajax({
-            url: 'api/inventory/list',
+            url: 'api/project/query',
             data: {
                 name: name,
-                typeId: typeId ? typeId.key : null,
+                programId: this.props.programId,
                 page: page,
                 number: pageSize
             },
@@ -102,28 +95,14 @@ class ProgramSearch extends React.Component {
                     this.setState({ loading: false })
                     console.log(result)
                     let datalist = []
-                    for (let i = 0; i < result.data.length; i++) {
-                        let dataitem = {
-                            key: result.data[i].id,
-                            partId: result.data[i].id,
-                            partName: result.data[i].name,
-                            attribute: result.data[i].property,
-                            standard: result.data[i].standard,
-                            price: result.data[i].price,
-                            brand: result.data[i].brand.name,
-                            inventory: result.data[i].amount,
-                            category: result.data[i].type,
-                            comment: result.data[i].comment,
-                            provider: result.data[i].provider
-                        }
-                        datalist.push(dataitem)
-                        if (datalist.length == result.data.length) {
-                            this.setState({
-                                data: datalist,
-                                pagination: { total: result.realSize },
-                            })
-                        }
+                    for (let item of result.data) {
+                        item.key = item.id
+                        datalist.push(item)
                     }
+                    this.setState({
+                        data: datalist,
+                        pagination: { total: result.realSize },
+                    })
                 } else if (result.code == '2') {
                     this.setState({
                         data: [],
@@ -140,19 +119,19 @@ class ProgramSearch extends React.Component {
         this.setState({
             pagination: pager
         })
-        if(this.state.type)
-        this.getList(this.state.partName,this.state.type,pagination.current, 10)
+        if (this.state.type)
+            this.getList(this.state.partName, this.state.type, pagination.current, 10)
     }
     setSearchName = (value) => {
         this.setState({
             partName: value,
-            type:-1
+            type: -1
         })
     }
     setSearchType = (value) => {
         this.setState({
             type: value,
-            partName:null
+            partName: null
         })
         this.getList(null, value, 1, 10)
     }
@@ -180,9 +159,9 @@ class ProgramSearch extends React.Component {
             lineHeight: '30px',
         };
         return <Modal
-            visible={this.state.visible}
+            visible={this.props.view}
             width={800}
-            title="配件查询"
+            title="项目查询"
             onOk={() => this.props.handleOk(this.state.selectedRows)}
             onCancel={() => this.props.handleCancel()}
             footer={[
@@ -198,7 +177,7 @@ class ProgramSearch extends React.Component {
                         <Radio style={radioStyle} value={1}>
                             按项目名称进行搜索
                             {this.state.value == 1 && <Search
-                                placeholder="按配件名称进行搜索"
+                                placeholder="按项目名称进行搜索"
                                 style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
                                 onSearch={value => this.getList(value, -1, 1, 10)}
                                 onChange={e => this.setSearchName(e.target.value)}
@@ -210,7 +189,7 @@ class ProgramSearch extends React.Component {
                             {this.state.value == 2 && <Select
                                 showSearch
                                 style={{ width: '200px', marginLeft: '20px' }}
-                                placeholder="选择配件类别"
+                                placeholder="选择项目类别"
                                 optionFilterProp="children"
                                 optionLabelProp="children"
                                 labelInValue

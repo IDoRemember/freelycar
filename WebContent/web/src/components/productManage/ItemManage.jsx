@@ -64,10 +64,8 @@ class BeautyOrder extends React.Component {
 
     //初始化数据
     componentDidMount() {
-
         this.loadData(1, 10);
         this.loadProgram();
-
     }
 
     //条件查询

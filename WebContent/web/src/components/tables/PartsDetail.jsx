@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, InputNumber } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, InputNumber,Icon } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import EditableCell from './EditableCell.jsx'
@@ -65,7 +65,8 @@ class PartsDetail extends React.Component {
         })
         console.log(this.props.dataInventory)
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
-            <div style={{ fontSize: '18px', marginBottom: '10px' }}>配件明细</div>
+            <div style={{ fontSize: '16px', marginBottom: '10px' }}>   服务项目&nbsp;&nbsp;&nbsp;
+            <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }}><Icon type="plus-circle-o" />&nbsp;增加</div></div>
             <Table className="accountTable" dataSource={this.props.dataInventory} bordered>
                 <Col
                     title="序号"
