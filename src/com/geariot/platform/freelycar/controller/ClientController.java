@@ -20,8 +20,6 @@ import com.geariot.platform.freelycar.shiro.PermissionRequire;
 @RequestMapping(value = "/client")
 public class ClientController {
 
-	private static final Logger log = LogManager.getLogger(ClientController.class);
-	
 	@Autowired
 	private ClientService clientService;
 	
