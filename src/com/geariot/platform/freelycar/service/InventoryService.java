@@ -320,9 +320,9 @@ public class InventoryService {
 		return obj.toString();
 	}
 
-	public String queryOrder(String inventoryOrderId, String adminId, int page, int number) {
+	public String queryOrder(String inventoryOrderId, String adminId, String type, int page, int number) {
 		int from = (page - 1) * number;
-		String andCondition = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId).createStatement();
+		String andCondition = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId, type).createStatement();
 		List<InventoryOrder> list = this.inventoryOrderDao.query(andCondition, from, number);
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();

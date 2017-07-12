@@ -8,9 +8,10 @@ public class InventoryOrderAndQueryCreator extends AndQueryCreator {
 		conditionKeys = new ArrayList<ConBean>();
 		conditionKeys.add(new ConBean("id", "like"));
     	conditionKeys.add(new ConBean("orderMaker.id", "=="));
+    	conditionKeys.add(new ConBean("type", "=="));
 	}
 	
-	public InventoryOrderAndQueryCreator(String... con){
-		super(con);
+	public InventoryOrderAndQueryCreator(String id, String makerId, String type){
+		super(new String[]{id, makerId, type});
 	}
 }
