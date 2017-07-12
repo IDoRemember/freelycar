@@ -118,8 +118,8 @@ public class InventoryController {
 	
 	@RequestMapping(value = "/query" , method = RequestMethod.GET)
 	@PermissionRequire("inventory:query")
-	public String query(String inventoryOrderId , String adminId, int page, int number){
-		return this.inventoryService.queryOrder(inventoryOrderId, adminId, page, number);
+	public String query(String inventoryOrderId , String adminId, String type, int page, int number){
+		return this.inventoryService.queryOrder(inventoryOrderId, adminId, type, page, number);
 	}
 	
 	@RequestMapping(value = "/orderdetail" , method = RequestMethod.GET)

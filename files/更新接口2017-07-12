@@ -644,6 +644,7 @@
 		参数:{
 			inventoryOriderId=
 			adminId=
+			type=
 			page=1
 			number=10
 
@@ -793,6 +794,8 @@
 		server_url/order/finish
 		参数:{
 			consumOrderId=
+			date=
+			comment=
 		}
 		响应:{
 			"code":
@@ -804,6 +807,8 @@
 		server_url/order/deliver
 		参数:{
 			consumOrderId=
+			date=
+			comment=
 		}
 		响应:{
 			"code":
