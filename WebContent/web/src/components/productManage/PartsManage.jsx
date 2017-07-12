@@ -302,9 +302,9 @@ class BeautyOrder extends React.Component {
         });
 
     }
-    handleCancel = (e) => {
+    handleCancel3 = (e) => {
         this.setState({
-            visible: false,
+            visible3: false,
         });
     }
 

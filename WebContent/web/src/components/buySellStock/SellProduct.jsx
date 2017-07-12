@@ -12,25 +12,64 @@ class PutInStorage extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: [{
-                key: 1,
-                index: 1,
-                partNumber: 'p2342232',
-                name: '玻璃水',
-                category: '美容保养',
-                specification: '通用',
-                singleSummation: '20',
-                number: '1111'
-            }],
+            data: [],
+            inventoryOrderId:'',//搜索单据编号
             option: []
         }
     }
     componentDidMount() {
-        
-        AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-            this.setState({ option: res.data })
-        })
+
+        this.loadData(1, 10);
     }
+
+    //条件查询
+    conditionQuery = () => {
+        console.log('ddd');
+        this.loadData(1, 10, this.state.inventoryOrderId);
+    }
+
+    loadData = (page, number, inventoryOrderId, adminId, type) => {
+        var obj = {};
+        obj.inventoryOrderId = inventoryOrderId;
+        obj.adminId = adminId;
+        obj.type = type;
+        obj.page = page;
+        obj.number = number;
+        $.ajax({
+            url: 'api/inventory/query',
+            type: 'get',
+            data: obj,
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    let data = [];
+                    let arr = res.data;
+                    for(let item of arr){
+                        let invArr = item.inventoryInfos;//配件数组
+                        for(let i of invArr){
+                            i.key = i.id;
+                            i.docNmuber = item.id;//单据编号
+                            i.docType = item.type;//单据类型
+                            i.createDate = item.createDate;
+                            data.push(i);
+                        }
+                    }   
+
+                    this.setState({
+                        data: data
+                    });
+                }
+            }
+
+        });
+    }
+
+    handleChange = (e) => {
+        console.log(e);
+    }
+
+
     render() {
         const projectOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
@@ -39,27 +78,44 @@ class PutInStorage extends React.Component {
             <BreadcrumbCustom first="进销存管理" second="出库" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                   
-                    <Col span={8} >
+
+                    <Col span={2} >
+                        单据编号：
+                    </Col>
+                    <Col span={5} >
+                        <Input size="large" value={this.state.inventoryOrderId} onChange={(e)=>{this.setState({ inventoryOrderId: e.target.value})}}/>
+                    </Col>
+                    <Col span={2} >
                         单据时间：
+                    </Col>
+                    <Col span={5} >
                         <DatePicker.RangePicker
                             defaultValue={[moment(), moment()]}
                             format={dateFormat}
                             showToday={true}
                         />
                     </Col>
-                    <Col span={8} >
-                        <div style={{ height: '28px',lineHeight:'28px' }}>
-                            制单人：
-                            <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
-                        </div>
+                    <Col span={2} >
+                        制单人：
                     </Col>
+                    <Col span={5} >
+                        <Select defaultValue="lucy" style={{ width: 120 }} onChange={() => this.handleChange}>
+                            <Option value="jack">Jack</Option>
+                            <Option value="lucy">Lucy</Option>
+                            <Option value="disabled" disabled>Disabled</Option>
+                            <Option value="Yiminghe">yiminghe</Option>
+                        </Select>
+                    </Col>
+                    <Button type="primary" onClick={()=>{this.conditionQuery}}>查询</Button>
                 </Row>
                 <Table dataSource={this.state.data} bordered>
                     <Col
                         title="序号"
                         dataIndex="index"
                         key="index"
+                        render={(text, record, index) => {
+                            return <span>{index + 1}</span>
+                        }}
                     />
                     <Col
                         title="配件名称"
@@ -68,8 +124,8 @@ class PutInStorage extends React.Component {
                     />
                     <Col
                         title="配件类别"
-                        key="category"
-                        dataIndex="category"
+                        key="typeName"
+                        dataIndex="typeName"
                     />
                     <Col
                         title="单据编号"
@@ -83,23 +139,26 @@ class PutInStorage extends React.Component {
                     />
                     <Col
                         title="单价"
-                        key="univalent"
-                        dataIndex="univalent"
+                        key="price"
+                        dataIndex="price"
                     />
                     <Col
                         title="出库数量"
-                        key="number"
-                        dataIndex="number"
+                        key="amount"
+                        dataIndex="amount"
                     />
                     <Col
                         title="总计"
                         key="total"
                         dataIndex="total"
+                        render={(text, record, index)=>{
+                            return <span>{record.price*record.amount}</span>
+                        }}
                     />
                     <Col
                         title="创建时间"
-                        key="creatTime"
-                        dataIndex="creatTime"
+                        key="createDate"
+                        dataIndex="createDate"
                     />
                 </Table>
             </Card>
