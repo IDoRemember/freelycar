@@ -46,4 +46,9 @@ public interface IncomeOrderDao {
 	
 	double countAmountByClientId(String condition, int clientId);
 	
+	List<Object[]> MemberPayToday();
+	
+	List<Object[]> MemberPayMonth();
+	
+	List<Object[]> MemberPayRange(Date startTime , Date endTime);
 }

@@ -20,7 +20,7 @@ public class Card {
 	private Service service;
 	private Date payDate;
 	private Date expirationDate;
-	private int payMethod;
+	private int payMethod; // 0,1,2,3,4  现金,刷卡,支付宝,微信,易付宝
 	private Set<CardProjectRemainingInfo> projectInfos;
 	private Admin orderMaker;
 	public Date getExpirationDate() {

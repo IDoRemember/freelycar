@@ -82,6 +82,7 @@ public class PayService {
 		order.setAmount(service.getPrice());
 		order.setClientId(clientId);
 		order.setLicensePlate(null);
+		order.setMember(true);
 		order.setPayDate(new Date());
 		order.setProgramName(Constants.CARD_PROGRAM);
 		order.setPayMethod(card.getPayMethod());
@@ -149,6 +150,16 @@ public class PayService {
 		recoder.setPayDate(new Date());
 		recoder.setProgramName(order.getProgramName());
 		recoder.setPayMethod(order.getPayMethod());
+
+		//查看客户是否有卡,判断是否属于会员
+		Client client = clientDao.findById(order.getClientId());
+		if(client.getCards() == null || client.getCards().isEmpty()){
+			recoder.setMember(false);
+		}
+		else{
+			recoder.setMember(true);
+		}
+		
 		/*StringBuilder staffNames = new StringBuilder();
 		for(Staff staff : order.getStaffs()){
 			staffNames.append(staff.getName());
@@ -157,7 +168,6 @@ public class PayService {
 		recoder.setStaffNames(staffNames.substring(0, staffNames.length() - 1));*/
 		this.incomeOrderDao.save(recoder);
 		
-		Client client = this.clientDao.findById(order.getClientId());
 		client.setConsumTimes(client.getConsumTimes() + 1);
 		client.setConsumAmout(client.getConsumAmout() + recoder.getAmount());
 		client.setLastVisit(new Date());

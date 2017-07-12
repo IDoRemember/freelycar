@@ -14,7 +14,7 @@ public class IncomeOrder {
 	private String licensePlate;
 	private float amount;
 	private Date payDate;
-	private int payMethod;
+	private int payMethod;  //// 0,1,2,3,4  现金,刷卡,支付宝,微信,易付宝
 	private String programName;
 //	private String staffNames;
 	private boolean member; 
