@@ -30,7 +30,6 @@ public class ConsumOrder {
 	private int payMethod;
 	private String programName;
 	private String parkingLocation;
-	private Set<Staff> staffs;
 	private Set<ConsumExtraInventoriesInfo> inventoryInfos;
 	private int state;		//0,1,2=接,完,交
 	private float totalPrice;
@@ -130,13 +129,6 @@ public class ConsumOrder {
 	public String getRepairAdvice() {
 		return repairAdvice;
 	}
-	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
-	@JoinTable(name="consumOrders_staff", 
-				joinColumns={@JoinColumn(name="consumOrdersId", foreignKey=@ForeignKey(name="none"))}, 
-				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
-	public Set<Staff> getStaffs() {
-		return staffs;
-	}
 	public int getState() {
 		return state;
 	}
@@ -220,9 +212,6 @@ public class ConsumOrder {
 	}
 	public void setRepairAdvice(String repairAdvice) {
 		this.repairAdvice = repairAdvice;
-	}
-	public void setStaffs(Set<Staff> staffs) {
-		this.staffs = staffs;
 	}
 	public void setState(int state) {
 		this.state = state;

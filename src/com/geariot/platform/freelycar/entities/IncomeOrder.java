@@ -16,7 +16,7 @@ public class IncomeOrder {
 	private Date payDate;
 	private int payMethod;
 	private String programName;
-	private String staffNames;
+//	private String staffNames;
 	private boolean member; 
 	
 	public float getAmount() {
@@ -42,9 +42,9 @@ public class IncomeOrder {
 	public String getProgramName() {
 		return programName;
 	}
-	public String getStaffNames() {
-		return staffNames;
-	}
+//	public String getStaffNames() {
+//		return staffNames;
+//	}
 	public void setAmount(float amount) {
 		this.amount = amount;
 	}
@@ -66,9 +66,9 @@ public class IncomeOrder {
 	public void setProgramName(String programName) {
 		this.programName = programName;
 	}
-	public void setStaffNames(String staffNames) {
-		this.staffNames = staffNames;
-	}
+//	public void setStaffNames(String staffNames) {
+//		this.staffNames = staffNames;
+//	}
 	public boolean isMember() {
 		return member;
 	}

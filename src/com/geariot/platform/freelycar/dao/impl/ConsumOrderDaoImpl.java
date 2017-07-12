@@ -37,7 +37,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ConsumOrder> list(int from, int pageSize) {
-		String hql = "from ConsumOrder";
+		String hql = "from ConsumOrder order by createDate desc";
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
@@ -59,7 +59,9 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	@Override
 	public List<ConsumOrder> query(String andCondition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from ConsumOrder");
-		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
+		StringBuffer temp = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER);
+		temp.append(" order by createDate desc");
+		String hql = temp.toString();
 		log.debug("订单查询最后生成查询语句：" + hql);
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
@@ -82,7 +84,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ConsumOrder> findWithClientId(int clientId) {
-		String hql = "from ConsumOrder where clientId = :clientId";
+		String hql = "from ConsumOrder where clientId = :clientId order by createDate desc";
 		return this.getSession().createQuery(hql).setInteger("clientId", clientId)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
@@ -90,7 +92,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ConsumOrder> findByMakerAccount(String account) {
-		String hql = "from ConsumOrder where orderMaker.account = :account";
+		String hql = "from ConsumOrder where orderMaker.account = :account order by createDate desc";
 		return this.getSession().createQuery(hql).setString("account", account)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
@@ -104,7 +106,7 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 
 	@Override
 	public void removeStaffInConsumOrderStaffs(int staffId) {
-		String sql = "delete from consumorders_staff where staffId = :id";
+		String sql = "delete from projectinfo_staff where staffId = :id";
 		this.getSession().createSQLQuery(sql).setInteger("id", staffId).executeUpdate();
 	}
 

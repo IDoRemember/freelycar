@@ -1,7 +1,15 @@
 package com.geariot.platform.freelycar.entities;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.ForeignKey;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class ProjectInfo {
@@ -15,6 +23,7 @@ public class ProjectInfo {
 	private int payCardTimes;
 	private float workingHour;
 	private float workingPricePerHour;
+	private Set<Staff> staffs;
 	public int getCardId() {
 		return cardId;
 	}
@@ -39,6 +48,13 @@ public class ProjectInfo {
 	}
 	public float getProjectPrice() {
 		return projectPrice;
+	}
+	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@JoinTable(name="projectinfo_staff", 
+				joinColumns={@JoinColumn(name="projectInfoId", foreignKey=@ForeignKey(name="none"))}, 
+				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})
+	public Set<Staff> getStaffs() {
+		return staffs;
 	}
 	public float getWorkingHour() {
 		return workingHour;
@@ -69,6 +85,9 @@ public class ProjectInfo {
 	}
 	public void setProjectPrice(float projectPrice) {
 		this.projectPrice = projectPrice;
+	}
+	public void setStaffs(Set<Staff> staffs) {
+		this.staffs = staffs;
 	}
 	public void setWorkingHour(float workingHour) {
 		this.workingHour = workingHour;

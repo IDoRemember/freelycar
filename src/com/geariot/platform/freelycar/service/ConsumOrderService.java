@@ -30,7 +30,6 @@ import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonPropertyFilter;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
@@ -165,7 +164,6 @@ public class ConsumOrderService {
 		exist.setInventoryInfos(consumOrder.getInventoryInfos());
 		exist.setParkingLocation(consumOrder.getParkingLocation());
 		exist.setPickTime(consumOrder.getPickTime());
-		exist.setStaffs(consumOrder.getStaffs());
 		exist.setTotalPrice(consumOrder.getTotalPrice());
 		exist.setProjects(consumOrder.getProjects());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();

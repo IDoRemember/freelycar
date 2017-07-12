@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.CardDao;
+import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.model.RESCODE;
@@ -32,6 +33,7 @@ public class CardService {
 		}
 		JsonConfig config = new JsonConfig();
 		config.registerPropertyExclusion(Project.class, "inventoryInfos");
+		config.registerPropertyExclusion(Admin.class, "password");
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(cards, config)).toString();
 	}
 	

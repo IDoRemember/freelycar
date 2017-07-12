@@ -180,6 +180,7 @@ public class AdminService {
 		int size=(int) Math.ceil(realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		config.registerPropertyExclusion(Admin.class, "password");
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -198,6 +199,7 @@ public class AdminService {
 		int size = (int) Math.ceil((int) realSize/(double)number);
 		JsonConfig config = new JsonConfig();
 		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		config.registerPropertyExclusion(Admin.class, "password");
 		JSONArray jsonArray = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 		res.put(Constants.RESPONSE_SIZE_KEY, size);
