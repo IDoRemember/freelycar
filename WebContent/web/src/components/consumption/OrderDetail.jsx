@@ -7,10 +7,39 @@ import $ from 'jquery';
 import { Row, Col, Card, Button, Input, Steps, Table, Icon } from 'antd';
 const Step = Steps.Step;
 const serviceColumns = [{
-    title: '序号',
-    dataIndex: 'index',
-    key: 'index',
-    render: text => <a href="#">{text}</a>,
+    title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
+        return <span>{index + 1}</span>
+    }
+}, {
+    title: '',
+    dataIndex: 'total',
+    key: 'total',
+}, {
+    title: '项目名称',
+    dataIndex: 'project',
+    key: 'project',
+}, {
+    title: '施工人员',
+    dataIndex: 'StaffName',
+    key: 'StaffName',
+
+}, {
+    title: '会员卡号',
+    dataIndex: 'CardNum',
+    key: 'CardNum',
+}, {
+    title: '项目价格',
+    dataIndex: 'price',
+    key: 'price',
+}, {
+    title: '抵扣卡次',
+    dataIndex: 'DeductionCardTime',
+    key: 'DeductionCardTime',
+}]
+const fixColumns = [{
+    title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
+        return <span>{index + 1}</span>
+    }
 }, {
     title: '',
     dataIndex: 'total',
@@ -28,19 +57,36 @@ const serviceColumns = [{
     dataIndex: 'number',
     key: 'number',
 }, {
-    title: '单项合计',
+    title: '参考工时',
+    dataIndex: 'worktime',
+    key: 'worktime',
+}, {
+    title: '工时单价',
+    dataIndex: 'singlePrice',
+    key: 'singlePrice',
+}, {
+    title: '施工人员',
+    dataIndex: 'StaffName',
+    key: 'StaffName',
+}, {
+    title: '单项小计',
     dataIndex: 'singleSummation',
     key: 'singleSummation',
+}, {
+    title: '会员卡号',
+    dataIndex: 'CardNum',
+    key: 'CardNum',
+
 }, {
     title: '抵扣卡次',
     dataIndex: 'DeductionCardTime',
     key: 'DeductionCardTime',
-}], partsDetail = [
+}]
+const partsDetail = [
     {
-        title: '序号',
-        dataIndex: 'index',
-        key: 'index',
-        render: text => <a href="#">{text}</a>,
+        title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
+            return <span>{index + 1}</span>
+        }
     }, {
         title: '',
         dataIndex: 'total',
@@ -85,10 +131,17 @@ class BeautyDetail extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            current:2,
-            programId:0,
-            faultDesc:'',
-            repairAdvice:'',
+            current: 2,
+            programId: 0,
+            faultDesc: '',
+            repairAdvice: '',
+            totalPrice: '',
+            sumPrice: 0,
+            fixsumPrice: 0,
+            inventoryPrice: 0,
+            serviceData: [],
+            fixData: [],
+            inventoryData: [],
             form: {
                 orderMaker: '',
                 licensePlate: '',
@@ -99,30 +152,32 @@ class BeautyDetail extends React.Component {
 
                 name: '',
                 phone: '',
-              //  drivingLicense: '',
+                //  drivingLicense: '',
 
                 parkingLocation: '',
-                createDate:'',
+                createDate: '',
                 deliverTime: '',
                 finishTime: '',
                 staffs: ''
             },
 
-            serviceData: [{
-                key: 1,
-                index: 1,
-                project: '洗车',
-                price: '20.00',
-                number: '20',
-                singleSummation: '20',
-                DeductionCardTime: '1',
-            }, {
-                key: '',
-                index: '',
-                total: '合计',
-                singleSummation: '20',
-                DeductionCardTime: '1',
-            }],
+            // serviceData: [{
+            //     key: 1,
+            //     index: 1,
+            //     project: '洗车',
+            //     price: '20.00',
+            //     number: '20',
+            //     singleSummation: '20',
+            //     staffName: '小易',
+            //     CardNum: '123 300体验卡',
+            //     DeductionCardTime: '1',
+            // }, {
+            //     key: '',
+            //     index: '',
+            //     total: '合计',
+            //     singleSummation: '20',
+            //     DeductionCardTime: '1',
+            // }],
             partsDetailData: [{
                 key: 1,
                 index: 1,
@@ -142,7 +197,12 @@ class BeautyDetail extends React.Component {
         }
     }
     componentDidMount() {
-        console.log("hahhahahha ")
+        this.GetClientInfo();
+
+
+    }
+
+    GetClientInfo() {
         $.ajax({
             url: 'api/order/queryid',
             dataType: 'json',
@@ -152,62 +212,179 @@ class BeautyDetail extends React.Component {
                 consumOrderId: this.props.params.orderId
             },
             success: (res) => {
+                var sumprice = 0;
+                var fixsumprice = 0;
+                var inventoryprice = 0;
                 let obj = res.data;
-                let stateType=obj.state;
-                let programId= obj.programId;
-                let faultDesc=obj.faultDesc;
-                let repairAdvice=obj.repairAdvice;
-                let createDate=obj.createDate;
-                let staffList = obj.staffs;
+                let objservice = obj.projects;
+                let objinventory = obj.inventoryInfos;
+                let totalPrice = obj.totalPrice;
+                let stateType = obj.state;
+                let programId = obj.programId;
+                let faultDesc = obj.faultDesc;
+                let repairAdvice = obj.repairAdvice;
+                let createDate = obj.createDate;
+                let staffList = obj.projects.staffs;
                 let orderMaker = obj.orderMaker.name;
                 let licensePlate = obj.licensePlate;
                 let carType = obj.carType;
                 let brand = obj.carBrand;
                 let lastMiles = obj.lastMiles;
                 let Miles = obj.miles;
-
                 let name = obj.clientName;
                 let phone = obj.phone;
-
                 let parkingLocation = obj.parkingLocation;
                 let deliverTime = obj.deliverTime;
                 let finishTime = obj.finishTime;
                 let staffString = ''
-                for (let i = 0; i < staffList.length; i++) {
-                    staffString += staffList[i].name+' 、 ';
-                    
-                }
-                    staffString=staffString.substring(0,staffString.length-2)
+                // for (let i = 0; i < staffList.length; i++) {
+                //      staffString += staffList[i].name + ' 、 ';
+
+                //  }    
+                staffString = staffString.substring(0, staffString.length - 2)
                 console.log(res);
+                let serviceList = [];
+                let fixList = [];
+                let inventoryList = [];
 
+                for (let i = 0; i < objinventory.length; i++) {
+                    var inventoryprice = inventoryprice + objinventory[i].inventory.price * objinventory[i].number;
+                    console.log(inventoryprice)
+                    let inventoryItem = {
+                        key: objinventory[i].inventory.id,
+                        id: objinventory[i].inventory.id,
+                        partName: objinventory[i].inventory.name,
+                        brand: objinventory[i].inventory.brandName,
+                        specification: objinventory[i].inventory.standard,
+                        attribute: objinventory[i].inventory.property,
+                        price: objinventory[i].inventory.price,
+                        inventory: objinventory[i].inventory.amount,
+                        number: objinventory[i].number,
+                        singleSummation: objinventory[i].inventory.price * objinventory[i].number,
+                    }
+                    inventoryList.push(inventoryItem)
+                }
                 this.setState({
-                    current:stateType,
-                    programId:programId,
-                    repairAdvice:repairAdvice,
-                    faultDesc:faultDesc,
-                    form: {
-                        orderMaker: orderMaker,
-                        licensePlate: licensePlate,
-                        carType: carType,
-                        brand: brand,
-                        lastMiles: lastMiles,
-                        Miles: Miles,
-                        createDate:createDate,
-                        name: name,
-                        phone: phone,
-                        // drivingLicense: '',
-
-                        parkingLocation: parkingLocation,
-                        deliverTime: deliverTime,
-                        finishTime: finishTime,
-                        staffs: staffString,
-                    },
-
+                    inventoryData: inventoryList,
+                    totalPrice: totalPrice,
+                    inventoryPrice: inventoryprice,
                 })
+                var inventorylist = this.state.inventoryData;
+                let inventoryTable = {
+                    key: '',
+
+                    total: '合计',
+                    singleSummation: this.state.inventoryPrice,
+
+                }
+                if (objinventory.length > 0) {
+
+                    inventorylist.push(inventoryTable)
+                    console.log(inventorylist);
+                    this.setState({
+                        inventoryData: inventorylist,
+
+                    })
+                }
+
+                for (let i = 0; i < objservice.length; i++) {
+                    var sumprice = sumprice + objservice[i].projectPrice;
+                    var fixsumprice = fixsumprice + (objservice[i].projectPrice+objservice[i].workingHour* objservice[i].workingPricePerHour);
+                    console.log(fixsumprice)
+                    let staffList = objservice[i].staffs;
+                    let staffString = ''
+                    for (let i = 0; i < staffList.length; i++) {
+                        staffString += staffList[i].name + ' 、 ';
+
+                    }
+                    let serviceItem = {
+                        key: objservice[i].id,
+                        id: objservice[i].id,
+                        project: objservice[i].projectName,
+                        price: objservice[i].projectPrice,
+                        StaffName: staffString.substring(0, staffString.length - 2),
+                        CardNum: objservice[i].cardId,
+                        DeductionCardTime: objservice[i].payCardTimes,
+                    }
+
+                    let fixItem = {
+                        key: objservice[i].id,
+                        id: objservice[i].id,
+                        project: objservice[i].projectName,
+                        number: '1',
+                        price: objservice[i].projectPrice,
+                        StaffName: staffString.substring(0, staffString.length - 2),
+                        worktime: objservice[i].workingHour,
+                        singlePrice: objservice[i].workingPricePerHour,
+                        singleSummation:objservice[i].projectPrice+objservice[i].workingHour* objservice[i].workingPricePerHour,
+                        CardNum: objservice[i].cardId,
+                        DeductionCardTime: objservice[i].payCardTimes,
+                    }
+                    serviceList.push(serviceItem);
+                    fixList.push(fixItem);
+                    if (serviceList.length == objservice.length) {
+                        //    serviceList.push({ sumTable })
+                        this.setState({
+                            serviceData: serviceList,
+                            fixData: fixList,
+                            sumPrice: sumprice,
+                            fixsumPrice:fixsumprice
+                        })
+
+                    }
+                    this.setState({
+                        current: stateType,
+                        programId: programId,
+                        repairAdvice: repairAdvice,
+                        faultDesc: faultDesc,
+                        form: {
+                            orderMaker: orderMaker,
+                            licensePlate: licensePlate,
+                            carType: carType,
+                            brand: brand,
+                            lastMiles: lastMiles,
+                            Miles: Miles,
+                            createDate: createDate,
+                            name: name,
+                            phone: phone,
+                            // drivingLicense: '',
+
+                            parkingLocation: parkingLocation,
+                            deliverTime: deliverTime,
+                            finishTime: finishTime,
+                            staffs: staffString,
+                        },
+
+                    })
+                }
+
+                var servicelist = this.state.serviceData;
+                var fixlist = this.state.fixData;
+                let sumTable = {
+                    key: '',
+
+                    total: '合计',
+                    price: this.state.sumPrice,
+                }
+                let fixsumTable = {
+                    key: '',
+
+                    total: '合计',
+                    singleSummation: this.state.fixsumPrice,
+                }
+                if (objinventory.length > 0) {
+                    servicelist.push(sumTable)
+                    fixlist.push(fixsumTable)
+                    console.log(servicelist);
+                    this.setState({
+                        serviceData: servicelist,
+                        fixData: fixlist
+                    })
+                }
             }
         })
-    }
 
+    }
     render() {
         return <div>
             <BreadcrumbCustom first="消费开单" second="单据详情" />
@@ -218,26 +395,30 @@ class BeautyDetail extends React.Component {
                     <Step title="交车" />
                 </Steps>
             </Card>
-            <CustomerInfo form={this.state.form}/>
-           {this.state.programId==2 && <Card style={{ marginBottom: '10px' }}>
+            <CustomerInfo form={this.state.form} />
+            {this.state.programId == 2 && <Card style={{ marginBottom: '10px' }}>
                 <h3>故障描述：</h3>
                 <p>{this.state.faultDesc}</p>
                 <h3>维修建议：</h3>
                 <p>{this.state.repairAdvice}</p>
             </Card>
-           }
-            <Card style={{ marginBottom: '10px' }}>
+            }
+            {this.state.programId == 1 && <Card style={{ marginBottom: '10px' }}>
                 <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
                 <Table className="accountTable" columns={serviceColumns} dataSource={this.state.serviceData} bordered />
-            </Card>
+            </Card>}
+            {this.state.programId == 2 && <Card style={{ marginBottom: '10px' }}>
+                <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
+                <Table className="accountTable" columns={fixColumns} dataSource={this.state.fixData} bordered />
+            </Card>}
             <Card style={{ marginBottom: '10px' }}>
                 <div style={{ fontSize: '18px', marginBottom: '10px' }}>配件明细</div>
-                <Table className="accountTable" columns={partsDetail} dataSource={this.state.serviceData} bordered />
+                <Table className="accountTable" columns={partsDetail} dataSource={this.state.inventoryData} bordered />
             </Card>
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额
-                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> 43.00</span>
+                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}>{this.state.totalPrice}.00</span>
                     元
                 </div>
             </Card>
