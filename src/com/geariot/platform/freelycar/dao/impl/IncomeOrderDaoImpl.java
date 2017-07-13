@@ -229,7 +229,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.SECOND, 0);
 		cal2.add(Calendar.DAY_OF_MONTH, 1);
 		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
@@ -251,7 +251,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.DATE, 1);
 		cal2.add(Calendar.MONTH, 1);
 		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
@@ -270,7 +270,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.MINUTE, 59);
 		cal2.set(Calendar.SECOND, 59);
 		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
@@ -379,7 +379,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.SECOND, 0);
 		cal2.add(Calendar.DAY_OF_MONTH, 1);
 		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
@@ -401,7 +401,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.DATE, 1);
 		cal2.add(Calendar.MONTH, 1);
 		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
@@ -420,7 +420,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		cal2.set(Calendar.MINUTE, 59);
 		cal2.set(Calendar.SECOND, 59);
 		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 	
