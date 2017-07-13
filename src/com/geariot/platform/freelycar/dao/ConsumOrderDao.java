@@ -1,5 +1,6 @@
 package com.geariot.platform.freelycar.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import com.geariot.platform.freelycar.entities.ConsumOrder;
@@ -28,4 +29,9 @@ public interface ConsumOrderDao {
 	
 	void removeStaffInConsumOrderStaffs(int staffId);
 	
+	List<Object[]> programNameToday();
+	
+	List<Object[]> programNameMonth();
+	
+	List<Object[]> programNameRange(Date startTime , Date endTime);
 }

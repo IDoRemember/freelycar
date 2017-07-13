@@ -274,7 +274,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> programNameToday() {
 		Date date = new Date();
@@ -292,9 +292,9 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
-	}
+	}*/
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> programNameMonth() {
 		Date date = new Date();
@@ -314,9 +314,9 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
-	}
+	}*/
 
-	@SuppressWarnings("unchecked")
+	/*@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> programNameRange(Date startTime, Date endTime) {
 		Calendar cal1 = Calendar.getInstance();
@@ -333,7 +333,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
-	}
+	}*/
 
 	@SuppressWarnings("unchecked")
 	@Override
