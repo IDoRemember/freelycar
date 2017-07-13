@@ -1,10 +1,11 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, InputNumber,Icon } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, InputNumber, Icon } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import EditableCell from './EditableCell.jsx'
 import update from 'immutability-helper'
 import $ from 'jquery'
+import PartsSearch from '../model/PartsSearch.jsx'
 const Option = Select.Option;
 class PartsDetail extends React.Component {
     constructor(props) {
@@ -30,7 +31,35 @@ class PartsDetail extends React.Component {
         })
     }
 
+    handleCancel = () => {
+        this.setState({
+            view: false
+        })
+    }
 
+    handleOk = (data) => {
+        console.log(data)
+        let datalist = this.state.data
+        if (datalist.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let same = 0;
+                for (let j = 0; j < datalist.length; j++) {
+                    if (data[i].partId == datalist[j].partId) {
+                        same++
+                    }
+                }
+                if (same == 0) {
+                    datalist.push(data[i])
+                }
+            }
+        } else {
+            datalist.push(...data)
+        }
+        this.setState({
+            view: false,
+            data: datalist
+        })
+    }
     addOneROw = () => {
         let oneRow = {
             key: this.state.data.length,
@@ -63,10 +92,10 @@ class PartsDetail extends React.Component {
         const projectOptions = this.props.optionInventory.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
-        console.log(this.props.dataInventory)
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
             <div style={{ fontSize: '16px', marginBottom: '10px' }}>   服务项目&nbsp;&nbsp;&nbsp;
             <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }}><Icon type="plus-circle-o" />&nbsp;增加</div></div>
+            <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
             <Table className="accountTable" dataSource={this.props.dataInventory} bordered>
                 <Col
                     title="序号"

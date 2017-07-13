@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, Button, InputNumber, Icon } from 'antd';
+import { Row, Col, Card, Select, Table, Iconconst, Popover, Popconfirm, Button, InputNumber, Icon } from 'antd';
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import update from 'immutability-helper'
@@ -30,16 +30,6 @@ class ServiceTable extends React.Component {
         })
     }
 
-    numberChange = (index, value) => {
-        console.log(index, value);
-        let price = this.state.data[index].price;
-        this.setState({
-            data: update(this.state.data, { [index]: { singleSummation: { $set: price * value } } })
-        }, () => {
-            console.log(this.state.data);
-        })
-    }
-
     handleChange = (index, value) => {
         this.props.changeProjectSelect(index, value);
     }
@@ -67,8 +57,8 @@ class ServiceTable extends React.Component {
         }
         for (let item of datalist) {
             // parts.push(item.inventoryInfos)
-            if(item.inventoryInfos) {
-                 parts.push(...item.inventoryInfos)
+            if (item.inventoryInfos) {
+                parts.push(...item.inventoryInfos)
             }
         }
         console.log(parts)
@@ -76,23 +66,6 @@ class ServiceTable extends React.Component {
         this.setState({
             view: false,
             data: datalist
-        })
-    }
-
-    addOneROw = () => {
-        let oneRow = {
-            key: this.state.data.length,
-            index: this.state.data.length,
-            project: 'xiuche',
-            price: '30.00',
-            number: '20',
-            singleSummation: '20',
-            DeductionCardTime: '1',
-        }
-        let data = this.state.data
-        data.splice(data.length - 1, 0, oneRow)
-        this.setState({
-            data: data
         })
     }
     onDelete = (index) => {
@@ -103,7 +76,20 @@ class ServiceTable extends React.Component {
     render() {
         const projectOptions = this.props.optionService.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
-        })
+        }), staffOptions = this.props.staffList.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+        }), cardOptions = this.props.cards ? this.props.cards.map((item, index) => {
+            const content = (
+                <div>
+                    <p>Content</p>
+                    <p>Content</p>
+                </div>
+            );
+            const pop = <Popover placement="rightTop" content={content} title="Title">
+                <Button type="primary">Hover me</Button>
+            </Popover>
+            return <Option key={index} value={item.id + ''}>{item.service.name + item.service.id}{pop}</Option>
+        }) : []
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
             <div style={{ fontSize: '16px', marginBottom: '10px' }}> 服务项目&nbsp;&nbsp;&nbsp;
@@ -147,15 +133,6 @@ class ServiceTable extends React.Component {
                     key="price"
                     dataIndex="price"
                 />
-                <Col
-                    title="数量"
-                    key="amount"
-                    render={(text, record, index) => {
-                        if ((index + 1) < this.state.data.length) {
-                            return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.numberChange(index, e) }} />
-                        }
-                    }}
-                />
                 {this.props.programId == '2' && <Col
                     title="参考工时"
                     key="referWorkTime"
@@ -172,6 +149,25 @@ class ServiceTable extends React.Component {
                     dataIndex="singleSummation"
                 />
                 <Col
+                    title="施工人员"
+                    key="builder"
+                    dataIndex="builder"
+                    render={(text, record, index) => {
+                        if ((index + 1) < this.state.data.length) {
+                            return <Select showSearch
+                                style={{ width: '160px', maxHeight: '500px' }}
+                                placeholder="输入施工人员"
+                                optionFilterProp="children "
+                                mode="multiple"
+                                onChange={this.handleChange}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                            >
+                                {staffOptions}
+                            </Select>
+                        }
+                    }}
+                />
+                <Col
                     title="会员卡号"
                     key="memberCard"
                     dataIndex="memberCard"
@@ -179,12 +175,12 @@ class ServiceTable extends React.Component {
                         if ((index + 1) < this.state.data.length) {
                             return <Select showSearch
                                 style={{ width: '100px' }}
-                                placeholder="输入项目名称"
+                                placeholder="输入会员卡号"
                                 optionFilterProp="children "
                                 onChange={this.handleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
-                                {projectOptions}
+                                {cardOptions}
                             </Select>
                         }
                     }}
