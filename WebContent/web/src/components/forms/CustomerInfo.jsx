@@ -60,7 +60,6 @@ class CustomerInfo extends React.Component {
         });
     }
     render() {
-        console.log('haha')
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
@@ -113,10 +112,12 @@ class CustomerInfo extends React.Component {
                         历史消费：
                         <span style={{ width: '100px' }}>￥19999</span>
                     </Col>*/}
-                    <Col span={8}>
-                        施工人员：
-                          <span style={{ width: '100px' }}>{this.props.form.staffs}</span>
+                    <Col span={8}></Col>
+                    <Col span={8} >
+                        交车时间：
+                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
                     </Col>
+                   
                     
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -128,10 +129,8 @@ class CustomerInfo extends React.Component {
                         实时积分：
                         <span style={{ width: '100px' }}>5000</span>
                     </Col>*/}
-                    <Col span={8} >
-                        交车时间：
-                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
-                    </Col>
+                    <Col span={8}></Col>
+                   
                    
                 </Row>
             </Card>

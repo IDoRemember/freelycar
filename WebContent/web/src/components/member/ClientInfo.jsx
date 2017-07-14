@@ -155,7 +155,7 @@ class ClientInfo extends React.Component {
                     let datalist = [];
                     //调用接口后返回的数据
                     var obj = res.data;
-                    //   console.log(obj);
+                     console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
                         //   console.log(obj[i].cars);

@@ -235,19 +235,20 @@ class BuyCard extends React.Component {
         })
     }
 
-    payhandleChange = (e) => {
-        console.log(e);
+    payhandleChange = (event) => {
+        console.log(event);
         this.setState({
-            payMethod: e
+            payMethod: event
         })
     }
 
-    handleChange = (e) => {
-        let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
-        this.setState({
-            carId: e
-        })
+    handleChange = (value) => {
+        console.log(`selected ${value}`)
+        // let typelist = this.state.option[e-1 ].types;
+        // console.log(this.state.option[e-1].types)
+        // this.setState({
+        //     carId: e
+        // })
     }
     handleOk = () => {
         this.setState({
@@ -280,7 +281,7 @@ class BuyCard extends React.Component {
                         </Col>
                         <Col span={8}>性别：
                             <div style={{ display: 'inline-block', marginLeft: '26px' }}>
-                                <RadioGroup onChange={()=>this.genderonChange} value={this.state.value}>
+                                <RadioGroup onChange={(value)=>this.genderonChange(value)} value={this.state.value}>
                                     <Radio value={'男'}>男</Radio>
                                     <Radio value={'女'}>女</Radio>
                                 </RadioGroup>
@@ -298,10 +299,10 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4} id="car-brand">车辆品牌:
                             <Select showSearch
-                                style={{ width: '140px', marginLeft: '10px' }}
+                                style={{ width: '140px', marginLeft: '10px',maxHeight:'150px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
-                                onChange={()=>this.handleChange()}
+                                onChange={(value)=>this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('car-brand')}
                             >
@@ -325,9 +326,9 @@ class BuyCard extends React.Component {
                         <Col span={8} offset={4}>
                             会员卡类：
                         <Select
-                                style={{ width: '140px', marginLeft: '13px' }}
+                                style={{ width: '140px', marginLeft: '13px',maxHeight:'150px' }}
                                 optionFilterProp="children"
-                                onChange={()=>this.CardhandleChange()}
+                                onChange={(value)=>this.CardhandleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {CardOptions}
@@ -349,8 +350,8 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4} >
                             <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15 }} onChange={()=>this.payhandleChange()} >
+                                 <div style={{ display: 'inline-block', marginLeft: '10px'}}>
+                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15,maxHeight:'100px' }} onChange={(value)=>this.payhandleChange(value)} >
                                         <Option value="0">现金</Option>
                                         <Option value="1">微信</Option>
                                         <Option value="2">支付宝</Option>
@@ -366,7 +367,7 @@ class BuyCard extends React.Component {
                                         style={{ width: '140px', marginLeft: '10px' }}
                                         placeholder="选择办卡人员"
                                         optionFilterProp="children"
-                                        onChange={()=>this.StaffhandleChange()}
+                                        onChange={(value)=>this.StaffhandleChange(value)}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                         getPopupContainer={() => document.getElementById('staff')}
                                     >
