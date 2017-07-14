@@ -93,7 +93,6 @@ class ProgramSearch extends React.Component {
             success: (result) => {
                 if (result.code == "0") {
                     this.setState({ loading: false })
-                    console.log(result)
                     let datalist = []
                     for (let item of result.data) {
                         item.key = item.id

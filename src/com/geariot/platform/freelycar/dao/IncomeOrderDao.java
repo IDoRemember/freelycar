@@ -34,11 +34,11 @@ public interface IncomeOrderDao {
 	
 	List<Object[]> listByPayMethodRange(Date startTime , Date endTime);
 	
-	List<Object[]> programNameToday();
+	/*List<Object[]> programNameToday();
 	
 	List<Object[]> programNameMonth();
 	
-	List<Object[]> programNameRange(Date startTime , Date endTime);
+	List<Object[]> programNameRange(Date startTime , Date endTime);*/
 	
 	List<IncomeOrder> listIncomeOrderByClientId(String condition, int clientId, int from, int pageSize);
 	

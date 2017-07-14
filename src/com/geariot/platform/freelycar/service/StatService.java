@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.ExpendOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.ExpendOrder;
@@ -18,6 +19,7 @@ import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
 import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
+import com.geariot.platform.freelycar.utils.query.MemberPayStat;
 import com.geariot.platform.freelycar.utils.query.MonthStat;
 import com.geariot.platform.freelycar.utils.query.PayMethodStat;
 import com.geariot.platform.freelycar.utils.query.ProgramPayStat;
@@ -34,6 +36,9 @@ public class StatService {
 
 	@Autowired
 	private IncomeOrderDao incomeOrderDao;
+	
+	@Autowired
+	private ConsumOrderDao consumOrderDao;
 
 	public String getToday(int income, int expend, int page, int number) {
 		Date today = new Date();
@@ -347,13 +352,19 @@ public class StatService {
 			for (Object[] payMethod : payMethods) {
 				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-			List<Object[]> programNames = this.incomeOrderDao.programNameToday();
+			List<Object[]> programNames = this.consumOrderDao.programNameToday();
 			List<ProgramPayStat> programPayDetail = new ArrayList<>();
 			for(Object[] programName : programNames){
 				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
 			}
+			List<Object[]> objects = this.incomeOrderDao.MemberPayToday();
+			List<MemberPayStat> memberPayStats = new ArrayList<>();
+			for(Object[] object : objects){
+				memberPayStats.add(new MemberPayStat(Boolean.valueOf(String.valueOf(object[1])), Double.valueOf(String.valueOf(object[0]))));
+			}
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
 		obj.put("programPayDetail", programPayDetail);
+		obj.put("memberPay", memberPayStats);
 		return obj.toString();
 		}
 	}
@@ -370,14 +381,19 @@ public class StatService {
 			for (Object[] payMethod : payMethods) {
 				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-			List<Object[]> programNames = this.incomeOrderDao.programNameMonth();
+			List<Object[]> programNames = this.consumOrderDao.programNameMonth();
 			List<ProgramPayStat> programPayDetail = new ArrayList<>();
 			for(Object[] programName : programNames){
 				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
 			}
-			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
-			obj.put("programPayDetail", programPayDetail);
-			return obj.toString();
+			List<Object[]> objects = this.incomeOrderDao.MemberPayMonth();
+			List<MemberPayStat> memberPayStats = new ArrayList<>();
+			for(Object[] object : objects){
+				memberPayStats.add(new MemberPayStat(Boolean.valueOf(String.valueOf(object[1])), Double.valueOf(String.valueOf(object[0]))));
+			}
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
+		obj.put("programPayDetail", programPayDetail);
+		return obj.toString();
 		}
 }
 	
@@ -392,14 +408,19 @@ public class StatService {
 			for (Object[] payMethod : payMethods) {
 				payMethodDetail.add(new PayMethodStat(String.valueOf(payMethod[1]), Double.valueOf(String.valueOf(payMethod[0]))));
 			}
-			List<Object[]> programNames = this.incomeOrderDao.programNameRange(startTime, endTime);
+			List<Object[]> programNames = this.consumOrderDao.programNameRange(startTime, endTime);
 			List<ProgramPayStat> programPayDetail = new ArrayList<>();
 			for(Object[] programName : programNames){
 				programPayDetail.add(new ProgramPayStat(String.valueOf(programName[1]), Double.valueOf(String.valueOf(programName[0])), Integer.valueOf(String.valueOf(programName[2]))));
 			}
-			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
-			obj.put("programPayDetail", programPayDetail);
-			return obj.toString();
+			List<Object[]> objects = this.incomeOrderDao.MemberPayRange(startTime, endTime);
+			List<MemberPayStat> memberPayStats = new ArrayList<>();
+			for(Object[] object : objects){
+				memberPayStats.add(new MemberPayStat(Boolean.valueOf(String.valueOf(object[1])), Double.valueOf(String.valueOf(object[0]))));
+			}
+		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
+		obj.put("programPayDetail", programPayDetail);
+		return obj.toString();
 		}
 	}
 	

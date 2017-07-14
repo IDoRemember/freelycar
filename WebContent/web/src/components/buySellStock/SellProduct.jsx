@@ -14,18 +14,19 @@ class PutInStorage extends React.Component {
         this.state = {
             data: [],
             inventoryOrderId:'',//搜索单据编号
+            adminId:'',
             option: []
         }
     }
     componentDidMount() {
 
         this.loadData(1, 10);
+        this.loadAdmin();
     }
 
     //条件查询
     conditionQuery = () => {
-        console.log('ddd');
-        this.loadData(1, 10, this.state.inventoryOrderId);
+        this.loadData(1, 10, this.state.inventoryOrderId,this.state.adminId);
     }
 
     loadData = (page, number, inventoryOrderId, adminId, type) => {
@@ -41,7 +42,6 @@ class PutInStorage extends React.Component {
             data: obj,
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     let data = [];
                     let arr = res.data;
@@ -65,15 +65,34 @@ class PutInStorage extends React.Component {
         });
     }
 
+    loadAdmin = ()=>{
+      $.ajax({
+          url: 'api/admin/list',
+            type: 'get',
+            data: {page:1,number:99},
+            dataType: 'json',
+            success: (res) => {
+                if(res.code=='0'){
+                    this.setState({
+                        option:res.data
+                    });
+                }
+            }
+      });   
+    }
+
     handleChange = (e) => {
-        console.log(e);
+        this.setState({
+            adminId:e
+        })
     }
 
 
     render() {
-        const projectOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
+        const adminOption = this.state.option.map((item, index) => {
+            return <Option key={index} value={item.id+''}>{item.name}</Option>
         })
+       
         return <div>
             <BreadcrumbCustom first="进销存管理" second="出库" />
             <Card>
@@ -99,14 +118,11 @@ class PutInStorage extends React.Component {
                         制单人：
                     </Col>
                     <Col span={5} >
-                        <Select defaultValue="lucy" style={{ width: 120 }} onChange={() => this.handleChange}>
-                            <Option value="jack">Jack</Option>
-                            <Option value="lucy">Lucy</Option>
-                            <Option value="disabled" disabled>Disabled</Option>
-                            <Option value="Yiminghe">yiminghe</Option>
+                        <Select  style={{ width: 120 }} onChange={(e) => this.handleChange(e)}>
+                            {adminOption}
                         </Select>
                     </Col>
-                    <Button type="primary" onClick={()=>{this.conditionQuery}}>查询</Button>
+                    <Button type="primary" onClick={()=>{this.conditionQuery()}}>查询</Button>
                 </Row>
                 <Table dataSource={this.state.data} bordered>
                     <Col

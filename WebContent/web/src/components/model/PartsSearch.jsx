@@ -97,7 +97,6 @@ class PartsSearch extends React.Component {
             success: (result) => {
                 if (result.code == "0") {
                     this.setState({ loading: false })
-                    console.log(result)
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {

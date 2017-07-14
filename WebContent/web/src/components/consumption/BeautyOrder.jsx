@@ -11,27 +11,9 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            parts:[],
-            dataService: [{
-                key: -1,
-                index: -1,
-                name: '',
-                price: '0',
-                referWorkTime: '0',
-                pricePerUnit: '0',
-                memberCard: '',
-                number: 1,
-                singleSummation: '',
-                DeductionCardTime: '1',
-            }, {
-                key: '',
-                index: '',
-                total: '合计',
-                singleSummation: '0'
-                // DeductionCardTime: '1',
-            }],
+            parts: [],
+            staffList: [],
             optionService: [],
-
             dataInventory: [{
                 key: -1,
                 index: -1,
@@ -53,11 +35,26 @@ class BeautyOrder extends React.Component {
         }
     }
 
-    componentWillMount() {
-        console.log('willmount')
+
+    getStaffList = () => {
+        $.ajax({
+            url: 'api/staff/list',
+            type: 'get',
+            dataType: 'json',
+            data: {
+                page: 1,
+                number: 99
+            },
+            success: (res) => {
+                if (res.code == '0') {
+                    this.setState({ staffList: res.data })
+                }
+            }
+        })
     }
 
     componentDidMount() {
+        this.getStaffList()
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -153,12 +150,24 @@ class BeautyOrder extends React.Component {
         })
     }
 
+    getCards = (cards) => {
+        console.log(cards)
+        this.setState({
+            cards: cards
+        })
+    }
     render() {
+        console.log(this.state.parts)
+        const parts = this.state.parts.map((item, index) => {
+            if (this.state.parts.length > (index + 1)) {
+                return <PartsDetail key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} changeInvSelect={this.changeInvSelect} />
+            }
+        })
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
-            <CustomerInfo MemberButton={true} type={1} />
-            <ServiceTable getPartsDetail={this.getPartsDetail} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
-            <PartsDetail optionInventory={this.state.optionInventory} programId={1} dataInventory={this.state.dataInventory} changeInvSelect={this.changeInvSelect} />
+            <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} />
+            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
+            {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额

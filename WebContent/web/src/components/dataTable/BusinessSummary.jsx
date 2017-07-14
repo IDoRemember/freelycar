@@ -12,37 +12,38 @@ class BusinessSummary extends React.Component {
         super(props)
         this.state = {
             mode: 'paytoday',
+            pay: [],
             data: [{
                 key: 1,
                 index: 1,
                 payway: '金额',
-                cash: '¥2000',
-                easyfubao: '¥2000',
-                alipay: '¥2000',
-                wechatpay: '¥2000'
+                cash: '¥0',
+                easyfubao: '¥0',
+                alipay: '¥0',
+                wechatpay: '¥0'
             }, {
                 key: 2,
                 index: 2,
                 payway: '比例',
-                cash: '25%',
-                easyfubao: '25%',
-                alipay: '25%',
-                wechatpay: '25%'
+                cash: '0%',
+                easyfubao: '0%',
+                alipay: '0%',
+                wechatpay: '0%'
             }],
             proportionData: [{
                 key: 1,
                 index: 1,
                 projectCategory: '美容服务',
-                number: '2000',
-                proportion: '20%',
-                money: '¥2000'
+                number: '0',
+                proportion: '0%',
+                money: '¥0'
             }, {
                 key: 2,
                 index: 2,
                 projectCategory: '美容服务',
-                number: '2000',
-                proportion: '20%',
-                money: '¥2000'
+                number: '0',
+                proportion: '0%',
+                money: '¥0'
             }]
         }
     }
@@ -50,15 +51,38 @@ class BusinessSummary extends React.Component {
         this.getIncomeExpend(this.state.mode)
     }
 
-    getIncomeExpend = (mode) => {
+    getIncomeExpend = (mode, data) => {
         $.ajax({
             url: 'api/stat/' + mode,
-            data: {
-
-            },
+            type: 'get',
+            dataType: 'json',
+            data: data == undefined ? {} : data,
             success: (result) => {
+                //console.log(result);
                 if (result.code == "0") {
-                    console.log(result)
+                    let pay = {};
+                    pay.key = -1;
+                    let recordingMethod = result.data;
+                    for (let item of recordingMethod) {
+                        let payMethod = item.payMethod;
+                        if (payMethod == '0') {
+                            pay.cash = item.value;
+                        } else if (payMethod == '1') {
+                            pay.card = item.value;
+                        } else if (payMethod == '2') {
+                            pay.alipay = item.value;
+                        } else if (payMethod == '3') {
+                            pay.weixin = item.value;
+                        } else if (payMethod == '4') {
+                            pay.yifubao = item.value;
+                        }
+                    }
+                    this.setState({
+                        pay: [...this.state.pay, pay]
+                    }, () => {
+                        console.log(this.state.pay);
+                    });
+
                 }
             }
         })
@@ -71,7 +95,7 @@ class BusinessSummary extends React.Component {
             this.getIncomeExpend(mode)
         } else if (mode == 'thismonth') {
             this.getIncomeExpend(mode)
-        } 
+        }
     }
 
     onTimeSelected = (dates, dateStrings) => {
@@ -100,7 +124,7 @@ class BusinessSummary extends React.Component {
                 <div>
                     <Row>
                         <Col span={12}>
-                            <Radio.Group onChange={()=>this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
+                            <Radio.Group onChange={() => this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
                                 <Radio.Button value="paytoday">今日</Radio.Button>
                                 <Radio.Button value="paymonth">本月</Radio.Button>
                                 <Radio.Button value="payrange">区间查找</Radio.Button>
@@ -124,7 +148,7 @@ class BusinessSummary extends React.Component {
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实收金额">
-                                    <h1>￥100</h1>
+                                    <h1>￥0</h1>
                                 </Card>
                             </div>
                         </Col>
@@ -132,14 +156,14 @@ class BusinessSummary extends React.Component {
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="会员消费金额">
-                                    <h1>￥100</h1>
+                                    <h1>￥0</h1>
                                 </Card>
                             </div>
                         </Col>
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }}>
                                 <Card className="nature-grey" title="散客消费金额">
-                                    <h1>￥100</h1>
+                                    <h1>￥0</h1>
                                 </Card>
                             </div>
                         </Col>
@@ -147,31 +171,67 @@ class BusinessSummary extends React.Component {
                 </div>
                 <div>
                     <h2 style={{ padding: '10px' }}>收款方式</h2>
-                    <Table className="accountTable" dataSource={this.state.data} bordered>
+                    <Table className="accountTable" dataSource={this.state.pay} bordered>
                         <Col
                             title="支付方式"
                             dataIndex="payway"
                             key="payway"
+
                         />
                         <Col
                             title="现金"
                             dataIndex="cash"
                             key="cash"
+                            render={(text, record, index) => {
+                                if (text == undefined)
+                                    return <span>0</span>
+                                else
+                                    return <span>{text}</span>
+                            }}
+                        />
+                        <Col
+                            title="刷卡"
+                            dataIndex="card"
+                            key="card"
+                            render={(text, record, index) => {
+                                if (text == undefined)
+                                    return <span>0</span>
+                                else
+                                    return <span>{text}</span>
+                            }}
                         />
                         <Col
                             title="易付宝"
-                            key="easyfubao"
-                            dataIndex="easyfubao"
+                            key="yifubao"
+                            dataIndex="yifubao"
+                            render={(text, record, index) => {
+                                if (text == undefined)
+                                    return <span>0</span>
+                                else
+                                    return <span>{text}</span>
+                            }}
                         />
                         <Col
                             title="支付宝"
                             key="alipay"
                             dataIndex="alipay"
+                            render={(text, record, index) => {
+                                if (text == undefined)
+                                    return <span>0</span>
+                                else
+                                    return <span>{text}</span>
+                            }}
                         />
                         <Col
                             title="微信支付"
-                            key="wechatpay"
-                            dataIndex="wechatpay"
+                            key="weixin"
+                            dataIndex="weixin"
+                            render={(text, record, index) => {
+                                if (text == undefined)
+                                    return <span>0</span>
+                                else
+                                    return <span>{text}</span>
+                            }}
                         />
                     </Table>
                 </div>
