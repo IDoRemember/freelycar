@@ -162,9 +162,6 @@ class PutInStorage extends React.Component {
                         title="配件类别"
                         key=" category"
                         dataIndex="category"
-                        render={(text, record, index) => {
-                            return <span>{text.typeName}</span>
-                        }}
                     />
                     <Col
                         title="规格属性"
