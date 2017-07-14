@@ -13,6 +13,8 @@ class BusinessSummary extends React.Component {
         this.state = {
             mode: 'paytoday',
             pay: [],
+            startTime:'',
+            endTime:'',
             data: [{
                 key: 1,
                 index: 1,
@@ -30,21 +32,7 @@ class BusinessSummary extends React.Component {
                 alipay: '0%',
                 wechatpay: '0%'
             }],
-            proportionData: [{
-                key: 1,
-                index: 1,
-                projectCategory: '美容服务',
-                number: '0',
-                proportion: '0%',
-                money: '¥0'
-            }, {
-                key: 2,
-                index: 2,
-                projectCategory: '美容服务',
-                number: '0',
-                proportion: '0%',
-                money: '¥0'
-            }]
+            proportionData: []
         }
     }
     componentDidMount() {
@@ -58,7 +46,7 @@ class BusinessSummary extends React.Component {
             dataType: 'json',
             data: data == undefined ? {} : data,
             success: (result) => {
-                //console.log(result);
+                console.log(result);
                 if (result.code == "0") {
                     let pay = {};
                     pay.key = -1;
@@ -77,12 +65,22 @@ class BusinessSummary extends React.Component {
                             pay.yifubao = item.value;
                         }
                     }
+
+                    //项目类别
+                    let programPayDetail = result.programPayDetail;
+                    for (let item of programPayDetail) {
+                        item.key = item.programName;
+                    }
                     this.setState({
-                        pay: [...this.state.pay, pay]
-                    }, () => {
-                        console.log(this.state.pay);
+                        pay: [pay],
+                        proportionData: programPayDetail
                     });
 
+
+                } else {
+                    this.setState({
+                        proportionData:[]
+                    });
                 }
             }
         })
@@ -90,31 +88,20 @@ class BusinessSummary extends React.Component {
 
     handleModeChange = (e) => {
         const mode = e.target.value;
-        this.setState({ mode: mode });
-        if (mode == 'today') {
+        this.setState({ mode: mode});
+        if (mode == 'paytoday') {
             this.getIncomeExpend(mode)
-        } else if (mode == 'thismonth') {
+        } else if (mode == 'paymonth') {
             this.getIncomeExpend(mode)
-        }
+        } 
     }
 
     onTimeSelected = (dates, dateStrings) => {
-        console.log(dates, dateStrings)
-        localStorage.setItem('datastrings', dateStrings)
-        if (this.state.mode == 'payrange') {
-            $.ajax({
-                url: 'api/stat/payrange',
-                data: {
-                    startTime: new Date(dateStrings[0]),
-                    endTime: new Date(dateStrings[1]),
-                },
-                success: (result) => {
-                    if (result.code == "0") {
-                        console.log(result)
-                    }
-                }
-            })
-        }
+        let obj = {};
+        obj.startTime = new Date(dateStrings[0]);
+        obj.endTime = new Date(dateStrings[1]);
+        this.getIncomeExpend('payrange',obj)
+       
     }
 
     render() {
@@ -124,7 +111,7 @@ class BusinessSummary extends React.Component {
                 <div>
                     <Row>
                         <Col span={12}>
-                            <Radio.Group onChange={() => this.handleModeChange} value={this.state.mode} style={{ marginBottom: 8 }}>
+                            <Radio.Group onChange={(e) => this.handleModeChange(e)} value={this.state.mode} style={{ marginBottom: 8 }}>
                                 <Radio.Button value="paytoday">今日</Radio.Button>
                                 <Radio.Button value="paymonth">本月</Radio.Button>
                                 <Radio.Button value="payrange">区间查找</Radio.Button>
@@ -238,27 +225,41 @@ class BusinessSummary extends React.Component {
                 <div>
                     <h2 style={{ padding: '10px' }}>项目类别</h2>
                 </div>
-                <Chart></Chart>
+                <Chart proportionData = {this.state.proportionData}></Chart>
                 <Table className="accountTable" dataSource={this.state.proportionData} bordered>
                     <Col
                         title="项目类别"
-                        dataIndex="projectCategory"
-                        key="projectCategory"
+                        dataIndex="programName"
+                        key="programName"
+                        render={(text, record, index) => {
+                            return <span>{text}服务</span>
+                        }}
                     />
                     <Col
                         title="数量"
-                        dataIndex="number"
-                        key="number"
+                        dataIndex="count"
+                        key="count"
                     />
                     <Col
                         title="占比"
-                        key="proportion"
-                        dataIndex="proportion"
+                        key="count2"
+                        dataIndex="count"
+                        render={(text, record, index) => {
+                            //项目类别
+                            let programPayDetail = this.state.proportionData;
+                            let sum = 0;
+                            for (let item of programPayDetail) {
+                                sum += item.count;
+                            }
+                            sum = text/sum;
+                            sum = sum.toFixed(2);
+                            return <span>{sum*100}%</span>
+                        }}
                     />
                     <Col
                         title="金额"
-                        key="money"
-                        dataIndex="money"
+                        key="value"
+                        dataIndex="value"
                     />
                 </Table>
             </Card>
