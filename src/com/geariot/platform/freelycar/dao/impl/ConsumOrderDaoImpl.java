@@ -173,4 +173,11 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ConsumOrder> findByPickCarStaffId(int staffId) {
+		String hql = "from ConsumOrder where pickCarStaff.id = :id";
+		return this.getSession().createQuery(hql).setInteger("id", staffId).list();
+	}
+
 }

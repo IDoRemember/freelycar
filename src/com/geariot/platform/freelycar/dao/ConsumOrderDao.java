@@ -25,6 +25,8 @@ public interface ConsumOrderDao {
 	
 	List<ConsumOrder> findByMakerAccount(String account);
 	
+	List<ConsumOrder> findByPickCarStaffId(int staffId);
+	
 	long countInventoryInfoByIds(List<String> inventoryIds);
 	
 	void removeStaffInConsumOrderStaffs(int staffId);

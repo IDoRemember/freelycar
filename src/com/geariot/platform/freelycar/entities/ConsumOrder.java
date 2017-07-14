@@ -42,6 +42,7 @@ public class ConsumOrder {
 	private String comment;
 	private String faultDesc;
 	private String repairAdvice;
+	private Staff pickCarStaff;
 	public String getCarBrand() {
 		return carBrand;
 	}
@@ -109,6 +110,11 @@ public class ConsumOrder {
 	}
 	public String getPhone() {
 		return phone;
+	}
+	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
+	@JoinColumn(name="pickCarStaffId", foreignKey=@ForeignKey(name="none"))
+	public Staff getPickCarStaff() {
+		return pickCarStaff;
 	}
 	public Date getPickTime() {
 		return pickTime;
@@ -195,6 +201,9 @@ public class ConsumOrder {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public void setPickCarStaff(Staff pickCarStaff) {
+		this.pickCarStaff = pickCarStaff;
 	}
 	public void setPickTime(Date pickTime) {
 		this.pickTime = pickTime;

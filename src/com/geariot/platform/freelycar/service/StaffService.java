@@ -69,6 +69,10 @@ public class StaffService {
 				//并且将ConsumOrder施工人员中有该员工的订单中去除该员工
 				this.adminDao.deleteByStaffId(staffId);
 				this.consumOrderDao.removeStaffInConsumOrderStaffs(staffId);
+				//订单中相关接车人员设为空
+				for(ConsumOrder c : this.consumOrderDao.findByPickCarStaffId(staffId)){
+					c.setPickCarStaff(null);
+				}
 				
 				staffDao.deleteStaff(staffId);
 			}
