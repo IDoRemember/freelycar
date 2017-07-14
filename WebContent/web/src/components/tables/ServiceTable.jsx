@@ -5,6 +5,7 @@ import AjaxSend from '../../utils/ajaxSend'
 import update from 'immutability-helper'
 import $ from 'jquery'
 import ProgramSearch from '../model/ProgramSearch.jsx'
+import { Link } from 'react-router';
 const Option = Select.Option;
 const total = {
     key: '',
@@ -55,14 +56,8 @@ class ServiceTable extends React.Component {
             datalist.push(...data)
             datalist.push(total)
         }
-        for (let item of datalist) {
-            // parts.push(item.inventoryInfos)
-            if (item.inventoryInfos) {
-                parts.push(...item.inventoryInfos)
-            }
-        }
-        console.log(parts)
-        this.props.getPartsDetail(parts)
+        console.log(datalist)
+        this.props.getPartsDetail(datalist)
         this.setState({
             view: false,
             data: datalist
@@ -81,12 +76,34 @@ class ServiceTable extends React.Component {
         }), cardOptions = this.props.cards ? this.props.cards.map((item, index) => {
             const content = (
                 <div>
-                    <p>Content</p>
-                    <p>Content</p>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >卡类名称：</Col>
+                        <Col span={8}>白金卡</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >卡类属性：</Col>
+                        <Col span={8}>白金卡</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >售卡金额：</Col>
+                        <Col span={8}>1000</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >有效期：</Col>
+                        <Col span={8}>永久</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >备注</Col>
+                        <Col span={8}>清洁剂</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={8} >剩余次数明细</Col>
+                        <Col span={8}>永久</Col>
+                    </Row>
                 </div>
             );
             const pop = <Popover placement="rightTop" content={content} title="Title">
-                <Button type="primary">Hover me</Button>
+                >>>
             </Popover>
             return <Option key={index} value={item.id + ''}>{item.service.name + item.service.id}{pop}</Option>
         }) : []
@@ -96,7 +113,7 @@ class ServiceTable extends React.Component {
             <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }} onClick={() => { this.setState({ view: true }) }}><Icon type="plus-circle-o" />&nbsp;增加</div>
             </div>
             <ProgramSearch programId={this.props.programId} view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></ProgramSearch>
-            <Table className="accountTable" dataSource={this.state.data} bordered>
+            <Table className="accountTable" dataSource={this.state.data} bordered >
                 <Col
                     title="序号"
                     dataIndex="index"
@@ -157,7 +174,7 @@ class ServiceTable extends React.Component {
                             return <Select showSearch
                                 style={{ width: '160px', maxHeight: '500px' }}
                                 placeholder="输入施工人员"
-                                optionFilterProp="children "
+                                optionFilterProp="children"
                                 mode="multiple"
                                 onChange={this.handleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
@@ -173,15 +190,17 @@ class ServiceTable extends React.Component {
                     dataIndex="memberCard"
                     render={(text, record, index) => {
                         if ((index + 1) < this.state.data.length) {
-                            return <Select showSearch
-                                style={{ width: '100px' }}
+                            return <div id="memberCard"><Select showSearch
+                                style={{ width: '120px', maxHeight: '200px' }}
                                 placeholder="输入会员卡号"
-                                optionFilterProp="children "
+                                optionFilterProp="children"
                                 onChange={this.handleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to="/app/member/memberShip" style={{ width: '100%', display: 'block' }}>会员开卡</Link></Option>
                             </Select>
+                            </div>
                         }
                     }}
                 />
@@ -189,6 +208,11 @@ class ServiceTable extends React.Component {
                     title="抵扣卡次"
                     key="DeductionCardTime"
                     dataIndex="DeductionCardTime"
+                    render={(text, record, index) => {
+                        if ((index + 1) < this.state.data.length) {
+                            return <InputNumber min={1}></InputNumber>
+                        }
+                    }}
                 />
                 <Col
                     title="操作"

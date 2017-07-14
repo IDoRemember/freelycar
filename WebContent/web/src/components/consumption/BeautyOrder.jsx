@@ -157,11 +157,17 @@ class BeautyOrder extends React.Component {
         })
     }
     render() {
+        console.log(this.state.parts)
+        const parts = this.state.parts.map((item, index) => {
+            if (this.state.parts.length > (index + 1)) {
+                return <PartsDetail key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} changeInvSelect={this.changeInvSelect} />
+            }
+        })
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} />
-            <ServiceTable cards={this.state.cards} getPartsDetail={this.getPartsDetail} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
-            <PartsDetail optionInventory={this.state.optionInventory} programId={1} dataInventory={this.state.dataInventory} changeInvSelect={this.changeInvSelect} />
+            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
+            {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额
