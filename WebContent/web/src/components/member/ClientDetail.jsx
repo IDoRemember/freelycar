@@ -28,7 +28,7 @@ class ClientDetail extends React.Component {
         this.state = {
             option: [],
             type: [],
-            client:this.props.params.id,
+            client: this.props.params.id,
             value: this.props.value,
             editable: false,
             visible: false,
@@ -141,7 +141,7 @@ class ClientDetail extends React.Component {
                 phone: '',
                 birthday: '',
                 gender: '',
-                drivingLicense: '',
+                driverLicense: '',
                 idNumber: '',
                 points: '',
                 licensePlate: '',
@@ -163,7 +163,7 @@ class ClientDetail extends React.Component {
     componentDidMount() {
         this.getBrandList();
         this.getClientInfo();
-        this.queryConsumOrder();
+        //this.queryConsumOrder();
     }
     getBrandList = () => {
         $.ajax({
@@ -176,35 +176,35 @@ class ClientDetail extends React.Component {
                 this.setState({
                     option: res.data,
                 })
-             
-            }
-        })
-    }
-    queryConsumOrder = () => {
-        $.ajax({
-            url: 'api/order/query',
-            dataType: 'json',
-            type: 'POST',
-            contentType: 'application/json;charset=utf-8',
-            data: JSON.stringify({
-                consumOrder: {
-                    id: -1,
-                    programId: -1,
-                    payState: -1,
-                    clientId: this.props.params.id
-                },
-                dateType: 0,
-                startDate: '',
-                endDate: '',
-                page: 1,
-                number: 3,
 
-            }),
-            success: (res) => {
-                console.log(res)
             }
         })
     }
+    // queryConsumOrder = () => {
+    //     $.ajax({
+    //         url: 'api/order/query',
+    //         dataType: 'json',
+    //         type: 'POST',
+    //         contentType: 'application/json;charset=utf-8',
+    //         data: JSON.stringify({
+    //             consumOrder: {
+    //                 id: -1,
+    //                 programId: -1,
+    //                 payState: -1,
+    //                 clientId: this.props.params.id
+    //             },
+    //             dateType: 0,
+    //             startDate: '',
+    //             endDate: '',
+    //             page: 1,
+    //             number: 3,
+
+    //         }),
+    //         success: (res) => {
+    //             console.log(res)
+    //         }
+    //     })
+    // }
     getClientInfo = () => {
         $.ajax({
             url: 'api/client/detail',
@@ -281,42 +281,43 @@ class ClientDetail extends React.Component {
                         form: clientInfo,
 
                     })
-                   
 
+                    console.log(objpay.length)
                     //获取消费记录
-                    for (let k = 0; k < 3; k++) {
-                         let payMethod= objpay[k].payMethod;
-                         let paymeth;
-                         switch(payMethod){
-                             case 0:  paymeth="现金";
-                             break;
-                             case 1:  paymeth="微信";
-                             break;
-                             case 2:  paymeth="支付宝";
-                             break;
-                             case 3:  paymeth="易付宝";
-                             break;
-                         }
-                       
-                         
+
+                    for (let k = 0; k < (objpay.length > 3 ? 3 : objpay.length); k++) {
+                        let payMethod = objpay[k].payMethod;
+                        let paymeth;
+                        switch (payMethod) {
+                            case 0: paymeth = "现金";
+                                break;
+                            case 1: paymeth = "微信";
+                                break;
+                            case 2: paymeth = "支付宝";
+                                break;
+                            case 3: paymeth = "易付宝";
+                                break;
+                        }
+
+
                         let payItem = {
 
                             key: objpay[k].id,
                             id: objpay[k].id,
                             maintainItem: objpay[k].programName,
                             payMoney: objpay[k].amount,
-                              payType:paymeth,
-                           // carType: "911",
-                            servicePeople:objpay[k].staffNames,
+                            payType: paymeth,
+                            // carType: "911",
+                            servicePeople: objpay[k].staffNames,
                             serviceTime: objpay[k].payDate,
                             insuranceMoney: objpay[k].amount,
                             serviceState: "完成",
                         }
-                        paylist.push(payItem);   
+                        paylist.push(payItem);
                     }
-                         this.setState({
-                                payData: paylist,
-                            })
+                    this.setState({
+                        payData: paylist,
+                    })
                 }
 
             }
@@ -366,9 +367,11 @@ class ClientDetail extends React.Component {
             value: e.target.value,
         });
     }
+
     handleChange = (e) => {
-        let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
+        console.log(e)
+        let typelist = this.state.option[e].types;
+        console.log(this.state.option[e].types)
         this.setState({
             carId: e,
             type: typelist
@@ -422,13 +425,13 @@ class ClientDetail extends React.Component {
             data: JSON.stringify({
                 //select选择
                 type: {
-                    id: this.state.carId,
+                    id: this.state.typeId,
                     // CarBrand:{
                     //     // name:'lambor',
                     //     // id:'3',
 
                     // },
-                    type: this.state.typeId,
+                    // type: 
                 },
                 licensePlate: forms.licensePlate,
                 //时间选择
@@ -495,7 +498,7 @@ class ClientDetail extends React.Component {
         const { value, editable } = this.state;
         const RadioGroup = Radio.Group;
         const brandOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+            return <Option key={index + 1} value={item.id + ''}>{item.name}</Option>
         })
         const typeOptions = this.state.type.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.type}</Option>
@@ -508,7 +511,7 @@ class ClientDetail extends React.Component {
                         <Col span={3}></Col>
                         <Col span={6}>姓名：<span style={{ width: '200px' }} >{this.state.form.name}</span></Col>
                         <Col span={6}>手机号：<span style={{ width: '200px' }} >{this.state.form.phone} </span></Col>
-                        <Col span={6}>生日：<span>{this.state.form.birthday}</span></Col>
+                        <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,10)}</span></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
@@ -527,12 +530,12 @@ class ClientDetail extends React.Component {
                     <Table columns={this.state.cardColumns} dataSource={this.state.cardData} bordered></Table>
                 </Card>
                 <Card title="车辆信息" className="accountTable" style={{ marginBottom: '15px' }}>
-                    <Button style={{ marginBottom: '20px' }} onClick={()=>this.showModal}><Icon type='car'></Icon>新增车辆</Button>
+                    <Button style={{ marginBottom: '20px' }} onClick={this.showModal}><Icon type='car'></Icon>新增车辆</Button>
                     <Table columns={this.state.carColumns} dataSource={this.state.carData}></Table>
                 </Card>
                 <Card title="消费记录" className="accountTable" >
                     <Table columns={this.state.payColumns} dataSource={this.state.payData} bordered></Table>
-                    <p style={{ float: 'right', marginRight: '30px' }}><Link to={'app/member/customer/'+this.props.params.id+'/payhistory/'}> 更多</Link></p>
+                    <p style={{ float: 'right', marginRight: '30px' }}><Link to={'app/member/customer/' + this.props.params.id + '/payhistory/'}> 更多</Link></p>
                 </Card>
                 <Modal title="新增车辆" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
@@ -571,7 +574,7 @@ class ClientDetail extends React.Component {
                                 optionFilterProp="children"
                                 onChange={this.TypehandleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                 getPopupContainer={() => document.getElementById('car-type')}
+                                getPopupContainer={() => document.getElementById('car-type')}
                             >
                                 {typeOptions}
                             </Select>

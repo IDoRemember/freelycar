@@ -84,13 +84,13 @@ class AddClient extends React.Component {
                 cars: [{
                     //select选择
                     type: {
-                        id: this.state.carId,
+                        id:  this.state.typeId,
                         // CarBrand:{
                         //     // name:'lambor',
                         //     // id:'3',
 
                         // },
-                        type: this.state.typeId,
+                      //  type:
                     },
                     licensePlate: forms.licensePlate,
                     //时间选择
