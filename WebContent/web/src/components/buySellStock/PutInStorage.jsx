@@ -13,6 +13,7 @@ class PutInStorage extends React.Component {
         super(props)
         this.state = {
             view: false,
+            display: 'none',//添加配件入库以下部分
             data: [],
             error: ''
         }
@@ -51,7 +52,8 @@ class PutInStorage extends React.Component {
         }
         this.setState({
             view: false,
-            data: datalist
+            data: datalist,
+            display: datalist.length > 0 ? 'block' : 'none'
         })
     }
     changeNumber = (value, index) => {
@@ -67,9 +69,12 @@ class PutInStorage extends React.Component {
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ data: dataSource });
+        this.setState({
+            data: dataSource,
+            display: dataSource.length > 0 ? 'block' : 'none'
+        });
     }
-    saveData = (totalPrice,totalAmount) => {
+    saveData = (totalPrice, totalAmount) => {
         if (this.state.data.length < 1) {
             this.setState({
                 error: '请新增配件入库'
@@ -91,7 +96,6 @@ class PutInStorage extends React.Component {
                 }
                 instockArray.push(instockObject)
             }
-            console.log(instockArray)
             $.ajax({
                 url: 'api/inventory/instock',
                 contentType: 'application/json;charset=utf-8',
@@ -100,9 +104,9 @@ class PutInStorage extends React.Component {
                 data: JSON.stringify({
                     type: 0,
                     state: 0,
-                    totalAmount:totalAmount,
-                    totalPrice:totalPrice,
-                    
+                    totalAmount: totalAmount,
+                    totalPrice: totalPrice,
+
                     inventoryInfos: instockArray
                 }),
                 traditional: true,
@@ -141,113 +145,96 @@ class PutInStorage extends React.Component {
                 <Button type="primary" style={{ marginLeft: '10px', marginBottom: '10px' }} onClick={() => this.modeShow()} size={'large'}>添加配件入库</Button>
 
                 <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
-                <Table loading={this.state.data ? false : true} className="accountTable" dataSource={this.state.data} bordered>
-                    <Col
-                        title="序号"
-                        dataIndex="index"
-                        key="index"
-                        render={(text, record, index) => { return <span>{index + 1}</span> }}
-                    />
-                    <Col
-                        title="配件编号"
-                        dataIndex="partId"
-                        key="partId"
-                    />
-                    <Col
-                        title="配件名称"
-                        key="partName"
-                        dataIndex="partName"
-                    />
-                    <Col
-                        title="配件类别"
-                        key=" category"
-                        dataIndex="category"
-                    />
-                    <Col
-                        title="规格属性"
-                        key="attribute"
-                        dataIndex="attribute"
-                    />
-                    <Col
-                        title="单价"
-                        key="price"
-                        dataIndex="price"
-                    />
-                    <Col
-                        title="数量"
-                        key="number"
-                        dataIndex="number"
-                        render={(text, record, index) => {
-                            return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeNumber(value, index)} />
-                        }}
-                    />
-                    <Col
-                        title="供应商"
-                        key="provider"
-                        dataIndex="provider"
-                        render={(text, record, index) => {
-                            return <span>{text.name}</span>
-                        }}
-                    /*const providersOptions = record.provider.map((item, index) => {
-                        return <Option key={item.id} value={item.id + ''}>{item.name}</Option>
-                    })
-                    if (text) {
-                        return <span>{text}</span>
-                    } else {
-                        return <Select
-                            mode="combobox"
-                            showSearch
-                            style={{ width: '100px' }}
-                            placeholder="输入供应商名称"
-                            optionFilterProp="children"
-                            optionLabelProp="children"
-                            labelInValue
-                            onChange={(value) => this.handleSelectedChange(value, index)}
-                            filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                        >
-                            {providersOptions}
-                        </Select>
-                    }
-                }}*/
-                    />
-                    <Col
-                        title="单项合计"
-                        key="DeductionCardTime"
-                        dataIndex="DeductionCardTime"
-                        render={(text, record, index) => {
-                            return <span>{record.number ? record.number * record.price : record.price}</span>
-                        }}
-                    />
-                    <Col
-                        title="操作"
-                        key="action"
-                        render={(text, record, index) => {
-                            return <span>
-                                <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
-                                    <a href="javascript:void(0);">删除</a>
-                                </Popconfirm>
-                            </span>
-                        }}
-                    />
-                </Table>
-                <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
-                    <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
-                        <Col span={12} >合计金额：<span>{totalPrice}</span>
-                        </Col>
-                        <Col span={12} >
-                            合计数量：
-                        <span>{this.state.data.length}</span>
-                        </Col>
-                    </Row>
-                    <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
-                        <Col span={12} >
-                        </Col>
-                        <Col span={12} style={{ textAlign: 'right' }}>
-                            <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
-                            <Button onClick={() => this.saveData(totalPrice,this.state.data.length)} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
-                            <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
-                        </Col>
-                    </Row>
+
+                <div style={{ display: this.state.display }}>
+                    <Table loading={this.state.data ? false : true} className="accountTable" dataSource={this.state.data} bordered>
+                        <Col
+                            title="序号"
+                            dataIndex="index"
+                            key="index"
+                            render={(text, record, index) => { return <span>{index + 1}</span> }}
+                        />
+                        <Col
+                            title="配件编号"
+                            dataIndex="partId"
+                            key="partId"
+                        />
+                        <Col
+                            title="配件名称"
+                            key="partName"
+                            dataIndex="partName"
+                        />
+                        <Col
+                            title="配件类别"
+                            key=" category"
+                            dataIndex="category"
+                        />
+                        <Col
+                            title="规格属性"
+                            key="attribute"
+                            dataIndex="attribute"
+                        />
+                        <Col
+                            title="单价"
+                            key="price"
+                            dataIndex="price"
+                        />
+                        <Col
+                            title="数量"
+                            key="number"
+                            dataIndex="number"
+                            render={(text, record, index) => {
+                                return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeNumber(value, index)} />
+                            }}
+                        />
+                        <Col
+                            title="供应商"
+                            key="provider"
+                            dataIndex="provider"
+                            render={(text, record, index) => {
+                                return <span>{text.name}</span>
+                            }}
+                        />
+                        <Col
+                            title="单项合计"
+                            key="DeductionCardTime"
+                            dataIndex="DeductionCardTime"
+                            render={(text, record, index) => {
+                                return <span>{record.number ? record.number * record.price : record.price}</span>
+                            }}
+                        />
+                        <Col
+                            title="操作"
+                            key="action"
+                            render={(text, record, index) => {
+                                return <span>
+                                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
+                                        <a href="javascript:void(0);">删除</a>
+                                    </Popconfirm>
+                                </span>
+                            }}
+                        />
+                    </Table>
+                    <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
+                        <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
+                            <Col span={12} >合计金额：<span>{totalPrice}</span>
+                            </Col>
+                            <Col span={12} >
+                                合计数量：
+                            <span>{this.state.data.length}</span>
+                            </Col>
+                        </Row>
+                        <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
+                            <Col span={12} >
+                            </Col>
+                            <Col span={12} style={{ textAlign: 'right' }}>
+                                <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
+                                <Button onClick={() => this.saveData(totalPrice, this.state.data.length)} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
+                                <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
+                            </Col>
+                        </Row>
+                    </div>
+
                 </div>
 
             </Card>
