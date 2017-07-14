@@ -12,9 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
+import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
@@ -25,6 +27,7 @@ import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
 import com.geariot.platform.freelycar.entities.InventoryOrderInfo;
 import com.geariot.platform.freelycar.entities.Project;
+import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Provider;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
@@ -53,6 +56,12 @@ public class ConsumOrderService {
 
 	@Autowired
 	private InventoryOrderDao inventoryOrderDao;
+	
+	@Autowired
+	private CardDao cardDao;
+	
+	@Autowired
+	private ProjectDao projectDao;
 	
 	public String book(ConsumOrder consumOrder) {
 		consumOrder.setId(IDGenerator.generate(IDGenerator.MAINTAIN_CONSUM));
@@ -88,6 +97,14 @@ public class ConsumOrderService {
 			list.add(temp);
 			totalAmount += temp.getAmount();
 			totalPrice += temp.getPrice();
+		}
+		//获取project信息保存到该订单
+		for(ProjectInfo pInfo : consumOrder.getProjects()){
+			Project project = this.projectDao.findProjectById(pInfo.getProjectId());
+			Card payCard = this.cardDao.getCardById(pInfo.getCardId());
+			pInfo.setProjectName(project.getName());
+			pInfo.setProjectPrice(project.getPrice());
+			pInfo.setCardName(payCard.getService().getName());
 		}
 		this.orderDao.save(consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
