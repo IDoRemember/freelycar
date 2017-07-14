@@ -31,7 +31,36 @@ class BeautyOrder extends React.Component {
                 singleSummation: '0',
                 DeductionCardTime: '1'
             }],
-            optionInventory: []
+            optionInventory: [],
+            consumOrder: {
+                carId: '',
+                licensePlate: '',
+                carType: '',
+                carBrand: '',
+                clientId: '',
+                clientName: '',
+                gender: '',
+                phone: '',
+                projects: [],
+                programId: '',
+                payMethod: '',
+                programName: '',
+                parkingLocation: '',
+                inventoryInfos: [],
+                state: '',
+                totalPrice: '',
+                payState: '',
+                pickTime: '',
+                finishTime: '',
+                deliverTime: '',
+                createDate: '',
+                lastMiles: '',
+                miles: '',
+                orderMaker: '',
+                comment: '',
+                faultDesc: '',
+                repairAdvice: ''
+            }
         }
     }
 
@@ -84,30 +113,13 @@ class BeautyOrder extends React.Component {
         });
     }
 
-
-    //选择改变项目名称
-    changeProjectSelect = (index, value) => {
-        $.ajax({
-            url: 'api/project/getbyid',
-            type: 'get',
-            data: { projectId: value },
-            dataType: 'json',
-            success: (res) => {
-                if (res.code == '0') {
-                    let obj = res.data;
-                    obj.key = obj.id;
-                    obj.index = index;
-                    obj.singleSummation = obj.price * (this.state.dataService[index].number);
-                    this.setState({
-                        dataService: update(this.state.dataService, { [index]: { $set: obj } })
-                    }, () => {
-                        console.log(this.state.dataService);
-                    })
-                }
-            }
-
-        });
+    saveInfo = (key, value) => {
+        this.setState({
+            consumOrder: update(this.state.consumOrder, { [key]: { $update: value } })
+        })
     }
+    //选择改变项目名称
+ 
     combineParts = () => {
         let dataInventory = []
         console.log(this.state.dataService)
@@ -119,29 +131,6 @@ class BeautyOrder extends React.Component {
         this.setState({
             dataInventory: dataInventory
         })
-    }
-    //选择改变配件名称
-    changeInvSelect = (index, value) => {
-        $.ajax({
-            url: 'api/inventory/getbyid',
-            type: 'get',
-            data: { inventoryId: value },
-            dataType: 'json',
-            success: (res) => {
-                //console.log(res);
-                if (res.code == '0') {
-                    let obj = res.data;
-                    obj.key = obj.id;
-                    obj.index = index;
-                    // obj.singleSummation = obj.price * this.state.data[index].number;
-                    this.setState({
-                        data: update(this.state.data, { [index]: { $set: obj } })
-                    }, () => {
-                        // console.log(this.state.data);
-                    })
-                }
-            }
-        });
     }
 
     getPartsDetail = (Parts) => {
@@ -166,7 +155,7 @@ class BeautyOrder extends React.Component {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} />
-            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} changeProjectSelect={this.changeProjectSelect} />
+            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService}/>
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>

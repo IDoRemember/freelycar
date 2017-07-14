@@ -32,12 +32,13 @@ class CustomerInfo extends React.Component {
                 tips: '',
                 lastMiles: '',
                 consumTimes: '',
-                lastVisit: ''
+                lastVisit: '',
+                pickCarStaff: '',
+                parkingLocation: '',
+                miles: '',
+                pickTime: ''
             }
         }
-    }
-    componentDidMount() {
-
     }
 
     licenseChange = (value) => {
@@ -76,29 +77,41 @@ class CustomerInfo extends React.Component {
                 }
             });
         }
-
     }
+
+    handleValueChange = (key, value) => {
+        console.log(value)
+        this.setState({
+            carInfo: update(this.state.carInfo, { [key]: { $set: value } })
+        })
+    }
+
     timeonChange = (time) => {
         console.log(time)
     }
+
     showModal = () => {
         this.setState({
             visible: true
         });
     }
+
     handleOk = () => {
         this.setState({
             visible: false
         });
     }
+
     handleCancel = () => {
         this.setState({
             visible: false
         });
     }
+
     onChange = (date, dateString) => {
         console.log(date, dateString);
     }
+
     render() {
         const plateOptions = this.props.staffList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
@@ -113,7 +126,7 @@ class CustomerInfo extends React.Component {
                     <span style={{ width: '150px' }}>小易爱车</span>
                 </div>
             </div>
-            <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
+            <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }} >
                 <Row gutter={16} style={{ marginBottom: "10px" }}>
                     <Col span={8} >车牌号码：
                         <Input onChange={(e) => { this.licenseChange(e.target.value) }} style={{ width: '100px' }} />
@@ -126,7 +139,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8} >
                         停车位置：
-                        <Input style={{ width: '100px' }} />
+                        <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('parkingLocation', e.target.value) }} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -140,10 +153,10 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         接车时间：
-                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={this.timeonChange} />
+                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', time._d)} />
                     </Col>
                 </Row>
-                <Row gutter={16} style={{ marginBottom: '10px' }} id="get-car">
+                <Row gutter={16} style={{ marginBottom: '10px' }} >
                     <Col span={8}>
                         上次里程：
                         <span style={{ width: '100px' }}>{this.state.carInfo.lastMiles}km </span>
@@ -154,10 +167,10 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         接车人员：
-                          <Select mode="multiple"
-                            style={{ width: '200px' }}
-                            onChange={this.handleChange}
-                            getPopupContainer={() => document.getElementById('get-car')}
+                          <Select
+                            style={{ width: '100px' }}
+                            onChange={(value) => this.handleValueChange('pickCarStaff', value)}
+                            dropdownStyle={{ overflow: 'scroll' }}
                         >
                             {plateOptions}
                         </Select>
@@ -166,7 +179,7 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8}>
                         本次里程：
-                        <Input style={{ width: '100px' }} />
+                        <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('miles', e.target.value) }} />
                     </Col>
                     <Col span={8} style={{ height: '28px', lineHeight: '28px' }}>
                         提示信息：

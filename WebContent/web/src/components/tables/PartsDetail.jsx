@@ -9,8 +9,10 @@ import PartsSearch from '../model/PartsSearch.jsx'
 const Option = Select.Option,
     total = {
         key: '',
-        id:'total',
+        view: false,
+        id: 'total',
         index: '',
+        parts: [],
         total: '合计',
         singleSummation: '0'
     }
@@ -19,7 +21,6 @@ class PartsDetail extends React.Component {
         super(props)
         this.state = {
             parts: [],
-
         }
     }
     componentDidMount() {
@@ -28,8 +29,9 @@ class PartsDetail extends React.Component {
             parts.push(item.inventory)
         }
         parts.push(total)
-        for(let item of parts) {
-            item.key = item.id 
+        console.log(this.props.parts)
+        for (let item of parts) {
+            item.key = item.id
         }
         this.setState({
             parts: parts
@@ -39,6 +41,7 @@ class PartsDetail extends React.Component {
     handleInvChange = (index, value) => {
         this.props.changeInvSelect(index, value);
     }
+
 
     modifyParts = (key, value, index) => {
         this.setState({
@@ -54,49 +57,41 @@ class PartsDetail extends React.Component {
 
     handleOk = (data) => {
         console.log(data)
-        let datalist = this.state.data
+        let datalist = this.state.parts
         if (datalist.length > 0) {
             for (let i = 0; i < data.length; i++) {
                 let same = 0;
                 for (let j = 0; j < datalist.length; j++) {
-                    if (data[i].partId == datalist[j].partId) {
+                    if (data[i].partId == datalist[j].id) {
                         same++
                     }
                 }
                 if (same == 0) {
-                    datalist.push(data[i])
+                    let obj = {
+                        name: data[i].partName,
+                        brandName: data[i].brand,
+                        standard: data[i].standard,
+                        property: data[i].attribute,
+                        price: data[i].price,
+                        amount: data[i].inventory,
+                        key: data[i].key
+                    }
+                    datalist.unshift(obj)
                 }
             }
         } else {
-            datalist.push(...data)
+            datalist.unshift(...data)
         }
         this.setState({
             view: false,
-            data: datalist
-        })
-    }
-
-    addOneROw = () => {
-        let oneRow = {
-            key: this.state.data.length,
-            index: this.state.data.length,
-            project: 'xiuche',
-            price: '0',
-            number: '1',
-            singleSummation: '0',
-            DeductionCardTime: '0',
-        }
-        let data = this.state.data
-        data.splice(data.length - 1, 0, oneRow)
-        this.setState({
-            data: data
+            parts: datalist
         })
     }
 
     onDelete = (index) => {
-        const dataSource = [...this.state.data];
+        const dataSource = [...this.state.parts];
         dataSource.splice(index, 1);
-        this.setState({ data: dataSource });
+        this.setState({ parts: dataSource });
     }
 
     onCellChange = (index, key) => {
@@ -113,7 +108,7 @@ class PartsDetail extends React.Component {
         })
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
             <div style={{ fontSize: '16px', marginBottom: '10px' }}>   {this.props.title}配件&nbsp;&nbsp;&nbsp;
-            <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }}><Icon type="plus-circle-o" />&nbsp;增加</div></div>
+            <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }} onClick={() => { this.setState({ view: true }) }}><Icon type="plus-circle-o" />&nbsp;增加</div></div>
             <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
             <Table className="accountTable" dataSource={this.state.parts} bordered>
                 <Col
@@ -175,10 +170,13 @@ class PartsDetail extends React.Component {
                     key="singleSummation"
                     dataIndex="singleSummation"
                     render={(text, record, index) => {
-                        if(index == (this.state.parts.length-1)) {
+                        if (index == (this.state.parts.length - 1)) {
+                            console.log(record)
                             let total = 0
-                            for(let item of this.state.parts) {
-                                total = total+(item.number ? item.number : 1) * item.price
+                            for (let item of this.state.parts) {
+                                if (item.price) {
+                                    total = total + (item.number ? item.number : 1) * item.price
+                                }
                             }
                             return <span>{total}</span>
                         }
@@ -191,9 +189,6 @@ class PartsDetail extends React.Component {
                     render={(text, record, index) => {
                         if (!record.total) {
                             return <span>
-                                <span style={{ marginRight: '10px', cursor: 'pointer' }} onClick={this.addOneROw}>
-                                    <a href="javascript:void(0);">新增</a>
-                                </span>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(index)}>
                                     <a href="javascript:void(0);">删除</a>
                                 </Popconfirm>
