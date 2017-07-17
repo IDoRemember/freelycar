@@ -238,4 +238,14 @@ public class AdminService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
+	public String getAdminByAccount(String account) {
+		Admin admin = this.findAdminByAccount(account);
+		if(admin == null){
+			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
+		}
+		JsonConfig config = new JsonConfig();
+		config.registerPropertyExclusion(Admin.class, "password");
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(admin, config)).toString();
+	}
+
 }

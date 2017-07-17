@@ -99,6 +99,17 @@
 			msg:
 		}
 		0,2,24,26
+	1.9 根据account获取admin
+		请求:GET
+		server_url/admin/getaccount
+		参数:{
+			account=
+		}
+		响应:{
+			code:
+			msg:
+			data:
+		}
 
 2. 员工接口:/staff/
 	2.1 新增员工

@@ -66,6 +66,11 @@ public class AdminController {
 		return adminService.query(account, name, page, number);
 	}
 	
+	@RequestMapping(value="/getaccount", method=RequestMethod.GET)
+	public String queryByAccount(String account){
+		return adminService.getAdminByAccount(account);
+	}
+	
 	@RequestMapping(value="/changestate", method=RequestMethod.POST)
 	@PermissionRequire("admin:modify")
 	public String changeAdminCurrent(String account, int type){
