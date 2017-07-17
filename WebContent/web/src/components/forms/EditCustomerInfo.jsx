@@ -25,8 +25,9 @@ class CustomerInfo extends React.Component {
             option: [],
             visible: false,
             carInfo: {
+                clientId:'',
                 clientName: '',
-                brandName: '',
+                carBrand: '',
                 phone: '',
                 consumAmout: '',
                 tips: '',
@@ -53,18 +54,20 @@ class CustomerInfo extends React.Component {
                 success: (res) => {
                     console.log(res);
                     if (res.code == '0') {
-                        let data = res.data, cars = data.cars, brandName, lastMiles;
+                        console.log(res.data)
+                        let data = res.data, cars = data.cars, carBrand, lastMiles;
                         for (let item of cars) {
                             if (item.licensePlate == value) {
-                                brandName = item.type.brand.name;
+                                carBrand = item.type.brand.name;
                                 lastMiles = item.lastMiles;
                             }
                         }
                         this.setState({
                             carInfo: update(this.state.carInfo,
                                 {
+                                    ['clientId']:{$set:data.id},
                                     ['clientName']: { $set: data.name },
-                                    ['brandName']: { $set: brandName },
+                                    ['carBrand']: { $set: carBrand },
                                     ['phone']: { $set: data.phone },
                                     ['lastMiles']: { $set: lastMiles },
                                     ['consumAmout']: { $set: data.consumAmout },
@@ -80,14 +83,10 @@ class CustomerInfo extends React.Component {
     }
 
     handleValueChange = (key, value) => {
-        console.log(value)
         this.setState({
             carInfo: update(this.state.carInfo, { [key]: { $set: value } })
         })
-    }
-
-    timeonChange = (time) => {
-        console.log(time)
+        this.props.saveInfo(this.state.carInfo)
     }
 
     showModal = () => {
@@ -145,7 +144,7 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8} >
                         品牌型号：
-                        <span style={{ width: '100px' }}>{this.state.carInfo.brandName}</span>
+                        <span style={{ width: '100px' }}>{this.state.carInfo.carBrand}</span>
                     </Col>
                     <Col span={8}>
                         手机号码：
@@ -169,7 +168,7 @@ class CustomerInfo extends React.Component {
                         接车人员：
                           <Select
                             style={{ width: '100px' }}
-                            onChange={(value) => this.handleValueChange('pickCarStaff', value)}
+                            onChange={(value) => this.handleValueChange('pickCarStaff', { id: value })}
                             dropdownStyle={{ overflow: 'scroll' }}
                         >
                             {plateOptions}
@@ -179,7 +178,7 @@ class CustomerInfo extends React.Component {
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
                     <Col span={8}>
                         本次里程：
-                        <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('miles', e.target.value) }} />
+                        <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('miles', e.target.value) }} />&nbsp;&nbsp;km
                     </Col>
                     <Col span={8} style={{ height: '28px', lineHeight: '28px' }}>
                         提示信息：
