@@ -264,7 +264,7 @@ class AccountManage extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.queryaccount(pagination.current, 10)
+        this.queryAccount(pagination.current, 10)
     }
 
     handleCancel = (e) => {

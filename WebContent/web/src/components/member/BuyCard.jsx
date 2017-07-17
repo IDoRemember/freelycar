@@ -22,7 +22,9 @@ class BuyCard extends React.Component {
             female: 'female',
             value: 1,
             vaild: '',
-            type: '',
+            typeId:'',
+            cardtype: '',
+            type: [],
             price: '',
             orderMaker: '',
             serviceId: '',
@@ -40,7 +42,7 @@ class BuyCard extends React.Component {
                 name: '',
                 price: '',
                 vaild: '',
-                type: '',
+                cardtype: '',
             },
             clientInfo: {
                 name: '',
@@ -120,7 +122,12 @@ class BuyCard extends React.Component {
             visible: true
         });
     }
-    
+     TypehandleChange = (value) => {
+        console.log(`selected ${value}`);
+        this.setState({
+            typeId: value
+        })
+    }
     CardhandleChange = (value) => {
         console.log(value)
         console.log(`selected ${value}`)
@@ -138,7 +145,7 @@ class BuyCard extends React.Component {
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
-                    type: res.data[0].type,
+                    cardtype: res.data[0].type,
                     serviceId: res.data[0].id,
                 })
             }
@@ -242,18 +249,22 @@ class BuyCard extends React.Component {
         })
     }
 
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
-        // let typelist = this.state.option[e-1 ].types;
-        // console.log(this.state.option[e-1].types)
-        // this.setState({
-        //     carId: e
-        // })
+    handleChange = (e) => {
+        console.log(`selected ${e}`)
+        let typelist = this.state.option[e-1 ].types;
+        console.log(this.state.option[e-1].types)
+        this.setState({
+            carId: e,
+            type:typelist,
+          //  type:""
+            typeId:''
+        })
     }
     handleOk = () => {
         this.setState({
             visible: false
         });
+    this.CardhandleChange();
     }
     handleCancel = () => {
         this.setState({
@@ -270,6 +281,9 @@ class BuyCard extends React.Component {
         }), StaffOptions = this.state.adminList.map((item, index) => {
             let staffId = item.id + '';
             return <Option key={index} value={staffId}>{item.name}</Option>
+        })
+        const typeOptions = this.state.type.map((item, index) => {
+            return <Option key={index} value={item.id + ''}>{item.type}</Option>
         })
         return (
             <div >
@@ -309,8 +323,24 @@ class BuyCard extends React.Component {
                                 {brandOptions}
                             </Select>
                         </Col>
+                      
                         <Col span={8} >推荐人：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.recommendName} onChange={(e) => this.onValueChange('recommendName', e.target.value)} />
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                          <Col span={8} offset={4}  id="provider-area">车辆型号:
+                            <Select showSearch
+                                style={{ width: '140px', marginLeft: '10px' }}
+                                placeholder="请选择车辆型号"
+                                optionFilterProp="children"
+                                value={this.state.typeId}
+                                onChange={this.TypehandleChange}
+                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                 getPopupContainer={() => document.getElementById('provider-area')}
+                            >
+                                 {typeOptions} 
+                            </Select>
                         </Col>
                     </Row>
                     <Row>
@@ -333,7 +363,7 @@ class BuyCard extends React.Component {
                             >
                                 {CardOptions}
                             </Select>
-                            <Icon type="plus-circle-o" onClick={()=>this.showModal()} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
+                            <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
                         </Col>
                         <Col span={8} >卡类价格：
                             <Input style={{ width: '140px', marginLeft: '14px', color: 'red' }} value={this.state.price == '' ? '' : this.state.price + '元'} disabled />
@@ -344,7 +374,7 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '140px', marginLeft: '25px', color: 'red' }} value={this.state.vaild == '' ? '' : this.state.vaild + '年'} disabled />
                         </Col>
                         <Col span={8} >会员卡种：
-                             <Input style={{ width: '140px', marginLeft: '15px', color: 'red' }} value={this.state.type == '0' ? '组合次卡' : '次卡'} disabled />
+                             <Input style={{ width: '140px', marginLeft: '15px', color: 'red' }} value={this.state.cardtype == '1' ? '组合次卡' : '次卡'} disabled />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -378,8 +408,8 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
-                    onCancel={() => this.handleCancel}>
+                <CardModal visible={this.state.visible} onOk={this.handleOk}
+                    onCancel={this.handleCancel}>
                 </CardModal>
                 <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={()=>this.SaveCard()}>办理</Button>
             </div >
