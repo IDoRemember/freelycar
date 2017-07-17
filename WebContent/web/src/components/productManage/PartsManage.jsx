@@ -483,7 +483,7 @@ class BeautyOrder extends React.Component {
             data: jsonData,
             type: 'get',
             success: (res) => {
-                console.log(res);
+                //console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let typeItem = [];//表格显示的数据
@@ -545,12 +545,12 @@ class BeautyOrder extends React.Component {
             key: 'name'
         }, {
             title: '配件类别',
-            dataIndex: 'type',
-            key: 'type'
+            dataIndex: 'typeName',
+            key: 'typeName'
         }, {
             title: '配件品牌',
-            dataIndex: 'brand',
-            key: 'brand'
+            dataIndex: 'brandName',
+            key: 'brandName'
         }, {
             title: '规格',
             dataIndex: 'standard',
@@ -640,8 +640,8 @@ class BeautyOrder extends React.Component {
             key: 'createDate'
         }, {
             title: '备注',
-            dataIndex: 'remark',
-            key: 'remark'
+            dataIndex: 'comment',
+            key: 'comment'
         }, {
             title: '操作',
             dataIndex: 'operation',

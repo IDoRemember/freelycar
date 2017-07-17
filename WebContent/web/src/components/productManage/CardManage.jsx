@@ -27,9 +27,6 @@ class EditableTable extends React.Component {
 
     }
 
-
-
-
     componentDidMount() {
         this.loadData(1, 10);
     }
@@ -52,8 +49,6 @@ class EditableTable extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
-
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -89,7 +84,6 @@ class EditableTable extends React.Component {
 
     // 模态框的处理函数
     showModal = () => {
-        console.log('zzz');
         this.setState({
             visible: true,
         });
@@ -99,7 +93,6 @@ class EditableTable extends React.Component {
             visible: false,
         });
 
-        console.log(obj);
         this.setState({
             data: [...this.state.data, obj],
         });
@@ -151,22 +144,6 @@ class EditableTable extends React.Component {
         });
     }
     handleAdd = () => {
-        console.log('zzz');
-        // const { count, dataSource } = this.state;
-        // const newData = {
-        //     key: count,
-        //     index: count,
-        //     name: `Edward King ${count}`,
-        //     properties: `Edward King ${count}`,
-        //     valateTime: `Edward King ${count}`,
-        //     price: `Edward King ${count}`,
-        //     createTime: `Edward King ${count}`,
-        //     remark: `Edward King ${count}`,
-        // };
-        // this.setState({
-        //     dataSource: [...dataSource, newData],
-        //     count: count + 1,
-        // });
     }
     render() {
         //卡类的表头
@@ -202,7 +179,7 @@ class EditableTable extends React.Component {
             dataIndex: 'comment',
             key: 'comment'
         }, {
-            title: 'operation',
+            title: '操作',
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
@@ -297,19 +274,7 @@ class ModalEditableTable extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: [{
-                key: '1',
-                index: '1',
-                name: 'John Brown',
-                count: 'dfsd',
-                operation: 'zz'
-            }, {
-                key: '2',
-                index: '2',
-                name: 'John Brown',
-                count: 'dfsd',
-                operation: 'zz'
-            }]
+            data: []
         }
 
     }
@@ -328,21 +293,7 @@ class ModalEditableTable extends React.Component {
         this.setState({ data: dataSource });
     }
     handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
+        
     }
     render() {
         const columns = [{
@@ -354,7 +305,7 @@ class ModalEditableTable extends React.Component {
             dataIndex: 'count',
             key: 'count'
         }, {
-            title: 'operation',
+            title: '操作',
             dataIndex: 'operation',
             render: (text, record, index) => {
                 return (
