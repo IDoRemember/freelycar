@@ -21,6 +21,7 @@ class ClientInfo extends React.Component {
             },
             selectedIds: [],
             queryValue: '',
+            type:[],
             columns: [
                 {
                     title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
@@ -60,9 +61,34 @@ class ClientInfo extends React.Component {
     //渲染完成后执行
     componentDidMount() {
         this.getList(1, 10);
-        this.getName()
-
+        this.getName();
+        this.getBrand();
     }
+    getBrand=()=>{
+          $.ajax({
+            type: 'GET',
+            url: '/api/car/listbrand',
+            datatype: 'json',
+            contentType: 'application/json;charset=utf-8',
+            data: {},
+            success: (res) => {
+
+                this.setState({
+                    option: res.data,
+
+
+                })
+                console.log(this.state.option)
+            }
+        })
+    }
+    //  TypehandleChange = (value) => {
+    //     console.log(`selected ${value}`);
+    //     this.setState({
+    //         typeId: value
+    //     })
+    // }
+
     //获取所有客户姓名模糊查询然后再去根据选择的值去筛选
     /*name接口有没有？？？ */
     getName = () => {
@@ -164,7 +190,7 @@ class ClientInfo extends React.Component {
                             id: obj[i].id,
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
-                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
+                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substring(0,2)+'...': obj[i].cars[0].licensePlate,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -312,6 +338,9 @@ class ClientInfo extends React.Component {
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.index}>{item.value}</Option>
         })
+        //   const typeOptions = this.state.type.map((item, index) => {
+        //     return <Option key={index} value={item.id + ''}>{item.type}</Option>
+        // })
         return (
             <div>
                 <BreadcrumbCustom first="会员管理" second="客户信息" />
