@@ -43,9 +43,8 @@ import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
 //system
 import StaffManage from './components/systemSetting/StaffManage.jsx';
 import AccountManage from './components/systemSetting/AccountManage.jsx';
-import StaffDetail from './components/systemSetting/StaffDetail.jsx';
-
-
+import StaffDetail from './components/systemSetting/StaffDetail.jsx';      
+   
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
     <Route path={"app"} component={App} >

@@ -4,6 +4,7 @@ import { Layout, Menu, Icon } from 'antd';
 const { Sider } = Layout;
 const SubMenu = Menu.SubMenu;
 import { Link } from 'react-router';
+import $ from 'jquery';
 import logo from '../styles/imgs/logo.png';
 class SiderCustom extends Component {
     constructor(props) {
@@ -12,15 +13,38 @@ class SiderCustom extends Component {
             collapsed: false,
             mode: 'inline',
             openKey: '',
-            selectedKey: ''
+            selectedKey: '',
+            user:'',
+            role:1,
         }
     }
     componentDidMount() {
+        this.queryAdmin()
         const _path = this.props.path;
         this.setState({
             openKey: _path.substr(0, _path.lastIndexOf('/')),
             selectedKey: _path
         });
+    }
+      queryAdmin = () => {
+        $.ajax({
+            url: 'api/admin/getaccount',
+            type: "GET",
+            data: {
+                account: localStorage.getItem('username'),
+            
+            },
+            success: (res) => {
+                console.log(res.data);
+                console.log(res.data.role.id)
+                this.setState({
+                    user: res.data.name,
+                    role:res.data.role.id,
+
+                })
+                
+            }
+        })
     }
     componentWillReceiveProps(nextProps) {
         this.onCollapse(nextProps.collapsed);
@@ -92,7 +116,7 @@ class SiderCustom extends Component {
                         <Menu.Item key="/app/member/memberShip"><Link to={'/app/member/memberShip'}>会员办理</Link></Menu.Item>
                         <Menu.Item key="/app/member/customer"><Link to={'/app/member/customer'}>客户管理</Link></Menu.Item>
                     </SubMenu>
-                    <SubMenu
+                   {this.state.role!=3&&this.state.role!=4&&<SubMenu
                         key="/app/buySellStock"
                         title={<span><Icon type="shopping-cart" /><span className="nav-text">进销存管理</span></span>}
                     >
@@ -100,8 +124,8 @@ class SiderCustom extends Component {
                         <Menu.Item key="/app/buySellStock/buyProduct"><Link to={'/app/buySellStock/buyProduct'}>入库</Link></Menu.Item>
                         <Menu.Item key="/app/buySellStock/sellProduct"><Link to={'/app/buySellStock/sellProduct'}>出库</Link></Menu.Item>
                         <Menu.Item key="/app/buySellStock/providerManage"><Link to={'/app/buySellStock/providerManage'}>供应商管理</Link></Menu.Item>
-                    </SubMenu>
-                    <SubMenu
+                    </SubMenu>}
+                  {this.state.role!=3&&this.state.role!=4&& <SubMenu
                         key="/app/productManage"
                         title={<span><Icon type="appstore-o" /><span className="nav-text">产品管理</span></span>}
                     >
@@ -109,19 +133,20 @@ class SiderCustom extends Component {
                         <Menu.Item key="/app/productManage/partsManage"><Link to={'/app/productManage/partsManage'}>配件管理</Link></Menu.Item>
                         <Menu.Item key="/app/productManage/cardManage"><Link to={'/app/productManage/cardManage'}>卡类管理</Link></Menu.Item>
                     </SubMenu>
-                    <SubMenu
+                    } 
+                    {this.state.role!=3&&<SubMenu
                         key="/app/dataTable"
                         title={<span><Icon type="line-chart" /><span className="nav-text">数据报表</span></span>}
                     >
                         <Menu.Item key="/app/dataTable/businessSummary"><Link to={'/app/dataTable/businessSummary'}>营业汇总</Link></Menu.Item>
-                    </SubMenu>
-                    <SubMenu
+                    </SubMenu>}
+                    {this.state.role!=3&&this.state.role!=4&&<SubMenu
                         key="/app/systemSet"
                         title={<span><Icon type="setting" /><span className="nav-text">系统设置</span></span>}
                     >
                         <Menu.Item key="/app/systemSet/staffManage"><Link to={'/app/systemSet/staffManage'}>员工管理</Link></Menu.Item>
                         <Menu.Item key="/app/systemSet/accountManage"><Link to={'/app/systemSet/accountManage'}>账户管理</Link></Menu.Item>
-                    </SubMenu>
+                    </SubMenu>}
                 </Menu>
                 <style>
                     {`
