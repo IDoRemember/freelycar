@@ -3,6 +3,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import EditableCell from '../tables/EditableCell.jsx'
 import CardModal from './CardModal.jsx'
 import $ from 'jquery';
+import update from 'immutability-helper'
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Popconfirm, Modal, Form } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
@@ -22,7 +23,8 @@ class EditableTable extends React.Component {
             //会员卡类别数据
             data: [],
             cardName: '',//条件查询的卡类,
-            selectedRowKeys:[]
+            selectedRowKeys:[],
+            pagination:{}
         }
 
     }
@@ -143,7 +145,8 @@ class EditableTable extends React.Component {
 
         });
     }
-    handleAdd = () => {
+    handleChange = (p) => {
+        this.loadData(p.current,10);
     }
     render() {
         //卡类的表头
@@ -252,6 +255,8 @@ class EditableTable extends React.Component {
                                     columns={columns}
                                     dataSource={this.state.data}
                                     bordered
+                                    pagination={this.state.pagination}
+                                    onChange={(pagination) => this.handleChange(pagination)}
                                 />
                             </Col>
                         </Row>
@@ -328,6 +333,8 @@ class ModalEditableTable extends React.Component {
                     columns={columns}
                     dataSource={this.state.data}
                     bordered
+                    pagination = {this.state.pagination}
+                    onChange={(pagination) => this.handleChange(pagination)}
                 />
             </div>
         );

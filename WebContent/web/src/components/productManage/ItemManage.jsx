@@ -105,7 +105,7 @@ class BeautyOrder extends React.Component {
                         }
                         tableDate.push(tableItem);
                     }
-                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                    this.setState({ data: tableDate, pagination: { total: res.realSize } });
                 }else{
                     this.setState({ data: [] });
                 }
@@ -350,7 +350,7 @@ class BeautyOrder extends React.Component {
             type: 'post',
             traditional: true,
             success: (res) => {
-                //console.log(res);
+                console.log(res);
                 let code = res.code;
                 if (code == '0' || code == '18') {
                     let dataSource = [...this.state.data];

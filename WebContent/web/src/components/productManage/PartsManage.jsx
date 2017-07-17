@@ -57,9 +57,8 @@ class BeautyOrder extends React.Component {
             typeItem: [],
             inventoryName: '',//条件查询的配件名称
             inventoryTypeId: '',//条件查询的配件类别id
-            inventoryBrandName: ''//条件查询的配件品牌名称
-
-
+            inventoryBrandName: '',//条件查询的配件品牌名称
+            pagination:{}
         }
     }
 
@@ -105,7 +104,7 @@ class BeautyOrder extends React.Component {
                     //console.log(dataSource)
                     this.setState({
                         data: dataSource,
-                        //pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
 
                 }
@@ -790,6 +789,7 @@ class BeautyOrder extends React.Component {
                                             columns={columns}
                                             dataSource={this.state.data}
                                             bordered
+                                            pagination={this.state.pagination}
                                         />
                                     </Col>
                                 </Row>
@@ -854,6 +854,7 @@ class BeautyOrder extends React.Component {
                                             columns={columns2}
                                             dataSource={this.state.data}
                                             bordered
+                                            pagination={this.state.pagination}
                                         />
                                     </Col>
                                 </Row>
@@ -916,6 +917,7 @@ class BeautyOrder extends React.Component {
                                             columns={columns3}
                                             dataSource={this.state.data}
                                             bordered
+                                            pagination={this.state.pagination}
                                         />
                                     </Col>
                                 </Row>
