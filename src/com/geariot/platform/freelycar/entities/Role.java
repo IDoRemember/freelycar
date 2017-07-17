@@ -6,8 +6,6 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -26,7 +24,7 @@ public class Role {
 	public int getId() {
 		return id;
 	}
-	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.EAGER, orphanRemoval=true)
 	@JoinColumn(name="roleId", foreignKey=@ForeignKey(name="none"))
 	public Set<Permission> getPermissions() {
 		return permissions;

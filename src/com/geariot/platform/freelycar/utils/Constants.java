@@ -19,6 +19,9 @@ public class Constants {
 	public static final String RESPONSE_REAL_SIZE_KEY = "realSize";
 	public static final String RESPONSE_AMOUNT_KEY = "amount";
 	
+	private static final String RELOAD_ROLES_KEY = "reload_roles";
+	public static boolean RELOAD_ROLES;
+	
 	public static final int PROJECT_WITH_CARD = 0;
 	public static final int PROJECT_WITH_CASH = 1;
 	
@@ -40,6 +43,7 @@ public class Constants {
 			InputStream in = cl.getResourceAsStream("config.properties");
 			
 			p.load(in);
+			RELOAD_ROLES = Boolean.valueOf(p.getProperty(RELOAD_ROLES_KEY));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
