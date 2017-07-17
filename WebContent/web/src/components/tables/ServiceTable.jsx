@@ -35,6 +35,13 @@ class ServiceTable extends React.Component {
     componentDidMount() {
     }
 
+    setData = (key, data, index) => {
+        console.log(key, data, index)
+        this.setState({
+            data: update(this.state.data, { [index]: { [key]: { $set: data } } })
+        })
+    }
+
     handleCancel = () => {
         this.setState({
             view: false
@@ -65,7 +72,7 @@ class ServiceTable extends React.Component {
         this.setState({
             view: false,
             data: datalist
-        })
+        }, console.log(this.state.data.slice(0, this.state.data.length - 1)))
     }
     onDelete = (index) => {
         const dataSource = [...this.state.data];
@@ -79,7 +86,7 @@ class ServiceTable extends React.Component {
         }), staffOptions = this.props.staffList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         }), cardOptions = this.props.cards ? this.props.cards.map((item, index) => {
-            console.log(item)
+
             let projectInfos = []
             for (let item of item.projectInfos) {
                 let obj = {
@@ -108,13 +115,12 @@ class ServiceTable extends React.Component {
                         <Col span={12}>{item.service.validTime}年</Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >剩余次数明细</Col>
+                        <Col span={12} >剩余次数明细：</Col>
                     </Row>
-                    <Table size={'small'} bordered columns={columns} dataSource={projectInfos} />
-
+                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
                 </div>
             );
-            const pop = <Popover arrowPointAtCenter placement="left" content={content} title="Title" style={{ zIndex: '1000' }}>
+            const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
                 {item.service.name + item.service.id}
             </Popover>
             return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
@@ -187,7 +193,14 @@ class ServiceTable extends React.Component {
                                 placeholder="输入施工人员"
                                 optionFilterProp="children"
                                 mode="multiple"
-                                onChange={this.handleChange}
+                                onChange={(value) => {
+                                    console.log(value)
+                                    let staffList = []
+                                    for (let item of value) {
+                                        staffList.push({ id: item })
+                                    }
+                                    this.setData('staffs', staffList, index)
+                                }}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {staffOptions}
@@ -205,12 +218,12 @@ class ServiceTable extends React.Component {
                                 style={{ width: '120px', maxHeight: '200px' }}
                                 placeholder="输入会员卡号"
                                 optionFilterProp="children"
-                                onChange={this.handleChange}
+                                onChange={(value) => this.setData('cardId', value, index)}
                                 dropdownMatchSelectWidth={false}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
-                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to="/app/member/memberShip" style={{ width: '100%', padding: '10', display: 'block' }}>会员开卡</Link></Option>
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to="/app/member/memberShip" style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
                             </Select>
                             </div>
                         }
@@ -222,7 +235,7 @@ class ServiceTable extends React.Component {
                     dataIndex="DeductionCardTime"
                     render={(text, record, index) => {
                         if ((index + 1) < this.state.data.length) {
-                            return <InputNumber min={1}></InputNumber>
+                            return <InputNumber min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
                         }
                     }}
                 />
