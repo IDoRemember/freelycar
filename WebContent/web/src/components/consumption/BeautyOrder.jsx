@@ -11,7 +11,6 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            partsPrice:[],
             parts: [],
             staffList: [],
             optionService: [],
@@ -121,11 +120,25 @@ class BeautyOrder extends React.Component {
             console.log(this.state.consumOrder)
         })
     }
-    //选择改变项目名称
 
-    savePartPrice = (oneprice)=>{
+    pushInventory = (value) => {
+        console.log(value)
+        for (let item of this.state.consumOrder.inventoryInfos) {
+            for (let nowItem of value) {
+                if (item.projectId == nowItem.projectId && item.inventory.id == nowItem.inventory.id) {
+                    console.log(item.index)
+                    this.setState({
+                        consumOrder: update(this.state.consumOrder, { inventoryInfos: { [item.index]: { $set: value } } })
+                    })
+                    return
+                }
+            }
+
+        }
         this.setState({
-            partsPrice:update(this.state.partsPrice,{$push:[oneprice]})
+            consumOrder: update(this.state.consumOrder, { inventoryInfos: { $push: value } })
+        }, () => {
+            console.log(this.state.consumOrder)
         })
     }
 
@@ -157,18 +170,25 @@ class BeautyOrder extends React.Component {
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail saveInfo={this.saveInfo}  savePartPrice={this.savePartPrice} key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} changeInvSelect={this.changeInvSelect} />
+                return <PartsDetail pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
+        let price = 0
+        for (let item of this.state.consumOrder.projects) {
+            price = price + item.price + item.pricePerUnit * item.referWorkTime
+        }
+        for (let item of this.state.consumOrder.inventoryInfos) {
+            price = price + item.inventory.price * item.number
+        }
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
-            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList}  saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
+            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额
-                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> 43.00</span>
+                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}</span>
                     元
                 </div>
             </Card>

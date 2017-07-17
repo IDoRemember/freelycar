@@ -28,7 +28,8 @@ class ServiceTable extends React.Component {
         super(props)
         this.state = {
             view: false,
-            data: []
+            data: [],
+            total: 0
         }
     }
 
@@ -39,9 +40,11 @@ class ServiceTable extends React.Component {
         console.log(key, data, index)
         this.setState({
             data: update(this.state.data, { [index]: { [key]: { $set: data } } })
+        }, () => {
+            this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
         })
-        this.props.saveInfo({ projects: this.state.data })
     }
+
 
     handleCancel = () => {
         this.setState({
@@ -73,13 +76,19 @@ class ServiceTable extends React.Component {
         this.setState({
             view: false,
             data: datalist
-        }, console.log(this.state.data.slice(0, this.state.data.length - 1)))
+        }, () => {
+            this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
+        })
+
     }
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
-        this.setState({ data: dataSource });
-        this.props.getPartsDetail(dataSource)
+        this.setState({ data: dataSource }, () => {
+            this.props.getPartsDetail(dataSource)
+            this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
+        });
+
     }
     render() {
         const projectOptions = this.props.optionService.map((item, index) => {
@@ -178,6 +187,7 @@ class ServiceTable extends React.Component {
                                     total = total + item.price + item.pricePerUnit * item.referWorkTime
                                 }
                             }
+
                             return <span>{total}</span>
                         }
                         return <span>{record.price + record.pricePerUnit * record.referWorkTime}</span>
