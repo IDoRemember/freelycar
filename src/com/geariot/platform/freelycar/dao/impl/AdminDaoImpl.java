@@ -2,6 +2,8 @@ package com.geariot.platform.freelycar.dao.impl;
 
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,8 @@ import com.geariot.platform.freelycar.utils.query.QueryUtils;
 @Repository
 public class AdminDaoImpl implements AdminDao {
 
+	private static final Logger log = LogManager.getLogger(AdminDaoImpl.class);
+	
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -101,6 +105,16 @@ public class AdminDaoImpl implements AdminDao {
 	public void deleteByStaffId(int staffId) {
 		String hql = "delete from Admin where staff.id = :id";
 		this.getSession().createQuery(hql).setInteger("id", staffId).executeUpdate();
+	}
+
+	@Override
+	public void clearRoles() {
+		String hql1 = "delete from Role";
+		int deleted1 = this.getSession().createQuery(hql1).executeUpdate();
+		String hql2 = "delete from Permission";
+		int deleted2 = this.getSession().createQuery(hql2).executeUpdate();
+		log.debug("删除Role数据共:" + deleted1 + "条");
+		log.debug("删除Permission数据共:" + deleted2 + "条");
 	}
 
 }

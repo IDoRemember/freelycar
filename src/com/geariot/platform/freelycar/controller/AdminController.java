@@ -81,9 +81,4 @@ public class AdminController {
 		}
 	}
 	
-	@RequestMapping(value="/readRoles", method=RequestMethod.GET)
-	public String readRoles(){
-		return adminService.readRoles();
-	}
-	
 }
