@@ -29,5 +29,7 @@ public interface AdminDao {
 	
 	void save(Role role);
 	
+	void clearRoles();
+	
 	void deleteByStaffId(int staffId);
 }

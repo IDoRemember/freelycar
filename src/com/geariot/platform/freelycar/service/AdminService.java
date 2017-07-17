@@ -229,15 +229,7 @@ public class AdminService {
 		admin.setCurrent(true);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
-
-	public String readRoles() {
-		Set<Role> roles = PermissionsList.getRoles();
-		for(Role role : roles){
-			adminDao.save(role);
-		}
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
-	}
-
+	
 	public String getAdminByAccount(String account) {
 		Admin admin = this.findAdminByAccount(account);
 		if(admin == null){
@@ -246,6 +238,17 @@ public class AdminService {
 		JsonConfig config = new JsonConfig();
 		config.registerPropertyExclusion(Admin.class, "password");
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(admin, config)).toString();
+	}
+	
+	public String readRoles() {
+		this.adminDao.clearRoles();
+		Set<Role> roles = PermissionsList.getRoles();
+		log.debug("从配置文件中读取到角色数据共：" + roles.size() + "条");
+		for(Role role : roles){
+			log.debug("角色名称:" + role.getRoleName() + ", 角色描述:" + role.getDescription() + ", 权限:" + role.getPermissions());
+			adminDao.save(role);
+		}
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
 }
