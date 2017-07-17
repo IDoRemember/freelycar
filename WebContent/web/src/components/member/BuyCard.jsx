@@ -51,6 +51,7 @@ class BuyCard extends React.Component {
             },
             carId: '',
             payMethod: '',
+            visible:false
         }
     }
 
@@ -256,6 +257,7 @@ class BuyCard extends React.Component {
         });
     }
     handleCancel = () => {
+        console.log('sss');
         this.setState({
             visible: false
         });
@@ -378,8 +380,8 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={() => this.handleOk}
-                    onCancel={() => this.handleCancel}>
+                <CardModal visible={this.state.visible} onOk={this.handleOk}
+                    onCancel={this.handleCancel}>
                 </CardModal>
                 <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={()=>this.SaveCard()}>办理</Button>
             </div >

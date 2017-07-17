@@ -174,6 +174,7 @@ class CardModal extends React.Component {
                     }
 
                     this.setState({ selectedRows: [], form: form0 });
+                    this.props.onOk();
                 }
             }
 
