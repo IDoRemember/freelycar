@@ -11,6 +11,7 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            partsPrice:[],
             parts: [],
             staffList: [],
             optionService: [],
@@ -122,6 +123,12 @@ class BeautyOrder extends React.Component {
     }
     //选择改变项目名称
 
+    savePartPrice = (oneprice)=>{
+        this.setState({
+            partsPrice:update(this.state.partsPrice,{$push:[oneprice]})
+        })
+    }
+
     combineParts = () => {
         let dataInventory = []
         console.log(this.state.dataService)
@@ -150,13 +157,13 @@ class BeautyOrder extends React.Component {
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} changeInvSelect={this.changeInvSelect} />
+                return <PartsDetail saveInfo={this.saveInfo}  savePartPrice={this.savePartPrice} key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} changeInvSelect={this.changeInvSelect} />
             }
         })
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
-            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
+            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList}  saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>

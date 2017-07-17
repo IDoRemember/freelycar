@@ -40,6 +40,7 @@ class ServiceTable extends React.Component {
         this.setState({
             data: update(this.state.data, { [index]: { [key]: { $set: data } } })
         })
+        this.props.saveInfo({ projects: this.state.data })
     }
 
     handleCancel = () => {

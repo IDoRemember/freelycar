@@ -46,7 +46,7 @@ class PartsDetail extends React.Component {
     modifyParts = (key, value, index) => {
         this.setState({
             parts: update(this.state.parts, { [index]: { [key]: { $set: value } } })
-        }, () => { console.log(this.state.parts) })
+        })
     }
 
     handleCancel = () => {
@@ -179,6 +179,7 @@ class PartsDetail extends React.Component {
                                 }
                             }
                             return <span>{total}</span>
+                            this.savePartPrice(total)
                         }
                         return <span>{(record.number ? record.number : 1) * record.price}</span>
                     }}
