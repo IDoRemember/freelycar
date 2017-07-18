@@ -82,10 +82,12 @@ class ServiceTable extends React.Component {
 
     }
     onDelete = (index) => {
+        this.props.pushInventory([], this.state.data[index].id)
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
         this.setState({ data: dataSource }, () => {
             this.props.getPartsDetail(dataSource)
+
             this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
         });
 

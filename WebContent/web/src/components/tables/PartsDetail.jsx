@@ -102,7 +102,6 @@ class PartsDetail extends React.Component {
             view: false,
             parts: datalist
         }, () => {
-
             this.handleformat()
         })
     }

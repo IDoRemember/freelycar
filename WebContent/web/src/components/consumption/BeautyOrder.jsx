@@ -124,11 +124,12 @@ class BeautyOrder extends React.Component {
 
     pushInventory = (value, projectId) => {
         console.log(a)
-        let newConsumOrder = [], same = 0
+        let newConsumOrder = []
         if (this.state.consumOrder.inventoryInfos.length < 1) {
             a.push(...value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
         } else {
+
             if (value.length < 1) {
                 this.state.consumOrder.inventoryInfos.forEach((item, index) => {
                     if (item.projectId == projectId) {
@@ -137,28 +138,34 @@ class BeautyOrder extends React.Component {
                 })
             }
             for (let nowItem of value) {
+                let same = 0, deleteIndex = null, addItem = []
                 this.state.consumOrder.inventoryInfos.forEach((item, index) => {
                     console.log(index, value)
-                    if (item.projectId == nowItem.projectId) {
-                        same++
+
+                    if (item.projectId == projectId) {
+                        same = same + 1
+                        let valueSame = 0
                         if (item.inventory.id == nowItem.inventory.id) {
-                            console.log('genggai', index, item)
+                            valueSame++
                             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
-                            console.log(newConsumOrder)
                         } else {
-                            console.log('shanchu', index, item)
-                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
-                            console.log(newConsumOrder)
+                            deleteIndex= index
+                            addItem.push(nowItem)
                         }
                     } else {
                         newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [nowItem] } })
                     }
                 })
+                console.log(same)
+                if (same <= value.length) {
+                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [...addItem] } })
+                } else if( same >value.length){
+                    console.log(deleteIndex)
+                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[deleteIndex, 1]] } })
+                }
             }
 
         }
-
-        console.log(same, newConsumOrder)
         this.setState({
             consumOrder: newConsumOrder
         }, () => {
@@ -209,7 +216,7 @@ class BeautyOrder extends React.Component {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
-            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
+            <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
