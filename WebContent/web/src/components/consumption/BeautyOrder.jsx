@@ -7,6 +7,7 @@ import { Row, Col, Card, Button } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
+let a = []
 class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
@@ -122,23 +123,40 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value) => {
-        console.log(value)
-        for (let item of this.state.consumOrder.inventoryInfos) {
-            for (let nowItem of value) {
-                if (item.projectId == nowItem.projectId && item.inventory.id == nowItem.inventory.id) {
-                    console.log(item.index)
-                    this.setState({
-                        consumOrder: update(this.state.consumOrder, { inventoryInfos: { [item.index]: { $set: value } } })
-                    })
-                    return
+        console.log(a)
+        a.push(...value)
+        let newConsumOrder = [], same = 0
+        if (this.state.consumOrder.inventoryInfos.length < 1) {
+            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+        } else {
+            this.state.consumOrder.inventoryInfos.forEach((item, index) => {
+                for (let nowItem of value) {
+                    if (item.projectId == nowItem.projectId) {
+                        same++
+                        if (item.inventory.id == nowItem.inventory.id) {
+                            console.log('genggai',index)
+                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
+                        } else {
+                            console.log('shanchu',index)
+                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
+                        }
+                    }
                 }
-            }
+                if (same < 1) {
+                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+                }
+            })
+            
 
         }
+
+        console.log(same, newConsumOrder)
         this.setState({
-            consumOrder: update(this.state.consumOrder, { inventoryInfos: { $push: value } })
+            consumOrder: newConsumOrder
         }, () => {
-            console.log(this.state.consumOrder)
+            console.log(
+                this.state.consumOrder
+            )
         })
     }
 
@@ -170,7 +188,7 @@ class BeautyOrder extends React.Component {
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
+                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
         let price = 0
