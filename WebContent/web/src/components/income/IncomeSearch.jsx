@@ -125,7 +125,7 @@ class IncomeSearch extends React.Component {
     render() {
         return (
             <div>
-                <BreadcrumbCustom first="收支查询" />
+                <BreadcrumbCustom first="收支管理"  second="收支查询"/>
                 <div>
                     <Row>
                         <Col span={12}>

@@ -34,8 +34,34 @@ class ClientInfo extends React.Component {
                     }
                 },
                 { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-                { title: '车牌号码', dataIndex: 'busNumber', key: 'busNumber' },
-                { title: '品牌', dataIndex: 'carBrand', key: 'carBrand' },
+                { title: '车牌号码', dataIndex: 'cars', key: 'cars' ,render:(text,record,index)=>{
+                    let carnum = '';
+                    let indx = 0;
+                    let length = text.length;
+                    for(let item of text){
+                        if(indx < length-1){
+                            carnum += item.licensePlate +', ';
+                        }else{
+                            carnum += item.licensePlate;
+                        }
+                        indx++;
+                    }
+                    return carnum;
+                }},
+                { title: '品牌', dataIndex: 'cars', key: 'carBrand' ,render:(text,record,index)=>{
+                    let carnum = '';
+                    let indx = 0;
+                    let length = text.length;
+                    for(let item of text){
+                        if(indx < length-1){
+                            carnum += item.type.brand.name +', ';
+                        }else{
+                            carnum += item.type.brand.name;
+                        }
+                        indx++;
+                    }
+                    return carnum;
+                } },
                 { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
                 { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
                 { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
@@ -78,7 +104,6 @@ class ClientInfo extends React.Component {
 
 
                 })
-                console.log(this.state.option)
             }
         })
     }
@@ -98,7 +123,6 @@ class ClientInfo extends React.Component {
                 name: "",
             },
             success: (result) => {
-                console.log(result.data);
                 this.setState({
                     option: result.data,
                 })
@@ -129,13 +153,14 @@ class ClientInfo extends React.Component {
                     //   console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
-                        console.log(obj[i].cars);
+                        //console.log(obj[i].cars);
                         let dataItem = {
                             key: obj[i].id,
                             id: obj[i].id,
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
-                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+' ,  '+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
+                            //busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+' ,  '+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
+                            cars:obj[i].cars,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -181,16 +206,17 @@ class ClientInfo extends React.Component {
                     let datalist = [];
                     //调用接口后返回的数据
                     var obj = res.data;
-                     console.log(obj);
+                     //console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
-                        //   console.log(obj[i].cars);
+                        //console.log(obj[i].cars);
                         let dataItem = {
                             key: obj[i].id,
                             id: obj[i].id,
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
-                            busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substring(0,2)+'...': obj[i].cars[0].licensePlate,
+                            //car:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substring(0,2)+'...': obj[i].cars[0].licensePlate,
+                            cars:obj[i].cars,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -257,14 +283,14 @@ class ClientInfo extends React.Component {
                 if (result.code == "0") {
                     let dataSource = [...this.state.dataSource];
                     //？看看返回值有没有对应的dataSource有没有被删去
-                    console.log(result)
+                   // console.log(result)
                     //过滤id    
                     for (let id of idArray) {
                         dataSource = dataSource.filter((obj) => {
                             return id !== obj.id;
                         });
                     }
-                    console.log(dataSource)
+                    //console.log(dataSource)
                     //为什么这边要加一个判断呢
 
                     this.setState({
@@ -322,7 +348,7 @@ class ClientInfo extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
+        //console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -343,7 +369,7 @@ class ClientInfo extends React.Component {
         // })
         return (
             <div>
-                <BreadcrumbCustom first="会员管理" second="客户信息" />
+                <BreadcrumbCustom first="会员管理" second="客户管理" />
 
                 <div style={{ display: 'inline-block', marginBottom: '25px' }}>
 

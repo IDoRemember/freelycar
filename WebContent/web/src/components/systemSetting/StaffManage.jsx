@@ -289,7 +289,7 @@ class StaffManage extends React.Component {
         }
         return (
             <div>
-                <BreadcrumbCustom first="产品管理" second="项目管理" />
+                <BreadcrumbCustom first="产品管理" second="员工管理" />
                 <Card>
                     <div>
                         <Row>
