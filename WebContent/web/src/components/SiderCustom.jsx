@@ -26,7 +26,26 @@ class SiderCustom extends Component {
             selectedKey: _path
         });
     }
-     
+
+      queryAdmin = () => {
+        $.ajax({
+            url: 'api/admin/getaccount',
+            type: "GET",
+            data: {
+                account: localStorage.getItem('username'),
+            
+            },
+            success: (res) => {
+                this.setState({
+                    user: res.data.name,
+                    role:res.data.role.id,
+
+                })
+                
+            }
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         this.onCollapse(nextProps.collapsed);
     }

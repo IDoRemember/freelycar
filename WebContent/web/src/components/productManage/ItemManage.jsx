@@ -602,10 +602,9 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="项目管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={5}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="项目名称" value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
-                                        </div>
+                                    <Col span={5} style={{ verticalAlign: 'middle' }}>
+                                        <span>项目名称：</span>
+                                            <Input style={{width:'140px'}} value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                     </Col>
                 
                                     <Col span={5}>

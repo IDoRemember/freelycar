@@ -143,7 +143,6 @@ class ProductSearch extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -155,7 +154,6 @@ class ProductSearch extends React.Component {
 
     }
     handleClick = (e) => {
-        console.log('click ', e);
         this.setState({
             current: e.key,
         });
