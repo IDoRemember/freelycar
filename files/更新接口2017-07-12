@@ -101,7 +101,8 @@
 		0,2,24,26
 	1.9 根据account获取admin
 		请求:GET
-		server_url/admin/getaccount
+		server_url/admin/
+		
 		参数:{
 			account=
 		}

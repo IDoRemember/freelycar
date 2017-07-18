@@ -6,6 +6,7 @@ import { hashHistory } from 'react-router'
 import SiderCustom from './components/SiderCustom.jsx';
 import HeaderCustom from './components/HeaderCustom.jsx';
 import Page from './components/Page.jsx';
+import $ from 'jquery';
 
 class App extends Component {
     constructor(props) {
@@ -13,7 +14,10 @@ class App extends Component {
         const username = localStorage.getItem("username")
         this.state = {
             collapsed: false,
-            loginState: (username != "" && username != undefined) ? true : false
+            // loginState: (username != "" && username != undefined) ? true : false,
+            loginState: true,
+            user:'',
+            role:0,
         };
     }
 
@@ -21,6 +25,27 @@ class App extends Component {
         if (!this.state.loginState) {
             hashHistory.push('/login')
         }
+        this.queryAdmin()
+    }
+     queryAdmin = () => {
+        $.ajax({
+            url: 'api/admin/getaccount',
+            type: "GET",
+            data: {
+                account: localStorage.getItem('username'),
+            
+            },
+            success: (res) => {
+                console.log(res.data);
+                console.log(res.data.role.id)
+                this.setState({
+                    user: res.data.name,
+                    role:res.data.role.id,
+
+                })
+                
+            }
+        })
     }
     toggle = () => {
         this.setState({
@@ -30,11 +55,11 @@ class App extends Component {
     render() {
         return this.state.loginState && (<Layout className="ant-layout-has-sider" >
             <SiderCustom path={this.props.location.pathname}
-                collapsed={this.state.collapsed}
+                collapsed={this.state.collapsed} role={this.state.role}
             />
             <Layout >
                 <HeaderCustom toggle={this.toggle} />
-                <Content style={{ margin: '0 16px', overflow: 'initial' }} > {this.props.children} </Content>
+                <Content style={{ margin: '0 16px', overflow: 'initial' }} role={this.state.role}> {this.props.children} </Content>
                 <Footer style={
                     { textAlign: 'center' }} >
                 </Footer>

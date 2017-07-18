@@ -110,8 +110,8 @@ class AddClient extends React.Component {
 
             success: (result) => {
                 if (result.code == "0") {
-
-                    hashHistory.push('/app/member/customer')
+                    window.history.go(-1);
+                  //  hashHistory.push('/app/member/customer')
                 }
             }
         })

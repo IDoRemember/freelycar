@@ -24,7 +24,7 @@ class BuyCard extends React.Component {
             vaild: '',
             typeId: '',
             haveClient: false,
-            cardtype: '',
+            cardtype:'',
             type: [],
             price: '',
             orderMaker: '',
@@ -80,7 +80,9 @@ class BuyCard extends React.Component {
             success: (res) => {
                 console.log(res.data)
                 if (res.code == '0') {
+                     console.log(res.data);
                     this.setState({
+                       
                         cardList: res.data,
                     })
                 }
@@ -144,10 +146,17 @@ class BuyCard extends React.Component {
             success: (res) => {
                 console.log(res.data[0]);
                 console.log(res.data[0].validTime);
+                let cardtype="";
+                if( res.data.type=0){
+                    cardtype="次卡";
+                }else if(res.data.type=1){
+                    cardtype="组合次卡";
+                }
+
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
-                    cardtype: res.data[0].type,
+                    cardtype: cardtype,
                     serviceId: res.data[0].id,
                 })
             }
@@ -282,9 +291,7 @@ class BuyCard extends React.Component {
         });
     }
     render() {
-        const plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.value}>{item.text}</Option>
-        }), brandOptions = this.state.option.map((item, index) => {
+        const  brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         }), CardOptions = this.state.cardList.map((item, index) => {
             return <Option key={index} value={item.name}>{item.name}</Option>
@@ -384,7 +391,7 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '140px', marginLeft: '25px', color: 'red' }} value={this.state.vaild == '' ? '' : this.state.vaild + '年'} disabled />
                         </Col>
                         <Col span={8} >会员卡种：
-                             <Input style={{ width: '140px', marginLeft: '15px', color: 'red' }} value={this.state.cardtype == '1' ? '组合次卡' : '次卡'} disabled />
+                             <Input style={{ width: '140px', marginLeft: '15px', color: 'red' }} value={this.state.cardtype} disabled />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
