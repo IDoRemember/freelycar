@@ -14,6 +14,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.Subject;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -95,6 +96,8 @@ public class AdminService {
 		}
 		log.debug("账号：" + account + " 登陆结果：" + obj);
 		curUser = SecurityUtils.getSubject();
+//		Session session = curUser.getSession(false);
+//		session.setTimeout(60000L);
 		return obj.toString();
 	}
 	

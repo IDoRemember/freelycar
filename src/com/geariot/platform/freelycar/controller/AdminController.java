@@ -18,8 +18,6 @@ import com.geariot.platform.freelycar.service.AdminService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
-import net.sf.json.JSONObject;
-
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
