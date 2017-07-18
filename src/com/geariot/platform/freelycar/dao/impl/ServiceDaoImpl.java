@@ -53,7 +53,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Service> queryByName(String name) {
-		String hql = "from Service where name like :name and deleted = 0";
+		String hql = "from Service where name like :name and deleted = 0 order by createDate desc";
 		return this.getSession().createQuery(hql).setString("name", "%"+name+"%").list();
 	}
 
@@ -67,7 +67,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public List<Service> listServices(String andCondition, int from, int pageSize) {
 		String basic = "from Service where deleted = 0 ";
-		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.DESC_ORDER).toString();
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
@@ -75,7 +75,7 @@ public class ServiceDaoImpl implements ServiceDao{
 	@Override
 	public long getConditionCount(String andCondition) {
 		String basic = "select count(*) from Service where deleted = 0";
-		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.DESC_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 

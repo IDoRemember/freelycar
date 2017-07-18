@@ -28,7 +28,8 @@ public class PermissionsList {
 	public static Set<Role> getRoles(){
 		Set<Role> roles = new HashSet<>();
 		BufferedReader br = null;
-		File file = new File(PermissionsList.class.getClassLoader().getResource(FILENAME).getPath());
+		String filePath = PermissionsList.class.getClassLoader().getResource(FILENAME).getPath();
+		File file = new File(filePath);
 		try {
 			if(file.isFile() && file.exists()){
 	        	br = new BufferedReader(new FileReader(file));
@@ -55,7 +56,7 @@ public class PermissionsList {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			log.debug("文件没找到");
+			log.debug("文件:" + filePath + "　未找到");
 			e.printStackTrace();
 		} catch (IOException e) {
 			log.debug("文件读取出错");

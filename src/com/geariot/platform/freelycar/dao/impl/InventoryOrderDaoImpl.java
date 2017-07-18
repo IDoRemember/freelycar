@@ -47,9 +47,7 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 	@Override
 	public List<InventoryOrder> query(String andCondition, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from InventoryOrder");
-		StringBuffer temp = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER);
-		temp.append(" order by createDate desc");
-		String hql = temp.toString();
+		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.DESC_ORDER).toString();
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
