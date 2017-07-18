@@ -253,7 +253,7 @@ class ClientDetail extends React.Component {
                         let cardItem = {
                             key: objcard[j].id,
                             cardNum: objcard[j].id,
-                            cardClasses: objcard[j].service.type ? "次卡" : "组合次卡",
+                            cardClasses: objcard[j].service.type=="0" ? "次卡" : "组合次卡",
                             transactionTime: objcard[j].payDate,
                             cardname: objcard[j].service.name,
                             makePeople: objcard[j].orderMaker.name,

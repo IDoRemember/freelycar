@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal,message} from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CardModal from '../productManage/CardModal.jsx';
 import Regclient from './Regclient.jsx'
@@ -22,7 +22,8 @@ class BuyCard extends React.Component {
             female: 'female',
             value: 1,
             vaild: '',
-            typeId:'',
+            typeId: '',
+            haveClient: false,
             cardtype: '',
             type: [],
             price: '',
@@ -53,7 +54,7 @@ class BuyCard extends React.Component {
             },
             carId: '',
             payMethod: '',
-            visible:false
+            visible: false
         }
     }
 
@@ -123,7 +124,7 @@ class BuyCard extends React.Component {
             visible: true
         });
     }
-     TypehandleChange = (value) => {
+    TypehandleChange = (value) => {
         console.log(`selected ${value}`);
         this.setState({
             typeId: value
@@ -178,7 +179,8 @@ class BuyCard extends React.Component {
                 console.log(res);
                 if (res.code == "0") {
                     this.setState({
-                        clientId: res.data.id
+                        clientId: res.data.id,
+                        haveClient: true
                     });
                     console.log(this.state.clientId)
                 }
@@ -200,25 +202,31 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-        console.log('111')
-        $.ajax({
-            url: 'api/pay/buycard',
-            type: 'POST',
-            contentType: "application/json;charset=utf-8",
-            data: JSON.stringify({
-                clientId: this.state.clientId,
-                card: {
-                    service: {
-                        id: this.state.serviceId
+        if (this.setState.haveClient == true) {
+            console.log('111')
+            $.ajax({
+                url: 'api/pay/buycard',
+                type: 'POST',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify({
+                    clientId: this.state.clientId,
+                    card: {
+                        service: {
+                            id: this.state.serviceId
 
-                    },
-                    orderMaker: { id: this.state.orderMaker },
-                    payMethod: this.state.payMethod,
-
-
+                        },
+                        orderMaker: { id: this.state.orderMaker },
+                        payMethod: this.state.payMethod,
+                    }
+                }),
+                success:()=>{
+                    
                 }
             })
-        })
+        }else{
+             message.error('请先保存客户', 1.5);
+
+        }
     }
 
     getCarBrand = () => {
@@ -252,20 +260,20 @@ class BuyCard extends React.Component {
 
     handleChange = (e) => {
         console.log(`selected ${e}`)
-        let typelist = this.state.option[e-1 ].types;
-        console.log(this.state.option[e-1].types)
+        let typelist = this.state.option[e - 1].types;
+        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
-            type:typelist,
-          //  type:""
-            typeId:''
+            type: typelist,
+            //  type:""
+            typeId: ''
         })
     }
     handleOk = () => {
         this.setState({
             visible: false
         });
-    this.CardhandleChange();
+        this.CardhandleChange();
     }
     handleCancel = () => {
         console.log('sss');
@@ -278,7 +286,7 @@ class BuyCard extends React.Component {
             return <Option key={index} value={item.value}>{item.text}</Option>
         }), brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
-        }),CardOptions = this.state.cardList.map((item, index) => {
+        }), CardOptions = this.state.cardList.map((item, index) => {
             return <Option key={index} value={item.name}>{item.name}</Option>
         }), StaffOptions = this.state.adminList.map((item, index) => {
             let staffId = item.id + '';
@@ -297,7 +305,7 @@ class BuyCard extends React.Component {
                         </Col>
                         <Col span={8}>性别：
                             <div style={{ display: 'inline-block', marginLeft: '26px' }}>
-                                <RadioGroup onChange={(value)=>this.genderonChange(value)} value={this.state.value}>
+                                <RadioGroup onChange={(value) => this.genderonChange(value)} value={this.state.value}>
                                     <Radio value={'男'}>男</Radio>
                                     <Radio value={'女'}>女</Radio>
                                 </RadioGroup>
@@ -315,23 +323,23 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4} id="car-brand">车辆品牌:
                             <Select showSearch
-                                style={{ width: '140px', marginLeft: '10px',maxHeight:'150px' }}
+                                style={{ width: '140px', marginLeft: '10px', maxHeight: '150px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
-                                onChange={(value)=>this.handleChange(value)}
+                                onChange={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('car-brand')}
                             >
                                 {brandOptions}
                             </Select>
                         </Col>
-                      
+
                         <Col span={8} >推荐人：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.recommendName} onChange={(e) => this.onValueChange('recommendName', e.target.value)} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                          <Col span={8} offset={4}  id="provider-area">车辆型号:
+                        <Col span={8} offset={4} id="provider-area">车辆型号:
                             <Select showSearch
                                 style={{ width: '140px', marginLeft: '10px' }}
                                 placeholder="请选择车辆型号"
@@ -339,9 +347,9 @@ class BuyCard extends React.Component {
                                 value={this.state.typeId}
                                 onChange={this.TypehandleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                 getPopupContainer={() => document.getElementById('provider-area')}
+                                getPopupContainer={() => document.getElementById('provider-area')}
                             >
-                                 {typeOptions} 
+                                {typeOptions}
                             </Select>
                         </Col>
                     </Row>
@@ -358,9 +366,9 @@ class BuyCard extends React.Component {
                         <Col span={8} offset={4}>
                             会员卡类：
                         <Select
-                                style={{ width: '140px', marginLeft: '13px',maxHeight:'150px' }}
+                                style={{ width: '140px', marginLeft: '13px', maxHeight: '150px' }}
                                 optionFilterProp="children"
-                                onChange={(value)=>this.CardhandleChange(value)}
+                                onChange={(value) => this.CardhandleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {CardOptions}
@@ -382,8 +390,8 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4} >
                             <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px'}}>
-                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15,maxHeight:'100px' }} onChange={(value)=>this.payhandleChange(value)} >
+                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                                    <Select defaultValue="现金" style={{ width: 140, marginLeft: 15, maxHeight: '100px' }} onChange={(value) => this.payhandleChange(value)} >
                                         <Option value="0">现金</Option>
                                         <Option value="1">微信</Option>
                                         <Option value="2">支付宝</Option>
@@ -399,7 +407,7 @@ class BuyCard extends React.Component {
                                         style={{ width: '140px', marginLeft: '10px' }}
                                         placeholder="选择办卡人员"
                                         optionFilterProp="children"
-                                        onChange={(value)=>this.StaffhandleChange(value)}
+                                        onChange={(value) => this.StaffhandleChange(value)}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                         getPopupContainer={() => document.getElementById('staff')}
                                     >
@@ -413,7 +421,7 @@ class BuyCard extends React.Component {
                 <CardModal visible={this.state.visible} onOk={this.handleOk}
                     onCancel={this.handleCancel}>
                 </CardModal>
-                <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={()=>this.SaveCard()}>办理</Button>
+                <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={() => this.SaveCard()}>办理</Button>
             </div >
         )
     }
