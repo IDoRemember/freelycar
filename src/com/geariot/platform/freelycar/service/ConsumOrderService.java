@@ -106,7 +106,7 @@ public class ConsumOrderService {
 			pInfo.setProjectPrice(project.getPrice());
 			pInfo.setCardName(payCard.getService().getName());
 		}
-		this.orderDao.save(consumOrder);
+		String id = this.orderDao.save(consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
 		//创建出库订单并保存
 		if(list != null && !list.isEmpty()){
@@ -121,7 +121,7 @@ public class ConsumOrderService {
 			inventoryOrderDao.save(order);
 			log.debug("出库订单(id:" + order.getId() + ")保存成功");
 		}
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS, "id", id).toString();
 	}
 
 	public String list(int page, int number) {

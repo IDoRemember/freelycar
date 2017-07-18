@@ -30,10 +30,11 @@ public class ConsumOrderDaoImpl implements ConsumOrderDao {
 	}
 	
 	@Override
-	public void save(ConsumOrder consumOrder) {
+	public String save(ConsumOrder consumOrder) {
 		Session session = this.getSession();
-		session.save(consumOrder);
+		String id = session.save(consumOrder).toString();
 		session.evict(consumOrder);
+		return id;
 	}
 
 	@SuppressWarnings("unchecked")
