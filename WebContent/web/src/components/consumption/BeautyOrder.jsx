@@ -122,31 +122,39 @@ class BeautyOrder extends React.Component {
         })
     }
 
-    pushInventory = (value) => {
+    pushInventory = (value, projectId) => {
         console.log(a)
-        a.push(...value)
         let newConsumOrder = [], same = 0
         if (this.state.consumOrder.inventoryInfos.length < 1) {
+            a.push(...value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
         } else {
-            this.state.consumOrder.inventoryInfos.forEach((item, index) => {
-                for (let nowItem of value) {
+            if (value.length < 1) {
+                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
+                    if (item.projectId == projectId) {
+                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
+                    }
+                })
+            }
+            for (let nowItem of value) {
+                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
+                    console.log(index, value)
                     if (item.projectId == nowItem.projectId) {
                         same++
                         if (item.inventory.id == nowItem.inventory.id) {
-                            console.log('genggai',index)
+                            console.log('genggai', index, item)
                             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
+                            console.log(newConsumOrder)
                         } else {
-                            console.log('shanchu',index)
+                            console.log('shanchu', index, item)
                             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
+                            console.log(newConsumOrder)
                         }
+                    } else {
+                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [nowItem] } })
                     }
-                }
-                if (same < 1) {
-                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
-                }
-            })
-            
+                })
+            }
 
         }
 
