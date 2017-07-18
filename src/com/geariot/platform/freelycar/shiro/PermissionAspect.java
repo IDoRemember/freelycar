@@ -8,6 +8,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
+import com.geariot.platform.freelycar.model.RESCODE;
+import com.geariot.platform.freelycar.utils.JsonResFactory;
+
 @Aspect
 @Component
 public class PermissionAspect {
@@ -21,7 +24,7 @@ public class PermissionAspect {
 		if(permission != null && !permission.isEmpty()){
 			Subject curUser = SecurityUtils.getSubject();
 			if(!curUser.isPermitted(permission)){
-//				return JsonResFactory.buildOrg(RESCODE.PERMISSION_ERROR).toString();
+				return JsonResFactory.buildOrg(RESCODE.PERMISSION_ERROR).toString();
 			}
 		}
 		Object res = null;

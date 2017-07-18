@@ -4,6 +4,8 @@ import java.util.Arrays;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,6 +81,15 @@ public class AdminController {
 		case 1: return this.adminService.enable(account);
 		default: return JsonResFactory.buildOrg(RESCODE.UNSUPPORT_TYPE).toString();
 		}
+	}
+	
+	@RequestMapping(value="/cur", method=RequestMethod.GET)
+	public String cur(){
+		Subject curUser = SecurityUtils.getSubject();
+		if(curUser != null){
+			return (String) curUser.getPrincipal();
+		}
+		return "mei denlu";
 	}
 	
 }
