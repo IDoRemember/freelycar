@@ -20,49 +20,20 @@ public class PermissionsList {
 	
 	private static final String FILENAME = "permissions.txt";
 	
-	private static final String PERMISSION_START = "[Permissions]";
 	private static final String ROLE_START = "[Roles]";
-	
-	private static BufferedReader getReader() throws FileNotFoundException{
-		File file = new File(PermissionsList.class.getClassLoader().getResource(FILENAME).getPath());
-		BufferedReader br = null;
-		if(file.isFile() && file.exists()){
-        	br = new BufferedReader(new FileReader(file));
-        }
-		return br;
-	}
-	
-	/*public static Set<Permission> getPermissions(){
-		Set<Permission> permissions = new HashSet<>();
-        try {
-			BufferedReader br = getReader();
-			String line = null;
-			while((line = br.readLine()) != null){
-				if(line.trim().equals(PERMISSION_START)){
-					while((line = br.readLine()) != null){
-						Permission temp = new Permission();
-						temp.setPermission(line);
-						permissions.add(temp);
-					}
-				}
-			}
-		} catch (FileNotFoundException e) {
-			log.debug("文件没找到");
-			e.printStackTrace();
-		} catch (IOException e) {
-			log.debug("文件读取出错");
-			e.printStackTrace();
-		}
-		return permissions;
-	}*/
 	
 	private static final String DES_SPLITER = ",";
 	private static final String PER_SPLITER = ";";
 	
 	public static Set<Role> getRoles(){
 		Set<Role> roles = new HashSet<>();
+		BufferedReader br = null;
+		String filePath = PermissionsList.class.getClassLoader().getResource(FILENAME).getPath();
+		File file = new File(filePath);
 		try {
-			BufferedReader br = getReader();
+			if(file.isFile() && file.exists()){
+	        	br = new BufferedReader(new FileReader(file));
+	        }
 			String line = null;
 			while((line = br.readLine()) != null){
 				if(line.trim().equals(ROLE_START)){
@@ -85,11 +56,19 @@ public class PermissionsList {
 				}
 			}
 		} catch (FileNotFoundException e) {
-			log.debug("文件没找到");
+			log.debug("文件:" + filePath + "　未找到");
 			e.printStackTrace();
 		} catch (IOException e) {
 			log.debug("文件读取出错");
 			e.printStackTrace();
+		} finally {
+			if(br != null){
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
 		}
 		return roles;
 	}

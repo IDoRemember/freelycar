@@ -25,7 +25,7 @@ class CustomerInfo extends React.Component {
             option: [],
             visible: false,
             carInfo: {
-                clientId:'',
+                clientId: '',
                 clientName: '',
                 carBrand: '',
                 phone: '',
@@ -65,7 +65,7 @@ class CustomerInfo extends React.Component {
                         this.setState({
                             carInfo: update(this.state.carInfo,
                                 {
-                                    ['clientId']:{$set:data.id},
+                                    ['clientId']: { $set: data.id },
                                     ['clientName']: { $set: data.name },
                                     ['carBrand']: { $set: carBrand },
                                     ['phone']: { $set: data.phone },
@@ -85,8 +85,10 @@ class CustomerInfo extends React.Component {
     handleValueChange = (key, value) => {
         this.setState({
             carInfo: update(this.state.carInfo, { [key]: { $set: value } })
+        }, () => {
+            this.props.saveInfo(this.state.carInfo)
         })
-        this.props.saveInfo(this.state.carInfo)
+
     }
 
     showModal = () => {

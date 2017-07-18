@@ -21,9 +21,11 @@ class PartsDetail extends React.Component {
         super(props)
         this.state = {
             parts: [],
+            total: 0,
         }
     }
     componentDidMount() {
+        console.log(this.props.parts)
         let parts = []
         for (let item of this.props.parts) {
             parts.push(item.inventory)
@@ -34,18 +36,18 @@ class PartsDetail extends React.Component {
             item.key = item.id
         }
         this.setState({
-            parts: parts
+            parts: parts,
+        }, () => {
+            this.handleformat()
         })
     }
 
-    handleInvChange = (index, value) => {
-        this.props.changeInvSelect(index, value);
-    }
-
-
+    //格式化配件数据格式
     modifyParts = (key, value, index) => {
         this.setState({
             parts: update(this.state.parts, { [index]: { [key]: { $set: value } } })
+        }, () => {
+            this.handleformat()
         })
     }
 
@@ -53,6 +55,20 @@ class PartsDetail extends React.Component {
         this.setState({
             view: false
         })
+    }
+
+    handleformat = () => {
+        let inventorys = []
+        for (let item of this.state.parts) {
+            if (item.key != 'total') {
+                inventorys.push({
+                    inventory: item,
+                    number: item.number ? item.number : 1,
+                    projectId: this.props.id
+                })
+            }
+        }
+        this.props.pushInventory(inventorys)
     }
 
     handleOk = (data) => {
@@ -85,22 +101,21 @@ class PartsDetail extends React.Component {
         this.setState({
             view: false,
             parts: datalist
+        }, () => {
+
+            this.handleformat()
         })
     }
 
     onDelete = (index) => {
         const dataSource = [...this.state.parts];
         dataSource.splice(index, 1);
-        this.setState({ parts: dataSource });
+        this.setState({ parts: dataSource }, () => {
+
+            this.handleformat()
+        });
     }
 
-    onCellChange = (index, key) => {
-        return (value) => {
-            const dataSource = [...this.state.dataSource];
-            dataSource[index][key] = value;
-            this.setState({ dataSource });
-        };
-    }
 
     render() {
         const projectOptions = this.props.optionInventory.map((item, index) => {
@@ -154,6 +169,11 @@ class PartsDetail extends React.Component {
                     title="可用库存"
                     key="amount"
                     dataIndex="amount"
+                    render={(text, record, index) => {
+                        if (index + 1 < this.state.parts.length) {
+                            return <span>{text}</span>
+                        }
+                    }}
                 />
                 <Col
                     title="数量"
@@ -179,7 +199,7 @@ class PartsDetail extends React.Component {
                                 }
                             }
                             return <span>{total}</span>
-                            this.savePartPrice(total)
+
                         }
                         return <span>{(record.number ? record.number : 1) * record.price}</span>
                     }}
