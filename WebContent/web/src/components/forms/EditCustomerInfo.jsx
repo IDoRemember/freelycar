@@ -154,7 +154,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         接车时间：
-                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', time._d)} />
+                        <DatePicker style={{ width: '100px' }} showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', time._d)} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }} >

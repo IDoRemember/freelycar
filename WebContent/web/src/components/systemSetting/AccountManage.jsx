@@ -365,7 +365,7 @@ class AccountManage extends React.Component {
                 <Card>
                     <div>
                         <Row>
-                            <Col span={9}>
+                            <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
                                     <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
                                 </div>
