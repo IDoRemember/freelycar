@@ -58,7 +58,7 @@ class BeautyOrder extends React.Component {
             inventoryName: '',//条件查询的配件名称
             inventoryTypeId: '',//条件查询的配件类别id
             inventoryBrandName: '',//条件查询的配件品牌名称
-            pagination:{}
+            pagination: {}
         }
     }
 
@@ -679,33 +679,27 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="配件管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={5}>
-                                        <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="配件名称" onChange={(e) => this.setState({ inventoryName: e.target.value })} />
+                                    <Col span={5} style={{ verticalAlign: 'middle' }}>
+                                        <div style={{ marginBottom: 16 }} >
+                                            <span>配件名称：</span>
+                                            <Input style={{width:'200px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
 
-                                    <Col span={1}>
-                                        <div style={{ verticalAlign: 'middle' }}>
-                                            <span>配件类别:</span>
-                                        </div>
-                                    </Col>
-
-                                    <Col span={3}>
-                                        <div style={{ marginBottom: 16 }}>
+                                    <Col span={5} style={{ verticalAlign: 'middle' }}>
+                                            <span>配件类别: </span>
                                             <Select
                                                 addonBefore="配件类别"
-                                                style={{ width: '100%' }}
+                                                style={{ width: '200px' }}
                                                 onChange={(value) => this.setState({ inventoryTypeId: value })}
                                             >
                                                 {this.state.typeItem}
                                             </Select>
 
-                                        </div>
                                     </Col>
-                                    
+
                                     <Col span={8}>
-                                        <Button type="primary" style={{ marginLeft:'40px'}} onClick={this.queryData}>查询</Button>
+                                        <Button type="primary" style={{ marginLeft: '40px' }} onClick={this.queryData}>查询</Button>
                                     </Col>
                                 </Row>
 
