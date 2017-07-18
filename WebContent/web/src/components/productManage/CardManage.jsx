@@ -224,7 +224,7 @@ class EditableTable extends React.Component {
 
         return (
             <div>
-                <BreadcrumbCustom first="产品管理" second="配件管理" />
+                <BreadcrumbCustom first="产品管理" second="卡类管理" />
 
                 <Card>
                     <div>

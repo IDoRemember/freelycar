@@ -140,6 +140,7 @@ class BeautyOrder extends React.Component {
             for (let nowItem of value) {
                 let same = 0, deleteIndex = null, addItem = []
                 this.state.consumOrder.inventoryInfos.forEach((item, index) => {
+<<<<<<< HEAD
                     console.log(index, value)
 
                     if (item.projectId == projectId) {
@@ -151,6 +152,14 @@ class BeautyOrder extends React.Component {
                         } else {
                             deleteIndex= index
                             addItem.push(nowItem)
+=======
+                    if (item.projectId == nowItem.projectId) {
+                        same++
+                        if (item.inventory.id == nowItem.inventory.id) {
+                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
+                        } else {
+                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
+>>>>>>> f34dcbc5120deede898b097a49c0dd8d1ab1ec18
                         }
                     } else {
                         newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [nowItem] } })
@@ -166,6 +175,10 @@ class BeautyOrder extends React.Component {
             }
 
         }
+<<<<<<< HEAD
+=======
+
+>>>>>>> f34dcbc5120deede898b097a49c0dd8d1ab1ec18
         this.setState({
             consumOrder: newConsumOrder
         }, () => {
@@ -177,9 +190,7 @@ class BeautyOrder extends React.Component {
 
     combineParts = () => {
         let dataInventory = []
-        console.log(this.state.dataService)
         for (let item of this.state.dataService) {
-            console.log(item.inventoryInfos)
             dataInventory.push(item.inventoryInfos)
         }
 
@@ -195,7 +206,6 @@ class BeautyOrder extends React.Component {
     }
 
     getCards = (cards) => {
-        console.log(cards)
         this.setState({
             cards: cards
         })

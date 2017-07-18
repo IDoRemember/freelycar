@@ -63,7 +63,7 @@ public class QueryUtils {
 		switch(orderByTime)
 		{
 			case DESC_ORDER:
-				basicQueryStr.append(" order by createDate desc desc");
+				basicQueryStr.append(" order by createDate desc");
 				break;
 			case ASC_ORDER:
 				basicQueryStr.append(" order by createDate asc");

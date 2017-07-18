@@ -703,9 +703,9 @@ class BeautyOrder extends React.Component {
 
                                         </div>
                                     </Col>
+                                    
                                     <Col span={8}>
-                                        <Button type="primary" onClick={this.queryData}>查询</Button>
-
+                                        <Button type="primary" style={{ marginLeft:'40px'}} onClick={this.queryData}>查询</Button>
                                     </Col>
                                 </Row>
 

@@ -101,8 +101,8 @@ class PutInStorage extends React.Component {
                     <Col span={2} >
                         单据编号：
                     </Col>
-                    <Col span={5} >
-                        <Input size="large" value={this.state.inventoryOrderId} onChange={(e)=>{this.setState({ inventoryOrderId: e.target.value})}}/>
+                    <Col span={4} >
+                        <Input style={{ width: '120px' }} size="large" value={this.state.inventoryOrderId} onChange={(e)=>{this.setState({ inventoryOrderId: e.target.value})}}/>
                     </Col>
                     <Col span={2} >
                         单据时间：

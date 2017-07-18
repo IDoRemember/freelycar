@@ -90,8 +90,8 @@
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
 		<property name="securityManager" ref="securityManager"/>
     	<!-- override these for application-specific URLs if you like:-->
-    	<property name="loginUrl" value="/api/admin/login"/>
-    	<property name="successUrl" value="/home.html"/>
+    	<property name="loginUrl" value="/freelycar/api/login"/>
+    	<property name="successUrl" value="/freelycar/api/dashboard/index"/>
     	<property name="unauthorizedUrl" value="/unauthorized.html"/>
     	<!-- <property name="filters">  
             <map>  
@@ -102,7 +102,7 @@
         </property> -->
     	<property name="filterChainDefinitions">
         	<value>
-        		/** = anon
+        		/freelycar/api/** = authc
             	<!-- # some example chain definitions:
         		/api/shiro = anon
         		/api/test/* = authc

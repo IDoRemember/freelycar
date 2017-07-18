@@ -602,13 +602,13 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="项目管理" key="1">
                             <div>
                                 <Row>
-                                    <Col span={8}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             <Input addonBefore="项目名称" value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                         </div>
                                     </Col>
                 
-                                    <Col span={8}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             <span>项目类别：</span>
                                             <Select

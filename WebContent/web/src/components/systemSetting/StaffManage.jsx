@@ -289,11 +289,11 @@ class StaffManage extends React.Component {
         }
         return (
             <div>
-                <BreadcrumbCustom first="产品管理" second="项目管理" />
+                <BreadcrumbCustom first="产品管理" second="员工管理" />
                 <Card>
                     <div>
                         <Row>
-                            <Col span={9}>
+                            <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
                                     <Input addonBefore="员工工号" value={this.state.staffId} onChange={(e) => { this.setState({ staffId: e.target.value }) }} />
                                 </div>

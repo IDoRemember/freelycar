@@ -150,11 +150,9 @@ class ProviderManage extends React.Component {
         })
     }
     handleOk = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
-        console.log(this.state.form.name);
         $.ajax({
             type: 'post',
             url: 'api/provider/add',
@@ -320,7 +318,7 @@ class ProviderManage extends React.Component {
                     >
                         {plateOptions}
                     </Select>
-                    <Button onClick={() => this.startQuery()} type="primary" style={{ margin: '10px 10px 10px 40px', width: '100px', height: '50px' }} size={'large'}>查询</Button>
+                    <Button onClick={() => this.startQuery()} type="primary" style={{ margin: '0 0 0 40px'}} >查询</Button>
                 </div>
                 <div className="table-operations">
                     <Button onClick={this.showModal}>新增供应商</Button>

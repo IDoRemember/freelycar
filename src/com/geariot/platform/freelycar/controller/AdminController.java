@@ -18,6 +18,8 @@ import com.geariot.platform.freelycar.service.AdminService;
 import com.geariot.platform.freelycar.shiro.PermissionRequire;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 
+import net.sf.json.JSONObject;
+
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -86,10 +88,11 @@ public class AdminController {
 	@RequestMapping(value="/cur", method=RequestMethod.GET)
 	public String cur(){
 		Subject curUser = SecurityUtils.getSubject();
-		if(curUser != null){
-			return (String) curUser.getPrincipal();
-		}
-		return "mei denlu";
+		System.out.println(curUser);
+		System.out.println(curUser.getPrincipal());
+		org.json.JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
+		obj.put("user", curUser.getPrincipal());
+		return obj.toString();
 	}
 	
 }
