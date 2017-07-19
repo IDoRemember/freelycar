@@ -44,11 +44,11 @@ class FixOrder extends React.Component {
                 phone: '',
                 projects: [],
                 programId: 2,
-                payMethod: '',
+                payMethod: 0,
                 programName: '',
                 parkingLocation: '',
                 inventoryInfos: [],
-                state: '',
+                state: 0,
                 totalPrice: '',
                 payState: '',
                 pickTime: '',
@@ -186,13 +186,14 @@ class FixOrder extends React.Component {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
-        let price = 0
+        let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
-            price = price + item.price + item.pricePerUnit * item.referWorkTime
+            projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
         for (let item of this.state.consumOrder.inventoryInfos) {
-            price = price + item.inventory.price * item.number
+            partsPrice = partsPrice + item.inventory.price * item.number
         }
+        price = partsPrice + projectPrice
         return <div>
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
@@ -204,8 +205,16 @@ class FixOrder extends React.Component {
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
-                    整单金额
-                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}</span>
+                    项目：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {projectPrice}&nbsp;&nbsp;</span>
+                    元
+                    &nbsp;&nbsp;
+                    配件：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {partsPrice}&nbsp;&nbsp;</span>
+                    元
+                    &nbsp;&nbsp;
+                    整单金额：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}&nbsp;&nbsp;</span>
                     元
                 </div>
             </Card>

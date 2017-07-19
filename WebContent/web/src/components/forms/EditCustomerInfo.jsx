@@ -25,19 +25,23 @@ class CustomerInfo extends React.Component {
             option: [],
             visible: false,
             carInfo: {
+                carId: '',
                 clientId: '',
+                licensePlate: '',
                 clientName: '',
                 carBrand: '',
                 phone: '',
                 consumAmout: '',
                 tips: '',
+                gender: '',
                 lastMiles: '',
                 consumTimes: '',
                 lastVisit: '',
                 pickCarStaff: '',
                 parkingLocation: '',
                 miles: '',
-                pickTime: ''
+                pickTime: '',
+                carType: ''
             }
         }
     }
@@ -55,27 +59,36 @@ class CustomerInfo extends React.Component {
                     console.log(res);
                     if (res.code == '0') {
                         console.log(res.data)
-                        let data = res.data, cars = data.cars, carBrand, lastMiles;
+                        let data = res.data, cars = data.cars, carBrand, lastMiles, carId, carType;
                         for (let item of cars) {
                             if (item.licensePlate == value) {
                                 carBrand = item.type.brand.name;
                                 lastMiles = item.lastMiles;
+                                carId = item.id;
+                                carType = item.type.type
                             }
                         }
                         this.setState({
                             carInfo: update(this.state.carInfo,
                                 {
+                                    ['carId']: { $set: carId },
                                     ['clientId']: { $set: data.id },
                                     ['clientName']: { $set: data.name },
                                     ['carBrand']: { $set: carBrand },
                                     ['phone']: { $set: data.phone },
+                                    ['gender']: { $set: data.gender },
                                     ['lastMiles']: { $set: lastMiles },
                                     ['consumAmout']: { $set: data.consumAmout },
                                     ['consumTimes']: { $set: data.consumTimes },
-                                    ['lastVisit']: { $set: data.lastVisit }
+                                    ['lastVisit']: { $set: data.lastVisit },
+                                    ['licensePlate']: { $set: data.licensePlate },
+                                    ['carType']: { $set: carType }
                                 })
+                        }, () => {
+                            this.props.saveInfo(this.state.carInfo)
                         })
                         this.props.getCards(data.cards)
+
                     }
                 }
             });
@@ -119,7 +132,6 @@ class CustomerInfo extends React.Component {
         })
         return <div className="gutter-example" >
             <div style={{ marginBottom: '15px' }}>
-
                 <div style={{ width: '30%', display: 'inline-block' }}>单据日期：
                     <span style={{ width: '150px' }}>2017-05-24 15:22:20</span>
                 </div>
@@ -154,7 +166,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         接车时间：
-                        <DatePicker style={{ width: '100px' }} showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', time._d)} />
+                        <DatePicker style={{ width: '100px' }} showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', new Date())} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }} >
