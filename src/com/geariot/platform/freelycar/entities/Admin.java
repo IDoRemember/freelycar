@@ -12,6 +12,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Admin {
 	private int id;
@@ -21,6 +24,7 @@ public class Admin {
 	private Staff staff;
 	private Role role;
 	private boolean current;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	private String comment;
 	public String getAccount() {

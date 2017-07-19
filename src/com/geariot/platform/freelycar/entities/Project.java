@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Project {
 	private int id;
@@ -23,6 +26,7 @@ public class Project {
 	private float pricePerUnit;
 	private String comment;
 	private List<ProjectInventoriesInfo> inventoryInfos;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	private Program program;
 	public String getComment() {
