@@ -6,7 +6,8 @@
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "webpack-dev-server --progress --inline --compress",
-        "build": "webpack -p"
+        "build": "webpack -p",
+        "production": "webpack --config ./webpack.production.config.js"
     },
     "repository": {
         "type": "git",
@@ -15,7 +16,7 @@
     "author": "cyh",
     "license": "MIT",
     "devDependencies": {
-        "axios":"^0.15.3",
+        "axios": "^0.15.3",
         "async-module-loader": "^2.1.0",
         "babel-core": "^6.24.1",
         "babel-loader": "^6.4.1",
@@ -38,7 +39,7 @@
         "webpack": "^1.9.11",
         "webpack-dev-server": "^1.15.0",
         "immutability-helper": "^2.1.2",
-        "jquery":"^3.2.1"
+        "jquery": "^3.2.1"
     },
     "dependencies": {
         "react": "^15.3.1",
