@@ -147,7 +147,6 @@ class BeautyOrder extends React.Component {
         for (let item of this.state.dataService) {
             dataInventory.push(item.inventoryInfos)
         }
-
         this.setState({
             dataInventory: dataInventory
         })
