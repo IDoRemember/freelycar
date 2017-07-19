@@ -7,6 +7,7 @@ import { Row, Col, Card, Button, Input } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
+let a = []
 class FixOrder extends React.Component {
     constructor(props) {
         super(props)
@@ -120,7 +121,38 @@ class FixOrder extends React.Component {
             console.log(this.state.consumOrder)
         })
     }
-    //选择改变项目名称
+
+    pushInventory = (value, projectId) => {
+        let inventoryInfos = this.state.consumOrder.inventoryInfos,
+            newConsumOrder,
+            sameProject = []
+        if (this.state.consumOrder.projects.length < 1) {
+            a.push(...value)
+            this.setState({
+                consumOrder: update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+            }, () => {
+                console.log(
+                    this.state.consumOrder
+                )
+            })
+        } else {
+
+            inventoryInfos = inventoryInfos.filter((obj) => {
+                return projectId !== obj.projectId;
+            });
+            console.log(inventoryInfos, value)
+            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
+            newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
+            this.setState({
+                consumOrder: newConsumOrder
+            }, () => {
+                console.log(
+                    this.state.consumOrder
+                )
+            })
+        }
+    }
+
 
     combineParts = () => {
         let dataInventory = []
@@ -151,9 +183,16 @@ class FixOrder extends React.Component {
         console.log(this.state.parts)
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail key={index} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} changeInvSelect={this.changeInvSelect} />
+                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
+        let price = 0
+        for (let item of this.state.consumOrder.projects) {
+            price = price + item.price + item.pricePerUnit * item.referWorkTime
+        }
+        for (let item of this.state.consumOrder.inventoryInfos) {
+            price = price + item.inventory.price * item.number
+        }
         return <div>
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
@@ -166,7 +205,7 @@ class FixOrder extends React.Component {
             <Card>
                 <div style={{ textAlign: 'right' }}>
                     整单金额
-                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> 43.00</span>
+                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}</span>
                     元
                 </div>
             </Card>

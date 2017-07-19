@@ -123,58 +123,25 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value, projectId) => {
-        console.log(a)
-        let newConsumOrder = []
-        if (this.state.consumOrder.inventoryInfos.length < 1) {
+        let inventoryInfos = this.state.consumOrder.inventoryInfos,
+            newConsumOrder,
+            sameProject = []
+        if (this.state.consumOrder.projects.length < 1) {
             a.push(...value)
-            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+            this.setState({
+                consumOrder: update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+            })
         } else {
-
-            if (value.length < 1) {
-                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
-                    if (item.projectId == projectId) {
-                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
-                    }
-                })
-            }
-            for (let nowItem of value) {
-                let same = 0, deleteIndex = null, addItem = []
-                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
-
-                    console.log(index, value)
-
-                    if (item.projectId == projectId) {
-                        same = same + 1
-                        let valueSame = 0
-                        if (item.inventory.id == nowItem.inventory.id) {
-                            valueSame++
-                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
-                        } else {
-                            deleteIndex= index
-                            addItem.push(nowItem)
-
-                        }
-                    } else {
-                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [nowItem] } })
-                    }
-                })
-                console.log(same)
-                if (same <= value.length) {
-                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [...addItem] } })
-                } else if( same >value.length){
-                    console.log(deleteIndex)
-                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[deleteIndex, 1]] } })
-                }
-            }
-
+            inventoryInfos = inventoryInfos.filter((obj) => {
+                return projectId !== obj.projectId;
+            });
+            console.log(inventoryInfos, value)
+            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
+            newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
+            this.setState({
+                consumOrder: newConsumOrder
+            })
         }
-        this.setState({
-            consumOrder: newConsumOrder
-        }, () => {
-            console.log(
-                this.state.consumOrder
-            )
-        })
     }
 
     combineParts = () => {
@@ -197,6 +164,19 @@ class BeautyOrder extends React.Component {
     getCards = (cards) => {
         this.setState({
             cards: cards
+        })
+    }
+
+    book = ()=>{
+          this.setState({
+            visible: false,
+        });
+        $.ajax({
+            type: 'post',
+            url: 'api/provider/add',
+            //contentType:'application/json;charset=utf-8',
+            dataType: 'json',
+            data: {}
         })
     }
     render() {
@@ -225,7 +205,7 @@ class BeautyOrder extends React.Component {
                 </div>
             </Card>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter">结算</Link></Button>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={()=>{this.book()}}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }
