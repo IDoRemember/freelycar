@@ -605,7 +605,7 @@ class BeautyOrder extends React.Component {
                                     </Col>
                 
                                     <Col span={5}>
-                                        <div style={{ marginBottom: 16 }}>
+                                        <div>
                                             <span>项目类别：</span>
                                             <Select
                                                 style={{ width: '140px' }}

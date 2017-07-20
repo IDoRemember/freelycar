@@ -695,11 +695,10 @@ class BeautyOrder extends React.Component {
                                         >
                                             {this.state.typeItem}
                                         </Select>
-
                                     </Col>
 
                                     <Col span={8}>
-                                        <Button type="primary" style={{ marginLeft: '40px' }} onClick={this.queryData}>查询</Button>
+                                        <Button type="primary" onClick={this.queryData}>查询</Button>
                                     </Col>
                                 </Row>
 

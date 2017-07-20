@@ -295,12 +295,14 @@ class StaffManage extends React.Component {
                         <Row>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="员工工号" value={this.state.staffId} onChange={(e) => { this.setState({ staffId: e.target.value }) }} />
+                                    员工工号：
+                                    <Input style={{ width: '140px' }} value={this.state.staffId} onChange={(e) => { this.setState({ staffId: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="员工姓名" value={this.state.staffName} onChange={(e) => { this.setState({ staffName: e.target.value }) }} />
+                                    员工姓名：
+                                    <Input style={{ width: '140px' }} value={this.state.staffName} onChange={(e) => { this.setState({ staffName: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={2}>
