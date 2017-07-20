@@ -32,6 +32,7 @@ class ModifyClient extends React.Component {
 
             },
             cars: [],
+            cards:[],
 
         }
     }
@@ -67,7 +68,7 @@ class ModifyClient extends React.Component {
                     console.log(res)
                     var obj = res.client;
                     let car = [];
-
+                    let cards=obj.cards
                     obj.cars.map((item, index) => {
                         car.push({
                             licensePlate: item.licensePlate,
@@ -80,12 +81,12 @@ class ModifyClient extends React.Component {
                             newCar: item.newCar,
                             lastMiles: item.lastMiles,
                             miles: item.miles,
-                            brand: item.type.brand.name,
-                            cartype: item.type.type
+                            type: item.type
                         })
                     })
                     this.setState({
-                        cars: car
+                        cars: car,
+                        cards:cards
                     })
 
                     let clientInfo = {
@@ -112,50 +113,53 @@ class ModifyClient extends React.Component {
         let forms = this.state.form;
         $.ajax({
             type: 'post',
-            url: '/api/client/add',
+            url: '/api/client/modify',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({
-
+                id:this.props.params.id,
                 name: forms.name,
                 age: forms.age,
                 idNumber: forms.idNumber,
                 //radio选择
-                gender: this.state.value,
+                gender: forms.gender,
                 phone: forms.phone,
                 //时间选择
                 birthday: forms.birthday,
-                driverLicense: this.state.driverLicense,
-                recommendName: this.state.recommendName,
-                cars: [{
-                    //select选择
-                    type: {
-                        id: this.state.typeId,
-                        // CarBrand:{
-                        //     // name:'lambor',
-                        //     // id:'3',
+                driverLicense:forms.driverLicense,
+                recommendName:forms.recommendName,
+                cars:this.state.cars,
+                cards:this.state.cards
+                // cars: [{
+                //     //select选择
+                //     type: {
+                //         id: this.state.typeId,
+                //         // CarBrand:{
+                //         //     // name:'lambor',
+                //         //     // id:'3',
 
-                        // },
-                        //  type:
-                    },
-                    licensePlate: forms.licensePlate,
-                    //时间选择
-                    insuranceStarttime: forms.insuranceStarttime,
-                    //时间选择
-                    insuranceEndtime: forms.insuranceEndtime,
-                    insuranceAmount: forms.insuranceAmount,
-                    frameNumber: forms.frameNumber,
-                    engineNumber: forms.engineNumber,
-                    //时间选择
-                    licenseDate: forms.licenseDate,
-                    newCar: forms.newCar,
-                    lastMiles: forms.lastMiles,
-                    miles: forms.miles
-                }]
+                //         // },
+                //         //  type:
+                //     },
+                //     licensePlate: forms.licensePlate,
+                //     //时间选择
+                //     insuranceStarttime: forms.insuranceStarttime,
+                //     //时间选择
+                //     insuranceEndtime: forms.insuranceEndtime,
+                //     insuranceAmount: forms.insuranceAmount,
+                //     frameNumber: forms.frameNumber,
+                //     engineNumber: forms.engineNumber,
+                //     //时间选择
+                //     licenseDate: forms.licenseDate,
+                //     newCar: forms.newCar,
+                //     lastMiles: forms.lastMiles,
+                //     miles: forms.miles
+                // }]
             }),
 
             success: (result) => {
                 if (result.code == "0") {
+                    console.log(result)
                     window.history.go(-1);
                     //  hashHistory.push('/app/member/customer')
                 }
@@ -216,6 +220,11 @@ class ModifyClient extends React.Component {
             cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
         })
     }
+     birthdayonChange = (key, value) => {
+        this.setState({
+            cars: update(this.state.cars,  { [key]: { $set: value } } )
+        })
+    }
     render() {
         const brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
@@ -230,7 +239,7 @@ class ModifyClient extends React.Component {
                            <span style={{ marginLeft: '14px' }}>{item.licensePlate}</span>
                     </Col>
                     <Col span={8}>车辆品牌:
-                        <span style={{ marginLeft: '35px' }}>{item.brand} </span>
+                        <span style={{ marginLeft: '35px' }}>{item.type.brand.name} </span>
 
                     </Col>
                 </Row>
@@ -262,7 +271,7 @@ class ModifyClient extends React.Component {
                         {/* <Input style={{ width: '150px', marginLeft: '2px' }} value={item.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} /> */}
                     </Col>
                     <Col span={8} >保险金额：
-                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('carInfoChange', e.target.value,index)} />
+                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('insuranceAmount', e.target.value,index)} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -317,11 +326,9 @@ class ModifyClient extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
                         <Col span={8} offset={4} id="birthday"><span >生日：</span>
-                             <DatePicker onChange={this.birthdayonChange} value={this.state.form.birthday} placeholder={this.state.form.birthday}
+                             <DatePicker onChange={(time) => this.birthday('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
                                 getCalendarContainer={() => document.getElementById('birthday')}
                             /> 
-
-                            <span style={{ width: '150px', marginLeft: '12px' }}>{this.state.form.birthday}</span>
 
                         </Col>
                         <Col span={8}>身份证号:

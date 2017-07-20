@@ -122,17 +122,9 @@ class ClientDetail extends React.Component {
                 dataIndex: 'payType',
                 key: 'payType'
             }, {
-                title: '服务人员',
-                dataIndex: 'servicePeople',
-                key: 'servicePeople'
-            }, {
                 title: '服务时间',
                 dataIndex: 'serviceTime',
                 key: 'serviceTime'
-            }, {
-                title: '状态',
-                dataIndex: 'serviceState',
-                key: 'serviceState'
             }],
 
 
@@ -291,14 +283,16 @@ class ClientDetail extends React.Component {
                         switch (payMethod) {
                             case 0: paymeth = "现金";
                                 break;
-                            case 1: paymeth = "微信";
-                                break;
+                            case 1: paymeth = "刷卡";
+                                break;    
                             case 2: paymeth = "支付宝";
                                 break;
-                            case 3: paymeth = "易付宝";
+                            case 3: paymeth = "微信";
+                                break;
+                            case 4: paymeth = "易付宝";
                                 break;
                         }
-
+                        let servicePeople=objpay[k].programName=="Card"?objcard[k].orderMaker.name: objpay[k].staffNames;
 
                         let payItem = {
 
@@ -308,10 +302,10 @@ class ClientDetail extends React.Component {
                             payMoney: objpay[k].amount,
                             payType: paymeth,
                             // carType: "911",
-                            servicePeople: objpay[k].staffNames,
+                         //   servicePeople: servicePeople,
                             serviceTime: objpay[k].payDate,
                             insuranceMoney: objpay[k].amount,
-                            serviceState: "完成",
+                         //   serviceState: "完成",
                         }
                         paylist.push(payItem);
                     }
