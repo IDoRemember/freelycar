@@ -12,7 +12,7 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            id: '',
+            idUrl: '',
             parts: [],
             staffList: [],
             optionService: [],
@@ -189,7 +189,7 @@ class BeautyOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         this.setState({
-                            id: res.id
+                            idUrl:  `/app/consumption/accountingcenter/${res.id}`
                         })
                     }
                 }
@@ -233,7 +233,7 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to={this.state.id!='' ? `/app/consumption/accountingcenter/${this.state.id}` : ''}>结算</Link></Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
