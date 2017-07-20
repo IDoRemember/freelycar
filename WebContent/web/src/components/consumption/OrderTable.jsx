@@ -148,9 +148,9 @@ class OrderTable extends React.Component {
                         switch (record.state) {
                             case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrderId: record.id })}>完工</a>;
                                 break;
-                            case 1: innertext = <span><Link to={`/app/accountingcenter/${record.id}`}  style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
+                            case 1: innertext = <span><Link to={`/app/consumption/accountingcenter/${record.id}`}  style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
                                 break;
-                            case 2: innertext = <Link to={`/app/accountingcenter/${record.id}`} >结算</Link>;
+                            case 2: innertext = <Link to={`/app/consumption/accountingcenter/${record.id}`} >结算</Link>;
                                 break;
                         }
                     } else {

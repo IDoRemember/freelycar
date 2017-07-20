@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
-import { Row, Col, Card, Button } from 'antd';
+import { Row, Col, Card, Button, Popconfirm } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -121,7 +121,7 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value, projectId) => {
-        console.log(value,projectId)
+        console.log(value, projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -165,9 +165,11 @@ class BeautyOrder extends React.Component {
             cards: cards
         })
     }
+    cancel = () => {
+        message.error('请继续更改');
+    }
 
-    book = () => {
-
+    confirm = (e) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -189,8 +191,9 @@ class BeautyOrder extends React.Component {
                 success: (res) => {
                     console.log(res)
                     if (res.code == '0') {
+                        message.success(res.text);
                         this.setState({
-                            idUrl:  `/app/consumption/accountingcenter/${res.id}`
+                            idUrl: `/app/consumption/accountingcenter/${res.id}`
                         })
                     }
                 }
@@ -199,6 +202,7 @@ class BeautyOrder extends React.Component {
 
 
     }
+
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
@@ -234,8 +238,12 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
+            </Popconfirm>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
+            </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }
