@@ -7,7 +7,7 @@ import com.geariot.platform.freelycar.entities.ConsumOrder;
 
 public interface ConsumOrderDao {
 	
-	String save(ConsumOrder consumOrder);
+	void save(ConsumOrder consumOrder);
 
 	List<ConsumOrder> list(int from, int pageSize);
 
