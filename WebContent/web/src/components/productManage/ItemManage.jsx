@@ -206,15 +206,12 @@ class BeautyOrder extends React.Component {
         this.setState({ tabkey: key });
     }
 
-
     // tab1模态框的处理函数
     showModal = () => {
         this.setState({
             visible: true,
         });
     }
-
-
 
     handleOk = (e) => {
         //修改为关联配件
@@ -611,7 +608,7 @@ class BeautyOrder extends React.Component {
                                         <div style={{ marginBottom: 16 }}>
                                             <span>项目类别：</span>
                                             <Select
-                                                style={{ width: '200px' }}
+                                                style={{ width: '140px' }}
                                                 onChange={(e) => this.setState({ progId: e })}
                                             >
                                                 {this.state.programItem}

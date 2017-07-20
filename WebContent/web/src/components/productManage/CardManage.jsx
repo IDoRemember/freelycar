@@ -231,7 +231,7 @@ class EditableTable extends React.Component {
                         <Row>
                             <Col span={5} style={{ verticalAlign: 'middle' }}>
                                     <span>卡类名称 : </span>
-                                    <Input style={{width:'200px'}} onChange={(e) => this.setState({ cardName: e.target.value })} />
+                                    <Input style={{width:'140px'}} onChange={(e) => this.setState({ cardName: e.target.value })} />
                             </Col>
                             <Col span={3}>
                                 <Button type="primary" onClick={this.queryData}>查询</Button>

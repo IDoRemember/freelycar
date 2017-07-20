@@ -682,19 +682,19 @@ class BeautyOrder extends React.Component {
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
                                         <div style={{ marginBottom: 16 }} >
                                             <span>配件名称：</span>
-                                            <Input style={{width:'200px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
+                                            <Input style={{ width: '140px' }} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
 
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
-                                            <span>配件类别: </span>
-                                            <Select
-                                                addonBefore="配件类别"
-                                                style={{ width: '200px' }}
-                                                onChange={(value) => this.setState({ inventoryTypeId: value })}
-                                            >
-                                                {this.state.typeItem}
-                                            </Select>
+                                        <span>配件类别: </span>
+                                        <Select
+                                            addonBefore="配件类别"
+                                            style={{ width: '140px' }}
+                                            onChange={(value) => this.setState({ inventoryTypeId: value })}
+                                        >
+                                            {this.state.typeItem}
+                                        </Select>
 
                                     </Col>
 

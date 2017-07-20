@@ -23,8 +23,8 @@ class OtherPay extends React.Component {
             typeList: [],
             selectedRowKeys: [],
             pagination: {
-                showTotal:(total)=>{
-                    return <span style={{marginRight:'20px'}}>共&nbsp;{total}&nbsp;条</span>
+                showTotal: (total) => {
+                    return <span style={{ marginRight: '20px' }}>共&nbsp;{total}&nbsp;条</span>
                 }
             },
             loading: false,
@@ -296,6 +296,7 @@ class OtherPay extends React.Component {
                             <DatePicker.RangePicker
                                 format={dateFormat}
                                 showToday={true}
+                                style={{ width: '200px' }}
                                 onChange={(date, dateString) => { this.setState({ queryDate: dateString }) }}
                             />
                         </Col>

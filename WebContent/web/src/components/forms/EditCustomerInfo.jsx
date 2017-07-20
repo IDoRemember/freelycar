@@ -165,8 +165,15 @@ class CustomerInfo extends React.Component {
                         <span style={{ width: '100px' }}>{this.state.carInfo.phone}</span>
                     </Col>
                     <Col span={8}>
-                        接车时间：
-                        <DatePicker style={{ width: '100px' }} showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', new Date())} />
+                        接车人员：
+                          <Select
+                            style={{ width: '100px' }}
+                            onChange={(value) => this.handleValueChange('pickCarStaff', { id: value })}
+                            dropdownStyle={{ overflow: 'scroll' }}
+                        >
+                            {plateOptions}
+                        </Select>
+
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }} >
@@ -178,15 +185,10 @@ class CustomerInfo extends React.Component {
                         历史消费：
                         <span style={{ width: '100px' }}>￥{this.state.carInfo.consumAmout}</span>
                     </Col>
+
                     <Col span={8}>
-                        接车人员：
-                          <Select
-                            style={{ width: '100px' }}
-                            onChange={(value) => this.handleValueChange('pickCarStaff', { id: value })}
-                            dropdownStyle={{ overflow: 'scroll' }}
-                        >
-                            {plateOptions}
-                        </Select>
+                        接车时间：
+                        <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', new Date())} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
