@@ -151,8 +151,8 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.type = { id: form.typeId };
-        obj.brand = { id: form.brandId };
+        obj.typeId = { id: form.typeId };
+        obj.brandId = { id: form.brandId };
         obj.comment = form.comment;
         $.ajax({
             type: 'post',
