@@ -15,11 +15,11 @@ class ModifyClient extends React.Component {
         this.state = {
             option: [],
             type: [],
-            value: '男',
+            // value: '男',
             carvalue: 'true',
             carId: '',
             typeId: '',
-            clientId: parseInt(this.props.params.id),
+            havetwocar: false,
             form: {
                 name: '',
                 age: '',
@@ -29,17 +29,9 @@ class ModifyClient extends React.Component {
                 birthday: '',
                 driverLicense: '',
                 recommendName: '',
-                licensePlate: '',
-                insuranceStarttime: '',
-                insuranceEndtime: '',
-                insuranceAmount: '',
-                frameNumber: '',
-                engineNumber: '',
-                licenseDate: '',
-                newCar: '',
-                lastMiles: '',
-                miles: '',
+
             },
+            cars: [],
 
         }
     }
@@ -68,11 +60,33 @@ class ModifyClient extends React.Component {
             dataType: 'json',
             type: 'GET',
             data: {
-                clientId: this.state.clientId
+                clientId: this.props.params.id,
             },
             success: (res) => {
                 if (res.code == '0') {
+                    console.log(res)
                     var obj = res.client;
+                    let car = [];
+
+                    obj.cars.map((item, index) => {
+                        car.push({
+                            licensePlate: item.licensePlate,
+                            insuranceStarttime: (item.insuranceStarttime == undefined) ? "" : (item.insuranceStarttime).substring(0, 10),
+                            insuranceEndtime: (item.insuranceEndtime == undefined) ? "" : (item.insuranceEndtime).substring(0, 10),
+                            insuranceAmount: item.insuranceAmount,
+                            frameNumber: item.frameNumber,
+                            engineNumber: item.engineNumber,
+                            licenseDate: (item.licenseDate == undefined) ? "" : (item.licenseDate).substring(0, 10),
+                            newCar: item.newCar,
+                            lastMiles: item.lastMiles,
+                            miles: item.miles,
+                            brand: item.type.brand.name,
+                            cartype: item.type.type
+                        })
+                    })
+                    this.setState({
+                        cars: car
+                    })
 
                     let clientInfo = {
                         name: obj.name,
@@ -80,25 +94,13 @@ class ModifyClient extends React.Component {
                         idNumber: obj.idNumber,
                         gender: obj.gender,
                         phone: obj.phone,
-                        birthday: obj.birthday,
+                        birthday: (obj.birthday != "") ? (obj.birthday).substring(0, 10) : "",
                         driverLicense: obj.driverLicense,
                         recommendName: obj.recommendName,
-                        licensePlate: '',
-                        insuranceStarttime: '',
-                        insuranceEndtime: '',
-                        insuranceAmount: '',
-                        frameNumber: '',
-                        engineNumber: '',
-                        licenseDate: '',
-                        newCar: '',
-                        lastMiles: '',
-                        miles: '',
                         points: obj.points,
                     }
-
                     this.setState({
                         form: clientInfo,
-
                     })
                 }
             }
@@ -199,14 +201,7 @@ class ModifyClient extends React.Component {
         console.log(time);
         this.state.form.birthday = new Date(time);
     }
-    insuranceStarttimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceStarttime = new Date(time);
-    }
-    insuranceEndtimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceEndtime = new Date(time);
-    }
+
     licensetimeonChange = (time) => {
         console.log(time);
         this.state.form.licensetime = new Date(time);
@@ -216,13 +211,81 @@ class ModifyClient extends React.Component {
             form: update(this.state.form, { [key]: { $set: value } })
         })
     }
-
+    carInfoChange = (key, value, index) => {
+        this.setState({
+            cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+        })
+    }
     render() {
         const brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
         const typeOptions = this.state.type.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.type}</Option>
+        })
+        const carsInfo = this.state.cars.map((item, index) => {
+            return <Card key={index} title='车辆信息' style={{ marginTop: '20px' }}>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4}>车牌号：
+                           <span style={{ marginLeft: '14px' }}>{item.licensePlate}</span>
+                    </Col>
+                    <Col span={8}>车辆品牌:
+                        <span style={{ marginLeft: '35px' }}>{item.brand} </span>
+
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4}>是否新车：
+                            <div style={{ display: 'inline-block', marginLeft: '5px' }}>
+                            <span>{(item.newCar) ? "是" : "否"}</span>
+                        </div>
+                    </Col>
+                    <Col span={8}>保险开始日期:
+                            <DatePicker onChange={(time) => this.carInfoChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
+                           
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4} >车辆型号:
+                        <span style={{ marginLeft: '10px' }}>{item.cartype}</span>
+                    </Col>
+                    <Col span={8} >保险截止日期:
+                            <DatePicker onChange={(time) => this.carInfoChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
+            
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4}>上次里程：
+                            <span style={{ marginLeft: '2px' }}>{item.lastMiles}</span>
+                        {/* <Input style={{ width: '150px', marginLeft: '2px' }} value={item.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} /> */}
+                    </Col>
+                    <Col span={8} >保险金额：
+                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('carInfoChange', e.target.value,index)} />
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4}>本次里程：
+                        <span style={{ marginLeft: '2px' }}>{item.miles}</span>
+                        {/* <Input style={{ width: '150px', marginLeft: '14px' }} value={item.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} /> */}
+                    </Col>
+                    <Col span={8} id="licTime">上牌时间:
+                         <DatePicker onChange={(time) => this.carInfoChange('licenseDate', time, index)} style={{ marginLeft: '35px' }} placeholder={item.licenseDate}
+                            getCalendarContainer={() => document.getElementById('licTime')}
+                        />
+                    </Col>
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                    <Col span={8} offset={4}>车架号：
+                         <span style={{ marginLeft: '15px' }}>{item.frameNumber}</span>
+                    </Col>
+                    <Col span={8} >发动机号：
+                        <span style={{ marginLeft: '25px' }}>{item.engineNumber}</span>
+                    </Col>
+                </Row>
+            </Card>
+
         })
         return (
             <div>
@@ -244,18 +307,22 @@ class ModifyClient extends React.Component {
                         </Col>
                         <Col span={8}>性别：
                             <div style={{ display: 'inline-block', marginLeft: '26px' }}>
-                                <RadioGroup onChange={this.genderonChange} value={this.state.value}>
+                                <span>{this.state.form.gender}</span>
+                                {/* <RadioGroup onChange={this.genderonChange} value={this.state.gender}>
                                     <Radio value={'男'}>男</Radio>
                                     <Radio value={'女'}>女</Radio>
-                                </RadioGroup>
+                                </RadioGroup> */}
                             </div>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
-                        <Col span={8} offset={4} id="birthday"><span style={{ marginRight: '15px' }}>生日：</span>
-                            <DatePicker onChange={this.birthdayonChange}
+                        <Col span={8} offset={4} id="birthday"><span >生日：</span>
+                             <DatePicker onChange={this.birthdayonChange} value={this.state.form.birthday} placeholder={this.state.form.birthday}
                                 getCalendarContainer={() => document.getElementById('birthday')}
-                            />
+                            /> 
+
+                            <span style={{ width: '150px', marginLeft: '12px' }}>{this.state.form.birthday}</span>
+
                         </Col>
                         <Col span={8}>身份证号:
                             <Input style={{ width: '150px', marginLeft: '12px' }} value={this.state.form.idNumber} onChange={(e) => this.onValueChange('idNumber', e.target.value)} />
@@ -270,90 +337,7 @@ class ModifyClient extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <Card title='车辆信息' style={{ marginTop: '20px' }}>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>车牌号：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
-                        </Col>
-                        <Col span={8} id="car-brand">车辆品牌:
-                            <Select showSearch
-                                style={{ width: '140px', marginLeft: '35px' }}
-                                placeholder="请选择车辆品牌"
-                                optionFilterProp="children"
-                                onChange={this.handleChange}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                getPopupContainer={() => document.getElementById('car-brand')}
-                            >
-                                {brandOptions}
-                            </Select>
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>是否新车：
-                            <div style={{ display: 'inline-block', marginLeft: '5px' }}>
-                                <RadioGroup onChange={this.isnewcar} value={this.state.carvalue}>
-                                    <Radio value={'true'}>是</Radio>
-                                    <Radio value={'false'}>否</Radio>
-                                </RadioGroup>
-                            </div>
-                        </Col>
-                        <Col span={8} id='startTime'>保险开始日期:
-                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }}
-                                getCalendarContainer={() => document.getElementById('startTime')}
-                            />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4} id="provider-area">车辆型号:
-                            <Select showSearch
-                                style={{ width: '150px', marginLeft: '10px' }}
-                                placeholder="请选择车辆型号"
-                                optionFilterProp="children"
-                                onChange={this.TypehandleChange}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                getPopupContainer={() => document.getElementById('provider-area')}
-                            >
-                                {typeOptions}
-                            </Select>
-                        </Col>
-
-                        <Col span={8} id='endTime'>保险截止日期:
-                            <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px' }}
-                                getCalendarContainer={() => document.getElementById('endTime')}
-                            />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>上次里程：
-                            <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} />
-                        </Col>
-                        <Col span={8} >保险金额：
-                        <Input style={{ width: '140px', marginLeft: '25px' }} value={this.state.form.insuranceAmount} onChange={(e) => this.onValueChange('insuranceAmount', e.target.value)} />
-                        </Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>里程数：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
-                        </Col>
-                        <Col span={8} id="licTime">上牌时间:
-                            <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px' }}
-                                getCalendarContainer={() => document.getElementById('licTime')}
-                            />
-
-                        </Col>
-
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>车架号：
-                        <Input style={{ width: '150px', marginLeft: '15px' }} value={this.state.form.frameNumber} onChange={(e) => this.onValueChange('frameNumber', e.target.value)} />
-                        </Col>
-                        <Col span={8} >发动机号：
-                        <Input style={{ width: '140px', marginLeft: '25px' }} value={this.state.form.engineNumber} onChange={(e) => this.onValueChange('engineNumber', e.target.value)} />
-                        </Col>
-                    </Row>
-
-
-                </Card>
+                {carsInfo}
                 <div style={{ marginLeft: '37%', marginTop: '20px', }}>
                     <Button type="primary" style={{ marginRight: '50px' }} size='large' onClick={this.saveData}>
                         保存

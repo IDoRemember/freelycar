@@ -79,8 +79,8 @@ class AddClient extends React.Component {
                 phone: forms.phone,
                 //时间选择
                 birthday: forms.birthday,
-                driverLicense: this.state.driverLicense,
-                recommendName: this.state.recommendName,
+                driverLicense: forms.driverLicense,
+                recommendName: forms.recommendName,
                 cars: [{
                     //select选择
                     type: {
@@ -165,7 +165,7 @@ class AddClient extends React.Component {
     }
     licensetimeonChange = (time) => {
         console.log(time);
-        this.state.form.licensetime = new Date(time);
+        this.state.form.licenseDate = new Date(time);
     }
     onValueChange = (key, value) => {
         this.setState({
