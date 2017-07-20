@@ -465,9 +465,7 @@ class BeautyOrder extends React.Component {
                     }
                     this.setState({ brandItem: brandItem });
                 }
-
             }
-
         });
     }
 
@@ -495,7 +493,6 @@ class BeautyOrder extends React.Component {
                 }
 
             }
-
         });
     }
 

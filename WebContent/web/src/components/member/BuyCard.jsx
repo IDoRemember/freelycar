@@ -194,7 +194,6 @@ class BuyCard extends React.Component {
                     console.log(this.state.clientId)
                 }
             }
-
         })
     }
     genderonChange = (e) => {

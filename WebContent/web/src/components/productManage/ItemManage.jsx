@@ -106,7 +106,7 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize } });
-                }else{
+                } else {
                     this.setState({ data: [] });
                 }
 
@@ -144,7 +144,7 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize } });
-                }else{
+                } else {
                     this.setState({ data: [] });
                 }
 
@@ -426,7 +426,7 @@ class BeautyOrder extends React.Component {
             })
     }
 
-    
+
 
     render() {
         const columns = [{
@@ -601,9 +601,9 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
                                         <span>项目名称：</span>
-                                            <Input style={{width:'140px'}} value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
+                                        <Input style={{ width: '140px' }} value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                     </Col>
-                
+
                                     <Col span={5}>
                                         <div>
                                             <span>项目类别：</span>
@@ -636,7 +636,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
-                                        width='50%'
+                                        width='80%'
                                     >
                                         <Form onSubmit={this.changehandleSubmit}>
 

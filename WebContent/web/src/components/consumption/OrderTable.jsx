@@ -151,7 +151,7 @@ class OrderTable extends React.Component {
                                 break;
                             case 1: innertext = <span><Link to="" style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
                                 break;
-                            case 2: innertext = <Link to="" >结算</Link>;
+                            case 2: innertext = <Link to={`/app/accountingcenter/${record.id}`} >结算</Link>;
                                 break;
                         }
                     } else {
