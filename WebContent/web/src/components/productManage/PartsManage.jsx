@@ -132,8 +132,8 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.type = { id: form.typeId };
-        obj.brand = { id: form.brandId };
+        obj.typeId =  form.typeId;
+        obj.brandId =  form.brandId;
         obj.comment = form.comment;
         obj.standard = form.standard;
         $.ajax({
@@ -153,7 +153,10 @@ class BeautyOrder extends React.Component {
                     obj.createDate = dt.createDate;
                     obj.brandName = this.state.form.brandName;
                     obj.typeName = this.state.form.typeName;
+<<<<<<< HEAD
                     console.log(obj);
+=======
+>>>>>>> f32028d0bbf8439f28d54fbd391307baeee2b0ab
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -694,7 +697,7 @@ class BeautyOrder extends React.Component {
 
                                     {/*查询的模态框*/}
                                     <Modal
-                                        title="项目查询"
+                                        title="新增配件"
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
