@@ -7,6 +7,7 @@ import Regclient from './Regclient.jsx'
 import AjaxGet from '../../utils/ajaxGet'
 import AjaxSend from '../../utils/ajaxSend'
 import update from 'immutability-helper';
+import { hashHistory } from 'react-router'
 import $ from 'jquery'
 const RadioGroup = Radio.Group;
 const Option = Select.Option;
@@ -191,7 +192,9 @@ class BuyCard extends React.Component {
                         clientId: res.data.id,
                         haveClient: true
                     });
-                    console.log(this.state.clientId)
+                    console.log(this.state.clientId);
+                    console.log(this.state.haveClient);
+                    
                 }
             }
         })
@@ -210,8 +213,9 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-        if (this.setState.haveClient == true) {
-            console.log('111')
+        if (this.state.haveClient == false){
+              message.error('请先保存客户', 1.5);
+        }else{
             $.ajax({
                 url: 'api/pay/buycard',
                 type: 'POST',
@@ -227,13 +231,12 @@ class BuyCard extends React.Component {
                         payMethod: this.state.payMethod,
                     }
                 }),
-                success:()=>{
+                success:(res)=>{
+                    message.success('保存成功!');
+                     hashHistory.push('/app/member/customer')
                     
                 }
             })
-        }else{
-             message.error('请先保存客户', 1.5);
-
         }
     }
 

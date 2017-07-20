@@ -100,7 +100,6 @@ class OrderTable extends React.Component {
                 comment: this.state.reverseCar.comment
             },
             dataType: 'json',
-            type: 'get',
             success: (res) => {
                 console.log(res);
             }
@@ -149,7 +148,7 @@ class OrderTable extends React.Component {
                         switch (record.state) {
                             case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrderId: record.id })}>完工</a>;
                                 break;
-                            case 1: innertext = <span><Link to="" style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
+                            case 1: innertext = <span><Link to={`/app/accountingcenter/${record.id}`}  style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
                                 break;
                             case 2: innertext = <Link to={`/app/accountingcenter/${record.id}`} >结算</Link>;
                                 break;
@@ -170,9 +169,9 @@ class OrderTable extends React.Component {
                     return <span>
                         <span style={{ marginRight: '10px' }}>
                             {innertext}
-                            <Link to="">
+                            {/* <Link to="">
                                 <span style={{ marginLeft: '5px' }}> 修改 </span>
-                            </Link>
+                            </Link> */}
                         </span>
                     </span>
                 }

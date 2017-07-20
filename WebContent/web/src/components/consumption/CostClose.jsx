@@ -1,20 +1,9 @@
 import React from 'react';
-import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button } from 'antd';
+import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import $ from 'jquery';
 
-const columns = [
-    { title: '项目费用', dataIndex: 'itemFee', key: 'itemFee' },
-    { title: '配件费用', dataIndex: 'productFee', key: 'productFee' },
-    { title: '实际工时', dataIndex: 'workHour', key: 'workHour' },
-    { title: '工时单价', dataIndex: 'perHourCost', key: 'perHourCost' },
-    { title: '合计', dataIndex: 'totalFee', key: 'totalFee' },
-];
-const data = [
-    { key: 1, itemFee: 100, productFee: 32, workHour: 2, perHourCost: 25, totalFee: 12 }
-
-];
 const RadioGroup = Radio.Group;
 const radioStyle = {
     display: 'block',
@@ -26,7 +15,11 @@ class CostClose extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: 1
+            value: 1,
+            checkedCard: true,
+            disabledCard: true,
+            feeDetail: [],
+            payMethod: ''//支付方式
         }
     }
     onChange = (e) => {
@@ -34,12 +27,53 @@ class CostClose extends React.Component {
             value: e.target.value,
         });
     }
+    handleChange = (e) => {
+        console.log(e);
+        this.setState({
+            value: e.target.value,
+        });
+    }
+
+    onCardChange = (e) => {
+        this.setState({
+            checkedCard: !this.state.checkedCard,
+            disabledCard: this.state.checkedCard
+        });
+    }
 
     componentDidMount() {
         $.ajax({
-            url: 'api/pay/consumpay',
+            url: 'api/order/queryid',
             type: 'get',
-            data:{consumOrdersId:''},
+            // data: { consumOrderId: this.props.params.orderId },
+            data: { consumOrderId: 'S201707204zgukg' },
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    let dataArr = res.data.projects;
+                    for (let item of dataArr) {
+                        item.inventory = res.data.inventoryInfos;
+                        item.key = item.id;
+                        item.totalPrice = res.data.totalPrice;//所有项目的总价
+                    }
+
+                    this.setState({
+                        feeDetail: dataArr
+                    }, () => {
+                        console.log(this.state.feeDetail);
+                    });
+                }
+            }
+        });
+
+    }
+
+    confirm = () => {
+        $.ajax({
+            url: 'api/pay/consumpay',
+            type: 'post',
+            data: { consumOrdersId: 'S201707204zgukg' },
             dataType: 'json',
             success: (res) => {
                 console.log(res);
@@ -54,12 +88,83 @@ class CostClose extends React.Component {
     }
 
     render() {
-        function handleChange(value) {
-            console.log(`selected ${value}`);
-        }
-        function onChange(value) {
-            console.log('changed', value);
-        }
+
+
+        const columns = [
+            { title: '项目名称', dataIndex: 'name', key: 'itemName' },
+            { title: '项目费用', dataIndex: 'price', key: 'itemFee' },
+            { title: '实际工时', dataIndex: 'referWorkTime', key: 'workHour' },
+            { title: '工时单价', dataIndex: 'pricePerUnit', key: 'perHourCost' },
+            {
+                title: '配件金额', dataIndex: 'inventory', key: 'productFee', render: (text, record, index) => {
+                    let rowId = record.projectId;
+                    let sum = 0;
+                    for (let item of text) {
+                        if (item.projectId == rowId) {
+                            sum += item.inventory.price;
+                        }
+                    }
+                    return <span>{sum}</span>
+
+                }
+            },
+            {
+                title: '配件小计', dataIndex: 'inventory', key: 'totalInv', render: (text, record, index) => {
+                    let sum = 0;
+                    for (let item of text) {
+                        sum += item.inventory.price;
+                    }
+
+                    return {
+                        children: <a>{sum}</a>,
+                        props: {
+                            rowSpan: index == 0 ? this.state.feeDetail.length : 0
+                        }
+                    }
+                }
+
+            },
+            {
+                title: '合计', dataIndex: 'totalPrice', key: 'total', render: (text, record, index) => {
+                    return {
+                        children: <a>{text}</a>,
+                        props: {
+                            rowSpan: index == 0 ? this.state.feeDetail.length : 0
+                        }
+                    }
+                }
+            },
+        ];
+
+        let flag = true;
+        const cardInfo = this.state.feeDetail.map((item, index) => {
+
+
+            return item.cardName && <div key={index}>
+                <div style={{ display: 'inline-block', width: '20%' }}>会员卡类:
+                            <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                        {item.cardName}
+                    </div>
+                </div>
+
+                <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
+                            <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                        {item.cardId}
+                    </div>
+                </div>
+
+                <div style={{ display: 'inline-block' }}>卡扣次数：
+                            <div style={{ display: 'inline-block', margin: '10px' }}>
+                        {item.payCardTimes}
+                    </div>
+                </div>
+            </div>
+
+
+        })
+
+
+
         return (
             <div className="gutter-example">
                 <BreadcrumbCustom first="消费开单" second="结算中心" />
@@ -70,60 +175,41 @@ class CostClose extends React.Component {
                     <Col className="gutter-row" span={16}>
                         <div className="gutter-box">
                             <Card title="应收金额" bordered={false} >
-                                <Table className="accountTable" columns={columns} dataSource={data} />
+                                <Table bordered className="accountTable" columns={columns} dataSource={this.state.feeDetail} />
                             </Card>
                             <Card title="支付方式" bordered={false} className="choosetype">
-                                <RadioGroup onChange={this.onChange} value={this.state.value}>
-                                    <Radio style={radioStyle} value={1}>
+                                <Checkbox
+                                    defaultChecked={cardInfo.length > 0 ? true : false}
+                                    checked={this.state.checkedCard}
+                                    onChange={() => this.onCardChange()}
+                                    style={{ width: '100%' }}
+                                    disabled={cardInfo.length > 0 ? false : true}
+                                >
+                                    <span>抵扣项目费用</span>
+                                </Checkbox>
 
-                                        <div style={{ display: 'inline-block', width: '80%' }}>会员卡类:
-                                        <div style={{ display: 'inline-block', marginLeft: '10px' }}><Select defaultValue="countCard" style={{ width: 120 }} onChange={handleChange}>
-                                                <Option value="countCard">次卡</Option>
-                                                <Option value="groupCard">组合卡</Option>
-                                            </Select>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ display: 'inline-block' }}>会员卡号:
-                                        <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                                <Select defaultValue="101001" style={{ width: 120 }} onChange={handleChange}>
-                                                    <Option value="101001">101001</Option>
-                                                    <Option value="100020">100020</Option>
-                                                </Select>
-                                            </div>
-                                        </div>
-
-                                        <div style={{ marginTop: '10px', marginLeft: '20px' }}>
-                                            卡扣次数：
-                                            <div style={{ display: 'inline-block', margin: '10px' }}>
-                                                <InputNumber min={1} max={10} defaultValue={3} onChange={onChange} />
-                                            </div>
-                                        </div>
-
-                                    </Radio>
-                                    <Radio style={radioStyle} value={2}>
-
-                                        <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
+                                {cardInfo}
+                                <br />
+                                <div style={{ display: 'inline-block', width: '20%' }}>支付方式:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                                <Select defaultValue="现金" style={{ width: 120 }} onChange={handleChange} >
-                                                    <Option value="cash">现金</Option>
-                                                    <Option value="wechatpay">微信</Option>
-                                                    <Option value="alipay">支付宝</Option>
-                                                    <Option value="suningpay">易付宝</Option>
-                                                </Select>
-                                            </div>
-                                        </div>
+                                        <Select defaultValue="现金" style={{ width: 120 }} onChange={this.handleChange} >
+                                            <Option value="cash">现金</Option>
+                                            <Option value="wechatpay">微信</Option>
+                                            <Option value="alipay">支付宝</Option>
+                                            <Option value="suningpay">易付宝</Option>
+                                        </Select>
+                                    </div>
+                                </div>
 
 
-                                        <div style={{ display: 'inline-block' }}>支付金额:
+                                <div style={{ display: 'inline-block', width: '20%' }}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                                <Input style={{ width: '120px' }} />
-                                            </div>
-                                        </div>
-                                    </Radio>
-                                </RadioGroup>
-                                <div style={{ display: 'block', textAlign: 'center' }}>
-                                    < Button type="primary" >确定</Button>
+                                        <Input style={{ width: '120px' }} />
+                                    </div>
+                                </div>
+
+                                <div style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}>
+                                    < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
                                     < Button type="primary">挂单</Button>
                                 </div>
                             </Card>

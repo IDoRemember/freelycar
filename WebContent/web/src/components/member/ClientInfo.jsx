@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm,message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery';
@@ -72,7 +73,9 @@ class ClientInfo extends React.Component {
                                 <Link to={'app/member/memberShip/' + record.id} >
                                     <span >开卡</span>
                                 </Link>
-
+                                 <Link to={'app/member/modifyclient/' + record.id} >
+                                    <span>修改</span>
+                                </Link>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                                     <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
                                 </Popconfirm>
@@ -101,8 +104,6 @@ class ClientInfo extends React.Component {
 
                 this.setState({
                     option: res.data,
-
-
                 })
             }
         })
@@ -206,7 +207,7 @@ class ClientInfo extends React.Component {
                     let datalist = [];
                     //调用接口后返回的数据
                     var obj = res.data;
-                     //console.log(obj);
+                    console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
                         //console.log(obj[i].cars);
@@ -217,7 +218,7 @@ class ClientInfo extends React.Component {
                             phoneNumber: obj[i].phone,
                             //car:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substring(0,2)+'...': obj[i].cars[0].licensePlate,
                             cars:obj[i].cars,
-                            carBrand: obj[i].cars[0].type.brand.name,
+                      //      carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
                             latelyTime: obj[i].lastVisit,
@@ -361,9 +362,9 @@ class ClientInfo extends React.Component {
     render() {
         //  const { dataSource } = this.state;
         // const columns = this.columns;
-        const plateOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.index}>{item.value}</Option>
-        })
+        // const plateOptions = this.state.option.map((item, index) => {
+        //     return <Option key={index} value={item.index}>{item.value}</Option>
+        // })
         //   const typeOptions = this.state.type.map((item, index) => {
         //     return <Option key={index} value={item.id + ''}>{item.type}</Option>
         // })

@@ -12,6 +12,7 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            idUrl: '',
             parts: [],
             staffList: [],
             optionService: [],
@@ -120,6 +121,7 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value, projectId) => {
+        console.log(value,projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -131,7 +133,7 @@ class BeautyOrder extends React.Component {
         } else {
             a = []
             inventoryInfos = inventoryInfos.filter((obj) => {
-                return projectId !== obj.projectId;
+                return projectId != obj.projectId;
             });
             console.log(inventoryInfos, value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
@@ -186,6 +188,11 @@ class BeautyOrder extends React.Component {
                 data: JSON.stringify(this.state.consumOrder),
                 success: (res) => {
                     console.log(res)
+                    if (res.code == '0') {
+                        this.setState({
+                            idUrl:  `/app/consumption/accountingcenter/${res.id}`
+                        })
+                    }
                 }
             })
         })
@@ -195,7 +202,7 @@ class BeautyOrder extends React.Component {
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
+                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
         let partsPrice = 0, projectPrice = 0, price = 0
@@ -227,7 +234,7 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter/1212">结算</Link></Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
