@@ -67,21 +67,23 @@ class CostClose extends React.Component {
             }
         });
 
+    }
 
-        // $.ajax({
-        //     url: 'api/pay/consumpay',
-        //     type: 'get',
-        //     data: { consumOrdersId: '' },
-        //     dataType: 'json',
-        //     success: (res) => {
-        //         console.log(res);
-        //         if (res.code == '0') {
-        //             this.setState({
-        //                 optionService: res.data
-        //             });
-        //         }
-        //     }
-        // });
+    confirm = () => {
+        $.ajax({
+            url: 'api/pay/consumpay',
+            type: 'post',
+            data: { consumOrdersId: 'S201707204zgukg' },
+            dataType: 'json',
+            success: (res) => {
+                console.log(res);
+                if (res.code == '0') {
+                    this.setState({
+                        optionService: res.data
+                    });
+                }
+            }
+        });
 
     }
 
@@ -177,11 +179,11 @@ class CostClose extends React.Component {
                             </Card>
                             <Card title="支付方式" bordered={false} className="choosetype">
                                 <Checkbox
-                                    defaultChecked={cardInfo.length>0?true:false}
+                                    defaultChecked={cardInfo.length > 0 ? true : false}
                                     checked={this.state.checkedCard}
-                                    onChange={()=>this.onCardChange()}
+                                    onChange={() => this.onCardChange()}
                                     style={{ width: '100%' }}
-                                    disabled={cardInfo.length>0?false:true}
+                                    disabled={cardInfo.length > 0 ? false : true}
                                 >
                                     <span>抵扣项目费用</span>
                                 </Checkbox>
@@ -207,7 +209,7 @@ class CostClose extends React.Component {
                                 </div>
 
                                 <div style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}>
-                                    < Button type="primary" >确定</Button>
+                                    < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
                                     < Button type="primary">挂单</Button>
                                 </div>
                             </Card>
