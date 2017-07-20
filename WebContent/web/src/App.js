@@ -14,8 +14,8 @@ class App extends Component {
         const username = localStorage.getItem("username")
         this.state = {
             collapsed: false,
-            loginState: (username != "" && username != undefined) ? true : false,
-            // loginState: true,
+           loginState: (username != "" && username != undefined) ? true : false,
+          //   loginState: true,
             user:'',
             role:0,
         };
