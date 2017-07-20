@@ -122,6 +122,7 @@ class FixOrder extends React.Component {
         })
     }
 
+
     pushInventory = (value, projectId) => {
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
@@ -198,8 +199,8 @@ class FixOrder extends React.Component {
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
             <Card style={{ marginBottom: '10px' }}>
-                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} />
-                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} />
+                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
             </Card>
             <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
             {parts}

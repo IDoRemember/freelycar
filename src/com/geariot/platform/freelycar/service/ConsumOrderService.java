@@ -101,10 +101,13 @@ public class ConsumOrderService {
 		//获取project信息保存到该订单
 		for(ProjectInfo pInfo : consumOrder.getProjects()){
 			Project project = this.projectDao.findProjectById(pInfo.getProjectId());
-			Card payCard = this.cardDao.getCardById(pInfo.getCardId());
 			pInfo.setName(project.getName());
 			pInfo.setPrice(project.getPrice());
-			pInfo.setCardName(payCard.getService().getName());
+			if(pInfo.getCardId() != 0 ){
+				Card payCard = this.cardDao.getCardById(pInfo.getCardId());
+				pInfo.setCardName(payCard.getService().getName());
+			}
+			
 		}
 		String id = this.orderDao.save(consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
