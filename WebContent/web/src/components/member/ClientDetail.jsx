@@ -269,7 +269,7 @@ class ClientDetail extends React.Component {
                     let clientInfo = {
                         name: obj.name,
                         phone: obj.phone,
-                        birthday: obj.birthday,
+                        birthday: obj.birthday!=undefined?obj.birthday:"",
                         gender: obj.gender,
                         driverLicense: obj.driverLicense,
                         idNumber: obj.idNumber,
@@ -511,7 +511,7 @@ class ClientDetail extends React.Component {
                         <Col span={3}></Col>
                         <Col span={6}>姓名：<span style={{ width: '200px' }} >{this.state.form.name}</span></Col>
                         <Col span={6}>手机号：<span style={{ width: '200px' }} >{this.state.form.phone} </span></Col>
-                        <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,10)}</span></Col>
+                      <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,9)}</span></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
