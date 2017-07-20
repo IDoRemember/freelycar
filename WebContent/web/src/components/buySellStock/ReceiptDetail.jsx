@@ -75,7 +75,7 @@ class PutInStorage extends React.Component {
             dataIndex: 'provider',
             key: 'provider',
             render: (text, record, index) => {
-                return <span>{text.name}</span>
+                return <span>{text?text.name:''}</span>
             }
         }, {
             title: '合计',
