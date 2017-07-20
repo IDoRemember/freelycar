@@ -1,15 +1,20 @@
 package com.geariot.platform.freelycar.entities;
 
+import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
 
 @Entity
 public class ProjectInfo {
@@ -24,6 +29,35 @@ public class ProjectInfo {
 	private float referWorkTime;
 	private float pricePerUnit;
 	private Set<Staff> staffs;
+	private String clientName;
+	private String licensePlate;
+	private String brandName;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
+	private Date createDate;
+	public String getClientName() {
+		return clientName;
+	}
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
+	}
+	public String getLicensePlate() {
+		return licensePlate;
+	}
+	public void setLicensePlate(String licensePlate) {
+		this.licensePlate = licensePlate;
+	}
+	public String getBrandName() {
+		return brandName;
+	}
+	public void setBrandName(String brandName) {
+		this.brandName = brandName;
+	}
+	public Date getCreateDate() {
+		return createDate;
+	}
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 	public int getCardId() {
 		return cardId;
 	}
@@ -31,6 +65,7 @@ public class ProjectInfo {
 		return cardName;
 	}
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	public int getId() {
 		return id;
 	}
@@ -55,7 +90,7 @@ public class ProjectInfo {
 	public float getReferWorkTime() {
 		return referWorkTime;
 	}
-	@ManyToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
+	@ManyToMany(cascade={}, fetch=FetchType.EAGER)
 	@JoinTable(name="projectinfo_staff", 
 				joinColumns={@JoinColumn(name="projectInfoId", foreignKey=@ForeignKey(name="none"))}, 
 				inverseJoinColumns={@JoinColumn(name="staffId", foreignKey=@ForeignKey(name="none"))})

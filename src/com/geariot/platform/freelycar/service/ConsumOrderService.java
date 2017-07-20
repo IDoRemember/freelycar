@@ -30,6 +30,7 @@ import com.geariot.platform.freelycar.entities.Project;
 import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.ProjectInventoriesInfo;
 import com.geariot.platform.freelycar.entities.Provider;
+import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.exception.ForRollbackException;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -64,7 +65,9 @@ public class ConsumOrderService {
 	private ProjectDao projectDao;
 	
 	public String book(ConsumOrder consumOrder) {
-		consumOrder.setId(IDGenerator.generate(IDGenerator.MAINTAIN_CONSUM));
+		log.debug("修改之前order----------" + consumOrder);
+		String consumOrderId = IDGenerator.generate(IDGenerator.MAINTAIN_CONSUM);
+		consumOrder.setId(consumOrderId);
 		log.debug("客户id：" + consumOrder.getClientId() + ", 客户姓名:" + consumOrder.getClientName() + ", 尝试创建消费订单");
 		consumOrder.setCreateDate(new Date());
 		consumOrder.setState(0);
@@ -100,16 +103,24 @@ public class ConsumOrderService {
 		}
 		//获取project信息保存到该订单
 		for(ProjectInfo pInfo : consumOrder.getProjects()){
+			Set<Staff> staffs = pInfo.getStaffs();
+			pInfo.setStaffs(staffs);
 			Project project = this.projectDao.findProjectById(pInfo.getProjectId());
 			pInfo.setName(project.getName());
 			pInfo.setPrice(project.getPrice());
+			pInfo.setClientName(consumOrder.getClientName());
+			pInfo.setLicensePlate(consumOrder.getLicensePlate());
+			pInfo.setBrandName(consumOrder.getCarBrand());
+			pInfo.setCreateDate(new Date());
 			if(pInfo.getCardId() != 0 ){
 				Card payCard = this.cardDao.getCardById(pInfo.getCardId());
 				pInfo.setCardName(payCard.getService().getName());
+				pInfo.setPayMethod(1);
 			}
 			
 		}
-		String id = this.orderDao.save(consumOrder);
+		this.orderDao.save(consumOrder);
+		log.debug("保存之前order----------" + consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
 		//创建出库订单并保存
 		if(list != null && !list.isEmpty()){
@@ -124,7 +135,7 @@ public class ConsumOrderService {
 			inventoryOrderDao.save(order);
 			log.debug("出库订单(id:" + order.getId() + ")保存成功");
 		}
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS, "id", id).toString();
+		return JsonResFactory.buildOrg(RESCODE.SUCCESS, "id", consumOrderId).toString();
 	}
 
 	public String list(int page, int number) {

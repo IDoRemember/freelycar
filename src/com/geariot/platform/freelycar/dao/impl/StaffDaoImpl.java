@@ -99,11 +99,11 @@ public class StaffDaoImpl implements StaffDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ConsumOrder> staffServiceDetails(int staffId, int from, int pageSize) {
-		String sql = "select consumOrdersId from consumorders_staff where staffId = :staffId";
-		List<Object> consumOrdersId = this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
-		if (consumOrdersId != null && !consumOrdersId.isEmpty()) {
-			String hql = "from ConsumOrder where id in :consumOrdersId";
-			return this.getSession().createQuery(hql).setParameterList("consumOrdersId", consumOrdersId)
+		String sql = "select projectInfoId from projectinfo_staff where staffId = :staffId";
+		List<Object> projectInfoId = this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
+		if (projectInfoId != null && !projectInfoId.isEmpty()) {
+			String hql = "from ProjectInfo where id in :projectInfoId";
+			return this.getSession().createQuery(hql).setParameterList("projectInfoId", projectInfoId)
 					.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 		} else {
 			return null;
