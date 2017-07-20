@@ -153,10 +153,6 @@ class BeautyOrder extends React.Component {
                     obj.createDate = dt.createDate;
                     obj.brandName = this.state.form.brandName;
                     obj.typeName = this.state.form.typeName;
-<<<<<<< HEAD
-                    console.log(obj);
-=======
->>>>>>> f32028d0bbf8439f28d54fbd391307baeee2b0ab
                     this.setState({
                         data: [...this.state.data, obj],
                     });
