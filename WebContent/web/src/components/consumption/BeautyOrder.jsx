@@ -121,6 +121,7 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value, projectId) => {
+        console.log(value,projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -132,7 +133,7 @@ class BeautyOrder extends React.Component {
         } else {
             a = []
             inventoryInfos = inventoryInfos.filter((obj) => {
-                return projectId !== obj.projectId;
+                return projectId != obj.projectId;
             });
             console.log(inventoryInfos, value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
@@ -201,7 +202,7 @@ class BeautyOrder extends React.Component {
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
+                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
         let partsPrice = 0, projectPrice = 0, price = 0

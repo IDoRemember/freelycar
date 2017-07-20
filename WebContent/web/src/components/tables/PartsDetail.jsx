@@ -69,6 +69,7 @@ class PartsDetail extends React.Component {
                 })
             }
         }
+        console.log(this.props.id)
         this.props.pushInventory(inventorys, this.props.id)
     }
 
