@@ -40,11 +40,12 @@ module.exports = {
                 NODE_ENV: JSON.stringify("production"),
             },
         }),
-        new HtmlWebpackPlugin({
+        new HtmlWebpackPlugin({ 
             template:  "test.html",
             showErrors:true,
             inject: 'body',
         }),
+        new webpack.HotModuleReplacementPlugin(),//热加载插件
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin(),
         new ExtractTextPlugin("[name]-[hash].css")

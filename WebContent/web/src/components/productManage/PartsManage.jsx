@@ -151,8 +151,8 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.typeId = { id: form.typeId };
-        obj.brandId = { id: form.brandId };
+        obj.typeId =  form.typeId;
+        obj.brandId =  form.brandId;
         obj.comment = form.comment;
         $.ajax({
             type: 'post',
@@ -169,8 +169,8 @@ class BeautyOrder extends React.Component {
                     obj.number = dt.id;
                     obj.key = dt.id;
                     obj.createDate = dt.createDate;
-                    obj.brand = this.state.form.brandName;
-                    obj.type = this.state.form.typeName;
+                    obj.brandName = this.state.form.brandName;
+                    obj.typeName = this.state.form.typeName;
                     this.setState({
                         data: [...this.state.data, obj],
                     });
