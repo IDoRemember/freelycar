@@ -7,20 +7,7 @@ import $ from 'jquery';
 const TabPane = Tabs.TabPane;
 const { RangePicker } = DatePicker;
 const dateFormat = 'YYYY/MM/DD 00:00:00';
-const AllData = [
-    {
-        key: 1,
-        indexNum: 1,
-        maintainItem: "洗车",
-        payMoney: "20",
-        payType: "支付宝",
-        carType: "911",
-        servicePeople: "小易,小爱",
-        serviceTime: "2017-5-23",
-        insuranceMoney: "3000",
-        serviceState: "已完成",
-    }
-]
+
 
 class PayHistory extends React.Component {
     constructor(props) {
@@ -29,8 +16,8 @@ class PayHistory extends React.Component {
             amount: '',
             option: [],
             payData: [],
-            queryStart:'',
-            queryEnd:'',
+            queryStart: '',
+            queryEnd: '',
             Columns: [
                 {
                     title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
@@ -40,9 +27,9 @@ class PayHistory extends React.Component {
                 { title: '项目', dataIndex: 'maintainItem', key: 'maintainItem' },
                 { title: '消费金额', dataIndex: 'payMoney', key: 'payMoney' },
                 { title: '支付方式', dataIndex: 'payType', key: 'payType' },
-                { title: '服务人员', dataIndex: 'servicePeople', key: 'servicePeople' },
+              //  { title: '服务人员', dataIndex: 'servicePeople', key: 'servicePeople' },
                 { title: '服务时间', dataIndex: 'serviceTime', key: 'serviceTime' },
-                { title: '状态', dataIndex: 'serviceState', key: 'serviceState' },
+              //  { title: '状态', dataIndex: 'serviceState', key: 'serviceState' },
             ]
         }
     }
@@ -85,22 +72,22 @@ class PayHistory extends React.Component {
             this.loadData(this.props.params.id, MonthStart, MonthEnd, 1, 10)
 
         } else if (key == 3) {
-            var AllStart = new Date(1900,4,28,0,0,1);
-            var AllEnd = new Date(2500,4,28,0,0,1);
-            this.loadData(this.props.params.id,AllStart,AllEnd,1,10)
+            var AllStart = new Date(1900, 4, 28, 0, 0, 1);
+            var AllEnd = new Date(2500, 4, 28, 0, 0, 1);
+            this.loadData(this.props.params.id, AllStart, AllEnd, 1, 10)
         }
     }
-    queryTime=()=>{
-         this.loadData(this.props.params.id,new Date(this.state.queryStart),new Date(this.state.queryEnd),1,10) 
+    queryTime = () => {
+        this.loadData(this.props.params.id, new Date(this.state.queryStart), new Date(this.state.queryEnd), 1, 10)
     }
 
-     onTimeSelected = (dates, dateStrings) => {
+    onTimeSelected = (dates, dateStrings) => {
         console.log(dates, dateStrings)
 
-           this.setState({
-               queryStart:dateStrings[0],
-               queryEnd:dateStrings[1]
-           })
+        this.setState({
+            queryStart: dateStrings[0],
+            queryEnd: dateStrings[1]
+        })
         // localStorage.setItem('datastrings', dateStrings)
         // if (this.state.mode == 'payrange') {
         //     $.ajax({
@@ -136,6 +123,7 @@ class PayHistory extends React.Component {
                     this.setState({
                         amount: res.amount,
                     })
+                  //  var objcard=res.client.cards;
                     var objpay = res.data;
                     let paylist = [];
                     for (let k = 0; k < objpay.length; k++) {
@@ -145,13 +133,17 @@ class PayHistory extends React.Component {
                         switch (payMethod) {
                             case 0: paymeth = "现金";
                                 break;
-                            case 1: paymeth = "微信";
-                                break;
+                            case 1: paymeth = "刷卡";
+                                break;    
                             case 2: paymeth = "支付宝";
                                 break;
-                            case 3: paymeth = "易付宝";
+                            case 3: paymeth = "微信";
+                                break;
+                            case 4: paymeth = "易付宝";
                                 break;
                         }
+         //               let servicePeople = objpay[k].programName == "Card" ? objcard[k].orderMaker.name : objpay[k].staffNames;
+
                         let payItem = {
                             key: objpay[k].id,
                             id: objpay[k].id,
@@ -159,10 +151,10 @@ class PayHistory extends React.Component {
                             payMoney: objpay[k].amount,
                             payType: paymeth,
                             // carType: "911",
-                            servicePeople: objpay[k].staffNames,
+                           // servicePeople: servicePeople,
                             serviceTime: objpay[k].payDate,
                             insuranceMoney: objpay[k].amount,
-                            serviceState: "完成",
+                          //  serviceState: "完成",
                         }
                         console.log(payItem)
                         paylist.push(payItem);
@@ -173,11 +165,11 @@ class PayHistory extends React.Component {
                         }
                     }
                 }
-                else if(res.code=="2"){   
-                     this.setState({
-                         payData:[],
-                         amount:0
-                     })                  
+                else if (res.code == "2") {
+                    this.setState({
+                        payData: [],
+                        amount: 0
+                    })
                 }
             }
         })
@@ -203,11 +195,11 @@ class PayHistory extends React.Component {
                         <Card>
                             <div style={{ marginBottom: '20px', fontSize: '16px' }}>合计消费：<span>{this.state.amount}</span></div>
                             查找日期： <DatePicker.RangePicker
-                                    format={dateFormat}
-                                    showToday={true}
-                                    onChange={(dates, dateStrings) => { this.onTimeSelected(dates, dateStrings) }}
-                                />
-                            <Button type="primary"  onClick={this.queryTime} style={{marginLeft:'10px'}}>查询</Button>
+                                format={dateFormat}
+                                showToday={true}
+                                onChange={(dates, dateStrings) => { this.onTimeSelected(dates, dateStrings) }}
+                            />
+                            <Button type="primary" onClick={this.queryTime} style={{ marginLeft: '10px' }}>查询</Button>
                             <Table columns={this.state.Columns} dataSource={this.state.payData} style={{ marginTop: '20px' }} bordered></Table>
                         </Card>
                     </TabPane>

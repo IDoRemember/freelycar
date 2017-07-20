@@ -213,10 +213,8 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-        if (this.state.haveClient == false){
-              message.error('请先保存客户', 1.5);
-        }else{
-            $.ajax({
+        if (this.state.haveClient == true){
+             $.ajax({
                 url: 'api/pay/buycard',
                 type: 'POST',
                 contentType: "application/json;charset=utf-8",
@@ -236,7 +234,32 @@ class BuyCard extends React.Component {
                      hashHistory.push('/app/member/customer')
                     
                 }
-            })
+            }) 
+        }else if(this.props.params.id){
+             $.ajax({
+                url: 'api/pay/buycard',
+                type: 'POST',
+                contentType: "application/json;charset=utf-8",
+                data: JSON.stringify({
+                    clientId: this.state.clientId,
+                    card: {
+                        service: {
+                            id: this.state.serviceId
+
+                        },
+                        orderMaker: { id: this.state.orderMaker },
+                        payMethod: this.state.payMethod,
+                    }
+                }),
+                success:(res)=>{
+                    message.success('保存成功!');
+                     hashHistory.push('/app/member/customer')
+                    
+                }
+            }) 
+        }else{
+            message.error('请先保存客户', 1.5);
+           
         }
     }
 
@@ -402,9 +425,10 @@ class BuyCard extends React.Component {
                                  <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                                     <Select defaultValue="现金" style={{ width: 140, marginLeft: 15, maxHeight: '100px' }} onChange={(value) => this.payhandleChange(value)} >
                                         <Option value="0">现金</Option>
-                                        <Option value="1">微信</Option>
+                                        <Option value="1">刷卡</Option>
                                         <Option value="2">支付宝</Option>
-                                        <Option value="3">易付宝</Option>
+                                        <Option value="3">微信</Option>
+                                        <Option value="4">易付宝</Option>
                                     </Select>
                                 </div>
                             </div>
