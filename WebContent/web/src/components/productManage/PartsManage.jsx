@@ -45,6 +45,7 @@ class BeautyOrder extends React.Component {
                 typeId: '',
                 typeName: '',
                 property: '',
+                standard: '',
                 price: '',
                 comment: ''
             },
@@ -114,26 +115,6 @@ class BeautyOrder extends React.Component {
         });
     }
 
-
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
-    }
-
-
     // tab1模态框的处理函数
     showModal = () => {
         this.setState({
@@ -154,6 +135,7 @@ class BeautyOrder extends React.Component {
         obj.typeId =  form.typeId;
         obj.brandId =  form.brandId;
         obj.comment = form.comment;
+        obj.standard = form.standard;
         $.ajax({
             type: 'post',
             url: 'api/inventory/add',
@@ -256,6 +238,7 @@ class BeautyOrder extends React.Component {
                 if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
+                    console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -749,7 +732,13 @@ class BeautyOrder extends React.Component {
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
-                                                label="规格属性"
+                                                label="规格"
+                                            >
+                                                <Input placeholder="" value={this.state.form.standard} onChange={(e) => this.onValueChange('standard', e.target.value)} />
+                                            </FormItem>
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="属性"
                                             >
                                                 <Input placeholder="" value={this.state.form.property} onChange={(e) => this.onValueChange('property', e.target.value)} />
                                             </FormItem>
