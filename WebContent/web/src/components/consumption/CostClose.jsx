@@ -47,8 +47,7 @@ class CostClose extends React.Component {
         $.ajax({
             url: 'api/order/queryid',
             type: 'get',
-            // data: { consumOrderId: this.props.params.orderId },
-            data: { consumOrderId: 'S20170720t6xif4' },
+            data: { consumOrderId: this.props.params.orderId },
             dataType: 'json',
             success: (res) => {
                 console.log(res);
@@ -86,7 +85,7 @@ class CostClose extends React.Component {
         $.ajax({
             url: 'api/pay/consumpay',
             type: 'post',
-            data: { consumOrdersId: 'S20170720t6xif4' ,payMethod:this.state.payMethod, cost:this.state.cardCost},
+            data: { consumOrdersId: this.props.params.orderId ,payMethod:this.state.payMethod, cost:this.state.cardCost},
             dataType: 'json',
             success: (res) => {
                 console.log(res);
