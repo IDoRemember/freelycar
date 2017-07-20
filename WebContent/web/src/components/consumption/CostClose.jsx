@@ -19,7 +19,9 @@ class CostClose extends React.Component {
             checkedCard: true,
             disabledCard: true,
             feeDetail: [],
-            payMethod: ''//支付方式
+            payMethod: '0',//支付方式
+            cardCost:0
+
         }
     }
     onChange = (e) => {
@@ -29,9 +31,9 @@ class CostClose extends React.Component {
     }
     handleChange = (e) => {
         console.log(e);
-        this.setState({
-            value: e.target.value,
-        });
+        // this.setState({
+        //     value: e.target.value,
+        // });
     }
 
     onCardChange = (e) => {
@@ -46,20 +48,31 @@ class CostClose extends React.Component {
             url: 'api/order/queryid',
             type: 'get',
             // data: { consumOrderId: this.props.params.orderId },
-            data: { consumOrderId: 'S201707204zgukg' },
+            data: { consumOrderId: 'S20170720t6xif4' },
             dataType: 'json',
             success: (res) => {
                 console.log(res);
+                let cardCost = 0;//卡扣的钱
                 if (res.code == '0') {
                     let dataArr = res.data.projects;
                     for (let item of dataArr) {
                         item.inventory = res.data.inventoryInfos;
                         item.key = item.id;
                         item.totalPrice = res.data.totalPrice;//所有项目的总价
+
+
+                        //计算卡扣的钱
+                        if(item.cardName!=undefined){
+                            cardCost += item.payCardTimes* item.price;
+                        }
                     }
 
+
+
+
                     this.setState({
-                        feeDetail: dataArr
+                        feeDetail: dataArr,
+                        cardCost : res.data.totalPrice-cardCost
                     }, () => {
                         console.log(this.state.feeDetail);
                     });
@@ -73,7 +86,7 @@ class CostClose extends React.Component {
         $.ajax({
             url: 'api/pay/consumpay',
             type: 'post',
-            data: { consumOrdersId: 'S201707204zgukg' },
+            data: { consumOrdersId: 'S20170720t6xif4' ,payMethod:this.state.payMethod, cost:this.state.cardCost},
             dataType: 'json',
             success: (res) => {
                 console.log(res);
@@ -136,22 +149,23 @@ class CostClose extends React.Component {
             },
         ];
 
-        let flag = true;
+        
         const cardInfo = this.state.feeDetail.map((item, index) => {
 
 
-            return item.cardName && <div key={index}>
-                <div style={{ display: 'inline-block', width: '20%' }}>会员卡类:
-                            <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                        {item.cardName}
-                    </div>
-                </div>
-
+            return item.cardName && <div key={index} style={{marginLeft:'20px'}}>
                 <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                         {item.cardId}
                     </div>
                 </div>
+
+                <div style={{ display: 'inline-block', width: '20%' }}>项目名称:
+                            <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                        {item.name}
+                    </div>
+                </div>
+
 
                 <div style={{ display: 'inline-block' }}>卡扣次数：
                             <div style={{ display: 'inline-block', margin: '10px' }}>
@@ -192,11 +206,12 @@ class CostClose extends React.Component {
                                 <br />
                                 <div style={{ display: 'inline-block', width: '20%' }}>支付方式:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Select defaultValue="现金" style={{ width: 120 }} onChange={this.handleChange} >
-                                            <Option value="cash">现金</Option>
-                                            <Option value="wechatpay">微信</Option>
-                                            <Option value="alipay">支付宝</Option>
-                                            <Option value="suningpay">易付宝</Option>
+                                        <Select defaultValue="现金" style={{ width: 120 }} onChange={(e)=>{this.handleChange(e)}} >
+                                            <Option value="0">现金</Option>
+                                            <Option value="1">刷卡</Option>
+                                            <Option value="2">支付宝</Option>
+                                            <Option value="3">微信</Option>
+                                            <Option value="4">易付宝</Option>
                                         </Select>
                                     </div>
                                 </div>
@@ -204,7 +219,7 @@ class CostClose extends React.Component {
 
                                 <div style={{ display: 'inline-block', width: '20%' }}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Input style={{ width: '120px' }} />
+                                        <Input style={{ width: '120px' }} value={this.state.cardCost} disabled/>
                                     </div>
                                 </div>
 
