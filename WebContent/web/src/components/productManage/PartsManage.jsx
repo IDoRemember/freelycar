@@ -256,6 +256,7 @@ class BeautyOrder extends React.Component {
                 if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
+                    console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
                     });
