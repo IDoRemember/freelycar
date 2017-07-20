@@ -9,6 +9,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Inventory {
 	private String id;
@@ -25,6 +28,7 @@ public class Inventory {
 	private float amount;
 	private Provider provider;
 	private String comment;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	public float getAmount() {
 		return amount;

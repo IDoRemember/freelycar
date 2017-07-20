@@ -60,15 +60,23 @@ class ServiceTable extends React.Component {
             for (let i = 0; i < data.length; i++) {
                 let same = 0;
                 for (let j = 0; j < datalist.length; j++) {
-                    if (data[i].id == datalist[j].id) {
+                    if (data[i].id == datalist[j].projectId) {
                         same++
                     }
                 }
+                data[i]['projectId'] = data[i]['id']
+                data[i]['payMethod'] = 0
+                delete data[i]['id']
                 if (same == 0) {
                     datalist.unshift(data[i])
                 }
             }
         } else {
+            for (let item of data) {
+                item['projectId'] = item['id']
+                item['payMethod'] = 0
+                delete item['id']
+            }
             datalist.push(...data)
             datalist.push(total)
         }

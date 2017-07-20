@@ -52,6 +52,22 @@ class OrderTable extends React.Component {
         this.setState({
             finishModal: false
         });
+
+        $.ajax({
+            url: 'api/order/finish',
+            type: 'post',
+            dataType: 'json',
+            data: {
+                consumOrderId: this.state.consumOrderId,
+                date: new Date(this.state.finishWork.finishTime),
+                comment: this.state.finishWork.comment
+            },
+            success: (res) => {
+                if (res.code == '0') {
+                    console.log(res)
+                }
+            }
+        })
     }
 
     setTime = (key, value) => {
@@ -79,7 +95,9 @@ class OrderTable extends React.Component {
             url: '/api/order/deliver',
             type: 'post',
             data: {
-                consumOrderId: this.state.consumOrderId
+                consumOrderId: this.state.consumOrderId,
+                date: this.state.reverseCar.finishTime,
+                comment: this.state.reverseCar.comment
             },
             dataType: 'json',
             type: 'get',

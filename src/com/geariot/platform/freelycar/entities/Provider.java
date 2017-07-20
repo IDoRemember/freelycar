@@ -7,6 +7,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Provider {
 	private int id;
@@ -17,6 +20,7 @@ public class Provider {
 	private String email;
 	private String address;
 	private String comment;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	public String getAddress() {
 		return address;

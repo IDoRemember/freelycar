@@ -44,20 +44,19 @@ class BeautyOrder extends React.Component {
                 phone: '',
                 projects: [],
                 programId: 1,
-                payMethod: '',
-                programName: '',
+                payMethod: 0,
+                programName: '美容',
                 parkingLocation: '',
                 inventoryInfos: [],
-                state: '',
+                state: 0,
                 totalPrice: '',
-                payState: '',
+                payState: 0,
                 pickTime: '',
-                finishTime: '',
-                deliverTime: '',
-                createDate: '',
+                // finishTime: '',
+                // deliverTime: '',
                 lastMiles: '',
                 miles: '',
-                orderMaker: '',
+                // orderMaker: '',
                 comment: '',
                 faultDesc: '',
                 repairAdvice: ''
@@ -117,64 +116,30 @@ class BeautyOrder extends React.Component {
     saveInfo = (params) => {
         this.setState({
             consumOrder: update(this.state.consumOrder, { $merge: params })
-        }, () => {
-            console.log(this.state.consumOrder)
         })
     }
 
     pushInventory = (value, projectId) => {
-        console.log(a)
-        let newConsumOrder = []
-        if (this.state.consumOrder.inventoryInfos.length < 1) {
+        let inventoryInfos = this.state.consumOrder.inventoryInfos,
+            newConsumOrder,
+            sameProject = []
+        if (this.state.consumOrder.projects.length < 1) {
             a.push(...value)
-            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+            this.setState({
+                consumOrder: update(this.state.consumOrder, { inventoryInfos: { $set: a } })
+            })
         } else {
-
-            if (value.length < 1) {
-                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
-                    if (item.projectId == projectId) {
-                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[index, 1]] } })
-                    }
-                })
-            }
-            for (let nowItem of value) {
-                let same = 0, deleteIndex = null, addItem = []
-                this.state.consumOrder.inventoryInfos.forEach((item, index) => {
-
-                    console.log(index, value)
-
-                    if (item.projectId == projectId) {
-                        same = same + 1
-                        let valueSame = 0
-                        if (item.inventory.id == nowItem.inventory.id) {
-                            valueSame++
-                            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { [index]: { $set: nowItem } } })
-                        } else {
-                            deleteIndex= index
-                            addItem.push(nowItem)
-
-                        }
-                    } else {
-                        newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [nowItem] } })
-                    }
-                })
-                console.log(same)
-                if (same <= value.length) {
-                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $push: [...addItem] } })
-                } else if( same >value.length){
-                    console.log(deleteIndex)
-                    newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $splice: [[deleteIndex, 1]] } })
-                }
-            }
-
+            a = []
+            inventoryInfos = inventoryInfos.filter((obj) => {
+                return projectId !== obj.projectId;
+            });
+            console.log(inventoryInfos, value)
+            newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
+            newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
+            this.setState({
+                consumOrder: newConsumOrder
+            })
         }
-        this.setState({
-            consumOrder: newConsumOrder
-        }, () => {
-            console.log(
-                this.state.consumOrder
-            )
-        })
     }
 
     combineParts = () => {
@@ -182,7 +147,6 @@ class BeautyOrder extends React.Component {
         for (let item of this.state.dataService) {
             dataInventory.push(item.inventoryInfos)
         }
-
         this.setState({
             dataInventory: dataInventory
         })
@@ -199,19 +163,50 @@ class BeautyOrder extends React.Component {
             cards: cards
         })
     }
+
+    book = () => {
+
+        let partsPrice = 0, projectPrice = 0, price = 0
+        for (let item of this.state.consumOrder.projects) {
+            projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
+        }
+        for (let item of this.state.consumOrder.inventoryInfos) {
+            partsPrice = partsPrice + item.inventory.price * item.number
+        }
+        price = partsPrice + projectPrice
+        this.setState({
+            consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })
+        }, () => {
+            $.ajax({
+                type: 'post',
+                url: 'api/order/book',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                // traditional: true,
+                data: JSON.stringify(this.state.consumOrder),
+                success: (res) => {
+                    console.log(res)
+                }
+            })
+        })
+
+
+    }
     render() {
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
-        let price = 0
+        let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
-            price = price + item.price + item.pricePerUnit * item.referWorkTime
+            projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
         for (let item of this.state.consumOrder.inventoryInfos) {
-            price = price + item.inventory.price * item.number
+            partsPrice = partsPrice + item.inventory.price * item.number
         }
+        price = partsPrice + projectPrice
+
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
@@ -219,13 +214,21 @@ class BeautyOrder extends React.Component {
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
-                    整单金额
-                <span style={{ margin: '0 10px', color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}</span>
+                    项目：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {projectPrice}&nbsp;&nbsp;</span>
+                    元
+                    &nbsp;&nbsp;
+                    配件：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {partsPrice}&nbsp;&nbsp;</span>
+                    元
+                    &nbsp;&nbsp;
+                    整单金额：
+                    <span style={{ color: 'red', fontWeight: 'bold', fontSize: '20px' }}> {price}&nbsp;&nbsp;</span>
                     元
                 </div>
             </Card>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter">结算</Link></Button>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }

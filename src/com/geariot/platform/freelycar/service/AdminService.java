@@ -96,7 +96,12 @@ public class AdminService {
 		}
 		log.debug("账号：" + account + " 登陆结果：" + obj);
 		curUser = SecurityUtils.getSubject();
-//		Session session = curUser.getSession(false);
+		Session session = curUser.getSession(false);
+		log.debug("-----session id:" + session.getId());
+		log.debug(session.getAttributeKeys());
+		for(Object key : session.getAttributeKeys()){
+			log.debug(session.getAttribute(key));
+		}
 //		session.setTimeout(60000L);
 		return obj.toString();
 	}

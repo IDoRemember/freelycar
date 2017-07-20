@@ -102,8 +102,8 @@ public class ConsumOrderService {
 		for(ProjectInfo pInfo : consumOrder.getProjects()){
 			Project project = this.projectDao.findProjectById(pInfo.getProjectId());
 			Card payCard = this.cardDao.getCardById(pInfo.getCardId());
-			pInfo.setProjectName(project.getName());
-			pInfo.setProjectPrice(project.getPrice());
+			pInfo.setName(project.getName());
+			pInfo.setPrice(project.getPrice());
 			pInfo.setCardName(payCard.getService().getName());
 		}
 		String id = this.orderDao.save(consumOrder);

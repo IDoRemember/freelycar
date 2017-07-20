@@ -190,7 +190,6 @@ class PartsDetail extends React.Component {
                     dataIndex="singleSummation"
                     render={(text, record, index) => {
                         if (index == (this.state.parts.length - 1)) {
-                            console.log(record)
                             let total = 0
                             for (let item of this.state.parts) {
                                 if (item.price) {

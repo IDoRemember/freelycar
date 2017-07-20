@@ -97,7 +97,7 @@ public class PayService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String consumPay(String consumOrderId){
+	public String consumPay(String consumOrderId, int payMethod){
 		ConsumOrder order = this.consumOrderDao.findById(consumOrderId);
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
@@ -106,7 +106,7 @@ public class PayService {
 		//判断项目付款方式
 		Set<ProjectInfo> projects = order.getProjects();
 		for(ProjectInfo info : projects){
-			log.debug(("项目(id:" + info.getProjectId() + ", 名称:" + info.getProjectName() + 
+			log.debug(("项目(id:" + info.getProjectId() + ", 名称:" + info.getName() + 
 					")" + "付款方式:" + info.getPayMethod()));
 			//如果用卡付款，根据设置的卡id与项目id查找剩余次数信息
 			if(info.getPayMethod() == Constants.PROJECT_WITH_CARD){
@@ -127,7 +127,7 @@ public class PayService {
 					}
 					//剩余次数足够，扣除次数
 					else {
-						log.debug("用卡(id:" + info.getCardId() + " ,对应项目:" + info.getProjectName() + " ,剩余次数:" + 
+						log.debug("用卡(id:" + info.getCardId() + " ,对应项目:" + info.getName() + " ,剩余次数:" + 
 								remain.getRemaining() + ")扣除次数:" + info.getPayCardTimes());
 						remain.setRemaining(remain.getRemaining() - info.getPayCardTimes());
 					}
@@ -138,10 +138,11 @@ public class PayService {
 			}*/
 		}
 		
-		log.debug("消费订单结算完成，生成收入订单");
 		//现金支付的情况，直接进行结算
 		order.setPayState(1);
+		order.setPayMethod(payMethod);
 		
+		log.debug("消费订单结算完成，生成收入订单");
 		//结算完成后，记录到IncomeOrder。
 		IncomeOrder recoder = new IncomeOrder();
 		recoder.setAmount(order.getTotalPrice());
@@ -149,7 +150,7 @@ public class PayService {
 		recoder.setLicensePlate(order.getLicensePlate());
 		recoder.setPayDate(new Date());
 		recoder.setProgramName(order.getProgramName());
-		recoder.setPayMethod(order.getPayMethod());
+		recoder.setPayMethod(payMethod);
 
 		//查看客户是否有卡,判断是否属于会员
 		Client client = clientDao.findById(order.getClientId());

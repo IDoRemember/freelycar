@@ -869,6 +869,7 @@
 		server_url/pay/consumpay
 		参数:{
 			consumOrdersId=
+			payMethod=
 		}
 		响应:{
 			"code":0
