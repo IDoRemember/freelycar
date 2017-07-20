@@ -12,6 +12,7 @@ class FixOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            idUrl: '',
             parts: [],
             staffList: [],
             optionService: [],
@@ -122,6 +123,7 @@ class FixOrder extends React.Component {
         })
     }
 
+
     pushInventory = (value, projectId) => {
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
@@ -179,11 +181,42 @@ class FixOrder extends React.Component {
             cards: cards
         })
     }
+    book = () => {
+
+        let partsPrice = 0, projectPrice = 0, price = 0
+        for (let item of this.state.consumOrder.projects) {
+            projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
+        }
+        for (let item of this.state.consumOrder.inventoryInfos) {
+            partsPrice = partsPrice + item.inventory.price * item.number
+        }
+        price = partsPrice + projectPrice
+        this.setState({
+            consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })
+        }, () => {
+            $.ajax({
+                type: 'post',
+                url: 'api/order/book',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                // traditional: true,
+                data: JSON.stringify(this.state.consumOrder),
+                success: (res) => {
+                    console.log(res)
+                    if (res.code == '0') {
+                        this.setState({
+                            idUrl: `/app/consumption/accountingcenter/${res.id}`
+                        })
+                    }
+                }
+            })
+        })
+    }
     render() {
         console.log(this.state.parts)
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
-                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.id} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
+                return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />
             }
         })
         let partsPrice = 0, projectPrice = 0, price = 0
@@ -198,10 +231,10 @@ class FixOrder extends React.Component {
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
             <Card style={{ marginBottom: '10px' }}>
-                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} />
-                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} />
+                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
             </Card>
-            <ServiceTable cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
+            <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
@@ -218,8 +251,7 @@ class FixOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}><Link to="/app/consumption/accountingcenter">结算</Link></Button>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }

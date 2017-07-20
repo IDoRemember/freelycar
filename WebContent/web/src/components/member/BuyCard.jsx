@@ -197,7 +197,6 @@ class BuyCard extends React.Component {
                     
                 }
             }
-
         })
     }
     genderonChange = (e) => {

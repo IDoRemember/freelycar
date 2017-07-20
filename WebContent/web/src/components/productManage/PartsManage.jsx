@@ -45,6 +45,7 @@ class BeautyOrder extends React.Component {
                 typeId: '',
                 typeName: '',
                 property: '',
+                standard: '',
                 price: '',
                 comment: ''
             },
@@ -114,26 +115,6 @@ class BeautyOrder extends React.Component {
         });
     }
 
-
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            name: `Edward King ${count}`,
-            properties: `Edward King ${count}`,
-            valateTime: `Edward King ${count}`,
-            price: `Edward King ${count}`,
-            createTime: `Edward King ${count}`,
-            remark: `Edward King ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
-    }
-
-
     // tab1模态框的处理函数
     showModal = () => {
         this.setState({
@@ -151,9 +132,10 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.type = { id: form.typeId };
-        obj.brand = { id: form.brandId };
+        obj.typeId =  form.typeId;
+        obj.brandId =  form.brandId;
         obj.comment = form.comment;
+        obj.standard = form.standard;
         $.ajax({
             type: 'post',
             url: 'api/inventory/add',
@@ -169,8 +151,8 @@ class BeautyOrder extends React.Component {
                     obj.number = dt.id;
                     obj.key = dt.id;
                     obj.createDate = dt.createDate;
-                    obj.brand = this.state.form.brandName;
-                    obj.type = this.state.form.typeName;
+                    obj.brandName = this.state.form.brandName;
+                    obj.typeName = this.state.form.typeName;
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -256,6 +238,7 @@ class BeautyOrder extends React.Component {
                 if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
+                    console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -465,9 +448,7 @@ class BeautyOrder extends React.Component {
                     }
                     this.setState({ brandItem: brandItem });
                 }
-
             }
-
         });
     }
 
@@ -495,7 +476,6 @@ class BeautyOrder extends React.Component {
                 }
 
             }
-
         });
     }
 
@@ -682,24 +662,23 @@ class BeautyOrder extends React.Component {
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
                                         <div style={{ marginBottom: 16 }} >
                                             <span>配件名称：</span>
-                                            <Input style={{width:'200px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
+                                            <Input style={{ width: '140px' }} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
 
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
-                                            <span>配件类别: </span>
-                                            <Select
-                                                addonBefore="配件类别"
-                                                style={{ width: '200px' }}
-                                                onChange={(value) => this.setState({ inventoryTypeId: value })}
-                                            >
-                                                {this.state.typeItem}
-                                            </Select>
-
+                                        <span>配件类别: </span>
+                                        <Select
+                                            addonBefore="配件类别"
+                                            style={{ width: '140px' }}
+                                            onChange={(value) => this.setState({ inventoryTypeId: value })}
+                                        >
+                                            {this.state.typeItem}
+                                        </Select>
                                     </Col>
 
                                     <Col span={8}>
-                                        <Button type="primary" style={{ marginLeft: '40px' }} onClick={this.queryData}>查询</Button>
+                                        <Button type="primary" onClick={this.queryData}>查询</Button>
                                     </Col>
                                 </Row>
 
@@ -714,7 +693,7 @@ class BeautyOrder extends React.Component {
 
                                     {/*查询的模态框*/}
                                     <Modal
-                                        title="项目查询"
+                                        title="新增配件"
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
@@ -753,7 +732,13 @@ class BeautyOrder extends React.Component {
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
-                                                label="规格属性"
+                                                label="规格"
+                                            >
+                                                <Input placeholder="" value={this.state.form.standard} onChange={(e) => this.onValueChange('standard', e.target.value)} />
+                                            </FormItem>
+                                            <FormItem
+                                                {...formItemLayout}
+                                                label="属性"
                                             >
                                                 <Input placeholder="" value={this.state.form.property} onChange={(e) => this.onValueChange('property', e.target.value)} />
                                             </FormItem>

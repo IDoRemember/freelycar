@@ -367,12 +367,14 @@ class AccountManage extends React.Component {
                         <Row>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="账号" value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
+                                    账号：
+                                    <Input style={{width:'140px'}} value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
-                                    <Input addonBefore="姓名" value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
+                                    姓名：
+                                    <Input style={{width:'140px'}} value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={2}>

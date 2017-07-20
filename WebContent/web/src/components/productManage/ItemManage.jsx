@@ -106,7 +106,7 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize } });
-                }else{
+                } else {
                     this.setState({ data: [] });
                 }
 
@@ -144,7 +144,7 @@ class BeautyOrder extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ data: tableDate, pagination: { total: res.realSize } });
-                }else{
+                } else {
                     this.setState({ data: [] });
                 }
 
@@ -206,15 +206,12 @@ class BeautyOrder extends React.Component {
         this.setState({ tabkey: key });
     }
 
-
     // tab1模态框的处理函数
     showModal = () => {
         this.setState({
             visible: true,
         });
     }
-
-
 
     handleOk = (e) => {
         //修改为关联配件
@@ -262,7 +259,7 @@ class BeautyOrder extends React.Component {
 
                     obj.program = this.state.form.program;
                     obj.key = result.data.id;
-
+                    obj.createDate = result.data.createDate;
                     this.setState({
                         data: [...this.state.data, obj],
                     });
@@ -429,7 +426,7 @@ class BeautyOrder extends React.Component {
             })
     }
 
-    
+
 
     render() {
         const columns = [{
@@ -604,14 +601,14 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={5} style={{ verticalAlign: 'middle' }}>
                                         <span>项目名称：</span>
-                                            <Input style={{width:'140px'}} value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
+                                        <Input style={{ width: '140px' }} value={this.state.projName} onChange={(e) => this.setState({ projName: e.target.value })} />
                                     </Col>
-                
+
                                     <Col span={5}>
-                                        <div style={{ marginBottom: 16 }}>
+                                        <div>
                                             <span>项目类别：</span>
                                             <Select
-                                                style={{ width: '200px' }}
+                                                style={{ width: '140px' }}
                                                 onChange={(e) => this.setState({ progId: e })}
                                             >
                                                 {this.state.programItem}
@@ -639,7 +636,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
-                                        width='50%'
+                                        width='80%'
                                     >
                                         <Form onSubmit={this.changehandleSubmit}>
 

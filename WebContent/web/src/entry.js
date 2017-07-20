@@ -53,7 +53,7 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"consumption"} >
             <Route path={"beautyorder"} component={BeautyOrder} />
             <Route path={"fixorder"} component={FixOrder} />
-            <Route path={"accountingcenter"} component={CostClose} />
+            <Route path={"accountingcenter/:orderId"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />
         </Route>

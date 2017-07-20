@@ -172,38 +172,34 @@ class ProgramSearch extends React.Component {
         >
             <Row gutter={24} style={{ marginBottom: '10px' }}>
                 <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
-                    <RadioGroup onChange={this.onChange} value={this.state.value} >
-                        <Radio style={radioStyle} value={1}>
-                            按项目名称进行搜索
-                            {this.state.value == 1 && <Search
-                                placeholder="按项目名称进行搜索"
-                                style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
-                                onSearch={value => this.getList(value, -1, 1, 10)}
-                                onChange={e => this.setSearchName(e.target.value)}
-                                value={this.state.partName}
-                            />}
-                        </Radio>
-                        <Radio style={radioStyle} value={2}>
-                            按项目类别进行搜索
-                            {this.state.value == 2 && <Select
-                                showSearch
-                                style={{ width: '200px', marginLeft: '20px' }}
-                                placeholder="选择项目类别"
-                                optionFilterProp="children"
-                                optionLabelProp="children"
-                                labelInValue
-                                onChange={(value) => this.setSearchType(value)}
-                                getPopupContainer={() => document.getElementById('provider-area')}
-                                filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                            >
-                                {partTypeOptions}
-                            </Select>}
-                        </Radio>
-                    </RadioGroup>
+                    按项目名称进行搜索
+                            {this.state.value == 1 && <Input
+                        placeholder="按项目名称进行搜索"
+                        style={{ width: '200px', marginBottom: '10px', marginLeft: '20px' }}
+
+                        onChange={e => this.setSearchName(e.target.value)}
+                        value={this.state.partName}
+                    />}
                 </Col>
-                {/*<Col span={12} style={{ verticalAlign: 'middle' }}>
-                    <Button type="primary" style={{ marginLeft: '10px' }} size={'large'}>新增配件</Button>
-                </Col>*/}
+                <Col span={10} style={{ verticalAlign: 'middle' }}>
+                    按项目类别进行搜索
+                            {this.state.value == 2 && <Select
+                        showSearch
+                        style={{ width: '200px', marginLeft: '20px' }}
+                        placeholder="选择项目类别"
+                        optionFilterProp="children"
+                        optionLabelProp="children"
+                        labelInValue
+                        onChange={(value) => this.setSearchType(value)}
+                        getPopupContainer={() => document.getElementById('provider-area')}
+                        filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                    >
+                        {partTypeOptions}
+                    </Select>}
+                </Col>
+                <Col span={2}>
+                    <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
+                </Col>
             </Row>
             <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
         </Modal>
