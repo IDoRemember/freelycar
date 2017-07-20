@@ -259,7 +259,7 @@ class BeautyOrder extends React.Component {
 
                     obj.program = this.state.form.program;
                     obj.key = result.data.id;
-
+                    obj.createDate = result.data.createDate;
                     this.setState({
                         data: [...this.state.data, obj],
                     });

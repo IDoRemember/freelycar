@@ -51,7 +51,7 @@ class CostClose extends React.Component {
         $.ajax({
             url: 'api/order/queryid',
             type: 'get',
-            data: { consumOrderId: '1' },
+            data: { consumOrderId: this.props.params.orderId },
             dataType: 'json',
             success: (res) => {
                 console.log(res);
@@ -154,7 +154,9 @@ class CostClose extends React.Component {
                                 <Checkbox
                                     checked={this.state.checkedCard}
                                     onChange={this.onCardChange}
+                                    style = {{width :'100%',marginBottom:'10px'}}
                                 >
+                                <span>抵扣项目费用</span>
                                 </Checkbox>
 
                                 <div style={{ display: 'inline-block', width: '30%' }}>会员卡类:
