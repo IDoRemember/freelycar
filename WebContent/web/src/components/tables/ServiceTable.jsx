@@ -239,7 +239,7 @@ class ServiceTable extends React.Component {
                                 style={{ width: '120px', maxHeight: '200px' }}
                                 placeholder="输入会员卡号"
                                 optionFilterProp="children"
-                                onChange={(value) => { this.setData('cardId', value, index); this.setData('payMethod', 1, index) }}
+                                onChange={(value) => { console.log(value); this.setData('cardId', value, index) }}
                                 dropdownMatchSelectWidth={false}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >

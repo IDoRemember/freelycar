@@ -170,9 +170,9 @@ class OrderTable extends React.Component {
                     return <span>
                         <span style={{ marginRight: '10px' }}>
                             {innertext}
-                            <Link to="">
+                            {/* <Link to="">
                                 <span style={{ marginLeft: '5px' }}> 修改 </span>
-                            </Link>
+                            </Link> */}
                         </span>
                     </span>
                 }
