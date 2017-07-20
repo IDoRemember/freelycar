@@ -60,6 +60,7 @@ class PartsDetail extends React.Component {
     handleformat = () => {
         let inventorys = []
         for (let item of this.state.parts) {
+            item.id = item.key
             if (item.key != 'total') {
                 inventorys.push({
                     inventory: item,
@@ -68,7 +69,7 @@ class PartsDetail extends React.Component {
                 })
             }
         }
-        this.props.pushInventory(inventorys,this.props.id)
+        this.props.pushInventory(inventorys, this.props.id)
     }
 
     handleOk = (data) => {

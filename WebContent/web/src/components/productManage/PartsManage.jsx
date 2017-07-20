@@ -710,7 +710,7 @@ class BeautyOrder extends React.Component {
 
                                     {/*查询的模态框*/}
                                     <Modal
-                                        title="项目查询"
+                                        title="新增配件"
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
