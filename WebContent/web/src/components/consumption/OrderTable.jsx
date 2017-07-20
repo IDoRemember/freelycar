@@ -100,7 +100,6 @@ class OrderTable extends React.Component {
                 comment: this.state.reverseCar.comment
             },
             dataType: 'json',
-            type: 'get',
             success: (res) => {
                 console.log(res);
             }
