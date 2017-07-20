@@ -226,4 +226,18 @@ public class ConsumOrder {
 	public void setTotalPrice(float totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	@Override
+	public String toString() {
+		return "ConsumOrder [id=" + id + ", carId=" + carId + ", licensePlate=" + licensePlate + ", carType=" + carType
+				+ ", carBrand=" + carBrand + ", clientId=" + clientId + ", clientName=" + clientName + ", gender="
+				+ gender + ", phone=" + phone + ", projects=" + projects + ", programId=" + programId + ", payMethod="
+				+ payMethod + ", programName=" + programName + ", parkingLocation=" + parkingLocation
+				+ ", inventoryInfos=" + inventoryInfos + ", state=" + state + ", totalPrice=" + totalPrice
+				+ ", payState=" + payState + ", pickTime=" + pickTime + ", finishTime=" + finishTime + ", deliverTime="
+				+ deliverTime + ", createDate=" + createDate + ", lastMiles=" + lastMiles + ", miles=" + miles
+				+ ", orderMaker=" + orderMaker + ", comment=" + comment + ", faultDesc=" + faultDesc + ", repairAdvice="
+				+ repairAdvice + ", pickCarStaff=" + pickCarStaff + "]";
+	}
+	
+	
 }

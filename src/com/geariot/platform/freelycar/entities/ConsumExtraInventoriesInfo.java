@@ -43,4 +43,11 @@ public class ConsumExtraInventoriesInfo {
 	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
+	
+	@Override
+	public String toString() {
+		return "ConsumExtraInventoriesInfo [id=" + id + ", inventory=" + inventory + ", number=" + number
+				+ ", projectId=" + projectId + "]";
+	}
+	
 }

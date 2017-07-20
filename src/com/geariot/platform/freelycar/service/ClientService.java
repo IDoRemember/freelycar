@@ -93,9 +93,9 @@ public class ClientService {
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		if(this.clientDao.findByPhone(client.getPhone()) != null){
+		/*if(this.clientDao.findByPhone(client.getPhone()) != null){
 			return JsonResFactory.buildOrg(RESCODE.PHONE_EXIST).toString();
-		}
+		}*/
 		exist.setAge(client.getAge());
 		exist.setBirthday(client.getBirthday());
 		exist.setCars(client.getCars());
