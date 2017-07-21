@@ -181,8 +181,12 @@ class FixOrder extends React.Component {
             cards: cards
         })
     }
-    book = () => {
 
+    cancel = () => {
+        message.error('请继续更改');
+    }
+
+    confirm = (isFinish) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -204,14 +208,18 @@ class FixOrder extends React.Component {
                 success: (res) => {
                     console.log(res)
                     if (res.code == '0') {
-                        this.setState({
-                            idUrl: `/app/consumption/accountingcenter/${res.id}`
-                        })
+                        message.success(res.text);
+                        if (isFinish) {
+                            hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                        } else {
+                            hashHistory.push(`/app/consumption/ordermanage`)
+                        }
                     }
                 }
             })
         })
     }
+
     render() {
         console.log(this.state.parts)
         const parts = this.state.parts.map((item, index) => {
@@ -251,7 +259,12 @@ class FixOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
+            </Popconfirm>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
+            </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }

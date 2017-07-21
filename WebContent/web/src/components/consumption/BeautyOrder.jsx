@@ -194,6 +194,8 @@ class BeautyOrder extends React.Component {
                         message.success(res.text);
                         if (isFinish) {
                             hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                        } else {
+                            hashHistory.push(`/app/consumption/ordermanage`)                            
                         }
                     }
                 }
