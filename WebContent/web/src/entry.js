@@ -49,10 +49,10 @@ import StaffDetail from './components/systemSetting/StaffDetail.jsx';
    
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
-    <Route path={"app"} component={App} >
+    <Route path={"app"}  component={App} >
         <Route path={"consumption"} >
             <Route path={"beautyorder"} component={BeautyOrder} />
-            <Route path={"fixorder"} component={FixOrder} />
+            <Route path={"fixorder"}  component={FixOrder} />
             <Route path={"accountingcenter/:orderId"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />

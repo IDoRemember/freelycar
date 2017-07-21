@@ -36,14 +36,10 @@ class App extends Component {
             
             },
             success: (res) => {
-                console.log(res.data);
-                console.log(res.data.role.id)
                 this.setState({
                     user: res.data.name,
                     role:res.data.role.id,
-
                 })
-                
             }
         })
     }

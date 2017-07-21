@@ -179,7 +179,7 @@ class ProgramSearch extends React.Component {
 
                         onChange={e => this.setSearchName(e.target.value)}
                         value={this.state.partName}
-                    />}
+                    />
                 </Col>
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
                     按项目类别进行搜索
@@ -195,7 +195,7 @@ class ProgramSearch extends React.Component {
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
                         {partTypeOptions}
-                    </Select>}
+                    </Select>
                 </Col>
                 <Col span={2}>
                     <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>

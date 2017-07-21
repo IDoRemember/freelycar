@@ -84,6 +84,7 @@ class BeautyOrder extends React.Component {
     }
 
     componentDidMount() {
+         this.queryAdmin()
         this.getStaffList()
         $.ajax({
             url: 'api/project/name',
@@ -114,6 +115,21 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    queryAdmin = () => {
+        $.ajax({
+            url: 'api/admin/getaccount',
+            type: "GET",
+            data: {
+                account: localStorage.getItem('username'),
+            
+            },
+            success: (res) => {
+                this.saveInfo({
+                    orderMaker:{id:res.data.role.id}
+                })
+            }
+        })
+    }
     saveInfo = (params) => {
         this.setState({
             consumOrder: update(this.state.consumOrder, { $merge: params })
