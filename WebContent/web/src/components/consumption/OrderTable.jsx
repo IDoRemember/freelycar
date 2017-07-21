@@ -261,7 +261,7 @@ class OrderTable extends React.Component {
                 <Row gutter={8}>
                     <div className="gutter-box">
                         <Card bordered>
-                            <Table columns={columns} dataSource={this.state.data} ></Table>
+                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) =>this.props.onChange(pagination)} dataSource={this.state.data} ></Table>
                         </Card>
                     </div>
                 </Row>
