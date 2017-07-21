@@ -47,8 +47,7 @@ class Regclient extends React.Component{
                     }
 
                     this.setState({
-                        form: clientInfo,
-
+                        form: clientInfo
                     })
                 }
             }
