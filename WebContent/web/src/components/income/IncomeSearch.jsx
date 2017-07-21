@@ -136,7 +136,7 @@ class IncomeSearch extends React.Component {
                             </Radio.Group>
                         </Col>
                         {/*日期选择器*/}
-                        <Col span={12}>
+                        <Col span={12} style={{ display: this.state.mode == 'query' ? 'inline-block' : 'none' }}>
                             <span>选择查找日期 : </span>
                             <DatePicker.RangePicker
                                 format={dateFormat}
