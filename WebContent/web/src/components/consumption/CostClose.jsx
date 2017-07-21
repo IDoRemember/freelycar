@@ -115,22 +115,6 @@ class CostClose extends React.Component {
                 }
             },
             {
-                title: '配件小计', dataIndex: 'inventory', key: 'totalInv', render: (text, record, index) => {
-                    let sum = 0;
-                    for (let item of text) {
-                        sum += item.inventory.price;
-                    }
-
-                    return {
-                        children: <a>{sum}</a>,
-                        props: {
-                            rowSpan: index == 0 ? this.state.feeDetail.length : 0
-                        }
-                    }
-                }
-
-            },
-            {
                 title: '合计', dataIndex: 'totalPrice', key: 'total', render: (text, record, index) => {
                     return {
                         children: <a>{text}</a>,
