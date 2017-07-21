@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
-import { Row, Col, Card, Button, Input } from 'antd';
+import { Row, Col, Card, Button, Input, Popconfirm, message } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -181,8 +181,12 @@ class FixOrder extends React.Component {
             cards: cards
         })
     }
-    book = () => {
 
+    cancel = () => {
+        message.error('请继续更改');
+    }
+
+    confirm = (isFinish) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -204,14 +208,18 @@ class FixOrder extends React.Component {
                 success: (res) => {
                     console.log(res)
                     if (res.code == '0') {
-                        this.setState({
-                            idUrl: `/app/consumption/accountingcenter/${res.id}`
-                        })
+                        message.success(res.text);
+                        if (isFinish) {
+                            hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                        } else {
+                            hashHistory.push(`/app/consumption/ordermanage`)
+                        }
                     }
                 }
             })
         })
     }
+
     render() {
         console.log(this.state.parts)
         const parts = this.state.parts.map((item, index) => {
@@ -231,8 +239,8 @@ class FixOrder extends React.Component {
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
             <Card style={{ marginBottom: '10px' }}>
-                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
-                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={2} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={2} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
             </Card>
             <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
             {parts}
@@ -251,7 +259,12 @@ class FixOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
+            </Popconfirm>
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
+            </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
     }
