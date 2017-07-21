@@ -228,8 +228,8 @@ class EditableTable extends React.Component {
 
                 <Card>
                     <div>
-                        <Row>
-                            <Col span={5} style={{ verticalAlign: 'middle' }}>
+                        <Row gutter={16}>
+                            <Col xs={15} sm={10} md={10} lg={6} xl={4} style={{ verticalAlign: 'middle' }}>
                                     <span>卡类名称 : </span>
                                     <Input style={{width:'140px'}} onChange={(e) => this.setState({ cardName: e.target.value })} />
                             </Col>
@@ -238,11 +238,11 @@ class EditableTable extends React.Component {
                             </Col>
                         </Row>
 
-                        <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
-                            <Col span={2}>
+                        <Row gutter={16} style={{ marginTop: '40px', marginBottom: '20px' }}>
+                            <Col xs={6} sm={5} md={4} lg={2} xl={2}>
                                 <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
                             </Col>
-                            <Col span={8}>
+                            <Col xs={2} sm={4} md={6}>
                                 <Button onClick={()=>{this.onDelete(this.state.selectedRowKeys)}}>删除卡类</Button>
                             </Col>
                         </Row>

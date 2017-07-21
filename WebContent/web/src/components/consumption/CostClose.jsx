@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox } from 'antd';
+import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox,message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -89,10 +89,10 @@ class CostClose extends React.Component {
             dataType: 'json',
             success: (res) => {
                 console.log(res);
-                if (res.code == '0') {
-                    this.setState({
-                        optionService: res.data
-                    });
+                if(res.code=='0'){
+                    message.success('结算成功');
+                }else{
+                    message.error('结算失败');
                 }
             }
         });
