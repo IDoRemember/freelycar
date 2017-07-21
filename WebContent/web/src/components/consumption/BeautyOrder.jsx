@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import { hashHistory } from 'react-router'
-import { Row, Col, Card, Button, Popconfirm } from 'antd';
+import { Row, Col, Card, Button, Popconfirm, message } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -169,7 +169,7 @@ class BeautyOrder extends React.Component {
         message.error('请继续更改');
     }
 
-    confirm = (e) => {
+    confirm = (isFinish) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -192,7 +192,9 @@ class BeautyOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         message.success(res.text);
-                        hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                        if (isFinish) {
+                            hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                        }
                     }
                 }
             })
@@ -236,10 +238,10 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
-            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
-            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
+            <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
