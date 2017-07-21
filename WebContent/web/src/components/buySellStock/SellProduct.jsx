@@ -103,7 +103,7 @@ class PutInStorage extends React.Component {
                         <Input style={{ width: '120px' }} value={this.state.inventoryOrderId} onChange={(e) => { this.setState({ inventoryOrderId: e.target.value }) }} />
                     </Col>
 
-                    <Col span={12} >
+                    <Col span={9} >
                         单据时间：
                         <DatePicker.RangePicker
                             defaultValue={[moment(), moment()]}
@@ -112,7 +112,7 @@ class PutInStorage extends React.Component {
                         />
                     </Col>
 
-                    <Col span={8} >
+                    <Col span={9} >
                         制单人：
                         <Select style={{ width: '120px',marginRight:'20px' }} onChange={(e) => this.handleChange(e)}>
                             {adminOption}
