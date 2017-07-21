@@ -31,10 +31,10 @@ class OrderManage extends React.Component {
         })
     }
     componentDidMount() {
-        this.getList()
+        this.getList(1,10)
     }
 
-    getList = () => {
+    getList = (page,number) => {
         $.ajax({
             url: 'api/order/list',
             // contentType:'application/json;charset=utf-8',
@@ -45,6 +45,7 @@ class OrderManage extends React.Component {
             },
             success: (res) => {
                 if (res.code == '0') {
+                    console.log(res.data)
                     let dataArray = res.data
                     for (let item of dataArray) {
                         item.key = item.id
