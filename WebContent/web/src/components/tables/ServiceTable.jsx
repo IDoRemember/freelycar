@@ -238,12 +238,12 @@ class ServiceTable extends React.Component {
                                 style={{ width: '120px', maxHeight: '200px' }}
                                 placeholder="输入会员卡号"
                                 optionFilterProp="children"
-                                onChange={(value) => { console.log(value); this.setData('cardId', value, index) }}
+                                onChange={(value) => { this.setData('cardId', value, index) }}
                                 dropdownMatchSelectWidth={false}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
-                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to="/app/member/memberShip" style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={`/app/member/memberShip${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
                             </Select>
                             </div>
                         }

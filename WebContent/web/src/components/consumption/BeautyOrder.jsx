@@ -34,6 +34,7 @@ class BeautyOrder extends React.Component {
                 DeductionCardTime: '1'
             }],
             optionInventory: [],
+            errorInfo: '',
             consumOrder: {
                 carId: '',
                 licensePlate: '',
@@ -84,7 +85,7 @@ class BeautyOrder extends React.Component {
     }
 
     componentDidMount() {
-         this.queryAdmin()
+        this.queryAdmin()
         this.getStaffList()
         $.ajax({
             url: 'api/project/name',
@@ -121,11 +122,11 @@ class BeautyOrder extends React.Component {
             type: "GET",
             data: {
                 account: localStorage.getItem('username'),
-            
+
             },
             success: (res) => {
                 this.saveInfo({
-                    orderMaker:{id:res.data.role.id}
+                    orderMaker: { id: res.data.role.id }
                 })
             }
         })
@@ -194,31 +195,47 @@ class BeautyOrder extends React.Component {
             partsPrice = partsPrice + item.inventory.price * item.number
         }
         price = partsPrice + projectPrice
+        if (this.state.consumOrder.carId == '') {
+            this.setState({
+                errorInfo: '*请输入车牌号'
+            })
+        } else if (this.state.consumOrder.pickTime == '') {
+            this.setState({
+                errorInfo: '*请输入接车时间'
+            })
+        } else if (!this.state.consumOrder.pickCarStaff) {
+            this.setState({
+                errorInfo: '*请输入接车人'
+            })
+        }
         this.setState({
             consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })
         }, () => {
-            $.ajax({
-                type: 'post',
-                url: 'api/order/book',
-                contentType: 'application/json;charset=utf-8',
-                dataType: 'json',
-                // traditional: true,
-                data: JSON.stringify(this.state.consumOrder),
-                success: (res) => {
-                    console.log(res)
-                    if (res.code == '0') {
-                        message.success(res.text);
-                        if (isFinish) {
-                            hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
-                        } else {
-                            hashHistory.push(`/app/consumption/ordermanage`)                            
+            if (this.state.errorInfo == '') {
+                $.ajax({
+                    type: 'post',
+                    url: 'api/order/book',
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    // traditional: true,
+                    data: JSON.stringify(this.state.consumOrder),
+                    success: (res) => {
+                        console.log(res)
+                        if(res.code != '0') {
+                            message.warning(res.msg)
+                        }
+                        if (res.code == '0') {
+                            message.success(res.text);
+                            if (isFinish) {
+                                hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                            } else {
+                                hashHistory.push(`/app/consumption/ordermanage`)
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
         })
-
-
     }
 
     render() {
@@ -239,7 +256,7 @@ class BeautyOrder extends React.Component {
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
-            <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
+            <ServiceTable clientId={this.state.consumOrder.clientId} pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={1} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
@@ -256,6 +273,7 @@ class BeautyOrder extends React.Component {
                     元
                 </div>
             </Card>
+            <span style={{ color: 'red' }}>{this.state.errorInfo}</span>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
