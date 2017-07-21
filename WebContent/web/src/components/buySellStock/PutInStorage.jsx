@@ -180,7 +180,7 @@ class PutInStorage extends React.Component {
                             key="price"
                             dataIndex="price"
                             render={(text, record, index) => {
-                                return <InputNumber style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
+                                return <InputNumber addonAfter={'元'} style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
                             }}
                         />
                         <Col
