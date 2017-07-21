@@ -307,7 +307,7 @@ class BuyCard extends React.Component {
         this.setState({
             visible: false
         });
-        this.CardhandleChange();
+         this.getService();
     }
     handleCancel = () => {
         console.log('sss');

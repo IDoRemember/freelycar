@@ -374,13 +374,18 @@ class ClientInfo extends React.Component {
                 <BreadcrumbCustom first="会员管理" second="客户管理" />
 
                 <div style={{ display: 'inline-block', marginBottom: '25px' }}>
-
-                    <Col span={8} style={{ marginBottom: 16 }}>
-                        <Input placeholder="请输入姓名" value={this.state.clientName} onChange={(e) => this.setState({ clientName: e.target.value })} />
-                    </Col>
-                    <Col span={8} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
-                        <Input placeholder="请输入手机号" value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
-                    </Col>
+            <Row>
+                    <div  style={{ marginBottom: 16,display:"inline-block",marginRight:'20px' }} >
+                       <span> 姓名：</span><Input style={{width:"120px"}} value={this.state.clientName} onChange={(e) => this.setState({ clientName: e.target.value })} />
+                    </div>
+                    
+                    <div  style={{ marginBottom: 16,display:"inline-block" }}>
+                       <span>手机号码：</span><Input style={{width:"140px"}} value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
+                    </div>
+                   </Row>
+                    {/* <Col span={10} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
+                      <span>手机号码：</span> <Input style={{width:"140px"}}  value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
+                    </Col> */}
 
                 
                     <Button type="primary" onClick={()=>this.queryData}>查询</Button>
