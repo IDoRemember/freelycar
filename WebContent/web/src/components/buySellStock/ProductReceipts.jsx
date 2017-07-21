@@ -25,6 +25,12 @@ class PutInStorage extends React.Component {
         this.getList(1, 10)
         this.getAdminList()
     }
+
+    componentWillReceiveProps(){
+        this.getList(1,10)
+    }
+
+    
     getAdminList = () => {
         $.ajax({
             url: 'api/admin/list',
