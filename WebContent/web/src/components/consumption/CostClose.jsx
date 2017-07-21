@@ -174,7 +174,7 @@ class CostClose extends React.Component {
                                 {cardInfo}
                                 <br />
                                 <Row>
-                                    <Col xs={16} sm={16} md={10} lg={8} xl={5}>支付方式:
+                                    <Col xs={16} sm={16} md={10} lg={8} xl={6}>支付方式:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                                             <Select defaultValue="现金" style={{ width: 120 }} onChange={(e) => { this.handleChange(e) }} >
                                                 <Option value="0">现金</Option>
@@ -187,7 +187,7 @@ class CostClose extends React.Component {
                                     </Col>
 
 
-                                    <Col xs={16} sm={16} md={10} lg={8} xl={5}>支付金额:
+                                    <Col xs={16} sm={16} md={10} lg={8} xl={6}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                                             <Input style={{ width: '120px', color: 'red' }} value={this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost} disabled />
                                         </div>
