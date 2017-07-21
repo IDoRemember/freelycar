@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
+import { hashHistory } from 'react-router'
 import { Row, Col, Card, Button, Popconfirm } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
