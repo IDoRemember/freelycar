@@ -13,8 +13,8 @@ class PutInStorage extends React.Component {
         super(props)
         this.state = {
             data: [],
-            inventoryOrderId:'',//搜索单据编号
-            adminId:'',
+            inventoryOrderId: '',//搜索单据编号
+            adminId: '',
             option: []
         }
     }
@@ -26,7 +26,7 @@ class PutInStorage extends React.Component {
 
     //条件查询
     conditionQuery = () => {
-        this.loadData(1, 10, this.state.inventoryOrderId,this.state.adminId);
+        this.loadData(1, 10, this.state.inventoryOrderId, this.state.adminId);
     }
 
     loadData = (page, number, inventoryOrderId, adminId, type) => {
@@ -45,16 +45,16 @@ class PutInStorage extends React.Component {
                 if (res.code == '0') {
                     let data = [];
                     let arr = res.data;
-                    for(let item of arr){
+                    for (let item of arr) {
                         let invArr = item.inventoryInfos;//配件数组
-                        for(let i of invArr){
+                        for (let i of invArr) {
                             i.key = i.id;
                             i.docNmuber = item.id;//单据编号
                             i.docType = item.type;//单据类型
                             i.createDate = item.createDate;
                             data.push(i);
                         }
-                    }   
+                    }
 
                     this.setState({
                         data: data
@@ -65,64 +65,61 @@ class PutInStorage extends React.Component {
         });
     }
 
-    loadAdmin = ()=>{
-      $.ajax({
-          url: 'api/admin/list',
+    loadAdmin = () => {
+        $.ajax({
+            url: 'api/admin/list',
             type: 'get',
-            data: {page:1,number:99},
+            data: { page: 1, number: 99 },
             dataType: 'json',
             success: (res) => {
-                if(res.code=='0'){
+                if (res.code == '0') {
                     this.setState({
-                        option:res.data
+                        option: res.data
                     });
                 }
             }
-      });   
+        });
     }
 
     handleChange = (e) => {
         this.setState({
-            adminId:e
+            adminId: e
         })
     }
 
 
     render() {
         const adminOption = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.id+''}>{item.name}</Option>
+            return <Option key={index} value={item.id + ''}>{item.name}</Option>
         })
-       
+
         return <div>
             <BreadcrumbCustom first="进销存管理" second="出库" />
             <Card>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
 
-                    <Col span={2} >
+                    <Col span={6} >
                         单据编号：
+                        <Input style={{ width: '120px' }} value={this.state.inventoryOrderId} onChange={(e) => { this.setState({ inventoryOrderId: e.target.value }) }} />
                     </Col>
-                    <Col span={4} >
-                        <Input style={{ width: '120px' }} size="large" value={this.state.inventoryOrderId} onChange={(e)=>{this.setState({ inventoryOrderId: e.target.value})}}/>
-                    </Col>
-                    <Col span={2} >
+
+                    <Col span={12} >
                         单据时间：
-                    </Col>
-                    <Col span={5} >
                         <DatePicker.RangePicker
                             defaultValue={[moment(), moment()]}
                             format={dateFormat}
                             showToday={true}
                         />
                     </Col>
-                    <Col span={2} >
+
+                    <Col span={8} >
                         制单人：
-                    </Col>
-                    <Col span={5} >
-                        <Select  style={{ width: 120 }} onChange={(e) => this.handleChange(e)}>
+                        <Select style={{ width: '120px',marginRight:'20px' }} onChange={(e) => this.handleChange(e)}>
                             {adminOption}
                         </Select>
+                          <Button type="primary" onClick={() => { this.conditionQuery() }}>查询</Button>
                     </Col>
-                    <Button type="primary" onClick={()=>{this.conditionQuery()}}>查询</Button>
+                  
                 </Row>
                 <Table dataSource={this.state.data} bordered>
                     <Col
@@ -167,8 +164,8 @@ class PutInStorage extends React.Component {
                         title="总计"
                         key="total"
                         dataIndex="total"
-                        render={(text, record, index)=>{
-                            return <span>{record.price*record.amount}</span>
+                        render={(text, record, index) => {
+                            return <span>{record.price * record.amount}</span>
                         }}
                     />
                     <Col
