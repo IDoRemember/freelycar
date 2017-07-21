@@ -74,7 +74,7 @@ class ServiceTable extends React.Component {
         } else {
             for (let item of data) {
                 item['projectId'] = item['id']
-                item['payMethod'] = 0
+                item['payMethod'] = 1
                 delete item['id']
             }
             datalist.push(...data)
@@ -197,7 +197,6 @@ class ServiceTable extends React.Component {
                                     total = total + item.price + item.pricePerUnit * item.referWorkTime
                                 }
                             }
-
                             return <span>{total}</span>
                         }
                         return <span>{record.price + record.pricePerUnit * record.referWorkTime}</span>

@@ -13,8 +13,8 @@ class BusinessSummary extends React.Component {
         this.state = {
             mode: 'paytoday',
             pay: [],
-            startTime:'',
-            endTime:'',
+            startTime: '',
+            endTime: '',
             data: [{
                 key: 1,
                 index: 1,
@@ -79,7 +79,7 @@ class BusinessSummary extends React.Component {
 
                 } else {
                     this.setState({
-                        proportionData:[]
+                        proportionData: []
                     });
                 }
             }
@@ -88,20 +88,20 @@ class BusinessSummary extends React.Component {
 
     handleModeChange = (e) => {
         const mode = e.target.value;
-        this.setState({ mode: mode});
+        this.setState({ mode: mode });
         if (mode == 'paytoday') {
             this.getIncomeExpend(mode)
         } else if (mode == 'paymonth') {
             this.getIncomeExpend(mode)
-        } 
+        }
     }
 
     onTimeSelected = (dates, dateStrings) => {
         let obj = {};
         obj.startTime = new Date(dateStrings[0]);
         obj.endTime = new Date(dateStrings[1]);
-        this.getIncomeExpend('payrange',obj)
-       
+        this.getIncomeExpend('payrange', obj)
+
     }
 
     render() {
@@ -118,7 +118,7 @@ class BusinessSummary extends React.Component {
                             </Radio.Group>
                         </Col>
                         {/*日期选择器*/}
-                        <Col span={12}>
+                        <Col span={12} style={{ display: this.state.mode == 'payrange' ? 'inline-block' : 'none' }}>
                             <div>
                                 <span>查找日期 : </span>
                                 <DatePicker.RangePicker
@@ -225,7 +225,7 @@ class BusinessSummary extends React.Component {
                 <div>
                     <h2 style={{ padding: '10px' }}>项目类别</h2>
                 </div>
-                <Chart proportionData = {this.state.proportionData}></Chart>
+                <Chart proportionData={this.state.proportionData}></Chart>
                 <Table className="accountTable" dataSource={this.state.proportionData} bordered>
                     <Col
                         title="项目类别"
@@ -251,9 +251,9 @@ class BusinessSummary extends React.Component {
                             for (let item of programPayDetail) {
                                 sum += item.count;
                             }
-                            sum = text/sum;
+                            sum = text / sum;
                             sum = sum.toFixed(2);
-                            return <span>{sum*100}%</span>
+                            return <span>{sum * 100}%</span>
                         }}
                     />
                     <Col

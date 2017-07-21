@@ -46,7 +46,7 @@ class FixOrder extends React.Component {
                 phone: '',
                 projects: [],
                 programId: 2,
-                payMethod: 0,
+                payMethod: 1,
                 programName: '维修',
                 parkingLocation: '',
                 inventoryInfos: [],
