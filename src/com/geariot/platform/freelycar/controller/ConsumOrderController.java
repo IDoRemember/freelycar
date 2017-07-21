@@ -35,11 +35,12 @@ public class ConsumOrderController {
 		}
 	}
 	
-	@RequestMapping(value = "/modify", method = RequestMethod.POST)
+	//freelycar v1.0 暂不提供订单修改接口
+	/*@RequestMapping(value = "/modify", method = RequestMethod.POST)
 	@PermissionRequire("order:modify")
 	public String modify(@RequestBody ConsumOrder consumOrder){
 		return this.orderService.modify(consumOrder);
-	}
+	}*/
 	
 	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	@PermissionRequire("order:query")

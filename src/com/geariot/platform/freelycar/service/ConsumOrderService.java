@@ -185,7 +185,12 @@ public class ConsumOrderService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 
-	public String modify(ConsumOrder consumOrder) {
+	
+	//***************************
+	//***************************
+	//freelycar v1.0 暂不提供订单修改接口
+	
+	/*public String modify(ConsumOrder consumOrder) {
 		ConsumOrder exist = this.orderDao.findById(consumOrder.getId());
 		if(exist == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
@@ -200,7 +205,7 @@ public class ConsumOrderService {
 		exist.setTotalPrice(consumOrder.getTotalPrice());
 		exist.setProjects(consumOrder.getProjects());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
-	}
+	}*/
 
 	public String query(ConsumOrderQueryCondition condition) {
 		String andCondition = this.buildAndCondition(condition);
