@@ -27,9 +27,9 @@ public class PayController {
 	
 	@RequestMapping(value = "/consumpay" , method = RequestMethod.POST)
 	@PermissionRequire("pay:consumpay")
-	public String consumPay(String consumOrdersId, int payMethod){
+	public String consumPay(String consumOrdersId, int payMethod, float cost){
 		try {
-			return this.payService.consumPay(consumOrdersId, payMethod);
+			return this.payService.consumPay(consumOrdersId, payMethod, cost);
 		} catch (ForRollbackException e){
 			org.json.JSONObject obj = new org.json.JSONObject();
 			obj.put(Constants.RESPONSE_CODE_KEY, e.getErrorCode());

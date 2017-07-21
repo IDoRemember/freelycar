@@ -97,7 +97,7 @@ public class PayService {
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
-	public String consumPay(String consumOrderId, int payMethod){
+	public String consumPay(String consumOrderId, int payMethod , float cost){
 		ConsumOrder order = this.consumOrderDao.findById(consumOrderId);
 		if(order == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
@@ -145,7 +145,7 @@ public class PayService {
 		log.debug("消费订单结算完成，生成收入订单");
 		//结算完成后，记录到IncomeOrder。
 		IncomeOrder recoder = new IncomeOrder();
-		recoder.setAmount(order.getTotalPrice());
+		recoder.setAmount(cost);
 		recoder.setClientId(order.getClientId());
 		recoder.setLicensePlate(order.getLicensePlate());
 		recoder.setPayDate(new Date());
