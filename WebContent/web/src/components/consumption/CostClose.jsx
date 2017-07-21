@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox } from 'antd';
+import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox,message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -20,7 +20,9 @@ class CostClose extends React.Component {
             disabledCard: true,
             feeDetail: [],
             payMethod: '0',//支付方式
-            cardCost:0
+            cardCost:0,//卡抵扣的钱
+            allCost:0,//所有的钱
+
 
         }
     }
@@ -66,12 +68,10 @@ class CostClose extends React.Component {
                         }
                     }
 
-
-
-
                     this.setState({
                         feeDetail: dataArr,
-                        cardCost : res.data.totalPrice-cardCost
+                        cardCost : cardCost,
+                        allCost : res.data.totalPrice
                     }, () => {
                         console.log(this.state.feeDetail);
                     });
@@ -89,10 +89,10 @@ class CostClose extends React.Component {
             dataType: 'json',
             success: (res) => {
                 console.log(res);
-                if (res.code == '0') {
-                    this.setState({
-                        optionService: res.data
-                    });
+                if(res.code=='0'){
+                    message.success('结算成功');
+                }else{
+                    message.error('结算失败');
                 }
             }
         });
@@ -218,7 +218,7 @@ class CostClose extends React.Component {
 
                                 <div style={{ display: 'inline-block', width: '20%' }}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Input style={{ width: '120px' }} value={this.state.cardCost} disabled/>
+                                        <Input style={{ width: '120px' }} value={ this.state.checkedCard?(this.state.allCost-this.state.cardCost):this.state.allCost} disabled/>
                                     </div>
                                 </div>
 
