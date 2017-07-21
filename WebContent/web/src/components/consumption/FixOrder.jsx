@@ -5,6 +5,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import { Row, Col, Card, Button, Input, Popconfirm, message } from 'antd';
 import { Link } from 'react-router';
+import { hashHistory } from 'react-router'
 import update from 'immutability-helper'
 import $ from 'jquery'
 let a = []
@@ -46,19 +47,19 @@ class FixOrder extends React.Component {
                 projects: [],
                 programId: 2,
                 payMethod: 0,
-                programName: '',
+                programName: '维修',
                 parkingLocation: '',
                 inventoryInfos: [],
                 state: 0,
                 totalPrice: '',
                 payState: '',
                 pickTime: '',
-                finishTime: '',
-                deliverTime: '',
+                // finishTime: '',
+                // deliverTime: '',
                 createDate: '',
                 lastMiles: '',
                 miles: '',
-                orderMaker: '',
+                // orderMaker: '',
                 comment: '',
                 faultDesc: '',
                 repairAdvice: ''
@@ -85,6 +86,7 @@ class FixOrder extends React.Component {
     }
 
     componentDidMount() {
+        this.queryAdmin()
         this.getStaffList()
         $.ajax({
             url: 'api/project/name',
@@ -115,6 +117,21 @@ class FixOrder extends React.Component {
         });
     }
 
+    queryAdmin = () => {
+        $.ajax({
+            url: 'api/admin/getaccount',
+            type: "GET",
+            data: {
+                account: localStorage.getItem('username'),
+            
+            },
+            success: (res) => {
+                this.saveInfo({
+                    orderMaker:{id:res.data.role.id}
+                })
+            }
+        })
+    }
     saveInfo = (params) => {
         this.setState({
             consumOrder: update(this.state.consumOrder, { $merge: params })
@@ -125,6 +142,7 @@ class FixOrder extends React.Component {
 
 
     pushInventory = (value, projectId) => {
+        console.log(value, projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -132,25 +150,17 @@ class FixOrder extends React.Component {
             a.push(...value)
             this.setState({
                 consumOrder: update(this.state.consumOrder, { inventoryInfos: { $set: a } })
-            }, () => {
-                console.log(
-                    this.state.consumOrder
-                )
             })
         } else {
-
+            a = []
             inventoryInfos = inventoryInfos.filter((obj) => {
-                return projectId !== obj.projectId;
+                return projectId != obj.projectId;
             });
             console.log(inventoryInfos, value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
             newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
             this.setState({
                 consumOrder: newConsumOrder
-            }, () => {
-                console.log(
-                    this.state.consumOrder
-                )
             })
         }
     }
