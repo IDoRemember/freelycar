@@ -73,10 +73,14 @@ class CostClose extends React.Component {
     }
 
     confirm = () => {
+        let obj = {};
+        obj.consumOrdersId = this.props.params.orderId;
+        obj.payMethod = this.state.payMethod;
+        obj.cost = this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost
         $.ajax({
             url: 'api/pay/consumpay',
             type: 'post',
-            data: { consumOrdersId: this.props.params.orderId, payMethod: this.state.payMethod, cost: this.state.cardCost },
+            data: obj,
             dataType: 'json',
             success: (res) => {
                 if (res.code == '0') {
@@ -111,22 +115,6 @@ class CostClose extends React.Component {
                 }
             },
             {
-                title: '配件小计', dataIndex: 'inventory', key: 'totalInv', render: (text, record, index) => {
-                    let sum = 0;
-                    for (let item of text) {
-                        sum += item.inventory.price;
-                    }
-
-                    return {
-                        children: <a>{sum}</a>,
-                        props: {
-                            rowSpan: index == 0 ? this.state.feeDetail.length : 0
-                        }
-                    }
-                }
-
-            },
-            {
                 title: '合计', dataIndex: 'totalPrice', key: 'total', render: (text, record, index) => {
                     return {
                         children: <a>{text}</a>,
@@ -139,34 +127,34 @@ class CostClose extends React.Component {
         ];
 
 
-        const cardInfo = this.state.feeDetail.map((item, index) => {
 
 
-            return item.cardName && <div key={index} style={{ marginLeft: '20px' }}>
-                <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
+        const cardInfo = [];
+        this.state.feeDetail.map((item, index) => {
+            if (item.cardName) {
+                const item = <div key={index} style={{ marginLeft: '20px' }}>
+                    <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                        {item.cardId}
+                            {item.cardId}
+                        </div>
                     </div>
-                </div>
 
-                <div style={{ display: 'inline-block', width: '20%' }}>项目名称:
+                    <div style={{ display: 'inline-block', width: '20%' }}>项目名称:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                        {item.name}
+                            {item.name}
+                        </div>
                     </div>
-                </div>
 
 
-                <div style={{ display: 'inline-block' }}>卡扣次数：
+                    <div style={{ display: 'inline-block' }}>卡扣次数：
                             <div style={{ display: 'inline-block', margin: '10px' }}>
-                        {item.payCardTimes}
+                            {item.payCardTimes}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
+                cardInfo.push(item);
+            }
         })
-
-
 
         return (
             <div className="gutter-example">
@@ -201,12 +189,12 @@ class CostClose extends React.Component {
 
                                     <Col xs={16} sm={16} md={10} lg={8} xl={5}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                            <Input style={{ width: '120px' }} value={this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost} disabled />
+                                            <Input style={{ width: '120px', color: 'red' }} value={this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost} disabled />
                                         </div>
                                     </Col>
                                 </Row>
 
-                                <Row type="flex" justify="space-around" style={{marginTop:'30px'}}>
+                                <Row type="flex" justify="space-around" style={{ marginTop: '30px' }}>
                                     <Col>
                                         < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
                                     </Col>
