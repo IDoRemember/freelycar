@@ -239,10 +239,10 @@ class BeautyOrder extends React.Component {
                 </div>
             </Card>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}><Link to={this.state.idUrl}>结算</Link></Button>
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} ><Link to={this.state.idUrl}>结算</Link></Button>
             </Popconfirm>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => { this.book() }}>保存</Button>
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>
