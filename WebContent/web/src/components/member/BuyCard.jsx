@@ -308,6 +308,7 @@ class BuyCard extends React.Component {
             visible: false
         });
          this.getService();
+       //  message.success("保存成功",1)
     }
     handleCancel = () => {
         console.log('sss');
