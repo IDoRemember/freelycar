@@ -12,7 +12,6 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            idUrl: '',
             parts: [],
             staffList: [],
             optionService: [],
@@ -192,9 +191,7 @@ class BeautyOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         message.success(res.text);
-                        this.setState({
-                            idUrl: `/app/consumption/accountingcenter/${res.id}`
-                        })
+                        hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
                     }
                 }
             })
@@ -239,7 +236,7 @@ class BeautyOrder extends React.Component {
                 </div>
             </Card>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} ><Link to={this.state.idUrl}>结算</Link></Button>
+                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm} onCancel={() => this.cancel} okText="是" cancelText="否">
                 <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
