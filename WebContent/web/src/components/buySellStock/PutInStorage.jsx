@@ -56,10 +56,11 @@ class PutInStorage extends React.Component {
             display: datalist.length > 0 ? 'block' : 'none'
         })
     }
-    changeNumber = (value, index) => {
+    changeData = (key, value, index) => {
         this.setState({
-            data: update(this.state.data, { [index]: { ['number']: { $set: value } } })
+            data: update(this.state.data, { [index]: { [key]: { $set: value } } })
         })
+
     }
     // handleSelectedChange = (value, index) => {
     //     this.setState({
@@ -178,13 +179,16 @@ class PutInStorage extends React.Component {
                             title="单价"
                             key="price"
                             dataIndex="price"
+                            render={(text, record, index) => {
+                                return <InputNumber style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
+                            }}
                         />
                         <Col
                             title="数量"
                             key="number"
                             dataIndex="number"
                             render={(text, record, index) => {
-                                return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeNumber(value, index)} />
+                                return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeData('number', value, index)} />
                             }}
                         />
                         <Col

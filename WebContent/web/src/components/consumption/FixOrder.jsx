@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
-import { Row, Col, Card, Button, Input } from 'antd';
+import { Row, Col, Card, Button, Input, Popconfirm, message } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -239,8 +239,8 @@ class FixOrder extends React.Component {
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
             <Card style={{ marginBottom: '10px' }}>
-                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={3} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
-                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={3} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={2} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
+                <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={2} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
             </Card>
             <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
             {parts}
