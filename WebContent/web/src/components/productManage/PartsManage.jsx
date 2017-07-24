@@ -292,6 +292,13 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    handlePageChange = (tab, p) => {
+        if (tab == 'tab1') {
+            this.loadData(p.current, 10, this.state.inventoryName, this.state.inventoryTypeId);
+        } else if (tab == 'tab2') {
+            this.loadPjData(p.current, 10, this.state.inventoryName);
+        }
+    }
 
 
     //获取数据的函数
@@ -772,6 +779,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab1', pagination)}
                                         />
                                     </Col>
                                 </Row>
@@ -837,6 +845,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab2', pagination)}
                                         />
                                     </Col>
                                 </Row>

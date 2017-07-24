@@ -94,7 +94,7 @@ class PartsSearch extends React.Component {
             url: 'api/inventory/list',
             data: {
                 name: name,
-                typeId: typeId ,
+                typeId: typeId,
                 page: page,
                 number: pageSize
             },
