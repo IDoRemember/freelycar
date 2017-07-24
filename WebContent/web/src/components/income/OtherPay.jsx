@@ -3,7 +3,6 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import AjaxGet from '../../utils/ajaxGet'
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, Icon, Modal } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
@@ -119,7 +118,6 @@ class OtherPay extends React.Component {
                             return id !== obj.id;
                         });
                     }
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -128,12 +126,7 @@ class OtherPay extends React.Component {
             }
         })
     }
-    searchGroupManage = (params) => {
-        console.log(params)
-    }
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
-    }
+
     setTypeValue = (value) => {
         this.setState({
             type: value
@@ -158,7 +151,6 @@ class OtherPay extends React.Component {
             }),
             traditional: true,
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     this.getType()
                 }
@@ -168,7 +160,6 @@ class OtherPay extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -196,7 +187,6 @@ class OtherPay extends React.Component {
             }),
             traditional: true,
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let data = result.data
                     data['key'] = data.id

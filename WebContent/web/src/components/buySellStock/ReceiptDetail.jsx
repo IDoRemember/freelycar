@@ -4,7 +4,6 @@ import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, D
 import { Link } from 'react-router';
 import moment from 'moment';
 import $ from 'jquery'
-import AjaxGet from '../../utils/ajaxGet'
 const Option = Select.Option;
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';
@@ -23,13 +22,11 @@ class PutInStorage extends React.Component {
                 inventoryOrderId: this.props.params.receiptId
             },
             success: (result) => {
-                console.log(result)
                 let data = result.data.inventoryInfos
                 for (let item of data) {
                     item['key'] = item.id
                     item['total'] = result.data.totalPrice
                 }
-                console.log(data)
                 if (result.code == "0") {
                     this.setState({
                         data: data

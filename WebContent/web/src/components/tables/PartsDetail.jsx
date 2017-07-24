@@ -1,7 +1,5 @@
 import React from 'react';
 import { Row, Col, Card, Select, Table, Iconconst, Popconfirm, InputNumber, Icon } from 'antd';
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
 import EditableCell from './EditableCell.jsx'
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -25,13 +23,11 @@ class PartsDetail extends React.Component {
         }
     }
     componentDidMount() {
-        console.log(this.props.parts)
         let parts = []
         for (let item of this.props.parts) {
             parts.push(item.inventory)
         }
         parts.push(total)
-        console.log(this.props.parts)
         for (let item of parts) {
             item.key = item.id
         }
@@ -69,12 +65,10 @@ class PartsDetail extends React.Component {
                 })
             }
         }
-        console.log(this.props.id)
         this.props.pushInventory(inventorys, this.props.id)
     }
 
     handleOk = (data) => {
-        console.log(data)
         let datalist = this.state.parts
         if (datalist.length > 0) {
             for (let i = 0; i < data.length; i++) {

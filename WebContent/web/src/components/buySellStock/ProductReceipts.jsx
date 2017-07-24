@@ -3,7 +3,6 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, DatePicker } from 'antd';
 import { Link } from 'react-router';
 import moment from 'moment';
-import AjaxGet from '../../utils/ajaxGet'
 import $ from 'jquery'
 import update from 'immutability-helper'
 const Option = Select.Option,
@@ -55,7 +54,6 @@ class PutInStorage extends React.Component {
                 number: number
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let data = result.data
                     for (let item of data) {
@@ -79,7 +77,6 @@ class PutInStorage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -101,7 +98,6 @@ class PutInStorage extends React.Component {
                     dataSource = dataSource.filter((obj) => {
                         return id !== obj.id;
                     });
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -114,7 +110,6 @@ class PutInStorage extends React.Component {
         $.ajax({
             type: 'get',
             url: 'api/inventory/query',
-            // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
                 inventoryOrderId: inventoryOrderId,
@@ -227,7 +222,7 @@ class PutInStorage extends React.Component {
                     </Col>
                     <Col span={8} >
                         <div style={{ height: '28px', lineHeight: '28px' }}>
-                            <Button onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
+                            <Button type="primary" onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
                                 查询
                             </Button>
                         </div>

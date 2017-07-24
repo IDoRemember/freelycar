@@ -4,8 +4,6 @@ import { Card, Button, Input, Select, Menu, Icon, Row, Col, DatePicker, Radio } 
 import { Link } from 'react-router';
 import update from 'immutability-helper';
 import $ from 'jquery';
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
 import { hashHistory } from 'react-router'
 const RadioGroup = Radio.Group;
 const Option = Select.Option;

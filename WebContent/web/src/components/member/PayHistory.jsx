@@ -33,9 +33,7 @@ class PayHistory extends React.Component {
             ]
         }
     }
-    timeonChange = (time) => {
-        console.log(time)
-    }
+
     componentDidMount() {
         var todayStart = new Date();
         var todayEnd = new Date();
@@ -45,7 +43,6 @@ class PayHistory extends React.Component {
         todayEnd.setHours(23);
         todayEnd.setMinutes(59);
         todayEnd.setSeconds(59)
-        console.log(this.props.params.id)
         this.loadData(this.props.params.id, todayStart, todayEnd, 1, 10)
     }
     tabCallback = (key) => {
@@ -82,8 +79,6 @@ class PayHistory extends React.Component {
     }
 
     onTimeSelected = (dates, dateStrings) => {
-        console.log(dates, dateStrings)
-
         this.setState({
             queryStart: dateStrings[0],
             queryEnd: dateStrings[1]
@@ -119,7 +114,6 @@ class PayHistory extends React.Component {
             type: 'GET',
             success: (res) => {
                 if (res.code == '0') {
-                    console.log(res.data)
                     this.setState({
                         amount: res.amount,
                     })
@@ -128,7 +122,6 @@ class PayHistory extends React.Component {
                     let paylist = [];
                     for (let k = 0; k < objpay.length; k++) {
                         let payMethod = objpay[k].payMethod;
-                        console.log(payMethod)
                         let paymeth;
                         switch (payMethod) {
                             case 0: paymeth = "现金";
@@ -156,7 +149,6 @@ class PayHistory extends React.Component {
                             insuranceMoney: objpay[k].amount,
                           //  serviceState: "完成",
                         }
-                        console.log(payItem)
                         paylist.push(payItem);
                         if (paylist.length == objpay.length) {
                             this.setState({

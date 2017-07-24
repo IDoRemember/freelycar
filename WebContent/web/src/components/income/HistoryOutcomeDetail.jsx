@@ -38,7 +38,6 @@ class BeautyOrder extends React.Component {
                 number: 10
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let data = result.data
                     for (let item of data) {
@@ -64,7 +63,7 @@ class BeautyOrder extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
+
         this.setState({
             pagination: pager
         })

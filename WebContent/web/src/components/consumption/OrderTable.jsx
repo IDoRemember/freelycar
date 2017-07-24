@@ -27,30 +27,12 @@ class OrderTable extends React.Component {
         }
     }
 
-    componentDidMount() {
-        this.gitStaffList(1, 10)
-        console.log(this.state.data)
-    }
-
     componentWillReceiveProps(newProps) {
         this.setState({
             data: newProps.data
         })
     }
-    gitStaffList = (page, number) => {
-        $.ajax({
-            url: '/api/staff/list',
-            data: {
-                page: page,
-                number: number
-            },
-            dataType: 'json',
-            type: 'get',
-            success: (res) => {
-                console.log(res);
-            }
-        })
-    }
+
 
     openFinishModal = () => {
         this.setState({
@@ -77,7 +59,7 @@ class OrderTable extends React.Component {
                     let dataSource = this.state.data
                     res.data.key = res.data.id
                     dataSource.splice(this.state.consumOrder.index, 1, res.data)
-                    console.log(dataSource, this.state.consumOrder.index)
+
                     this.setState({
                         data: dataSource
                     })
@@ -88,14 +70,12 @@ class OrderTable extends React.Component {
 
     setTime = (key, value) => {
         this.setState(update(this.state, { [key]: { finishTime: { $set: value._d } } }))
-        console.log(value._d, new Date())
     }
 
     onValueChange = (key, value) => {
         this.setState({
             finishWork: update(this.state.finishWork, { [key]: { $set: value } })
         })
-        console.log(this.state.finishWork)
     }
 
     onInfoChange = (key, value) => {
@@ -120,7 +100,6 @@ class OrderTable extends React.Component {
                     let dataSource = this.state.data
                     res.data.key = res.data.id
                     dataSource.splice(this.state.consumOrder.index, 1, res.data)
-                    console.log(dataSource, this.state.consumOrder.index)
                     this.setState({
                         data: dataSource
                     })
@@ -261,7 +240,7 @@ class OrderTable extends React.Component {
                 <Row gutter={8}>
                     <div className="gutter-box">
                         <Card bordered>
-                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) =>this.props.onChange(pagination)} dataSource={this.state.data} ></Table>
+                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) => this.props.onChange(pagination)} dataSource={this.state.data} ></Table>
                         </Card>
                     </div>
                 </Row>

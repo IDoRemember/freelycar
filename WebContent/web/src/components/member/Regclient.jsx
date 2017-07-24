@@ -1,8 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal } from 'antd';
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
+
 import $ from 'jquery'
 class Regclient extends React.Component{
     constructor(props){
