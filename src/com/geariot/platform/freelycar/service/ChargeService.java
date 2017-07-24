@@ -140,8 +140,7 @@ public class ChargeService {
 		if(list == null || list.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		JsonConfig config = new JsonConfig();
-		config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
+		JsonConfig config = JsonResFactory.dateConfig();
 		long realSize = (long) chargeDao.getConditionCount(andCondition);
 		int size=(int) Math.ceil(realSize/(double)number);
 		JSONArray jsonArray = JSONArray.fromObject(list,config);
