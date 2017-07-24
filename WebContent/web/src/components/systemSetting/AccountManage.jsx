@@ -248,7 +248,7 @@ class AccountManage extends React.Component {
                         message.success('增加成功', 5)
                     }
                 } else {
-                    message.error(result.message, 5);
+                    message.error(result.msg, 5);
                 }
             }
         })
