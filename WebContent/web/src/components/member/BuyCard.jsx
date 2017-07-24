@@ -18,6 +18,8 @@ class BuyCard extends React.Component {
             option: [],
             adminList: [],
             cardList: [],
+            phoneclassName: "hidden",
+            licensePlateClassName: "hidden",
             man: 'man',
             female: 'female',
             value: 1,
@@ -137,7 +139,7 @@ class BuyCard extends React.Component {
                 } else if (res.data[0].type == 1) {
                     cardtype = "组合卡";
                 }
-                 console.log(cardtype);
+                console.log(cardtype);
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
@@ -147,47 +149,86 @@ class BuyCard extends React.Component {
             }
         })
     }
+    CheckInfo = () => {
+        var phonecheck = this.state.clientInfo.phone;
 
-    SaveClient = () => {
-        let clientInfos = this.state.clientInfo;
-        if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) 
-        {
-            $.ajax({
-                type: 'post',
-                url: '/api/client/add',
-                datatype: 'json',
-                contentType: 'application/json;charset=utf-8',
-                data: JSON.stringify({
-                    name: clientInfos.name,
-                    phone: clientInfos.phone,
-                    gender: clientInfos.gender,
-                    recommendName: clientInfos.recommendName,
-                    cars: [{
-                        //select选择
-                        type: {
-                            id: this.state.carId,
+        console.log(phonecheck)
+        var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
 
-                        },
-                        licensePlate: clientInfos.licensePlate,
-                    }]
-                }),
-                success: (res) => {
-
-                    console.log(res);
-                    if (res.code == "0") {
-                        this.setState({
-                            clientId: res.data.id,
-                            haveClient: true
-                        });
-                        message.success("保存成功")
-                    }else{
-                        message.error(res.msg)
-                    }
-                }
+        if (!reg.test(phonecheck)) {
+            this.setState({
+                phoneclassName: "display"
             })
-        }else{
-            message.error("请把必填信息补充完整！")
+            return false;
+        } else {
+             this.setState({
+                phoneclassName: "hidden"
+            })
+            return true;
         }
+
+    }
+    licensePlateCheckInfo = () => {
+        var licensePlatecheck = this.state.clientInfo.licensePlate;
+        var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
+        console.log(re.test(licensePlatecheck))
+        if (!re.test(licensePlatecheck)) {
+            this.setState({
+                licensePlateClassName: "display"
+            })
+            return false
+        } else {
+            this.setState({
+                 licensePlateClassName: "hidden"
+            })
+            return true;
+        }
+    }
+    SaveClient = () => {
+        if (this.CheckInfo()) {
+            if (this.licensePlateCheckInfo()) {
+                let clientInfos = this.state.clientInfo;
+            if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/client/add',
+                    datatype: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({
+                        name: clientInfos.name,
+                        phone: clientInfos.phone,
+                        gender: clientInfos.gender,
+                        recommendName: clientInfos.recommendName,
+                        cars: [{
+                            //select选择
+                            type: {
+                                id: this.state.carId,
+
+                            },
+                            licensePlate: clientInfos.licensePlate,
+                        }]
+                    }),
+                    success: (res) => {
+
+                        console.log(res);
+                        if (res.code == "0") {
+                            this.setState({
+                                clientId: res.data.id,
+                                haveClient: true
+                            });
+                            message.success("保存成功")
+                        } else {
+                            message.error(res.msg)
+                        }
+                    }
+                })
+            } else {
+                message.error("请把必填信息补充完整！")
+            }
+            }
+            
+        }
+
 
     }
     genderonChange = (e) => {
@@ -326,6 +367,7 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}><span style={{ color: "red" }}>*</span>客户姓名：
                             <Input style={{ width: '140px' }} value={this.state.clientInfo.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+
                         </Col>
                         <Col span={8}>性别：
                             <div style={{ display: 'inline-block', marginLeft: '26px' }}>
@@ -339,9 +381,11 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4}><span style={{ color: "red" }}>*</span>手机号:
                             <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
+                            <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.phoneclassName}>手机号码格式有误</span>
                         </Col>
                         <Col span={8} ><span style={{ color: "red" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
+                            <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.licensePlateClassName}>车牌号格式有误</span>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
