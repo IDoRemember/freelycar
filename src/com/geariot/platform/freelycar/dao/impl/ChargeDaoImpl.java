@@ -99,7 +99,7 @@ public class ChargeDaoImpl implements ChargeDao{
 	@Override
 	public List<OtherExpendOrder> getConditionQuery(String andCondition, int from, int pageSize) {
 		String basic = "from OtherExpendOrder";
-		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.NO_ORDER).toString();
+		String hql = QueryUtils.createQueryString(new StringBuffer(basic), andCondition, ORDER_CON.DESC_ORDER).toString();
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
