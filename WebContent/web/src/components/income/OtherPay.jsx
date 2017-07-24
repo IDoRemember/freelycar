@@ -60,20 +60,15 @@ class OtherPay extends React.Component {
             }
         })
     }
-    getList = (page, number) => {
+    getList = (page, number, otherExpendTypeId) => {
         let obj = {
             page: page,
-            number: number
+            number: number,
+            otherExpendTypeId: otherExpendTypeId,
+            startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+            endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
         }
-        if (this.state.queryType != '' || this.state.queryDate.length > 0) {
-            obj = {
-                otherExpendTypeId: this.state.queryType,
-                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
-                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
-                page: page,
-                number: number
-            }
-        }
+
         $.ajax({
             url: 'api/charge/query',
             data: obj,
@@ -92,6 +87,10 @@ class OtherPay extends React.Component {
         })
     }
 
+    handleChangeType = (value) => {
+        getList(1, 10, value.key);
+    }
+
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
@@ -101,7 +100,6 @@ class OtherPay extends React.Component {
         $.ajax({
             type: 'post',
             url: 'api/charge/delete',
-            // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
                 ids: idArray
@@ -187,6 +185,7 @@ class OtherPay extends React.Component {
                 if (result.code == "0") {
                     let data = result.data
                     data['key'] = data.id
+                    data.typeName = this.state.form.payType;
                     this.setState({
                         data: update(this.state.data, { $push: [data] }),
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
@@ -272,7 +271,8 @@ class OtherPay extends React.Component {
                                 style={{ width: '100px' }}
                                 placeholder="选择支出类别"
                                 optionFilterProp="children"
-                                onChange={(value) => { this.setState({ queryType: value }) }}
+                                onChange={(value) => { this.handleChangeType(value) }}
+                                labelInValue
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {typeOptions}
