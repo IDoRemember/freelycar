@@ -24,7 +24,7 @@ class StaffManage extends React.Component {
             staffId: null,
             staffName: '',
             modifyIndex: null,
-            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收营员', '会计'],
+            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收银员', '会计'],
             levelOptions: ['', '初级', '中级', '高级'],
             modalstate: 'add',
             form: {

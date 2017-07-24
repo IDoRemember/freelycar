@@ -188,7 +188,12 @@ class OtherPay extends React.Component {
                     data.typeName = this.state.form.payType;
                     this.setState({
                         data: update(this.state.data, { $push: [data] }),
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
+                        form: {
+                            payType: '',
+                            amount: null,
+                            comment: ''
+                        }
                     })
                 }
             }
@@ -318,6 +323,7 @@ class OtherPay extends React.Component {
                                 <Col span={8}>
                                     <Select
                                         style={{ width: '150px' }}
+                                        value={this.state.form.payType}
                                         placeholder="选择支出类别"
                                         optionFilterProp="children"
                                         onChange={(value) => this.setFormData('payType', value)}
@@ -332,7 +338,7 @@ class OtherPay extends React.Component {
                                     支出金额：
                             </Col>
                                 <Col span={8}>
-                                    <Input style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
+                                    <Input value={this.state.form.amount} style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -341,7 +347,7 @@ class OtherPay extends React.Component {
                                 </Col>
                                 <Col span={8}>
                                     {/*<Input size="large" type="textarea" rows={3} />*/}
-                                    <Input rows={3} type="textarea" onChange={(e) => this.setFormData('comment', e.target.value)} />
+                                    <Input value={this.state.form.comment} rows={3} type="textarea" onChange={(e) => this.setFormData('comment', e.target.value)} />
                                 </Col>
                             </Row>
                         </Modal>
