@@ -110,7 +110,6 @@ class PutInStorage extends React.Component {
         $.ajax({
             type: 'get',
             url: 'api/inventory/query',
-            // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
                 inventoryOrderId: inventoryOrderId,
@@ -223,7 +222,7 @@ class PutInStorage extends React.Component {
                     </Col>
                     <Col span={8} >
                         <div style={{ height: '28px', lineHeight: '28px' }}>
-                            <Button onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
+                            <Button type="primary" onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
                                 查询
                             </Button>
                         </div>
