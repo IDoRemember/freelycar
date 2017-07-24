@@ -60,20 +60,15 @@ class OtherPay extends React.Component {
             }
         })
     }
-    getList = (page, number,otherExpendTypeId) => {
+    getList = (page, number, otherExpendTypeId) => {
         let obj = {
             page: page,
-            number: number
+            number: number,
+            otherExpendTypeId: otherExpendTypeId,
+            startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+            endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
         }
-        if (this.state.queryDate.length > 0) {
-            obj = {
-                otherExpendTypeId: otherExpendTypeId,
-                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
-                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
-                page: page,
-                number: number
-            }
-        }
+
         $.ajax({
             url: 'api/charge/query',
             data: obj,
@@ -92,8 +87,8 @@ class OtherPay extends React.Component {
         })
     }
 
-    handleChangeType = (value)=>{
-        getList(1,10,value.key);
+    handleChangeType = (value) => {
+        getList(1, 10, value.key);
     }
 
     onDelete = (index) => {
