@@ -237,7 +237,7 @@ class EditableTable extends React.Component {
                         <Row gutter={16} style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col xs={6} sm={5} md={4} lg={2} xl={2}>
                                 <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
-                            </Col>
+``                            </Col>
                             <Col xs={2} sm={4} md={6}>
                                 <Button onClick={()=>{this.onDelete(this.state.selectedRowKeys)}}>删除卡类</Button>
                             </Col>
