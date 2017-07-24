@@ -36,4 +36,10 @@ public class CardProjectRemainingInfo {
 	public void setRemaining(int remaining) {
 		this.remaining = remaining;
 	}
+	@Override
+	public String toString() {
+		return "CardProjectRemainingInfo [id=" + id + ", project=" + project + ", remaining=" + remaining + "]";
+	}
+	
+	
 }

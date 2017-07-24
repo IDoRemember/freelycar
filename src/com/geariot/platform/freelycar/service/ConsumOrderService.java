@@ -41,6 +41,7 @@ import com.geariot.platform.freelycar.utils.query.ConsumOrderAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.ConsumOrderQueryCondition;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
 @Service
@@ -115,6 +116,8 @@ public class ConsumOrderService {
 			if(pInfo.getCardId() != 0 ){
 				Card payCard = this.cardDao.getCardById(pInfo.getCardId());
 				pInfo.setCardName(payCard.getService().getName());
+				pInfo.setPayMethod(0);
+			}else{
 				pInfo.setPayMethod(1);
 			}
 			
@@ -154,6 +157,7 @@ public class ConsumOrderService {
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
+		obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 		return obj.toString();
 	}
 
@@ -163,10 +167,11 @@ public class ConsumOrderService {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		log.debug("消费订单(id:" + order.getId() + ")施工完成, 完成时间:" + date + ", 备注:" + comment);
+		JsonConfig config = JsonResFactory.dateConfig();
 		order.setFinishTime(date);
 		order.setComment(comment);
 		order.setState(1);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
 	}
 
 	public String deliverCar(String consumOrderId, Date date, String comment) {
@@ -179,10 +184,11 @@ public class ConsumOrderService {
 			return JsonResFactory.buildOrg(RESCODE.WORK_NOT_FINISH).toString();
 		}
 		log.debug("消费订单(id:" + order.getId() + ")交车, 时间:" + date + ", 备注:" + comment);
+		JsonConfig config = JsonResFactory.dateConfig();
 		order.setState(2);
 		order.setDeliverTime(date);
 		order.setComment(comment);
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
 	}
 
 	
