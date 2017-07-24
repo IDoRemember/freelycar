@@ -795,10 +795,10 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={this.showModal2}>新增配件</Button>
+                                        <Button onClick={this.showModal2}>新增类别</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除配件</Button>
+                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除类别</Button>
                                     </Col>
 
 
