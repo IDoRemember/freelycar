@@ -92,7 +92,6 @@ class BeautyOrder extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     this.setState({
                         optionService: res.data
@@ -106,7 +105,6 @@ class BeautyOrder extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (res) => {
-                //console.log(res);
                 if (res.code == '0') {
                     this.setState({
                         optionInventory: res.data
@@ -138,7 +136,6 @@ class BeautyOrder extends React.Component {
     }
 
     pushInventory = (value, projectId) => {
-        console.log(value, projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -152,7 +149,6 @@ class BeautyOrder extends React.Component {
             inventoryInfos = inventoryInfos.filter((obj) => {
                 return projectId != obj.projectId;
             });
-            console.log(inventoryInfos, value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
             newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
             this.setState({
@@ -220,7 +216,6 @@ class BeautyOrder extends React.Component {
                     // traditional: true,
                     data: JSON.stringify(this.state.consumOrder),
                     success: (res) => {
-                        console.log(res)
                         if(res.code != '0') {
                             message.warning(res.msg)
                         }

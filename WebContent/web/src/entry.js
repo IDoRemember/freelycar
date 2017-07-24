@@ -29,7 +29,6 @@ import AddClient from './components/member/AddClient.jsx'
 import BuyCard from './components/member/BuyCard.jsx'
 import ModifyClient from './components/member/ModifyClient.jsx'
 
-
 //product
 import ItemManage from './components/productManage/ItemManage.jsx';
 import PartsManage from './components/productManage/PartsManage.jsx';

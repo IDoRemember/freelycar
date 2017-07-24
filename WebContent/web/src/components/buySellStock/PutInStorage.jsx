@@ -2,7 +2,6 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message } from 'antd';
 import { Link } from 'react-router';
-import AjaxGet from '../../utils/ajaxGet'
 import ProductReceipts from './ProductReceipts.jsx'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'

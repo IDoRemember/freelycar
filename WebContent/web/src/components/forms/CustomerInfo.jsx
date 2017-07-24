@@ -3,9 +3,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button } from 'antd';
 import styled from "styled-components"
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
-import AjaxNative from '../../utils/ajaxNative'
+
 import $ from 'jquery';
 const Option = Select.Option;
 const MemberButton = styled.div`
@@ -24,26 +22,7 @@ class CustomerInfo extends React.Component {
             visible: false
         }
     }
-    // componentDidMount() {
-    //     $.ajax({
-    //         url: 'api/order/queryId',
-    //         dataType: 'json',
-    //         type: 'GET',
-    //         contentType: 'application/json;charset=utf-8',
-    //         data:{
-    //             consumOrderId:this.props.params.id
-    //         },
-    //         success:(res)=>{
-    //             console.log(res)
-    //         }
-    //     })
-    // }
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
-    }
-    timeonChange = (time) => {
-        console.log(time)
-    }
+
     showModal = () => {
         this.setState({
             visible: true
