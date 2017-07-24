@@ -83,7 +83,7 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<InventoryOrderInfo> findInfoByProviderId(int providerId) {
-		String hql = "from InventoryOrderInfo where provider.id = :id order by createDate desc";
+		String hql = "from InventoryOrderInfo where provider.id = :id";
 		return this.getSession().createQuery(hql).setInteger("id", providerId)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}

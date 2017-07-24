@@ -18,7 +18,6 @@ import com.geariot.platform.freelycar.entities.OtherExpendOrder;
 import com.geariot.platform.freelycar.entities.OtherExpendType;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
-import com.geariot.platform.freelycar.utils.DateJsonValueProcessor;
 import com.geariot.platform.freelycar.utils.IDGenerator;
 import com.geariot.platform.freelycar.utils.JsonResFactory;
 import com.geariot.platform.freelycar.utils.query.ChargeAndQueryCreator;
@@ -113,7 +112,7 @@ public class ChargeService {
 	}*/
 	
 	public String selectCharge(String typeId , Date startTime , Date endTime, int page, int number){
-		System.out.println(typeId);
+//		System.out.println(typeId);
 		String start = null;
 		String end = null;
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -136,8 +135,8 @@ public class ChargeService {
 			}
 		String andCondition = new ChargeAndQueryCreator(typeId, 
 				start, end).createStatement();
-		System.out.println(andCondition);
-		System.out.println("******************************");
+//		System.out.println(andCondition);
+//		System.out.println("******************************");
 		int from = (page - 1) * number;
 		List<OtherExpendOrder> list = chargeDao.getConditionQuery(andCondition, from, number);
 		if(list == null || list.isEmpty()){
