@@ -33,7 +33,7 @@ class Login extends React.Component {
             },
             success: (res) => {
                 console.log(res);
-                if (res.code == 0) {
+                if (res.code == 0||res.code==13) {
                     localStorage.setItem("username", values.userName);
                     console.log(localStorage.getItem("username"))
                     message.success('登录' + res.msg, 1);

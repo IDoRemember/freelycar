@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox,message } from 'antd';
+import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -16,12 +16,10 @@ class CostClose extends React.Component {
         super(props)
         this.state = {
             value: 1,
-            checkedCard: true,
-            disabledCard: true,
             feeDetail: [],
             payMethod: '0',//支付方式
-            cardCost:0,//卡抵扣的钱
-            allCost:0,//所有的钱
+            cardCost: 0,//卡抵扣的钱
+            allCost: 0,//所有的钱
 
 
         }
@@ -36,13 +34,6 @@ class CostClose extends React.Component {
         // this.setState({
         //     value: e.target.value,
         // });
-    }
-
-    onCardChange = (e) => {
-        this.setState({
-            checkedCard: !this.state.checkedCard,
-            disabledCard: this.state.checkedCard
-        });
     }
 
     componentDidMount() {
@@ -63,15 +54,15 @@ class CostClose extends React.Component {
 
 
                         //计算卡扣的钱
-                        if(item.cardName!=undefined){
-                            cardCost += item.payCardTimes* item.price;
+                        if (item.cardName != undefined) {
+                            cardCost += item.payCardTimes * item.price;
                         }
                     }
 
                     this.setState({
                         feeDetail: dataArr,
-                        cardCost : cardCost,
-                        allCost : res.data.totalPrice
+                        cardCost: cardCost,
+                        allCost: res.data.totalPrice
                     }, () => {
                         console.log(this.state.feeDetail);
                     });
@@ -82,16 +73,19 @@ class CostClose extends React.Component {
     }
 
     confirm = () => {
+        let obj = {};
+        obj.consumOrdersId = this.props.params.orderId;
+        obj.payMethod = this.state.payMethod;
+        obj.cost = this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost
         $.ajax({
             url: 'api/pay/consumpay',
             type: 'post',
-            data: { consumOrdersId: this.props.params.orderId ,payMethod:this.state.payMethod, cost:this.state.cardCost},
+            data: obj,
             dataType: 'json',
             success: (res) => {
-                console.log(res);
-                if(res.code=='0'){
+                if (res.code == '0') {
                     message.success('结算成功');
-                }else{
+                } else {
                     message.error('结算失败');
                 }
             }
@@ -121,22 +115,6 @@ class CostClose extends React.Component {
                 }
             },
             {
-                title: '配件小计', dataIndex: 'inventory', key: 'totalInv', render: (text, record, index) => {
-                    let sum = 0;
-                    for (let item of text) {
-                        sum += item.inventory.price;
-                    }
-
-                    return {
-                        children: <a>{sum}</a>,
-                        props: {
-                            rowSpan: index == 0 ? this.state.feeDetail.length : 0
-                        }
-                    }
-                }
-
-            },
-            {
                 title: '合计', dataIndex: 'totalPrice', key: 'total', render: (text, record, index) => {
                     return {
                         children: <a>{text}</a>,
@@ -148,35 +126,35 @@ class CostClose extends React.Component {
             },
         ];
 
-        
-        const cardInfo = this.state.feeDetail.map((item, index) => {
 
 
-            return item.cardName && <div key={index} style={{marginLeft:'20px'}}>
-                <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
+
+        const cardInfo = [];
+        this.state.feeDetail.map((item, index) => {
+            if (item.cardName) {
+                const item = <div key={index} style={{ marginLeft: '20px' }}>
+                    <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                        {item.cardId}
+                            {item.cardId}
+                        </div>
                     </div>
-                </div>
 
-                <div style={{ display: 'inline-block', width: '20%' }}>项目名称:
+                    <div style={{ display: 'inline-block', width: '20%' }}>项目名称:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                        {item.name}
+                            {item.name}
+                        </div>
                     </div>
-                </div>
 
 
-                <div style={{ display: 'inline-block' }}>卡扣次数：
+                    <div style={{ display: 'inline-block' }}>卡扣次数：
                             <div style={{ display: 'inline-block', margin: '10px' }}>
-                        {item.payCardTimes}
+                            {item.payCardTimes}
+                        </div>
                     </div>
                 </div>
-            </div>
-
-
+                cardInfo.push(item);
+            }
         })
-
-
 
         return (
             <div className="gutter-example">
@@ -191,41 +169,39 @@ class CostClose extends React.Component {
                                 <Table bordered className="accountTable" columns={columns} dataSource={this.state.feeDetail} />
                             </Card>
                             <Card title="支付方式" bordered={false} className="choosetype">
-                                <Checkbox
-                                    defaultChecked={cardInfo.length > 0 ? true : false}
-                                    checked={this.state.checkedCard}
-                                    onChange={() => this.onCardChange()}
-                                    style={{ width: '100%' }}
-                                    disabled={cardInfo.length > 0 ? false : true}
-                                >
-                                    <span>抵扣项目费用</span>
-                                </Checkbox>
 
+                                <span style={{ display: cardInfo.length > 0 ? 'block' : 'none' }} >抵扣项目费用</span>
                                 {cardInfo}
                                 <br />
-                                <div style={{ display: 'inline-block', width: '20%' }}>支付方式:
+                                <Row>
+                                    <Col xs={16} sm={16} md={10} lg={8} xl={6}>支付方式:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Select defaultValue="现金" style={{ width: 120 }} onChange={(e)=>{this.handleChange(e)}} >
-                                            <Option value="0">现金</Option>
-                                            <Option value="1">刷卡</Option>
-                                            <Option value="2">支付宝</Option>
-                                            <Option value="3">微信</Option>
-                                            <Option value="4">易付宝</Option>
-                                        </Select>
-                                    </div>
-                                </div>
+                                            <Select defaultValue="现金" style={{ width: 120 }} onChange={(e) => { this.handleChange(e) }} >
+                                                <Option value="0">现金</Option>
+                                                <Option value="1">刷卡</Option>
+                                                <Option value="2">支付宝</Option>
+                                                <Option value="3">微信</Option>
+                                                <Option value="4">易付宝</Option>
+                                            </Select>
+                                        </div>
+                                    </Col>
 
 
-                                <div style={{ display: 'inline-block', width: '20%' }}>支付金额:
+                                    <Col xs={16} sm={16} md={10} lg={8} xl={6}>支付金额:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                        <Input style={{ width: '120px' }} value={ this.state.checkedCard?(this.state.allCost-this.state.cardCost):this.state.allCost} disabled/>
-                                    </div>
-                                </div>
+                                            <Input style={{ width: '120px', color: 'red' }} value={this.state.checkedCard ? (this.state.allCost - this.state.cardCost) : this.state.allCost} disabled />
+                                        </div>
+                                    </Col>
+                                </Row>
 
-                                <div style={{ display: 'block', textAlign: 'center', marginTop: '20px' }}>
-                                    < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
-                                    < Button type="primary">挂单</Button>
-                                </div>
+                                <Row type="flex" justify="space-around" style={{ marginTop: '30px' }}>
+                                    <Col>
+                                        < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
+                                    </Col>
+                                    <Col >
+                                        < Button type="primary">挂单</Button>
+                                    </Col>
+                                </Row>
                             </Card>
                         </div>
                     </Col>

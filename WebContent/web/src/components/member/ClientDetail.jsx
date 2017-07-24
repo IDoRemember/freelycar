@@ -579,7 +579,7 @@ class ClientDetail extends React.Component {
                         <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.insuranceAmount} onChange={(e) => this.onValueChange('insuranceAmount', e.target.value)} />
                         </Col>
 
-                        <Col span={12}>保险截止日期:
+                        <Col span={12}>保险开始日期:
                             <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
                         </Col>
                     </Row>
@@ -587,14 +587,14 @@ class ClientDetail extends React.Component {
                         <Col span={12} >上次里程：
                             <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} />
                         </Col>
-                        <Col span={12}>保险开始日期:
+                        <Col span={12}>保险截止日期:
                             <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
                         </Col>
 
 
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >里程数：
+                        <Col span={12} >本次里程：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
                         </Col>
                         <Col span={12}>上牌时间:

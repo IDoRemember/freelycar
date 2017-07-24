@@ -148,7 +148,7 @@ class PutInStorage extends React.Component {
                 <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
 
                 <div style={{ display: this.state.display }}>
-                    <Table loading={this.state.data ? false : true} className="accountTable" dataSource={this.state.data} bordered>
+                    {this.state.data.length > 0 && <Table loading={this.state.data ? false : true} className="accountTable" dataSource={this.state.data} bordered>
                         <Col
                             title="序号"
                             dataIndex="index"
@@ -180,7 +180,7 @@ class PutInStorage extends React.Component {
                             key="price"
                             dataIndex="price"
                             render={(text, record, index) => {
-                                return <InputNumber  style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
+                                return <InputNumber style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
                             }}
                         />
                         <Col
@@ -196,7 +196,7 @@ class PutInStorage extends React.Component {
                             key="provider"
                             dataIndex="provider"
                             render={(text, record, index) => {
-                                return <span>{text.name}</span>
+                                return <span>{text?text.name:''}</span>
                             }}
                         />
                         <Col
@@ -204,7 +204,7 @@ class PutInStorage extends React.Component {
                             key="DeductionCardTime"
                             dataIndex="DeductionCardTime"
                             render={(text, record, index) => {
-                                return <span>{record.number ? record.number * record.price : record.price}</span>
+                                return <span>{record.number ? record.number * record.price : 0}</span>
                             }}
                         />
                         <Col
@@ -218,15 +218,15 @@ class PutInStorage extends React.Component {
                                 </span>
                             }}
                         />
-                    </Table>
-                    <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
+                    </Table>}
+                    {this.state.data.length > 0 && <div style={{ marginTop: '40px', borderTop: '1px solid #a1a1a1' }}>
                         <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
                             <Col span={12} >合计金额：<span>{totalPrice}</span>
                             </Col>
-                            <Col span={12} >
+                            {/* <Col span={12} >
                                 合计数量：
                             <span>{this.state.data.length}</span>
-                            </Col>
+                            </Col> */}
                         </Row>
                         <Row gutter={24} style={{ margin: "20px 0", fontSize: '18px' }}>
                             <Col span={12} >
@@ -237,12 +237,10 @@ class PutInStorage extends React.Component {
                                 <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
                             </Col>
                         </Row>
-                    </div>
-
+                    </div>}
                 </div>
-
             </Card>
-            <ProductReceipts></ProductReceipts>
+            <ProductReceipts totalPrice={this.state.totalPrice}></ProductReceipts>
         </div>
     }
 }

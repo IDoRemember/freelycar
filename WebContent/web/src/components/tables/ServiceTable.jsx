@@ -74,7 +74,7 @@ class ServiceTable extends React.Component {
         } else {
             for (let item of data) {
                 item['projectId'] = item['id']
-                item['payMethod'] = 0
+                item['payMethod'] = 1
                 delete item['id']
             }
             datalist.push(...data)
@@ -197,7 +197,6 @@ class ServiceTable extends React.Component {
                                     total = total + item.price + item.pricePerUnit * item.referWorkTime
                                 }
                             }
-
                             return <span>{total}</span>
                         }
                         return <span>{record.price + record.pricePerUnit * record.referWorkTime}</span>
@@ -239,12 +238,12 @@ class ServiceTable extends React.Component {
                                 style={{ width: '120px', maxHeight: '200px' }}
                                 placeholder="输入会员卡号"
                                 optionFilterProp="children"
-                                onChange={(value) => { console.log(value); this.setData('cardId', value, index) }}
+                                onChange={(value) => { this.setData('cardId', value, index) }}
                                 dropdownMatchSelectWidth={false}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
-                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to="/app/member/memberShip" style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={`/app/member/memberShip${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
                             </Select>
                             </div>
                         }

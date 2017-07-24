@@ -28,15 +28,14 @@ const EchartsPie = ({ proportionData }) => {
             left: 'left',
             data: title
         },
-
-        visualMap: {
-            show: false,
-            min: 80,
-            max: 600,
-            inRange: {
-                colorLightness: [0, 1]
-            }
-        },
+        // visualMap: {
+        //     show: false,
+        //     min: 80,
+        //     max: 600,
+        //     inRange: {
+        //         colorLightness: [0, 1],
+        //     }
+        // },
         series: [
             {
                 name: '项目类别',

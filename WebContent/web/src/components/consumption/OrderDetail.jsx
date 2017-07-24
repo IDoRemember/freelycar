@@ -234,7 +234,7 @@ class BeautyDetail extends React.Component {
                 let name = obj.clientName;
                 let phone = obj.phone;
                 let parkingLocation = obj.parkingLocation;
-                let deliverTime = obj.deliverTime;
+                let pickTime = obj.pickTime;
                 let finishTime = obj.finishTime;
                 let staffString = ''
                 // for (let i = 0; i < staffList.length; i++) {
@@ -288,8 +288,8 @@ class BeautyDetail extends React.Component {
                 }
 
                 for (let i = 0; i < objservice.length; i++) {
-                    var sumprice = sumprice + objservice[i].projectPrice;
-                    var fixsumprice = fixsumprice + (objservice[i].projectPrice+objservice[i].workingHour* objservice[i].workingPricePerHour);
+                    var sumprice = sumprice + objservice[i].price;
+                    var fixsumprice = fixsumprice + (objservice[i].price+objservice[i].referWorkTime* objservice[i].pricePerUnit);
                     console.log(fixsumprice)
                     let staffList = objservice[i].staffs;
                     let staffString = ''
@@ -300,8 +300,8 @@ class BeautyDetail extends React.Component {
                     let serviceItem = {
                         key: objservice[i].id,
                         id: objservice[i].id,
-                        project: objservice[i].projectName,
-                        price: objservice[i].projectPrice,
+                        project: objservice[i].name,
+                        price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
                         CardNum: objservice[i].cardId,
                         DeductionCardTime: objservice[i].payCardTimes,
@@ -310,13 +310,13 @@ class BeautyDetail extends React.Component {
                     let fixItem = {
                         key: objservice[i].id,
                         id: objservice[i].id,
-                        project: objservice[i].projectName,
+                        project: objservice[i].name,
                         number: '1',
-                        price: objservice[i].projectPrice,
+                        price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
-                        worktime: objservice[i].workingHour,
-                        singlePrice: objservice[i].workingPricePerHour,
-                        singleSummation:objservice[i].projectPrice+objservice[i].workingHour* objservice[i].workingPricePerHour,
+                        worktime: objservice[i].referWorkTime,
+                        singlePrice: objservice[i].pricePerUnit,
+                        singleSummation:objservice[i].price+objservice[i].referWorkTime* objservice[i].pricePerUnit,
                         CardNum: objservice[i].cardId,
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
@@ -350,7 +350,7 @@ class BeautyDetail extends React.Component {
                             // drivingLicense: '',
 
                             parkingLocation: parkingLocation,
-                            deliverTime: deliverTime,
+                            pickTime: pickTime,
                             finishTime: finishTime,
                             staffs: staffString,
                         },

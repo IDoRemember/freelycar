@@ -155,9 +155,9 @@ class AccountManage extends React.Component {
             success: (result) => {
                 if (result.code == "0") {
                     let dataSource = [...this.state.data];
-                    for (let id of idArray) {
+                    for (let account of idArray) {
                         dataSource = dataSource.filter((obj) => {
-                            return id !== obj.id;
+                            return account !== obj.account;
                         });
                     }
                     console.log(dataSource)
@@ -340,7 +340,7 @@ class AccountManage extends React.Component {
                     return <span>
                         <Switch style={{ marginRight: '10px' }} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
                         <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
-                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
+                        <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.account])}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
                     </span>

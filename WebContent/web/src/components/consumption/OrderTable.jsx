@@ -11,11 +11,15 @@ class OrderTable extends React.Component {
             option: [],
             finishModal: false,
             reverseModal: false,
-            consumOrderId: null,
+            consumOrder: {
+                consumOrderId: null,
+                index: null
+            },
             reverseCar: {
                 finishTime: '',
                 comment: ''
             },
+            data: this.props.data,
             finishWork: {
                 finishTime: '',
                 comment: ''
@@ -25,8 +29,14 @@ class OrderTable extends React.Component {
 
     componentDidMount() {
         this.gitStaffList(1, 10)
+        console.log(this.state.data)
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({
+            data: newProps.data
+        })
+    }
     gitStaffList = (page, number) => {
         $.ajax({
             url: '/api/staff/list',
@@ -58,13 +68,19 @@ class OrderTable extends React.Component {
             type: 'post',
             dataType: 'json',
             data: {
-                consumOrderId: this.state.consumOrderId,
+                consumOrderId: this.state.consumOrder.consumOrderId,
                 date: new Date(this.state.finishWork.finishTime),
                 comment: this.state.finishWork.comment
             },
             success: (res) => {
                 if (res.code == '0') {
-                    console.log(res)
+                    let dataSource = this.state.data
+                    res.data.key = res.data.id
+                    dataSource.splice(this.state.consumOrder.index, 1, res.data)
+                    console.log(dataSource, this.state.consumOrder.index)
+                    this.setState({
+                        data: dataSource
+                    })
                 }
             }
         })
@@ -89,19 +105,26 @@ class OrderTable extends React.Component {
     }
 
     reverseCar = () => {
-
         this.setState({ reverseModal: false })
         $.ajax({
             url: '/api/order/deliver',
             type: 'post',
             data: {
-                consumOrderId: this.state.consumOrderId,
+                consumOrderId: this.state.consumOrder.consumOrderId,
                 date: this.state.reverseCar.finishTime,
                 comment: this.state.reverseCar.comment
             },
             dataType: 'json',
             success: (res) => {
-                console.log(res);
+                if (res.code == '0') {
+                    let dataSource = this.state.data
+                    res.data.key = res.data.id
+                    dataSource.splice(this.state.consumOrder.index, 1, res.data)
+                    console.log(dataSource, this.state.consumOrder.index)
+                    this.setState({
+                        data: dataSource
+                    })
+                }
             }
         })
     }
@@ -146,18 +169,18 @@ class OrderTable extends React.Component {
                     let innertext = ''
                     if (record.payState == 0) {
                         switch (record.state) {
-                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrderId: record.id })}>完工</a>;
+                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
                                 break;
-                            case 1: innertext = <span><Link to={`/app/consumption/accountingcenter/${record.id}`}  style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a></span>;
+                            case 1: innertext = <span><Link to={`/app/consumption/accountingcenter/${record.id}`} style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a></span>;
                                 break;
                             case 2: innertext = <Link to={`/app/consumption/accountingcenter/${record.id}`} >结算</Link>;
                                 break;
                         }
                     } else {
                         switch (record.state) {
-                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true })}>完工</a>;
+                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
                                 break;
-                            case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true })}>交车</a>;
+                            case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a>;
                                 break;
                             case 2: innertext = <Link to="" >
                                 <span>查看</span>
@@ -238,7 +261,7 @@ class OrderTable extends React.Component {
                 <Row gutter={8}>
                     <div className="gutter-box">
                         <Card bordered>
-                            <Table columns={columns} dataSource={this.props.data} ></Table>
+                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) =>this.props.onChange(pagination)} dataSource={this.state.data} ></Table>
                         </Card>
                     </div>
                 </Row>

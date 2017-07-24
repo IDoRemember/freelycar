@@ -13,6 +13,9 @@ class OrderManage extends React.Component {
         this.state = {
             option: [],
             type: '美容',
+            pagination: {
+
+            },
             data: [],
             query: {
                 id: null,
@@ -31,27 +34,31 @@ class OrderManage extends React.Component {
         })
     }
     componentDidMount() {
-        this.getList()
+        this.getList(1, 10)
     }
 
-    getList = () => {
+    getList = (page, number) => {
         $.ajax({
             url: 'api/order/list',
             // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
-                page: 1,
-                number: 10
+                page: page,
+                number: number
             },
             success: (res) => {
+                console.log(res)
                 if (res.code == '0') {
+
                     let dataArray = res.data
                     for (let item of dataArray) {
                         item.key = item.id
                     }
                     this.setState({
-                        data: dataArray
+                        data: dataArray,
+                        pagination: { total: res.realSize },
                     })
+
                 }
             }
         })
@@ -61,6 +68,16 @@ class OrderManage extends React.Component {
         this.setState({
             query: update(this.state.query, { [key]: { $set: data } })
         })
+    }
+
+    handleTableChange = (pagination) => {
+        const pager = { ...this.state.pagination };
+        pager.current = pagination.current;
+        console.log(pagination)
+        this.setState({
+            pagination: pager
+        })
+        this.getList(pagination.current, 10)
     }
 
     startClear = () => {
@@ -159,7 +176,7 @@ class OrderManage extends React.Component {
                         <Select style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
                                 <Option value="0">挂单中</Option>
                                 <Option value=" 1">已结算</Option>
-                        </Select>
+                            </Select>
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: "10px" }} id="area">
@@ -170,7 +187,7 @@ class OrderManage extends React.Component {
                                 <Option value="1">接车时间</Option>
                                 <Option value="2">交车时间</Option>
                                 <Option value="3">完工时间</Option>
-                        </Select>
+                            </Select>
                         </Col>
                         <Col span={8} id="timepicker">
                             <div>
@@ -186,7 +203,7 @@ class OrderManage extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <OrderTable data={this.state.data} />
+                <OrderTable pagination={this.state.pagination} onChange={this.handleTableChange} data={this.state.data} />
             </div>
         )
     }
