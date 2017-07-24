@@ -297,6 +297,8 @@ class BeautyOrder extends React.Component {
             this.loadData(p.current, 10, this.state.inventoryName, this.state.inventoryTypeId);
         } else if (tab == 'tab2') {
             this.loadPjData(p.current, 10, this.state.inventoryName);
+        } else if (tab == 'tab3') {
+            this.loadPjBrandData(p.current, 10, this.state.inventoryBrandName);
         }
     }
 
@@ -909,6 +911,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab3', pagination)}
                                         />
                                     </Col>
                                 </Row>
