@@ -214,7 +214,7 @@ render() {
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '12px' }}>
                     <Col span={8} offset={4} id="birthday"><span style={{ marginRight: '15px' }}>生日：</span>
-                        <DatePicker onChange={this.birthdayonChange}
+                        <DatePicker onChange={this.birthdayonChange} style={{width:"150px"}}
                             getCalendarContainer={() => document.getElementById('birthday')}
                         />
                     </Col>
@@ -236,9 +236,20 @@ render() {
                     <Col span={8} offset={4}><span style={{ color: "red" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                     </Col>
-                    <Col span={8} id="car-brand"><span style={{ color: "red" }}>*</span>车辆品牌:
+                      <Col span={8}>是否新车：
+                            <div style={{ display: 'inline-block', marginLeft: '25px' }}>
+                            <RadioGroup onChange={this.isnewcar} value={this.state.carvalue}>
+                                <Radio value={'true'}>是</Radio>
+                                <Radio value={'false'}>否</Radio>
+                            </RadioGroup>
+                        </div>
+                    </Col>
+                    
+                </Row>
+                <Row gutter={16} style={{ marginBottom: '15px' }}>
+                  <Col span={8}  offset={4} id="car-brand"><span style={{ color: "red" }}>*</span>车辆品牌:
                             <Select showSearch
-                            style={{ width: '140px', marginLeft: '35px' }}
+                            style={{ width: '150px', marginLeft: '10px' }}
                             placeholder="请选择车辆品牌"
                             optionFilterProp="children"
                             onChange={this.handleChange}
@@ -247,16 +258,6 @@ render() {
                         >
                             {brandOptions}
                         </Select>
-                    </Col>
-                </Row>
-                <Row gutter={16} style={{ marginBottom: '15px' }}>
-                    <Col span={8} offset={4}>是否新车：
-                            <div style={{ display: 'inline-block', marginLeft: '5px' }}>
-                            <RadioGroup onChange={this.isnewcar} value={this.state.carvalue}>
-                                <Radio value={'true'}>是</Radio>
-                                <Radio value={'false'}>否</Radio>
-                            </RadioGroup>
-                        </div>
                     </Col>
                     <Col span={8} id='startTime'>保险开始日期:
                             <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }}
@@ -293,8 +294,8 @@ render() {
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
-                    <Col span={8} offset={4}>里程数：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
+                    <Col span={8} offset={4}>本次里程：
+                            <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
                     </Col>
                     <Col span={8} id="licTime">上牌时间:
                             <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px' }}

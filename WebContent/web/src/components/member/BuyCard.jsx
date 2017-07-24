@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal,message} from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, Radio, Modal, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CardModal from '../productManage/CardModal.jsx';
 import Regclient from './Regclient.jsx'
@@ -24,7 +24,7 @@ class BuyCard extends React.Component {
             vaild: '',
             typeId: '',
             haveClient: false,
-            cardtype:'',
+            cardtype: '',
             type: [],
             price: '',
             orderMaker: '',
@@ -80,9 +80,9 @@ class BuyCard extends React.Component {
             success: (res) => {
                 console.log(res.data)
                 if (res.code == '0') {
-                     console.log(res.data);
+                    console.log(res.data);
                     this.setState({
-                       
+
                         cardList: res.data,
                     })
                 }
@@ -105,7 +105,7 @@ class BuyCard extends React.Component {
             }
         })
     }
-  
+
     showModal = () => {
         this.setState({
             visible: true
@@ -131,11 +131,11 @@ class BuyCard extends React.Component {
             success: (res) => {
                 console.log(res.data[0]);
                 console.log(res.data[0].validTime);
-                let cardtype="";
-                if( res.data.type=0){
-                    cardtype="次卡";
-                }else if(res.data.type=1){
-                    cardtype="组合次卡";
+                let cardtype = "";
+                if (res.data.type == 0) {
+                    cardtype = "次卡";
+                } else if (res.data.type == 1) {
+                    cardtype = "组合卡";
                 }
 
                 this.setState({
@@ -150,38 +150,44 @@ class BuyCard extends React.Component {
 
     SaveClient = () => {
         let clientInfos = this.state.clientInfo;
-        $.ajax({
-            type: 'post',
-            url: '/api/client/add',
-            datatype: 'json',
-            contentType: 'application/json;charset=utf-8',
-            data: JSON.stringify({
-                name: clientInfos.name,
-                phone: clientInfos.phone,
-                gender: clientInfos.gender,
-                recommendName: clientInfos.recommendName,
-                cars: [{
-                    //select选择
-                    type: {
-                        id: this.state.carId,
+        if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) 
+        {
+            $.ajax({
+                type: 'post',
+                url: '/api/client/add',
+                datatype: 'json',
+                contentType: 'application/json;charset=utf-8',
+                data: JSON.stringify({
+                    name: clientInfos.name,
+                    phone: clientInfos.phone,
+                    gender: clientInfos.gender,
+                    recommendName: clientInfos.recommendName,
+                    cars: [{
+                        //select选择
+                        type: {
+                            id: this.state.carId,
 
-                    },
-                    licensePlate: clientInfos.licensePlate,
-                }]
-            }),
-            success: (res) => {
-                console.log(res);
-                if (res.code == "0") {
-                    this.setState({
-                        clientId: res.data.id,
-                        haveClient: true
-                    });
-                    console.log(this.state.clientId);
-                    console.log(this.state.haveClient);
-                    
+                        },
+                        licensePlate: clientInfos.licensePlate,
+                    }]
+                }),
+                success: (res) => {
+                    console.log(res);
+                    if (res.code == "0") {
+                        this.setState({
+                            clientId: res.data.id,
+                            haveClient: true
+                        });
+                        console.log(this.state.clientId);
+                        console.log(this.state.haveClient);
+
+                    }
                 }
-            }
-        })
+            })
+        }else{
+            message.error("请把必填信息补充完整！")
+        }
+
     }
     genderonChange = (e) => {
         console.log(e.target.value);
@@ -197,8 +203,8 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-        if (this.state.haveClient == true){
-             $.ajax({
+        if (this.state.haveClient == true) {
+            $.ajax({
                 url: 'api/pay/buycard',
                 type: 'POST',
                 contentType: "application/json;charset=utf-8",
@@ -213,14 +219,14 @@ class BuyCard extends React.Component {
                         payMethod: this.state.payMethod,
                     }
                 }),
-                success:(res)=>{
+                success: (res) => {
                     message.success('保存成功!');
-                     hashHistory.push('/app/member/customer')
-                    
+                    hashHistory.push('/app/member/customer')
+
                 }
-            }) 
-        }else if(this.props.params.id){
-             $.ajax({
+            })
+        } else if (this.props.params.id) {
+            $.ajax({
                 url: 'api/pay/buycard',
                 type: 'POST',
                 contentType: "application/json;charset=utf-8",
@@ -235,15 +241,15 @@ class BuyCard extends React.Component {
                         payMethod: this.state.payMethod,
                     }
                 }),
-                success:(res)=>{
+                success: (res) => {
                     message.success('保存成功!');
-                     hashHistory.push('/app/member/customer')
-                    
+                    hashHistory.push('/app/member/customer')
+
                 }
-            }) 
-        }else{
+            })
+        } else {
             message.error('请先保存客户', 1.5);
-           
+
         }
     }
 
@@ -291,8 +297,8 @@ class BuyCard extends React.Component {
         this.setState({
             visible: false
         });
-         this.getService();
-       //  message.success("保存成功",1)
+        this.getService();
+        //  message.success("保存成功",1)
     }
     handleCancel = () => {
         console.log('sss');
@@ -301,7 +307,7 @@ class BuyCard extends React.Component {
         });
     }
     render() {
-        const  brandOptions = this.state.option.map((item, index) => {
+        const brandOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         }), CardOptions = this.state.cardList.map((item, index) => {
             return <Option key={index} value={item.name}>{item.name}</Option>
@@ -317,7 +323,7 @@ class BuyCard extends React.Component {
                 <BreadcrumbCustom first="会员管理" second="会员办理" />
                 {!this.props.params.id && <Card title='客户信息'  >
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>客户姓名：
+                        <Col span={8} offset={4}><span style={{ color: "red" }}>*</span>客户姓名：
                             <Input style={{ width: '140px' }} value={this.state.clientInfo.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
                         </Col>
                         <Col span={8}>性别：
@@ -330,15 +336,15 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4}>手机号:
+                        <Col span={8} offset={4}><span style={{ color: "red" }}>*</span>手机号:
                             <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
                         </Col>
-                        <Col span={8} >车牌号：
+                        <Col span={8} ><span style={{ color: "red" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4} id="car-brand">车辆品牌:
+                        <Col span={8} offset={4} id="car-brand"><span style={{ color: "red" }}>*</span>车辆品牌:
                             <Select showSearch
                                 style={{ width: '140px', marginLeft: '10px', maxHeight: '150px' }}
                                 placeholder="请选择车辆品牌"

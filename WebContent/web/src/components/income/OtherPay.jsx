@@ -35,7 +35,7 @@ class OtherPay extends React.Component {
             queryDate: [],
             queryType: '',
             form: {
-                dateString: '',
+                dateString: null,
                 payType: '',
                 amount: null,
                 comment: ''
@@ -86,6 +86,7 @@ class OtherPay extends React.Component {
                     let data = result.data
                     for (let item of data) {
                         item['key'] = item.id
+                        item.expendDate = item.expendDate.slice(0,10)
                     }
                     this.setState({
                         data: data,
@@ -105,6 +106,7 @@ class OtherPay extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ data: dataSource });
     }
+
     deleteItems = (idArray) => {
         $.ajax({
             type: 'post',
@@ -136,11 +138,13 @@ class OtherPay extends React.Component {
             type: value
         })
     }
+
     showModal = () => {
         this.setState({
             visible: true
         })
     }
+
     handleOk = () => {
         this.setState({
             visible: false
@@ -169,6 +173,7 @@ class OtherPay extends React.Component {
         })
         this.getList(pagination.current, 10)
     }
+
     addPay = () => {
         this.setState({
             view: true
@@ -184,10 +189,10 @@ class OtherPay extends React.Component {
             contentType: 'application/json;charset=utf-8',
             dataType: 'json',
             data: JSON.stringify({
-                type: { id: this.state.form.payType },
+                typeId:this.state.form.payType ,
                 amount: this.state.form.amount,
                 comment: this.state.form.comment,
-                expendDate: new Date(this.state.form.dateString),
+                expendDate: this.state.form.dateString?new Date(this.state.form.dateString):null,
             }),
             traditional: true,
             success: (result) => {
@@ -195,11 +200,12 @@ class OtherPay extends React.Component {
                     console.log(result.data)
                     let data = result.data
                     data['key'] = data.id
-                    data.orderDate = this.state.form.dateString
+                    data.expendDate = data.expendDate.slice(0,10)
                     this.setState({
                         data: update(this.state.data, { $push: [data] }),
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
                         form: {
+                            dateString:null,
                             payType: '',
                             amount: null,
                             comment: ''
@@ -249,8 +255,8 @@ class OtherPay extends React.Component {
             key: 'id'
         }, {
             title: '单据日期',
-            dataIndex: 'orderDate',
-            key: 'orderDate'
+            dataIndex: 'expendDate',
+            key: 'expendDate'
         }, {
             title: '支出类别',
             dataIndex: 'typeName',
@@ -323,7 +329,7 @@ class OtherPay extends React.Component {
                                     单据日期：
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
-                                    <DatePicker format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
+                                    <DatePicker value={this.state.form.dateString?moment(this.state.form.dateString).startOf('day'):null} format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }} id="area">
