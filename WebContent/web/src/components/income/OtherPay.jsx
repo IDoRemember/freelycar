@@ -106,6 +106,7 @@ class OtherPay extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ data: dataSource });
     }
+
     deleteItems = (idArray) => {
         $.ajax({
             type: 'post',
@@ -137,11 +138,13 @@ class OtherPay extends React.Component {
             type: value
         })
     }
+
     showModal = () => {
         this.setState({
             visible: true
         })
     }
+
     handleOk = () => {
         this.setState({
             visible: false
@@ -170,6 +173,7 @@ class OtherPay extends React.Component {
         })
         this.getList(pagination.current, 10)
     }
+
     addPay = () => {
         this.setState({
             view: true
@@ -188,7 +192,7 @@ class OtherPay extends React.Component {
                 typeId:this.state.form.payType ,
                 amount: this.state.form.amount,
                 comment: this.state.form.comment,
-                expendDate: new Date(this.state.form.dateString),
+                expendDate: this.state.form.dateString?new Date(this.state.form.dateString):null,
             }),
             traditional: true,
             success: (result) => {

@@ -25,7 +25,7 @@ class StaffManage extends React.Component {
             staffName: '',
             modifyIndex: null,
             positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收银员', '会计'],
-            levelOptions: ['', '初级', '中级', '高级'],
+            levelOptions: ['  ', '初级', '中级', '高级'],
             modalstate: 'add',
             form: {
                 id: '',
@@ -64,6 +64,8 @@ class StaffManage extends React.Component {
                         data: datalist,
                         pagination: { total: result.realSize }
                     })
+                } else {
+                    console.log(result)
                 }
             }
         })
