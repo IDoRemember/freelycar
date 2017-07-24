@@ -63,8 +63,10 @@ public class PayService {
 			cardInfo.setProject(info.getProject());
 			cardInfo.setRemaining(info.getTimes());
 			cardInfos.add(cardInfo);
+			log.debug("***************************"+cardInfo.toString());
 		}
 		card.setProjectInfos(cardInfos);
+		log.debug("***************************"+card.toString());
 		//将新增卡增加到客户卡列表中
 		Set<Card> cards = client.getCards();
 		if(cards == null){

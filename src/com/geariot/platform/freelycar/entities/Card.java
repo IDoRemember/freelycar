@@ -73,4 +73,10 @@ public class Card {
 	public void setService(Service service) {
 		this.service = service;
 	}
+	@Override
+	public String toString() {
+		return "Card [id=" + id + ", service=" + service + ", payDate=" + payDate + ", expirationDate=" + expirationDate
+				+ ", payMethod=" + payMethod + ", projectInfos=" + projectInfos + ", orderMaker=" + orderMaker + "]";
+	}
+	
 }

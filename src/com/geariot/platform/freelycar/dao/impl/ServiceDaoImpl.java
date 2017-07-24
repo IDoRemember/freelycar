@@ -89,7 +89,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	@Override
 	public long countProjectByIds(List<Integer> ids) {
-		String hql = "select count(*) from ServiceProjectInfo where project.id in :list and deleted = 0";
+		String hql = "select count(*) from ServiceProjectInfo where project.id in :list";
 		return (long) this.getSession().createQuery(hql).setParameterList("list", ids)
 				.setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}

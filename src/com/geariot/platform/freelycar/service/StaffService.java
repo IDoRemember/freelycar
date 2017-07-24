@@ -57,8 +57,11 @@ public class StaffService {
 	}
 	
 	public String deleteStaff(Integer... staffIds) {
+		System.out.println(staffIds);
 		String curUser = (String) SecurityUtils.getSubject().getPrincipal();
 		Admin curAdmin = adminDao.findAdminByAccount(curUser);
+		System.out.println(curUser);
+		System.out.println(curAdmin);
 		boolean delSelf = false;
 		for (int staffId : staffIds) {
 			//如果要删除的员工是当前登陆账号所绑定的员工，则不能删除
