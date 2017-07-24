@@ -171,7 +171,7 @@ class ProgramSearch extends React.Component {
         >
             <Row gutter={24} style={{ marginBottom: '10px' }}>
                 <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
-                    按项目名称进行搜索
+                    按项目名称进行搜索：
                     <Input
                         placeholder="按项目名称进行搜索"
                         style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
@@ -181,7 +181,7 @@ class ProgramSearch extends React.Component {
                     />
                 </Col>
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    按项目类别进行搜索
+                    按项目类别进行搜索：
                      <Select
                         showSearch
                         style={{ width: '120px', marginLeft: '20px' }}
@@ -197,7 +197,7 @@ class ProgramSearch extends React.Component {
                     </Select>
                 </Col>
                 <Col span={2}>
-                    <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
+                    <Button type="primary" onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
                 </Col>
             </Row>
             <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />

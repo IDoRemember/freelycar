@@ -31,12 +31,13 @@ class HeaderCustom extends Component {
             type: "GET",
             data: {
                 account: localStorage.getItem('username'),
-            
+
             },
             success: (res) => {
                 this.setState({
                     user: res.data.name
                 })
+                localStorage.setItem('userId', res.data.id)
             }
         })
     }
@@ -70,7 +71,7 @@ class HeaderCustom extends Component {
                     type={this.state.collapsed ? 'menu-unfold' : 'menu-fold'}
                     onClick={this.props.toggle}
                 />
-                 <span style={{float:"right",marginRight:"40px",fontWeight:"600",fontSize:'16px'}}>{this.state.user}</span>
+                <span style={{ float: "right", marginRight: "40px", fontWeight: "600", fontSize: '16px' }}>{this.state.user}</span>
                 <Menu
                     mode="horizontal"
                     style={{ lineHeight: '64px', float: 'right' }}
@@ -81,7 +82,7 @@ class HeaderCustom extends Component {
                         <img src={avater} alt="头像" />
                         <i className="on bottom b-white" /></span>}>
                         <MenuItemGroup title="用户中心">
-                          
+
                             <Menu.Item key="1" >退出登录</Menu.Item>
                         </MenuItemGroup>
                         {/* <MenuItemGroup title="设置中心">
@@ -90,7 +91,7 @@ class HeaderCustom extends Component {
                         </MenuItemGroup> */}
                     </SubMenu>
                 </Menu>
-               
+
                 <style>{`
                     .ant-menu-submenu-horizontal > .ant-menu {
                         width: 120px;

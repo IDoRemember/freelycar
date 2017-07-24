@@ -191,7 +191,7 @@ class PartsSearch extends React.Component {
         >
             <Row gutter={24} style={{ marginBottom: '10px' }} id="parts-area">
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    按配件名称进行搜索
+                    按配件名称进行搜索：
                     <Input
                         style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
                         onChange={e => this.setSearchName(e.target.value)}
@@ -199,7 +199,7 @@ class PartsSearch extends React.Component {
                     />
                 </Col>
                 <Col span={10} style={{ verticalAlign: 'middle' }} >
-                    按配件类别进行搜索
+                    按配件类别进行搜索：
                     <Select
                         showSearch
                         style={{ width: '120px', marginLeft: '20px' }}
@@ -212,7 +212,7 @@ class PartsSearch extends React.Component {
                     </Select>
                 </Col>
                 <Col span={2}>
-                    <Button onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
+                    <Button type="primary" onClick={() => { this.getList(this.state.partName, this.state.type, 1, 10) }}>查询</Button>
                 </Col>
             </Row>
             <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={columns} dataSource={this.state.data} rowSelection={rowSelection} />
