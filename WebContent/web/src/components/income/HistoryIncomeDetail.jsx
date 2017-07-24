@@ -24,8 +24,8 @@ class HistoryIncomeDetail extends React.Component {
                 month: new Date(month),
                 income: 1,
                 expend: 0,
-                page: 1,
-                number: 10
+                page: page,
+                number: number
             },
             success: (result) => {
                 if (result.code == "0") {
@@ -80,11 +80,8 @@ class HistoryIncomeDetail extends React.Component {
             key: 'payDate'
         }, {
             title: '项目',
-            dataIndex: 'type',
-            key: 'type',
-            render: (text, record, index) => {
-                return <span>{text == 1 ? '消费' : '办卡'}</span>
-            }
+            dataIndex: 'programName',
+            key: 'programName'
         }, {
             title: '金额',
             dataIndex: 'amount',
