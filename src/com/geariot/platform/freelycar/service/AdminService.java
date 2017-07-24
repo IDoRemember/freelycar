@@ -77,24 +77,28 @@ public class AdminService {
             	/*ue.printStackTrace();
             	System.out.println(ue.getMessage());*/
                 obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_ERROR);
+                return obj.toString();
             } catch (IncorrectCredentialsException ie) {
             	/*ie.printStackTrace();
             	System.out.println(ie.getMessage());*/
             	obj = JsonResFactory.buildOrg(RESCODE.PSW_ERROR);
+            	return obj.toString();
             } catch (LockedAccountException le) {
             	/*le.printStackTrace();
             	System.out.println(le.getMessage());*/
             	obj = JsonResFactory.buildOrg(RESCODE.ACCOUNT_LOCKED_ERROR);
+            	return obj.toString();
             } catch (AuthenticationException ae) {
             	/*ae.printStackTrace();
             	System.out.println(ae.getMessage());*/
             	obj = JsonResFactory.buildOrg(RESCODE.PERMISSION_ERROR);
+            	return obj.toString();
             }
 		}
 		else {
 			obj = JsonResFactory.buildOrg(RESCODE.ALREADY_LOGIN);
 		}
-		log.debug("账号：" + account + " 登陆结果：" + obj);
+		log.debug("账号：" + account + " 登录结果：" + obj);
 		curUser = SecurityUtils.getSubject();
 		Session session = curUser.getSession(false);
 		log.debug("-----session id:" + session.getId());
@@ -104,6 +108,7 @@ public class AdminService {
 		}
 //		session.setTimeout(60000L);
 		return obj.toString();
+		
 	}
 	
 	public String logout() {
@@ -151,7 +156,7 @@ public class AdminService {
 		for(String account : accounts){
 			log.debug("删除账号：" + account + ", 将inventoryOrder、card、consumOrder中相关制单人设为空");
 			if(StringUtils.equalsIgnoreCase(curUser, account)){
-				log.debug("尝试删除当前登陆账号，删除失败");
+				log.debug("尝试删除当前登录账号，删除失败");
 				delSelf = true;
 			}
 			else{
@@ -218,7 +223,7 @@ public class AdminService {
 	public String disable(String account) {
 		Admin admin = adminDao.findAdminByAccount(account);
 		Subject curUser = SecurityUtils.getSubject();
-		log.debug("当前登陆账号：" + (String) curUser.getPrincipal() + " 尝试禁用账号：" + account);
+		log.debug("当前登录账号：" + (String) curUser.getPrincipal() + " 尝试禁用账号：" + account);
 		if(admin == null){
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}

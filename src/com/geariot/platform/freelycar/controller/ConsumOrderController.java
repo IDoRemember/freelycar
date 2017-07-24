@@ -29,7 +29,7 @@ public class ConsumOrderController {
 			return this.orderService.book(consumOrder);
 		} catch (ForRollbackException e) {
 			org.json.JSONObject obj = new org.json.JSONObject();
-			obj.put(Constants.RESPONSE_DATA_KEY, e.getErrorCode());
+			obj.put(Constants.RESPONSE_CODE_KEY, e.getErrorCode());
 			obj.put(Constants.RESPONSE_MSG_KEY, e.getMessage());
 			return obj.toString();
 		}
