@@ -28,9 +28,13 @@ const columns = [{
     dataIndex: 'category',
     key: 'category'
 }, {
-    title: '规格属性',
-    dataIndex: 'attribute',
-    key: 'attribute'
+    title: '属性',
+    dataIndex: 'property',
+    key: 'property'
+}, {
+    title: '规格',
+    dataIndex: 'standard',
+    key: 'standard'
 }, {
     title: '配件价格',
     dataIndex: 'price',
@@ -95,6 +99,7 @@ class PartsSearch extends React.Component {
                 number: pageSize
             },
             success: (result) => {
+                console.log(result);
                 if (result.code == "0") {
                     this.setState({ loading: false })
                     let datalist = []
@@ -178,7 +183,7 @@ class PartsSearch extends React.Component {
         };
         return <Modal
             visible={this.state.visible}
-            width={800}
+            width='80%'
             title="配件查询"
             onOk={() => this.props.handleOk(this.state.selectedRows)}
             onCancel={() => this.props.handleCancel()}

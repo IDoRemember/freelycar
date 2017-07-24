@@ -180,6 +180,8 @@ public class InventoryService {
 	public String addInventory(Inventory inventory) {
 		inventory.setCreateDate(new Date());
 		inventory.setId(IDGenerator.generate(IDGenerator.INV_ID));
+		inventory.setTypeName(inventoryTypeDao.findById(inventory.getTypeId()).getTypeName());
+		inventory.setBrandName(inventoryBrandDao.findById(inventory.getBrandId()).getName());
 		this.inventoryDao.add(inventory);
 		JsonConfig config = JsonResFactory.dateConfig();
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(inventory, config)).toString();
