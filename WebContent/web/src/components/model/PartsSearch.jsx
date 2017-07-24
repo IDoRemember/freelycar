@@ -136,13 +136,16 @@ class PartsSearch extends React.Component {
     }
 
     handleTableChange = (pagination) => {
+        console.log(pagination)
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
             pagination: pager
         })
-        if (this.state.type)
-            this.getList(this.state.partName, this.state.type, pagination.current, 10)
+
+        this.getList(this.state.partName, this.state.type, pagination.current, 10)
+
+
     }
 
     setSearchName = (value) => {
