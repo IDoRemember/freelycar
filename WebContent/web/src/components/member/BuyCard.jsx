@@ -130,14 +130,14 @@ class BuyCard extends React.Component {
             },
             success: (res) => {
                 console.log(res.data[0]);
-                console.log(res.data[0].validTime);
+                console.log(res.data[0].type);
                 let cardtype = "";
-                if (res.data.type == 0) {
+                if (res.data[0].type == 0) {
                     cardtype = "次卡";
-                } else if (res.data.type == 1) {
+                } else if (res.data[0].type == 1) {
                     cardtype = "组合卡";
                 }
-
+                 console.log(cardtype);
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
@@ -172,15 +172,16 @@ class BuyCard extends React.Component {
                     }]
                 }),
                 success: (res) => {
+
                     console.log(res);
                     if (res.code == "0") {
                         this.setState({
                             clientId: res.data.id,
                             haveClient: true
                         });
-                        console.log(this.state.clientId);
-                        console.log(this.state.haveClient);
-
+                        message.success("保存成功")
+                    }else{
+                        message.error(res.msg)
                     }
                 }
             })

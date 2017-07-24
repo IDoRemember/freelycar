@@ -51,9 +51,7 @@ class StaffManage extends React.Component {
                 number: number
             },
             success: (result) => {
-                this.setState({
-                    loading: false
-                })
+          
                 if (result.code == "0") {
                     let datalist = result.data
                     for (let item of datalist) {
@@ -62,10 +60,15 @@ class StaffManage extends React.Component {
 
                     this.setState({
                         data: datalist,
+                          loading: false,
                         pagination: { total: result.realSize }
                     })
                 } else {
-                    console.log(result)
+                    this.setState({
+                        data: [],
+                        loading:false
+                    })
+                    message.error(result.msg)
                 }
             }
         })
@@ -166,7 +169,7 @@ class StaffManage extends React.Component {
                         message.success('增加成功', 5)
                     }
                 } else {
-                    message.error(result.message, 5);
+                    message.error(result.msg, 5);
                 }
             }
         })
