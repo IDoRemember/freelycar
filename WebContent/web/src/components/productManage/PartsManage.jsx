@@ -292,6 +292,15 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    handlePageChange = (tab, p) => {
+        if (tab == 'tab1') {
+            this.loadData(p.current, 10, this.state.inventoryName, this.state.inventoryTypeId);
+        } else if (tab == 'tab2') {
+            this.loadPjData(p.current, 10, this.state.inventoryName);
+        } else if (tab == 'tab3') {
+            this.loadPjBrandData(p.current, 10, this.state.inventoryBrandName);
+        }
+    }
 
 
     //获取数据的函数
@@ -469,6 +478,7 @@ class BeautyOrder extends React.Component {
                 let code = res.code;
                 if (code == '0') {
                     let typeItem = [];//表格显示的数据
+                    typeItem.push(<Option key='-1'>全部</Option>);
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
                         let obj = arr[i];
@@ -771,6 +781,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab1', pagination)}
                                         />
                                     </Col>
                                 </Row>
@@ -836,6 +847,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab2', pagination)}
                                         />
                                     </Col>
                                 </Row>
@@ -899,6 +911,7 @@ class BeautyOrder extends React.Component {
                                             dataSource={this.state.data}
                                             bordered
                                             pagination={this.state.pagination}
+                                            onChange={(pagination) => this.handlePageChange('tab3', pagination)}
                                         />
                                     </Col>
                                 </Row>

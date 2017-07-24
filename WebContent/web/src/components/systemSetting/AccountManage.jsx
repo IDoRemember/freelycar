@@ -105,10 +105,6 @@ class AccountManage extends React.Component {
                 number: number
             },
             success: (result) => {
-                this.setState({
-                    loading: false
-                })
-                console.log(result)
                 if (result.code == "0") {
                     let datalist = result.data
                     for (let item of datalist) {
@@ -116,8 +112,15 @@ class AccountManage extends React.Component {
                     }
                     this.setState({
                         data: datalist,
+                         loading:false,
                         pagination: { total: result.realSize }
                     })
+                }  else {
+                    this.setState({
+                        data: [],
+                        loading:false
+                    })
+                    message.error(result.msg)
                 }
             }
         })
@@ -248,7 +251,7 @@ class AccountManage extends React.Component {
                         message.success('增加成功', 5)
                     }
                 } else {
-                    message.error(result.message, 5);
+                    message.error(result.msg, 5);
                 }
             }
         })

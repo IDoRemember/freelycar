@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination,message, Icon, Modal } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -20,6 +20,7 @@ class OtherPay extends React.Component {
             view: false,
             visible: false,
             typeList: [],
+            nowType: null,
             selectedRowKeys: [],
             pagination: {
                 showTotal: (total) => {
@@ -62,19 +63,19 @@ class OtherPay extends React.Component {
     }
     getList = (page, number, otherExpendTypeId) => {
         let obj
-        if (this.state.queryDate.length>0) {
+        if (this.state.queryDate.length > 0) {
             obj = {
                 page: page,
                 number: number,
-                otherExpendTypeId: otherExpendTypeId,
+                typeId: otherExpendTypeId,
                 startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
                 endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
             }
         } else {
             obj = {
+                typeId: otherExpendTypeId,
                 page: page,
-                number: number,
-                otherExpendTypeId: otherExpendTypeId,
+                number: number
             }
         }
 
@@ -86,18 +87,26 @@ class OtherPay extends React.Component {
                     let data = result.data
                     for (let item of data) {
                         item['key'] = item.id
-                        item.expendDate = item.expendDate.slice(0,10)
+                        item.expendDate = item.expendDate ? item.expendDate.slice(0, 10) : ''
                     }
                     this.setState({
                         data: data,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     })
+                } else {
+                    this.setState({
+                        data:[]
+                    }) 
+                    message.error(result.msg, 5)
                 }
             }
         })
     }
 
     handleChangeType = (value) => {
+        this.setState({
+            nowType: value.key
+        })
         this.getList(1, 10, value.key);
     }
 
@@ -171,7 +180,7 @@ class OtherPay extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.getList(pagination.current, 10)
+        this.getList(pagination.current, 10,this.state.nowType)
     }
 
     addPay = () => {
@@ -189,10 +198,10 @@ class OtherPay extends React.Component {
             contentType: 'application/json;charset=utf-8',
             dataType: 'json',
             data: JSON.stringify({
-                typeId:this.state.form.payType ,
+                typeId: this.state.form.payType,
                 amount: this.state.form.amount,
                 comment: this.state.form.comment,
-                expendDate: this.state.form.dateString?new Date(this.state.form.dateString):null,
+                expendDate: this.state.form.dateString ? new Date(this.state.form.dateString) : null,
             }),
             traditional: true,
             success: (result) => {
@@ -200,12 +209,12 @@ class OtherPay extends React.Component {
                     console.log(result.data)
                     let data = result.data
                     data['key'] = data.id
-                    data.expendDate = data.expendDate.slice(0,10)
+                    data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''
                     this.setState({
-                        data: update(this.state.data, { $push: [data] }),
+                        data: update(this.state.data, { $unshift: [data] }),
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
                         form: {
-                            dateString:null,
+                            dateString: null,
                             payType: '',
                             amount: null,
                             comment: ''
@@ -291,6 +300,7 @@ class OtherPay extends React.Component {
                                 labelInValue
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
+                            <Option key={-1} value={null}>全部</Option>
                                 {typeOptions}
                             </Select>
                             <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
@@ -311,7 +321,7 @@ class OtherPay extends React.Component {
                             />
                         </Col>
                         <Col span={8}>
-                            <Button type="primary" onClick={() => this.getList(1, 10)}>查询</Button>
+                            <Button type="primary" onClick={() => this.getList(1, 10,this.state.nowType)}>查询</Button>
                         </Col>
                     </Row>
                 </Card>
@@ -329,7 +339,7 @@ class OtherPay extends React.Component {
                                     单据日期：
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
-                                    <DatePicker value={this.state.form.dateString?moment(this.state.form.dateString).startOf('day'):null} format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
+                                    <DatePicker value={this.state.form.dateString ? moment(this.state.form.dateString).startOf('day') : null} format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }} id="area">
@@ -345,7 +355,9 @@ class OtherPay extends React.Component {
                                         onChange={(value) => this.setFormData('payType', value)}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                     >
+                                        
                                         {typeOptions}
+
                                     </Select>
                                 </Col>
                             </Row>

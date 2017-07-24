@@ -155,7 +155,7 @@ class ProviderManage extends React.Component {
         $.ajax({
             type: 'post',
             url: 'api/provider/add',
-            contentType:'application/json;charset=utf-8',
+            // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
                 name: this.state.form.name,
