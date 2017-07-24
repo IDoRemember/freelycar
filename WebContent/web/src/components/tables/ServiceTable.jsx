@@ -1,7 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Select, Table, Iconconst, Popover, Popconfirm, Button, InputNumber, Icon } from 'antd';
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
+
 import update from 'immutability-helper'
 import $ from 'jquery'
 import ProgramSearch from '../model/ProgramSearch.jsx'
@@ -37,7 +36,6 @@ class ServiceTable extends React.Component {
     }
 
     setData = (key, data, index) => {
-        console.log(key, data, index)
         this.setState({
             data: update(this.state.data, { [index]: { [key]: { $set: data } } })
         }, () => {
@@ -53,7 +51,6 @@ class ServiceTable extends React.Component {
     }
 
     handleOk = (data) => {
-        console.log(data)
         let datalist = this.state.data,
             parts = []
         if (datalist.length > 0) {
@@ -214,7 +211,6 @@ class ServiceTable extends React.Component {
                                 optionFilterProp="children"
                                 mode="multiple"
                                 onChange={(value) => {
-                                    console.log(value)
                                     let staffList = []
                                     for (let item of value) {
                                         staffList.push({ id: item })

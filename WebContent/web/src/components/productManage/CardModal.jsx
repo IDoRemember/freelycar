@@ -97,7 +97,6 @@ class CardModal extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -156,7 +155,6 @@ class CardModal extends React.Component {
             contentType: 'application/json; charset=utf-8',
             traditional: true,
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     //调用父类的onok
                     obj.key = res.data.id

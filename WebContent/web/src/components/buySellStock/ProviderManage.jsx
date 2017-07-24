@@ -5,7 +5,6 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import update from 'immutability-helper'
 import { Row, Col, Card, Button, Select, Table, Popconfirm, Form, InputNumber, Modal, Input } from 'antd';
-import AjaxGet from '../../utils/ajaxGet';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -190,7 +189,6 @@ class ProviderManage extends React.Component {
         })
     }
     handleCancel = (e) => {
-        console.log(e);
         this.setState({
             visible: false,
         });
@@ -233,7 +231,6 @@ class ProviderManage extends React.Component {
                         }
                     }
                 }
-                console.log(result)
             }
         })
     }
@@ -255,7 +252,6 @@ class ProviderManage extends React.Component {
                             return id !== obj.id;
                         });
                     }
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -272,7 +268,6 @@ class ProviderManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -289,7 +284,6 @@ class ProviderManage extends React.Component {
                     selectedRowKeys: selectedRowKeys,
                     selectedIds: selectedIds
                 })
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked

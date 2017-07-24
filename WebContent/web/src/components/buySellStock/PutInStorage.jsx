@@ -2,7 +2,6 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message } from 'antd';
 import { Link } from 'react-router';
-import AjaxGet from '../../utils/ajaxGet'
 import ProductReceipts from './ProductReceipts.jsx'
 import $ from 'jquery'
 import PartsSearch from '../model/PartsSearch.jsx'
@@ -13,7 +12,7 @@ class PutInStorage extends React.Component {
         super(props)
         this.state = {
             view: false,
-            display: 'none',//添加配件入库以下部分
+            display: 'none',
             data: [],
             error: ''
         }
@@ -62,11 +61,7 @@ class PutInStorage extends React.Component {
         })
 
     }
-    // handleSelectedChange = (value, index) => {
-    //     this.setState({
-    //         data: update(this.state.data, { [index]: { ['selectedProvider']: { $set: value } } })
-    //     })
-    // }
+
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
@@ -93,7 +88,8 @@ class PutInStorage extends React.Component {
                     property: item.attribute,
                     provider: { id: item.provider.id },
                     amount: item.number ? item.number : 1,
-                    price: item.price
+                    price: item.price,
+                    orderMaker:{id:localStorage.getItem('userId')}
                 }
                 instockArray.push(instockObject)
             }
@@ -140,7 +136,7 @@ class PutInStorage extends React.Component {
                     </Col>
                     <Col span={8} >
                         制单人：
-                        <span style={{ verticalAlign: 'middle' }}>🐟涵</span>
+                        <span style={{ verticalAlign: 'middle' }}>{localStorage.getItem('username')}</span>
                     </Col>
                 </Row>
                 <Button type="primary" style={{ marginLeft: '10px', marginBottom: '10px' }} onClick={() => this.modeShow()} size={'large'}>添加配件入库</Button>

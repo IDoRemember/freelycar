@@ -3,7 +3,6 @@ import CustomerInfo from '../forms/EditCustomerInfo.jsx';
 import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import AjaxGet from '../../utils/ajaxGet'
 import update from 'immutability-helper'
 import $ from 'jquery'
 import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table } from 'antd';
@@ -86,7 +85,6 @@ class ProductSearch extends React.Component {
             },
             success: (result) => {
                 if (result.code == '0') {
-                    console.log(result)
                     for (let item of result.data) {
                         this.setState({ options: update(this.state.options, { $push: [item] }) })
                     }
@@ -105,7 +103,6 @@ class ProductSearch extends React.Component {
             },
             success: (result) => {
                 if (result.code == "0") {
-                    console.log(result)
                     let datalist = []
                     for (let i = 0; i < result.data.length; i++) {
                         let dataitem = {

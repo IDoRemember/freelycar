@@ -29,12 +29,6 @@ class CostClose extends React.Component {
             value: e.target.value,
         });
     }
-    handleChange = (e) => {
-        console.log(e);
-        // this.setState({
-        //     value: e.target.value,
-        // });
-    }
 
     componentDidMount() {
         $.ajax({
@@ -43,7 +37,6 @@ class CostClose extends React.Component {
             data: { consumOrderId: this.props.params.orderId },
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 let cardCost = 0;//卡扣的钱
                 if (res.code == '0') {
                     let dataArr = res.data.projects;
@@ -63,8 +56,6 @@ class CostClose extends React.Component {
                         feeDetail: dataArr,
                         cardCost: cardCost,
                         allCost: res.data.totalPrice
-                    }, () => {
-                        console.log(this.state.feeDetail);
                     });
                 }
             }

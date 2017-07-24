@@ -3,7 +3,6 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import AjaxGet from '../../utils/ajaxGet'
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, Icon, Modal } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
@@ -61,25 +60,19 @@ class OtherPay extends React.Component {
             }
         })
     }
-    getList = (page, number) => {
+    getList = (page, number, otherExpendTypeId) => {
         let obj = {
             page: page,
-            number: number
+            number: number,
+            otherExpendTypeId: otherExpendTypeId,
+            startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+            endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
         }
-        if (this.state.queryType != '' || this.state.queryDate.length > 0) {
-            obj = {
-                otherExpendTypeId: this.state.queryType,
-                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
-                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
-                page: page,
-                number: number
-            }
-        }
+
         $.ajax({
             url: 'api/charge/query',
             data: obj,
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let data = result.data
                     for (let item of data) {
@@ -94,6 +87,10 @@ class OtherPay extends React.Component {
         })
     }
 
+    handleChangeType = (value) => {
+        getList(1, 10, value.key);
+    }
+
     onDelete = (index) => {
         const dataSource = [...this.state.data];
         dataSource.splice(index, 1);
@@ -103,7 +100,6 @@ class OtherPay extends React.Component {
         $.ajax({
             type: 'post',
             url: 'api/charge/delete',
-            // contentType:'application/json;charset=utf-8',
             dataType: 'json',
             data: {
                 ids: idArray
@@ -117,7 +113,6 @@ class OtherPay extends React.Component {
                             return id !== obj.id;
                         });
                     }
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -126,12 +121,7 @@ class OtherPay extends React.Component {
             }
         })
     }
-    searchGroupManage = (params) => {
-        console.log(params)
-    }
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
-    }
+
     setTypeValue = (value) => {
         this.setState({
             type: value
@@ -156,7 +146,6 @@ class OtherPay extends React.Component {
             }),
             traditional: true,
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     this.getType()
                 }
@@ -166,7 +155,6 @@ class OtherPay extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -194,13 +182,18 @@ class OtherPay extends React.Component {
             }),
             traditional: true,
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let data = result.data
                     data['key'] = data.id
+                    data.typeName = this.state.form.payType;
                     this.setState({
                         data: update(this.state.data, { $push: [data] }),
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
+                        form: {
+                            payType: '',
+                            amount: null,
+                            comment: ''
+                        }
                     })
                 }
             }
@@ -278,7 +271,8 @@ class OtherPay extends React.Component {
                                 style={{ width: '100px' }}
                                 placeholder="选择支出类别"
                                 optionFilterProp="children"
-                                onChange={(value) => { this.setState({ queryType: value }) }}
+                                onChange={(value) => { this.handleChangeType(value) }}
+                                labelInValue
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {typeOptions}
@@ -329,6 +323,7 @@ class OtherPay extends React.Component {
                                 <Col span={8}>
                                     <Select
                                         style={{ width: '150px' }}
+                                        value={this.state.form.payType}
                                         placeholder="选择支出类别"
                                         optionFilterProp="children"
                                         onChange={(value) => this.setFormData('payType', value)}
@@ -343,7 +338,7 @@ class OtherPay extends React.Component {
                                     支出金额：
                             </Col>
                                 <Col span={8}>
-                                    <Input style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
+                                    <Input value={this.state.form.amount} style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -352,7 +347,7 @@ class OtherPay extends React.Component {
                                 </Col>
                                 <Col span={8}>
                                     {/*<Input size="large" type="textarea" rows={3} />*/}
-                                    <Input rows={3} type="textarea" onChange={(e) => this.setFormData('comment', e.target.value)} />
+                                    <Input value={this.state.form.comment} rows={3} type="textarea" onChange={(e) => this.setFormData('comment', e.target.value)} />
                                 </Col>
                             </Row>
                         </Modal>

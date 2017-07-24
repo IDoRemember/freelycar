@@ -24,7 +24,7 @@ class StaffManage extends React.Component {
             staffId: null,
             staffName: '',
             modifyIndex: null,
-            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收营员', '会计'],
+            positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收银员', '会计'],
             levelOptions: ['', '初级', '中级', '高级'],
             modalstate: 'add',
             form: {
@@ -54,7 +54,6 @@ class StaffManage extends React.Component {
                 this.setState({
                     loading: false
                 })
-                console.log(result)
                 if (result.code == "0") {
                     let datalist = result.data
                     for (let item of datalist) {
@@ -81,7 +80,6 @@ class StaffManage extends React.Component {
     }
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -106,7 +104,6 @@ class StaffManage extends React.Component {
                             return id !== obj.id;
                         });
                     }
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -115,9 +112,7 @@ class StaffManage extends React.Component {
             }
         })
     }
-    tabCallback = (key) => {
-        console.log(key);
-    }
+
 
     // tab1模态框的处理函数
 
@@ -181,7 +176,6 @@ class StaffManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -189,13 +183,11 @@ class StaffManage extends React.Component {
     }
 
     handleCancel = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
     }
     modifyInfo = (record, index) => {
-        console.log(record, index)
         this.setState({
             visible: true,
             modalstate: 'modify',
@@ -284,7 +276,6 @@ class StaffManage extends React.Component {
                 this.setState({
                     selectedIds: selectedIds
                 })
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             }
         }
         return (

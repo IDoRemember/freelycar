@@ -4,8 +4,7 @@ import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popcon
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CardModal from '../productManage/CardModal.jsx';
 import Regclient from './Regclient.jsx'
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
+
 import update from 'immutability-helper';
 import { hashHistory } from 'react-router'
 import $ from 'jquery'
@@ -106,22 +105,7 @@ class BuyCard extends React.Component {
             }
         })
     }
-    // componentDidMount() {
-    //     $.ajax({
-    //         url: 'api/idgen/generate',
-    //         data: {
-    //             type: 0
-    //         },
-    //         success: (result) => {
-    //             this.setState({
-    //                 id: result.id
-    //             })
-    //         }
-    //     })
-    //     AjaxGet('GET', 'data/LicensePlate.json', (res) => {
-    //         this.setState({ option: res.data })
-    //     })
-    // }
+  
     showModal = () => {
         this.setState({
             visible: true

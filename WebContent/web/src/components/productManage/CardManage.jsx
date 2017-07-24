@@ -123,7 +123,6 @@ class EditableTable extends React.Component {
             traditional:true,
             dataType:'json',
             success:(res)=>{
-                console.log(res);
                 let code = res.code;
                 if (code == '0' || code == '18') {
                     let dataSource = [...this.state.data];
@@ -133,10 +132,8 @@ class EditableTable extends React.Component {
                             return id !== obj.key;
                         });
                     }
-                    //console.log(dataSource)
                     this.setState({
                         data: dataSource,
-                        //pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
 
                 }
@@ -201,7 +198,6 @@ class EditableTable extends React.Component {
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 this.setState({selectedRowKeys:selectedRowKeys});
             },
             getCheckboxProps: record => ({

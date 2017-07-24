@@ -4,7 +4,6 @@ import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, D
 import { Link } from 'react-router';
 import moment from 'moment';
 import $ from 'jquery'
-import AjaxGet from '../../utils/ajaxGet'
 const Option = Select.Option;
 // 日期 format
 const dateFormat = 'YYYY/MM/DD';

@@ -42,13 +42,11 @@ class HistoricalAccount extends React.Component {
                 selectYear: new Date(year)
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let newdata = result.data
                     for (let i = 0; i < newdata.length; i++) {
                         newdata[i]['key'] = i
                     }
-                    console.log(newdata)
                     this.setState({
                         data: newdata
                     })

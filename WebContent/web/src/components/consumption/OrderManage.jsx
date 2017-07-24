@@ -47,7 +47,6 @@ class OrderManage extends React.Component {
                 number: number
             },
             success: (res) => {
-                console.log(res)
                 if (res.code == '0') {
 
                     let dataArray = res.data
@@ -73,7 +72,6 @@ class OrderManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -137,9 +135,6 @@ class OrderManage extends React.Component {
         const plateOptions = this.state.option.map((item, index) => {
             return <Option key={index} value={item.value}>{item.text}</Option>
         })
-        function onChange(date, dateString) {
-            console.log(date, dateString);
-        }
 
         return (
             <div className="gutter-example">

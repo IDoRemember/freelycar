@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Popconfirm, Form } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Popconfirm, Form, message } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 const Option = Select.Option;
@@ -105,9 +105,11 @@ class BeautyOrder extends React.Component {
                     //console.log(dataSource)
                     this.setState({
                         data: dataSource,
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        pagination: update(this.state.pagination, { ['total']: { $set: res.realSize } })
                     });
 
+                } else {
+                    message.warning(res.msg);
                 }
 
             }
@@ -132,8 +134,8 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.price = form.price;
         obj.property = form.property;
-        obj.typeId =  form.typeId;
-        obj.brandId =  form.brandId;
+        obj.typeId = form.typeId;
+        obj.brandId = form.brandId;
         obj.comment = form.comment;
         obj.standard = form.standard;
         $.ajax({
@@ -319,9 +321,9 @@ class BeautyOrder extends React.Component {
                                 tableItem.number = obj[item];
                             }
                             else if (item == 'type')
-                                tableItem.type = obj[item].typeName;
+                                tableItem.typeName = obj[item].typeName;
                             else if (item == 'brand')
-                                tableItem.brand = obj[item].name;
+                                tableItem.brandName = obj[item].name;
                             else
                                 tableItem[item] = obj[item];
                         }
@@ -793,10 +795,10 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={this.showModal2}>新增配件</Button>
+                                        <Button onClick={this.showModal2}>新增类别</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除配件</Button>
+                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除类别</Button>
                                     </Col>
 
 

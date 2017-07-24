@@ -42,7 +42,6 @@ class AccountManage extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (result) => {
-                console.log(result)
                 let staffInfo = result.staffInfo;
                 this.setState({
                     form: update(this.state.form,
@@ -83,7 +82,6 @@ class AccountManage extends React.Component {
     }
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -96,7 +94,6 @@ class AccountManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -157,7 +154,6 @@ class AccountManage extends React.Component {
                 this.setState({
                     selectedIds: selectedIds
                 })
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             }
         }
         return (

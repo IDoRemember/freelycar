@@ -242,14 +242,12 @@ class BeautyDetail extends React.Component {
 
                 //  }    
                 staffString = staffString.substring(0, staffString.length - 2)
-                console.log(res);
                 let serviceList = [];
                 let fixList = [];
                 let inventoryList = [];
 
                 for (let i = 0; i < objinventory.length; i++) {
                     var inventoryprice = inventoryprice + objinventory[i].inventory.price * objinventory[i].number;
-                    console.log(inventoryprice)
                     let inventoryItem = {
                         key: objinventory[i].inventory.id,
                         id: objinventory[i].inventory.id,
@@ -280,7 +278,6 @@ class BeautyDetail extends React.Component {
                 if (objinventory.length > 0) {
 
                     inventorylist.push(inventoryTable)
-                    console.log(inventorylist);
                     this.setState({
                         inventoryData: inventorylist,
 
@@ -290,7 +287,6 @@ class BeautyDetail extends React.Component {
                 for (let i = 0; i < objservice.length; i++) {
                     var sumprice = sumprice + objservice[i].price;
                     var fixsumprice = fixsumprice + (objservice[i].price+objservice[i].referWorkTime* objservice[i].pricePerUnit);
-                    console.log(fixsumprice)
                     let staffList = objservice[i].staffs;
                     let staffString = ''
                     for (let i = 0; i < staffList.length; i++) {
@@ -375,7 +371,6 @@ class BeautyDetail extends React.Component {
                 if (objinventory.length > 0) {
                     servicelist.push(sumTable)
                     fixlist.push(fixsumTable)
-                    console.log(servicelist);
                     this.setState({
                         serviceData: servicelist,
                         fixData: fixlist

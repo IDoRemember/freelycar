@@ -74,13 +74,11 @@ class IncomeSearch extends React.Component {
                 selectYear:new Date(myDate.getFullYear()+'')
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     let newdata = result.data.slice(0,2)
                     for(let i=0;i<newdata.length;i++) {
                         newdata[i]['key'] = i
                     }
-                    console.log(newdata)
                    this.setState({
                        data:newdata
                    })

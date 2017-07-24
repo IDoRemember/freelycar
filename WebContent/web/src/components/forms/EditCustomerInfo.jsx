@@ -3,8 +3,6 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button } from 'antd';
 import styled from "styled-components"
-import AjaxGet from '../../utils/ajaxGet'
-import AjaxSend from '../../utils/ajaxSend'
 import update from 'immutability-helper'
 import $ from 'jquery'
 const Option = Select.Option;
@@ -56,9 +54,7 @@ class CustomerInfo extends React.Component {
                 type: 'get',
                 dataType: 'json',
                 success: (res) => {
-                    console.log(res);
                     if (res.code == '0') {
-                        console.log(res.data)
                         let data = res.data, cars = data.cars, carBrand, lastMiles, carId, carType;
                         for (let item of cars) {
                             if (item.licensePlate == value) {
@@ -120,10 +116,6 @@ class CustomerInfo extends React.Component {
         this.setState({
             visible: false
         });
-    }
-
-    onChange = (date, dateString) => {
-        console.log(date, dateString);
     }
 
     render() {
