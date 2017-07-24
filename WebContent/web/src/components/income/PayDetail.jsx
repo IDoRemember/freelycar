@@ -122,11 +122,11 @@ class PayDetail extends React.Component {
             <div>
                 <BreadcrumbCustom first="收支查询" second="支出明细" />
                 <Card>
-                    <div className="table-operations">
-                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/today'>当日</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/thisweek'>本周</Link></Button>
-                        <Button><Link to='/app/incomeManage/incomeSearch/paydetail/thismonth'>本月</Link></Button>
-                    </div>
+                    <Radio.Group value={this.props.params.mode} onChange={this.handleSizeChange}>
+                        <Radio.Button value="today"><Link to='/app/incomeManage/incomeSearch/incomedetail/today'>当日</Link></Radio.Button>
+                        <Radio.Button value="thisweek"><Link to='/app/incomeManage/incomeSearch/incomedetail/thisweek'>本周</Link></Radio.Button>
+                        <Radio.Button value="thismonth"><Link to='/app/incomeManage/incomeSearch/incomedetail/thismonth'>本月</Link></Radio.Button>
+                    </Radio.Group>
                     <div style={{ color: 'red', margin: '30px 0', fontSize: '18px' }}>合计金额：<span>{this.state.expendStat}</span></div>
                     <Table bordered pagination={this.state.pagination} columns={columns} dataSource={this.state.data} onChange={this.handleTableChange} />
                 </Card>

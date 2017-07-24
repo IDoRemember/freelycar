@@ -61,12 +61,21 @@ class OtherPay extends React.Component {
         })
     }
     getList = (page, number, otherExpendTypeId) => {
-        let obj = {
-            page: page,
-            number: number,
-            otherExpendTypeId: otherExpendTypeId,
-            startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
-            endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
+        let obj
+        if (this.state.queryDate.length>0) {
+            obj = {
+                page: page,
+                number: number,
+                otherExpendTypeId: otherExpendTypeId,
+                startTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[0]) : null,
+                endTime: this.state.queryDate.length > 0 ? new Date(this.state.queryDate[1]) : null,
+            }
+        } else {
+            obj = {
+                page: page,
+                number: number,
+                otherExpendTypeId: otherExpendTypeId,
+            }
         }
 
         $.ajax({
@@ -88,7 +97,7 @@ class OtherPay extends React.Component {
     }
 
     handleChangeType = (value) => {
-        getList(1, 10, value.key);
+        this.getList(1, 10, value.key);
     }
 
     onDelete = (index) => {
@@ -183,9 +192,10 @@ class OtherPay extends React.Component {
             traditional: true,
             success: (result) => {
                 if (result.code == "0") {
+                    console.log(result.data)
                     let data = result.data
                     data['key'] = data.id
-                    data.typeName = this.state.form.payType;
+                    data.orderDate = this.state.form.dateString
                     this.setState({
                         data: update(this.state.data, { $push: [data] }),
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
@@ -239,8 +249,8 @@ class OtherPay extends React.Component {
             key: 'id'
         }, {
             title: '单据日期',
-            dataIndex: 'expendDate',
-            key: 'expendDate'
+            dataIndex: 'orderDate',
+            key: 'orderDate'
         }, {
             title: '支出类别',
             dataIndex: 'typeName',
@@ -295,7 +305,7 @@ class OtherPay extends React.Component {
                             />
                         </Col>
                         <Col span={8}>
-                            <Button type="primary" size={'large'} onClick={() => this.getList(1, 10)}>查询</Button>
+                            <Button type="primary" onClick={() => this.getList(1, 10)}>查询</Button>
                         </Col>
                     </Row>
                 </Card>
