@@ -35,7 +35,7 @@ class OtherPay extends React.Component {
             queryDate: [],
             queryType: '',
             form: {
-                dateString: '',
+                dateString: null,
                 payType: '',
                 amount: null,
                 comment: ''
@@ -184,7 +184,7 @@ class OtherPay extends React.Component {
             contentType: 'application/json;charset=utf-8',
             dataType: 'json',
             data: JSON.stringify({
-                type: { id: this.state.form.payType },
+                typeId:this.state.form.payType ,
                 amount: this.state.form.amount,
                 comment: this.state.form.comment,
                 expendDate: new Date(this.state.form.dateString),
@@ -200,6 +200,7 @@ class OtherPay extends React.Component {
                         data: update(this.state.data, { $push: [data] }),
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
                         form: {
+                            dateString:null,
                             payType: '',
                             amount: null,
                             comment: ''
@@ -323,7 +324,7 @@ class OtherPay extends React.Component {
                                     单据日期：
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
-                                    <DatePicker format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
+                                    <DatePicker value={this.state.form.dateString?moment(this.state.form.dateString).startOf('day').format():null} format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }} id="area">
