@@ -95,7 +95,7 @@ class ModifyClient extends React.Component {
                         idNumber: obj.idNumber,
                         gender: obj.gender,
                         phone: obj.phone,
-                        birthday: (obj.birthday != "") ? (obj.birthday).substring(0, 10) : "",
+                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) : "",
                         driverLicense: obj.driverLicense,
                         recommendName: obj.recommendName,
                         points: obj.points,
@@ -257,7 +257,7 @@ class ModifyClient extends React.Component {
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
                     <Col span={8} offset={4} >车辆型号:
-                        <span style={{ marginLeft: '10px' }}>{item.cartype}</span>
+                        <span style={{ marginLeft: '10px' }}>{item.type.type}</span>
                     </Col>
                     <Col span={8} >保险截止日期:
                             <DatePicker onChange={(time) => this.carInfoChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}

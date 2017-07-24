@@ -292,7 +292,7 @@ class ClientDetail extends React.Component {
                             case 4: paymeth = "易付宝";
                                 break;
                         }
-                        let servicePeople=objpay[k].programName=="Card"?objcard[k].orderMaker.name: objpay[k].staffNames;
+                  //      let servicePeople=objpay[k].programName=="Card"?objcard[k].orderMaker.name: objpay[k].staffNames;
 
                         let payItem = {
 
