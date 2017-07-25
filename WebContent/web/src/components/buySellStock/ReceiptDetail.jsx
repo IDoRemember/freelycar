@@ -22,6 +22,7 @@ class PutInStorage extends React.Component {
                 inventoryOrderId: this.props.params.receiptId
             },
             success: (result) => {
+                console.log(result)
                 let data = result.data.inventoryInfos
                 for (let item of data) {
                     item['key'] = item.id
@@ -29,7 +30,8 @@ class PutInStorage extends React.Component {
                 }
                 if (result.code == "0") {
                     this.setState({
-                        data: data
+                        data: data,
+                        createDate:result.data.createDate
                     })
                 }
             }
@@ -83,7 +85,9 @@ class PutInStorage extends React.Component {
                     children: value,
                     props: {},
                 };
-                if (index > 1) {
+                if (index == this.state.data.length-1) {
+                    obj.props.rowSpan = this.state.data.length
+                } else {
                     obj.props.rowSpan = 0
                 }
                 return obj
@@ -95,7 +99,7 @@ class PutInStorage extends React.Component {
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
                     <Col span={8} >单据编号：<span>{this.props.params.receiptId}</span>
                     </Col>
-                    <Col span={8} >单据编号：<span>{this.props.params.receiptId}</span>
+                    <Col span={8} >单据时间：<span>{this.state.createDate}</span>
                     </Col>
                 </Row>
                 < Table className="accountTable" bordered columns={conlums} dataSource={this.state.data} onChange={this.handleChange} />
