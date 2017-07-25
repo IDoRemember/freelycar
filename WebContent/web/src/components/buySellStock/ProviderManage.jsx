@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Select, Table, Popconfirm, Form, InputNumber, Modal, Input } from 'antd';
+import { Row, Col, Card, Button, Select, Table, message, Popconfirm, Form, InputNumber, Modal, Input } from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -17,7 +17,7 @@ class ProviderManage extends React.Component {
             pagination: {
 
             },
-            loading:true,
+            loading: true,
             selectedRowKeys: [],
             selectedIds: [],
             queryValue: '',
@@ -114,7 +114,7 @@ class ProviderManage extends React.Component {
             },
             success: (result) => {
                 this.setState({
-                    loading:false
+                    loading: false
                 })
                 if (result.code == "0") {
                     let datalist = []
@@ -152,41 +152,45 @@ class ProviderManage extends React.Component {
         this.setState({
             visible: false,
         });
-        $.ajax({
-            type: 'post',
-            url: 'api/provider/add',
-            // contentType:'application/json;charset=utf-8',
-            dataType: 'json',
-            data: {
-                name: this.state.form.name,
-                contactName: this.state.form.linkman,
-                phone: this.state.form.phonenumber,
-                email: this.state.form.mail,
-                landline: this.state.form.landline,
-                address: this.state.form.address,
-                comment: this.state.form.remarks
-            },
-            success: (result) => {
-                if (result.code == "0") {
-                    let newdata = {
-                        key: result.data.id,
-                        id: result.data.id,
-                        name: result.data.name,
-                        linkman: result.data.contactName,
-                        phonenumber: result.data.phone,
-                        landline: result.data.landline,
-                        mail: result.data.email,
-                        address: result.data.address,
-                        remarks: result.data.comment,
-                        createTime: result.data.createDate
+        if (this.state.form.name == '') {
+            message.error('请输入供应商名称')
+        } else {
+            $.ajax({
+                type: 'post',
+                url: 'api/provider/add',
+                // contentType:'application/json;charset=utf-8',
+                dataType: 'json',
+                data: {
+                    name: this.state.form.name,
+                    contactName: this.state.form.linkman,
+                    phone: this.state.form.phonenumber,
+                    email: this.state.form.mail,
+                    landline: this.state.form.landline,
+                    address: this.state.form.address,
+                    comment: this.state.form.remarks
+                },
+                success: (result) => {
+                    if (result.code == "0") {
+                        let newdata = {
+                            key: result.data.id,
+                            id: result.data.id,
+                            name: result.data.name,
+                            linkman: result.data.contactName,
+                            phonenumber: result.data.phone,
+                            landline: result.data.landline,
+                            mail: result.data.email,
+                            address: result.data.address,
+                            remarks: result.data.comment,
+                            createTime: result.data.createDate
+                        }
+                        this.setState({
+                            data: update(this.state.data, { $push: [newdata] }),
+                            pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        })
                     }
-                    this.setState({
-                        data: update(this.state.data, { $push: [newdata] }),
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
-                    })
                 }
-            }
-        })
+            })
+        }
     }
     handleCancel = (e) => {
         this.setState({
@@ -304,15 +308,15 @@ class ProviderManage extends React.Component {
                         optionFilterProp="children"
                         value={this.state.queryValue}
                         defaultActiveFirstOption={false}
-                        onChange={(value) => {this.setState({queryValue:value})}}
-                        onBlur={(value)=>{this.setState({queryValue:value})}}
+                        onChange={(value) => { this.setState({ queryValue: value }) }}
+                        onBlur={(value) => { this.setState({ queryValue: value }) }}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                         getPopupContainer={() => document.getElementById('provider-area')}
-                        dropdownStyle = {(!this.state.queryValue||this.state.queryValue.length<2)?{display:'none'}:{}}
+                        dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
                     >
                         {plateOptions}
                     </Select>
-                    <Button onClick={() => this.startQuery()} type="primary" style={{ margin: '0 0 0 40px'}} >查询</Button>
+                    <Button onClick={() => this.startQuery()} type="primary" style={{ margin: '0 0 0 40px' }} >查询</Button>
                 </div>
                 <div className="table-operations">
                     <Button onClick={this.showModal}>新增供应商</Button>

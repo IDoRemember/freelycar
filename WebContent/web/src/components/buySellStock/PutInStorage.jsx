@@ -111,7 +111,6 @@ class PutInStorage extends React.Component {
                     provider: { id: item.provider.id },
                     amount: item.number ? item.number : 1,
                     price: item.price,
-
                 }
                 instockArray.push(instockObject)
             }
