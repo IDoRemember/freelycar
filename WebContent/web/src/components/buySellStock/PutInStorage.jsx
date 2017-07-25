@@ -55,6 +55,7 @@ class PutInStorage extends React.Component {
             display: datalist.length > 0 ? 'block' : 'none'
         })
     }
+
     changeData = (key, value, index) => {
         this.setState({
             data: update(this.state.data, { [index]: { [key]: { $set: value } } })
@@ -70,6 +71,7 @@ class PutInStorage extends React.Component {
             display: dataSource.length > 0 ? 'block' : 'none'
         });
     }
+
     saveData = (totalPrice, totalAmount) => {
         if (this.state.data.length < 1) {
             this.setState({
@@ -89,7 +91,7 @@ class PutInStorage extends React.Component {
                     provider: { id: item.provider.id },
                     amount: item.number ? item.number : 1,
                     price: item.price,
-                    orderMaker:{id:localStorage.getItem('userId')}
+                    orderMaker: { id: localStorage.getItem('userId') }
                 }
                 instockArray.push(instockObject)
             }
@@ -122,18 +124,20 @@ class PutInStorage extends React.Component {
 
     }
     render() {
-        let totalPrice = 0
+        let totalPrice = 0,disabled = true,oneDisabled = 0 
         for (let item of this.state.data) {
-            totalPrice = totalPrice + (item.number ? item.price * item.number : item.price)
+            totalPrice = totalPrice + (item.number ? item.price * item.number : 0)
+            if(item.price&&item.number){
+                oneDisabled++ 
+            } 
+        }
+        if(oneDisabled==this.state.data.length) {
+            disabled = false
         }
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card style={{ marginBottom: '10px' }}>
                 <Row gutter={24} style={{ marginBottom: "10px" }}>
-                    <Col span={8} >
-                        单据时间：
-                        <span>2017-5-27 14:00:08</span>
-                    </Col>
                     <Col span={8} >
                         制单人：
                         <span style={{ verticalAlign: 'middle' }}>{localStorage.getItem('username')}</span>
@@ -192,7 +196,7 @@ class PutInStorage extends React.Component {
                             key="provider"
                             dataIndex="provider"
                             render={(text, record, index) => {
-                                return <span>{text?text.name:''}</span>
+                                return <span>{text ? text.name : ''}</span>
                             }}
                         />
                         <Col
@@ -229,8 +233,8 @@ class PutInStorage extends React.Component {
                             </Col>
                             <Col span={12} style={{ textAlign: 'right' }}>
                                 <span style={{ color: 'red', marginRight: '20px' }} >{`${this.state.error}`}</span>
-                                <Button onClick={() => this.saveData(totalPrice, this.state.data.length)} type="primary" style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                                 <Button style={{ width: '100px', height: '50px' }} size={'large'}>取消</Button>
+                                <Button onClick={() => this.saveData(totalPrice, this.state.data.length)} type="primary" disabled={disabled} style={{ width: '100px', height: '50px' }} size={'large'}>保存</Button>
                             </Col>
                         </Row>
                     </div>}
