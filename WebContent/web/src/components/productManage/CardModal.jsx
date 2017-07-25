@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber } from 'antd';
+import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber ,message} from 'antd';
 import { Link } from 'react-router';
 // import ModalTable from '../productManage/ModalTable.jsx';
 import update from 'immutability-helper'
@@ -145,11 +145,35 @@ class CardModal extends React.Component {
             let proj = {};
             proj.id = item.key;
             projInfo.project = proj;
-            projInfo.times = item.times == undefined ? 1 : item.tiems;
+            projInfo.times = (item.times == undefined ? 1 : item.times);
 
             projs.push(projInfo);
         }
         obj.projectInfos = projs;
+        //check field require
+        if(obj.name==''){
+            message.warn('卡类名称是必填项');
+            return false;
+        }
+        if(obj.price==''){
+            message.warn('售卡金额是必填项');
+            return false;
+        }
+        if(obj.type==''){
+            message.warn('卡类属性是必填项');
+            return false;
+        }
+        if(obj.validTime==''){
+            message.warn('有效期是必填项');
+            return false;
+        }
+        if(projs.length==0){
+            message.warn('必须关联项目');
+            return false;
+        }
+
+
+
         $.ajax({
             url: 'api/service/add',
             data: JSON.stringify(obj),
@@ -197,6 +221,7 @@ class CardModal extends React.Component {
 
     //为项目中赋值times的属性
     onChangeTimes = (index, value) => {
+        console.log(index +"---"+value);
         this.setState({
             selectedRows: update(this.state.selectedRows, { [index]: { ['times']: { $set: value } } })
         })
