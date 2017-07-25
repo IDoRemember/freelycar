@@ -67,7 +67,9 @@ class CardModal extends React.Component {
                 price: '',
                 validTime: '',
                 comment: ''
-            }
+            },
+            pagination: {}
+
         }
     }
     componentWillReceiveProps(newProps) {
@@ -115,6 +117,8 @@ class CardModal extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ itemData: tableDate, pagination: { total: res.realSize }, });
+                }else{
+                    this.setState({ itemData: [], pagination: { total: 0 }});
                 }
 
             }
@@ -146,7 +150,6 @@ class CardModal extends React.Component {
             projs.push(projInfo);
         }
         obj.projectInfos = projs;
-        //console.log(obj);
         $.ajax({
             url: 'api/service/add',
             data: JSON.stringify(obj),
@@ -178,6 +181,11 @@ class CardModal extends React.Component {
 
 
         });
+    }
+
+    //处理翻页
+    handlePageChange = (p) => {
+        this.loadData(p.current,10)
     }
 
     //为form的赋值
@@ -363,7 +371,11 @@ class CardModal extends React.Component {
                             onCancel={() => this.onItemCancel()}
                             width='50%' >
 
-                            <Table dataSource={this.state.itemData} columns={Itemcolumns} rowSelection={rowSelection} />
+                            <Table dataSource={this.state.itemData}
+                                columns={Itemcolumns}
+                                rowSelection={rowSelection}
+                                pagination={this.state.pagination}
+                                onChange={(pagination) => this.handlePageChange(pagination)} />
                         </Modal>
                     </Row>
 

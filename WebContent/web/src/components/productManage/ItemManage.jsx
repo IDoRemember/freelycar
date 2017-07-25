@@ -628,7 +628,9 @@ class BeautyOrder extends React.Component {
                                         <Button onClick={this.showModal} >新增项目</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除项目</Button>
+                                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedIds)}>
+                                            <Button >删除项目</Button>
+                                        </Popconfirm>
                                     </Col>
 
                                     {/*新增的模态框*/}
