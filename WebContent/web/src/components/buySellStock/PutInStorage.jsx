@@ -218,10 +218,7 @@ class PutInStorage extends React.Component {
                                     placeholder="输入供应商名称"
                                     allowClear={true}
                                     optionFilterProp="children"
-                                    value={this.state.queryValue}
-                                    defaultActiveFirstOption={false}
                                     onChange={(value) => { this.setState({ queryValue: value }) }}
-                                    onBlur={(value) => { this.setState({ queryValue: value }) }}
                                     filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                     getPopupContainer={() => document.getElementById('provider-area')}
                                     dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
