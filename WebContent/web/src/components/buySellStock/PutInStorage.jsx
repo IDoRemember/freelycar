@@ -98,11 +98,13 @@ class PutInStorage extends React.Component {
         }
         if (this.state.error == '') {
             let instockArray = []
+            console.log(this.state.data)
             for (let item of this.state.data) {
+                
                 let instockObject = {
                     inventoryId: item.partId,
                     name: item.partName,
-                    typeName: item.category.typeName,
+                    typeName: item.category,
                     brandName: item.brand,
                     standard: item.standard,
                     property: item.attribute,
@@ -297,7 +299,7 @@ class PutInStorage extends React.Component {
                     </div>}
                 </div>
             </Card>
-            <ProductReceipts totalPrice={this.state.totalPrice}></ProductReceipts>
+            <ProductReceipts disabled={disabled}></ProductReceipts>
         </div>
     }
 }
