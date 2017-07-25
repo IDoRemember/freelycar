@@ -54,6 +54,7 @@ class CustomerInfo extends React.Component {
                 type: 'get',
                 dataType: 'json',
                 success: (res) => {
+                    console.log(res);
                     if (res.code == '0') {
                         let data = res.data, cars = data.cars, carBrand, lastMiles, carId, carType;
                         for (let item of cars) {

@@ -328,14 +328,14 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.state.form.name} />
+                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.state.form.type}>
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type}>
                                 <Option value="0">次卡</Option>
                                 <Option value="1">组合卡</Option>
                             </Select>
@@ -345,21 +345,21 @@ class CardModal extends React.Component {
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.state.form.price} />
+                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.state.form.validTime} />
+                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.state.form.comment} />
+                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>
