@@ -328,7 +328,7 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name} />
+                             <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name} /> 
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
