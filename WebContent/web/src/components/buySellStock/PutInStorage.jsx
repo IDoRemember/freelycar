@@ -14,11 +14,26 @@ class PutInStorage extends React.Component {
             view: false,
             display: 'none',
             data: [],
-            error: ''
+            error: '',
+            options:[]
         }
     }
     componentDidMount() {
-
+        $.ajax({
+            url: 'api/provider/list',
+            dataType: 'json',
+            type: 'post',
+            data: {
+                page: 1,
+                number: 99,
+            },
+            success: (result) => {
+                if (result.code == '0') {
+                    
+                }
+                console.log(result)
+            }
+        })
     }
     handleCancel = () => {
         this.setState({
@@ -60,7 +75,6 @@ class PutInStorage extends React.Component {
         this.setState({
             data: update(this.state.data, { [index]: { [key]: { $set: value } } })
         })
-
     }
 
     onDelete = (index) => {
@@ -105,7 +119,6 @@ class PutInStorage extends React.Component {
                     state: 0,
                     totalAmount: totalAmount,
                     totalPrice: totalPrice,
-
                     inventoryInfos: instockArray
                 }),
                 traditional: true,
@@ -124,16 +137,19 @@ class PutInStorage extends React.Component {
 
     }
     render() {
-        let totalPrice = 0,disabled = true,oneDisabled = 0 
+        let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
             totalPrice = totalPrice + (item.number ? item.price * item.number : 0)
-            if(item.price&&item.number){
-                oneDisabled++ 
-            } 
+            if (item.price && item.number) {
+                oneDisabled++
+            }
         }
-        if(oneDisabled==this.state.data.length) {
+        if (oneDisabled == this.state.data.length) {
             disabled = false
         }
+        plateOptions = this.state.options.map((item, index) => {
+            return <Option key={index} value={item + ''}>{item}</Option>
+        });
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
             <Card style={{ marginBottom: '10px' }}>
@@ -196,7 +212,22 @@ class PutInStorage extends React.Component {
                             key="provider"
                             dataIndex="provider"
                             render={(text, record, index) => {
-                                return <span>{text ? text.name : ''}</span>
+                                return <Select showSearch
+                                    mode="combobox"
+                                    style={{ width: '200px' }}
+                                    placeholder="输入供应商名称"
+                                    allowClear={true}
+                                    optionFilterProp="children"
+                                    value={this.state.queryValue}
+                                    defaultActiveFirstOption={false}
+                                    onChange={(value) => { this.setState({ queryValue: value }) }}
+                                    onBlur={(value) => { this.setState({ queryValue: value }) }}
+                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
+                                    getPopupContainer={() => document.getElementById('provider-area')}
+                                    dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
+                                >
+                                    {plateOptions}
+                                </Select>
                             }}
                         />
                         <Col
