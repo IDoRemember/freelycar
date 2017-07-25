@@ -251,7 +251,7 @@ class ServiceTable extends React.Component {
                     dataIndex="DeductionCardTime"
                     render={(text, record, index) => {
                         if ((index + 1) < this.state.data.length) {
-                            return <InputNumber min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
+                            return <InputNumber disabled={this.state.data[index].cardId ? false : true} min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
                         }
                     }}
                 />
