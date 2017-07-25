@@ -30,93 +30,95 @@ public class ProjectService {
 
 	@Autowired
 	private ProjectDao projectDao;
-	
+
 	@Autowired
 	private CardDao cardDao;
-	
+
 	@Autowired
 	private ServiceDao serviceDao;
-	
-	public String addProject(Project project){
-		project.setCreateDate(new Date());
-		//project.getInventoryInfos();
-		projectDao.save(project);
-		JsonConfig config = JsonResFactory.dateConfig();
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(project, config)).toString();
+
+	public String addProject(Project project) {
+		Project exist = projectDao.findProjectByName(project.getName());
+		if (exist != null) {
+			return JsonResFactory.buildOrg(RESCODE.NAME_EXIST).toString();
+		} else {
+			project.setCreateDate(new Date());
+			projectDao.save(project);
+			JsonConfig config = JsonResFactory.dateConfig();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(project, config))
+					.toString();
+		}
 	}
-	
-	public String deleteProject(Integer... projectIds){
+
+	public String deleteProject(Integer... projectIds) {
 		List<Integer> ids = Arrays.asList(projectIds);
-		//查找CardProjectRemainingInfo和ServiceProjectInfo，如果有该project的引用，则返回错误，删除失败
-		if(this.cardDao.countProjectByIds(ids) > 0 || this.serviceDao.countProjectByIds(ids) > 0){
+		// 查找CardProjectRemainingInfo和ServiceProjectInfo，如果有该project的引用，则返回错误，删除失败
+		if (this.cardDao.countProjectByIds(ids) > 0 || this.serviceDao.countProjectByIds(ids) > 0) {
 			return JsonResFactory.buildOrg(RESCODE.UNABLE_TO_DELETE).toString();
 		}
-		
+
 		int count = 0;
-		for(int projectId : projectIds){
-			if(projectDao.findProjectById(projectId) == null){
+		for (int projectId : projectIds) {
+			if (projectDao.findProjectById(projectId) == null) {
 				count++;
-			}
-			else{
+			} else {
 				projectDao.delete(projectId);
 				projectDao.deleteInventory(projectId);
-				}
 			}
-		if(count !=0){
-			String tips = "共"+count+"条未在数据库中存在记录";
-			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);
-			long realSize = projectDao.getCount();
-			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
-			return obj.toString();
 		}
-		else{
+		if (count != 0) {
+			String tips = "共" + count + "条未在数据库中存在记录";
+			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS, tips);
+			long realSize = projectDao.getCount();
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
+			return obj.toString();
+		} else {
 			JSONObject obj = JsonResFactory.buildOrg(RESCODE.SUCCESS);
 			long realSize = projectDao.getCount();
-			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			return obj.toString();
 		}
 	}
-	
-	public String getSelectProject(String name , String programId , int page ,int number){
-		if((name == null || name.isEmpty()|| name.trim().isEmpty())&&(programId==null||programId.isEmpty()||programId.trim().isEmpty()))
-		{
+
+	public String getSelectProject(String name, String programId, int page, int number) {
+		if ((name == null || name.isEmpty() || name.trim().isEmpty())
+				&& (programId == null || programId.isEmpty() || programId.trim().isEmpty())) {
 			int from = (page - 1) * number;
 			List<Project> list = projectDao.listProjects(from, number);
-			if(list == null || list.isEmpty()){
+			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			long realSize = projectDao.getCount();
-			int size=(int) Math.ceil(realSize/(double)number);
+			int size = (int) Math.ceil(realSize / (double) number);
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list, config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
-			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			return obj.toString();
-		}
-		else{
+		} else {
 			String andCondition = new ProjectAndQueryCreator(name, programId).createStatement();
 			int from = (page - 1) * number;
 			List<Project> list = projectDao.getConditionQuery(andCondition, from, number);
-			if(list == null || list.isEmpty()){
+			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
 			long realSize = (long) projectDao.getConditionCount(andCondition);
-			int size=(int) Math.ceil(realSize/(double)number);
+			int size = (int) Math.ceil(realSize / (double) number);
 			JsonConfig config = new JsonConfig();
 			config.registerJsonValueProcessor(Date.class, new DateJsonValueProcessor());
 			JSONArray jsonArray = JSONArray.fromObject(list, config);
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, jsonArray);
 			obj.put(Constants.RESPONSE_SIZE_KEY, size);
-			obj.put(Constants.RESPONSE_REAL_SIZE_KEY,realSize);
+			obj.put(Constants.RESPONSE_REAL_SIZE_KEY, realSize);
 			return obj.toString();
 		}
 	}
-	
-	public String modifyProject(Project project){
+
+	public String modifyProject(Project project) {
 		Project exist = projectDao.findProjectById(project.getId());
-		if(exist == null){
+		if (exist == null) {
 			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 		}
 		exist.setName(project.getName());
@@ -126,29 +128,28 @@ public class ProjectService {
 		exist.setReferWorkTime(project.getReferWorkTime());
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
-	
-	public String getProjectName(){
+
+	public String getProjectName() {
 		List<Object[]> exists = projectDao.getProjectName();
-		if(exists == null || exists.isEmpty()){
+		if (exists == null || exists.isEmpty()) {
 			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
-		}
-		else{
+		} else {
 			List<ProjectBean> projectBeans = new ArrayList<>();
-			for(Object[] exist : exists){
+			for (Object[] exist : exists) {
 				projectBeans.add(new ProjectBean(Integer.valueOf(String.valueOf(exist[0])), String.valueOf(exist[1])));
 			}
 			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONArray.fromObject(projectBeans)).toString();
 		}
 	}
-	
-	public String getProject(int projectId){
+
+	public String getProject(int projectId) {
 		Project exist = projectDao.findProjectById(projectId);
-		if(exist == null){
+		if (exist == null) {
 			return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
-		}
-		else{
+		} else {
 			JsonConfig config = JsonResFactory.dateConfig();
-			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(exist, config)).toString();
+			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(exist, config))
+					.toString();
 		}
 	}
 }

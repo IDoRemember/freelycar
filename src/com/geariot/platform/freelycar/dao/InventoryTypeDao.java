@@ -20,4 +20,5 @@ public interface InventoryTypeDao {
 	
 	long getQueryCount(String andCondition);
 
+	InventoryType findByName(String typeName);
 }
