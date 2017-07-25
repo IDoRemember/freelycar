@@ -14,8 +14,6 @@ class Login extends React.Component {
         e.preventDefault();
         this.props.form.validateFields((err, values) => {
             if (!err) {
-                console.log('Received values of form: ', values);
-                console.log(values)
                 this.postInfo(values)
                 // 
             }
@@ -32,11 +30,9 @@ class Login extends React.Component {
                 rememberMe: values.remember
             },
             success: (res) => {
-                console.log(res);
                 if (res.code == 0||res.code==13
                 ) {
                     localStorage.setItem("username", values.userName);
-                    console.log(localStorage.getItem("username"))
                     message.success('登录成功' , 1);
                     hashHistory.push('/dashboard/index')
                 } else {
