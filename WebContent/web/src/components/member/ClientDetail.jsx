@@ -505,7 +505,7 @@ class ClientDetail extends React.Component {
                         <Col span={3}></Col>
                         <Col span={6}>姓名：<span style={{ width: '200px' }} >{this.state.form.name}</span></Col>
                         <Col span={6}>手机号：<span style={{ width: '200px' }} >{this.state.form.phone} </span></Col>
-                      <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,9)}</span></Col>
+                      <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,10)}</span></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>

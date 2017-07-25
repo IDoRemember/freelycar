@@ -149,6 +149,7 @@ class AddClient extends React.Component {
                         }),
                         success: (result) => {
                             if (result.code == "0") {
+                                message.success("保存成功")
                                 window.history.go(-1);
                                 //  hashHistory.push('/app/member/customer')
                             }

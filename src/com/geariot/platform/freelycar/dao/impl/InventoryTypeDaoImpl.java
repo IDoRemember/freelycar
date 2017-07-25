@@ -70,4 +70,10 @@ public class InventoryTypeDaoImpl implements InventoryTypeDao {
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}
 
+	@Override
+	public InventoryType findByName(String typeName) {
+		String hql = "from InventoryType where typeName = :typeName";
+		return (InventoryType) this.getSession().createQuery(hql).setString("typeName", typeName).uniqueResult();
+	}
+
 }

@@ -93,7 +93,7 @@ class ModifyClient extends React.Component {
                         idNumber: obj.idNumber,
                         gender: obj.gender,
                         phone: obj.phone,
-                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) : "",
+                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) :"",
                         driverLicense: obj.driverLicense,
                         recommendName: obj.recommendName,
                         points: obj.points,
@@ -112,7 +112,7 @@ class ModifyClient extends React.Component {
         $.ajax({
             type: 'post',
             url: '/api/client/modify',
-            datatype: 'json',
+            dataType: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({
                 id:this.props.params.id,
@@ -123,7 +123,7 @@ class ModifyClient extends React.Component {
                 gender: forms.gender,
                 phone: forms.phone,
                 //时间选择
-                birthday: forms.birthday,
+                birthday:new Date(forms.birthday),
                 driverLicense:forms.driverLicense,
                 recommendName:forms.recommendName,
                 cars:this.state.cars,
@@ -199,10 +199,10 @@ class ModifyClient extends React.Component {
 
     }
     //时间选择函数
-    birthdayonChange = (time) => {
-        console.log(time);
-        this.state.form.birthday = new Date(time);
-    }
+    // birthdayonChange = (time) => {
+    //     console.log(time);
+    //     this.state.form.birthday = new Date(time);
+    // }
 
     licensetimeonChange = (time) => {
         console.log(time);
@@ -220,7 +220,7 @@ class ModifyClient extends React.Component {
     }
      birthdayonChange = (key, value) => {
         this.setState({
-            cars: update(this.state.cars,  { [key]: { $set: value } } )
+            form: update(this.state.form,  { [key]: { $set: value } } )
         })
     }
     render() {
@@ -324,7 +324,7 @@ class ModifyClient extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
                         <Col span={8} offset={4} id="birthday"><span >生日：</span>
-                             <DatePicker onChange={(time) => this.birthday('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
+                             <DatePicker onChange={(time) => this.birthdayonChange('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
                                 getCalendarContainer={() => document.getElementById('birthday')}
                             /> 
 
