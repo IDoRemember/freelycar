@@ -19,4 +19,5 @@ public interface InventoryDao {
 	
 	List<Object[]> getInventoryName();
 	
+	List<String> findByTypeName(String typeName);
 }

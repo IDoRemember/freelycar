@@ -41,9 +41,9 @@ public class InventoryTypeDaoImpl implements InventoryTypeDao {
 	}
 
 	@Override
-	public int delete(List<Integer> typeIds) {
-		String hql = "delete from InventoryType where id in :id";
-		return this.getSession().createQuery(hql).setParameterList("id", typeIds).executeUpdate();
+	public void delete(int typeId) {
+		String hql = "delete from InventoryType where id = :id";
+		this.getSession().createQuery(hql).setInteger("id", typeId).executeUpdate();
 	}
 
 	@SuppressWarnings("unchecked")
