@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, InputNumber, message, Popover } from 'antd';
 import { Link } from 'react-router';
 import ProductReceipts from './ProductReceipts.jsx'
 import $ from 'jquery'
@@ -15,26 +15,30 @@ class PutInStorage extends React.Component {
             display: 'none',
             data: [],
             error: '',
-            options:[]
+            options: []
         }
     }
+
     componentDidMount() {
         $.ajax({
             url: 'api/provider/list',
             dataType: 'json',
-            type: 'post',
+            type: 'get',
             data: {
                 page: 1,
                 number: 99,
             },
             success: (result) => {
                 if (result.code == '0') {
-                    
+                    this.setState({
+                        options: result.data
+                    })
                 }
                 console.log(result)
             }
         })
     }
+
     handleCancel = () => {
         this.setState({
             view: false
@@ -105,7 +109,7 @@ class PutInStorage extends React.Component {
                     provider: { id: item.provider.id },
                     amount: item.number ? item.number : 1,
                     price: item.price,
-                    orderMaker: { id: localStorage.getItem('userId') }
+
                 }
                 instockArray.push(instockObject)
             }
@@ -119,6 +123,7 @@ class PutInStorage extends React.Component {
                     state: 0,
                     totalAmount: totalAmount,
                     totalPrice: totalPrice,
+                    orderMaker: { id: localStorage.getItem('userId') },
                     inventoryInfos: instockArray
                 }),
                 traditional: true,
@@ -148,7 +153,34 @@ class PutInStorage extends React.Component {
             disabled = false
         }
         plateOptions = this.state.options.map((item, index) => {
-            return <Option key={index} value={item + ''}>{item}</Option>
+            const content = (
+                <div style={{ width: '200px' }}>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={12} >供应商名称：</Col>
+                        <Col span={12}>{item.name}</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={12} >联系人：</Col>
+                        <Col span={12}>{item.contactName}</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={12} >手机号码：</Col>
+                        <Col span={12}>{item.phone}</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={12} >座机号码：</Col>
+                        <Col span={12}>{item.landline}</Col>
+                    </Row>
+                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                        <Col span={12} >地址：</Col>
+                        <Col span={12}>{item.address}</Col>
+                    </Row>
+                </div>
+            );
+            const pop = <Popover arrowPointAtCenter placement="left" content={content} title="供应商明细" style={{ zIndex: '1000' }}>
+                {item.name}
+            </Popover>
+            return <Option key={index} value={item.id + ''}>{pop}</Option>
         });
         return <div>
             <BreadcrumbCustom first="进销存管理" second="入库" />
@@ -213,15 +245,12 @@ class PutInStorage extends React.Component {
                             dataIndex="provider"
                             render={(text, record, index) => {
                                 return <Select showSearch
-                                    mode="combobox"
                                     style={{ width: '200px' }}
                                     placeholder="输入供应商名称"
                                     allowClear={true}
                                     optionFilterProp="children"
-                                    onChange={(value) => { this.setState({ queryValue: value }) }}
-                                    filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
-                                    getPopupContainer={() => document.getElementById('provider-area')}
-                                    dropdownStyle={(!this.state.queryValue || this.state.queryValue.length < 2) ? { display: 'none' } : {}}
+                                    filterOption={(input, option) => option.props.children.props.children.indexOf(input) >= 0}
+                                    onChange={(value) => this.changeData('provider', { id: value }, index)}
                                 >
                                     {plateOptions}
                                 </Select>
