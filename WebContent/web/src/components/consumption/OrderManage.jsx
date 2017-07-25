@@ -177,7 +177,7 @@ class OrderManage extends React.Component {
                     <Row gutter={16} style={{ marginBottom: "10px" }} id="area">
                         <Col span={8} >
                             时间类型：
-                        <Select style={{ width: 120 }} onChange={(value) => this.setQueryData('dateType', value)} getPopupContainer={() => document.getElementById('area')}>
+                        <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('dateType', value)} getPopupContainer={() => document.getElementById('area')}>
                                 <Option value="0">单据时间</Option>
                                 <Option value="1">接车时间</Option>
                                 <Option value="2">交车时间</Option>
