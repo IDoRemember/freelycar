@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber } from 'antd';
+import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber ,message} from 'antd';
 import { Link } from 'react-router';
 // import ModalTable from '../productManage/ModalTable.jsx';
 import update from 'immutability-helper'
@@ -145,11 +145,35 @@ class CardModal extends React.Component {
             let proj = {};
             proj.id = item.key;
             projInfo.project = proj;
-            projInfo.times = item.times == undefined ? 1 : item.tiems;
+            projInfo.times = (item.times == undefined ? 1 : item.times);
 
             projs.push(projInfo);
         }
         obj.projectInfos = projs;
+        //check field require
+        if(obj.name==''){
+            message.warn('卡类名称是必填项');
+            return false;
+        }
+        if(obj.price==''){
+            message.warn('售卡金额是必填项');
+            return false;
+        }
+        if(obj.type==''){
+            message.warn('卡类属性是必填项');
+            return false;
+        }
+        if(obj.validTime==''){
+            message.warn('有效期是必填项');
+            return false;
+        }
+        if(projs.length==0){
+            message.warn('必须关联项目');
+            return false;
+        }
+
+
+
         $.ajax({
             url: 'api/service/add',
             data: JSON.stringify(obj),
@@ -163,6 +187,7 @@ class CardModal extends React.Component {
                     obj.key = res.data.id
                     obj.createDate = res.data.createDate;
                     obj.type = obj.type == 0 ? '次卡' : '组合卡';
+                  
                     p.onOk(obj)
 
                     //清空模态框数据
@@ -175,7 +200,6 @@ class CardModal extends React.Component {
                     }
 
                     this.setState({ selectedRows: [], form: form0 });
-                    this.props.onOk();
                 }
             }
 
@@ -197,6 +221,7 @@ class CardModal extends React.Component {
 
     //为项目中赋值times的属性
     onChangeTimes = (index, value) => {
+        console.log(index +"---"+value);
         this.setState({
             selectedRows: update(this.state.selectedRows, { [index]: { ['times']: { $set: value } } })
         })
@@ -328,14 +353,14 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                             <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name} /> 
+                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name?this.props.modifyData.name:this.state.form.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type}>
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type?this.props.modifyData.type:this.state.form.type}>
                                 <Option value="0">次卡</Option>
                                 <Option value="1">组合卡</Option>
                             </Select>
@@ -345,21 +370,21 @@ class CardModal extends React.Component {
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price} />
+                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price?this.props.modifyData.price:this.state.form.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime} />
+                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime?this.props.modifyData.validTime:this.state.form.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment} />
+                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment?this.props.modifyData.comment:this.state.form.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>

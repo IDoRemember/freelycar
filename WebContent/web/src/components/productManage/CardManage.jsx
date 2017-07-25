@@ -87,14 +87,17 @@ class EditableTable extends React.Component {
 
     // 模态框的处理函数
     showModal = (method, record) => {
+        console.log(method);
         if (method == 'modify') {
+        console.log(record);
             this.setState({
                 modifyData: record,
                 visible: true
             });
         } else {
             this.setState({
-                visible: true
+                visible: true,
+                modifyData: {}
             });
         }
 
@@ -102,10 +105,8 @@ class EditableTable extends React.Component {
     handleOk = (obj) => {
         this.setState({
             visible: false,
-        });
-
-        this.setState({
-            data: [...this.state.data, obj],
+            modifyData: {},
+            data: [...this.state.data, obj]
         });
 
     }
@@ -113,6 +114,7 @@ class EditableTable extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            modifyData: {}
         });
     }
     //end of modal

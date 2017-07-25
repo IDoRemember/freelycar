@@ -92,7 +92,6 @@ class BeautyOrder extends React.Component {
             type: 'post',
             traditional: true,
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0' || code == '18') {
                     let dataSource = [...this.state.data];
@@ -124,10 +123,6 @@ class BeautyOrder extends React.Component {
         });
     }
     handleOk = (e) => {
-        this.setState({
-            visible: false,
-        });
-
         let form = this.state.form;
         var obj = {};
         //obj.id = 's11100';
@@ -138,6 +133,25 @@ class BeautyOrder extends React.Component {
         obj.brandId = form.brandId;
         obj.comment = form.comment;
         obj.standard = form.standard;
+
+        //check field require
+        if (obj.name == '') {
+            message.warn('配件名称是必填项');
+            return false;
+        }
+        if (obj.brandId == '') {
+            message.warn('配件品牌是必填项');
+            return false;
+        }
+        if (obj.typeId == '') {
+            message.warn('配件类别是必填项');
+            return false;
+        }
+        if (obj.price == '') {
+            message.warn('配件价格是必填项');
+            return false;
+        }
+
         $.ajax({
             type: 'post',
             url: 'api/inventory/add',
@@ -156,8 +170,10 @@ class BeautyOrder extends React.Component {
                     obj.brandName = this.state.form.brandName;
                     obj.typeName = this.state.form.typeName;
                     this.setState({
+                        visible:false,
                         data: [...this.state.data, obj],
                     });
+
                 }
 
             }

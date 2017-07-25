@@ -185,12 +185,14 @@ class CostClose extends React.Component {
                                     </Col>
                                 </Row>
 
-                                <Row type="flex" justify="space-around" style={{ marginTop: '30px' }}>
-                                    <Col>
+                                <Row style={{ marginTop: '30px', marginBottom: '50px' }}>
+                                    <Col xs={2} offset={10}>
                                         < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
                                     </Col>
-                                    <Col >
-                                        < Button type="primary">挂单</Button>
+                                    <Col xs={2}>
+                                        <Link to="/app/consumption/orderManage">
+                                            < Button type="primary" >挂单</Button>
+                                        </Link>
                                     </Col>
                                 </Row>
                             </Card>

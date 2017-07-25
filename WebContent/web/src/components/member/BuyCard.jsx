@@ -56,7 +56,8 @@ class BuyCard extends React.Component {
             },
             carId: '',
             payMethod: '',
-            visible: false
+            visible: false,
+            modifyData:{}
         }
     }
 
@@ -83,6 +84,7 @@ class BuyCard extends React.Component {
                 console.log(res.data)
                 if (res.code == '0') {
                     console.log(res.data);
+               
                     this.setState({
 
                         cardList: res.data,
@@ -100,7 +102,6 @@ class BuyCard extends React.Component {
                 number: 99,
             },
             success: (res) => {
-                console.log(res.data)
                 this.setState({
                     adminList: res.data,
                 })
@@ -131,15 +132,12 @@ class BuyCard extends React.Component {
                 number: 99,
             },
             success: (res) => {
-                console.log(res.data[0]);
-                console.log(res.data[0].type);
                 let cardtype = "";
                 if (res.data[0].type == 0) {
                     cardtype = "次卡";
                 } else if (res.data[0].type == 1) {
                     cardtype = "组合卡";
                 }
-                console.log(cardtype);
                 this.setState({
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
@@ -151,8 +149,6 @@ class BuyCard extends React.Component {
     }
     CheckInfo = () => {
         var phonecheck = this.state.clientInfo.phone;
-
-        console.log(phonecheck)
         var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
 
         if (!reg.test(phonecheck)) {
@@ -171,7 +167,6 @@ class BuyCard extends React.Component {
     licensePlateCheckInfo = () => {
         var licensePlatecheck = this.state.clientInfo.licensePlate;
         var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-        console.log(re.test(licensePlatecheck))
         if (!re.test(licensePlatecheck)) {
             this.setState({
                 licensePlateClassName: "display"
@@ -209,8 +204,6 @@ class BuyCard extends React.Component {
                         }]
                     }),
                     success: (res) => {
-
-                        console.log(res);
                         if (res.code == "0") {
                             this.setState({
                                 clientId: res.data.id,
@@ -232,14 +225,12 @@ class BuyCard extends React.Component {
 
     }
     genderonChange = (e) => {
-        console.log(e.target.value);
         this.setState({
             value: e.target.value,
         });
         this.state.clientInfo.gender = e.target.value
     }
     StaffhandleChange = (value) => {
-        console.log(value)
         this.setState({
             orderMaker: parseInt(value),
         })
@@ -306,7 +297,6 @@ class BuyCard extends React.Component {
                 this.setState({
                     option: res.data,
                 })
-                console.log(this.state.option)
             }
         })
     }
@@ -318,16 +308,13 @@ class BuyCard extends React.Component {
     }
 
     payhandleChange = (event) => {
-        console.log(event);
         this.setState({
             payMethod: event
         })
     }
 
     handleChange = (e) => {
-        console.log(`selected ${e}`)
         let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist,
@@ -343,22 +330,21 @@ class BuyCard extends React.Component {
         //  message.success("保存成功",1)
     }
     handleCancel = () => {
-        console.log('sss');
         this.setState({
             visible: false
         });
     }
     render() {
         const brandOptions = this.state.option.map((item, index) => {
-            return <Option key={index} value={item.id + ''}>{item.name}</Option>
+            return <Option key={item.id} value={item.id + ''}>{item.name}</Option>
         }), CardOptions = this.state.cardList.map((item, index) => {
-            return <Option key={index} value={item.name}>{item.name}</Option>
+            return <Option key={item.id} value={item.name}>{item.name}</Option>
         }), StaffOptions = this.state.adminList.map((item, index) => {
             let staffId = item.id + '';
-            return <Option key={index} value={staffId}>{item.name}</Option>
+            return <Option key={staffId} value={staffId}>{item.name}</Option>
         })
         const typeOptions = this.state.type.map((item, index) => {
-            return <Option key={index} value={item.id + ''}>{item.type}</Option>
+            return <Option key={item.id} value={item.id + ''}>{item.type}</Option>
         })
         return (
             <div >
@@ -487,7 +473,7 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={this.handleOk}
+                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData = {this.state.modifyData}
                     onCancel={this.handleCancel}>
                 </CardModal>
                 <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={() => this.SaveCard()}>办理</Button>
