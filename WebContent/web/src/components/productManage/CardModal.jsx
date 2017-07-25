@@ -163,6 +163,7 @@ class CardModal extends React.Component {
                     obj.key = res.data.id
                     obj.createDate = res.data.createDate;
                     obj.type = obj.type == 0 ? '次卡' : '组合卡';
+                  
                     p.onOk(obj)
 
                     //清空模态框数据
@@ -175,7 +176,6 @@ class CardModal extends React.Component {
                     }
 
                     this.setState({ selectedRows: [], form: form0 });
-                    this.props.onOk();
                 }
             }
 
@@ -328,14 +328,14 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name} />
+                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name?this.props.modifyData.name:this.state.form.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type}>
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type?this.props.modifyData.type:this.state.form.type}>
                                 <Option value="0">次卡</Option>
                                 <Option value="1">组合卡</Option>
                             </Select>
@@ -345,21 +345,21 @@ class CardModal extends React.Component {
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price} />
+                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price?this.props.modifyData.price:this.state.form.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime} />
+                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime?this.props.modifyData.validTime:this.state.form.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment} />
+                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment?this.props.modifyData.comment:this.state.form.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>
