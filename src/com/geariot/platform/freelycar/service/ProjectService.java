@@ -58,9 +58,10 @@ public class ProjectService {
 				count++;
 			}
 			else{
-				projectDao.delete(projectId);;
+				projectDao.delete(projectId);
+				projectDao.deleteInventory(projectId);
+				}
 			}
-		}
 		if(count !=0){
 			String tips = "共"+count+"条未在数据库中存在记录";
 			net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.PART_SUCCESS , tips);

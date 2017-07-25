@@ -103,7 +103,10 @@ public class ProjectDaoImpl implements ProjectDao {
 		return this.getSession().createSQLQuery(sql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
-	
-	
+	@Override
+	public void deleteInventory(int projectId) {
+		String sql = "delete from projectinventoriesinfo where projectId = :projectId";
+		this.getSession().createSQLQuery(sql).setInteger("projectId", projectId).executeUpdate();
+	}
 	
 }

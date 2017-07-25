@@ -29,4 +29,6 @@ public interface ProjectDao {
 	long getConditionCount(String andCondition);
 	
 	long countInventoryByIds(List<String> inventoryIds);
+	
+	void deleteInventory(int projectId);
 }
