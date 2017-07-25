@@ -3,6 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx';
 import ServiceTable from '../tables/ServiceTable.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
+import { hashHistory } from 'react-router'
 import $ from 'jquery';
 import { Row, Col, Card, Button, Input, Steps, Table, Icon } from 'antd';
 const Step = Steps.Step;
@@ -201,7 +202,9 @@ class BeautyDetail extends React.Component {
 
 
     }
-
+    onclick=()=>{
+          hashHistory.push(`/app/consumption/accountingcenter/${this.props.params.orderId}`)
+    }
     GetClientInfo() {
         $.ajax({
             url: 'api/order/queryid',
@@ -417,7 +420,7 @@ class BeautyDetail extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>结算</Button>
+            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => this.onclick(true)}>结算</Button>
             {/*<Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>*/}
         </div>

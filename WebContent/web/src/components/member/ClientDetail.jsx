@@ -541,7 +541,7 @@ class ClientDetail extends React.Component {
                         </Col>
                         <Col span={12} id="car-brand">车辆品牌:
                             <Select showSearch
-                                style={{ width: '140px', marginLeft: '35px' }}
+                                style={{ width: '150px', marginLeft: '35px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
                                 onChange={this.handleChange}
@@ -595,7 +595,7 @@ class ClientDetail extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={12} >本次里程：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
+                            <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
                         </Col>
                         <Col span={12}>上牌时间:
                             <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px', width: '150px' }} />

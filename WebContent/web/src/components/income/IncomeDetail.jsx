@@ -86,15 +86,6 @@ class IncomeDetail extends React.Component {
                 return <span>{index + 1}</span>
             }
         }, {
-            title: '车牌号',
-            dataIndex: 'licensePlate',
-            key: 'licensePlate',
-
-        }, {
-            title: '时间',
-            dataIndex: 'payDate',
-            key: 'payDate'
-        }, {
             title: '项目',
             dataIndex: 'type',
             key: 'type',
@@ -105,6 +96,10 @@ class IncomeDetail extends React.Component {
             title: '金额',
             dataIndex: 'amount',
             key: 'amount'
+        }, {
+            title: '时间',
+            dataIndex: 'payDate',
+            key: 'payDate'
         }];
         return (
             <div>
