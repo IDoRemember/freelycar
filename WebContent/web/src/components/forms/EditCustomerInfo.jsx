@@ -77,7 +77,7 @@ class CustomerInfo extends React.Component {
                                     ['consumAmout']: { $set: data.consumAmout },
                                     ['consumTimes']: { $set: data.consumTimes },
                                     ['lastVisit']: { $set: data.lastVisit },
-                                    ['licensePlate']: { $set: value},
+                                    ['licensePlate']: { $set: value },
                                     ['carType']: { $set: carType }
                                 })
                         }, () => {

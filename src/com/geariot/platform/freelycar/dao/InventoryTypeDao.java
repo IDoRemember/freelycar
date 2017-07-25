@@ -12,7 +12,7 @@ public interface InventoryTypeDao {
 	
 	void add(InventoryType inventoryType);
 	
-	int delete(List<Integer> typeIds);
+	void delete(int typeId);
 	
 	List<InventoryType> list(int from, int pageSize);
 	
