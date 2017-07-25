@@ -105,8 +105,10 @@ class OrderManage extends React.Component {
                     licensePlate: this.state.query.licensePlate,
                     programId: this.state.query.programId ? this.state.query.programId : -1,
                     payState: this.state.query.payState ? this.state.query.payState : -1,
-                    clientId: -1
+                    clientId: -1,
+                    state:this.state.query.state>-1?this.state.query.state:-1
                 },
+    
                 startDate: this.state.query.dateString[0],
                 endDate: this.state.query.dateString[1],
                 dateType: this.state.query.dateType ? this.state.query.dateType : -1,
@@ -147,7 +149,7 @@ class OrderManage extends React.Component {
                         </Col>
                         <Col span={8} id="type">
                             项目类别：
-                        <Select style={{ width: 120 }} value={this.state.query.programId} onChange={(value) => this.setQueryData('programId', value)} getPopupContainer={() => document.getElementById('type')}>
+                        <Select allowClear style={{ width: 120 }} value={this.state.query.programId} onChange={(value) => this.setQueryData('programId', value)} getPopupContainer={() => document.getElementById('type')}>
                                 <Option value="1">美容</Option>
                                 <Option value="2">维修</Option>
                             </Select>
@@ -168,7 +170,7 @@ class OrderManage extends React.Component {
                         </Col>
                         <Col span={8} id="pay-state">
                             结算状态：
-                        <Select style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
+                        <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
                                 <Option value="0">挂单中</Option>
                                 <Option value=" 1">已结算</Option>
                             </Select>
