@@ -699,7 +699,9 @@ class BeautyOrder extends React.Component {
                                         <Button onClick={this.showModal}>新增配件</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => this.onDelete(this.state.selectedRowKeys)}>删除配件</Button>
+                                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
+                                            <Button >删除配件</Button>
+                                        </Popconfirm>
                                     </Col>
 
 
@@ -809,7 +811,9 @@ class BeautyOrder extends React.Component {
                                         <Button onClick={this.showModal2}>新增类别</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除类别</Button>
+                                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
+                                            <Button >删除类别</Button>
+                                        </Popconfirm>
                                     </Col>
 
 
@@ -871,10 +875,12 @@ class BeautyOrder extends React.Component {
 
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={this.showModal3}>新增</Button>
+                                        <Button onClick={this.showModal3}>新增品牌</Button>
                                     </Col>
                                     <Col span={8}>
-                                        <Button onClick={() => { this.onDelete(this.state.selectedRowKeys) }}>删除</Button>
+                                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
+                                            <Button >删除品牌</Button>
+                                        </Popconfirm>
                                     </Col>
 
                                     {/*查询的模态框*/}

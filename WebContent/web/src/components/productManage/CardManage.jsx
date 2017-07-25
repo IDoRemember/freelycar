@@ -22,9 +22,10 @@ class EditableTable extends React.Component {
             visible: false,
             //会员卡类别数据
             data: [],
+            modifyData: {},//点击修改的那条数据
             cardName: '',//条件查询的卡类,
-            selectedRowKeys:[],
-            pagination:{}
+            selectedRowKeys: [],
+            pagination: {}
         }
 
     }
@@ -117,12 +118,12 @@ class EditableTable extends React.Component {
     }
     onDelete = (idArray) => {
         $.ajax({
-            url:'api/service/delete',
-            type:'post',
-            data:{serviceIds:idArray},
-            traditional:true,
-            dataType:'json',
-            success:(res)=>{
+            url: 'api/service/delete',
+            type: 'post',
+            data: { serviceIds: idArray },
+            traditional: true,
+            dataType: 'json',
+            success: (res) => {
                 let code = res.code;
                 if (code == '0' || code == '18') {
                     let dataSource = [...this.state.data];
@@ -143,7 +144,7 @@ class EditableTable extends React.Component {
         });
     }
     handleChange = (p) => {
-        this.loadData(p.current,10);
+        this.loadData(p.current, 10);
     }
     render() {
         //卡类的表头
@@ -184,7 +185,7 @@ class EditableTable extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={this.showModal}>修改</a>
+                        <a onClick={() => this.showModal(record)}>修改</a>
                         &nbsp;&nbsp;
                                 <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
                             <a href="#">删除</a>
@@ -198,7 +199,7 @@ class EditableTable extends React.Component {
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                this.setState({selectedRowKeys:selectedRowKeys});
+                this.setState({ selectedRowKeys: selectedRowKeys });
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
@@ -226,8 +227,8 @@ class EditableTable extends React.Component {
                     <div>
                         <Row gutter={16}>
                             <Col xs={15} sm={10} md={10} lg={6} xl={4} style={{ verticalAlign: 'middle' }}>
-                                    <span>卡类名称 : </span>
-                                    <Input style={{width:'140px'}} onChange={(e) => this.setState({ cardName: e.target.value })} />
+                                <span>卡类名称 : </span>
+                                <Input style={{ width: '140px' }} onChange={(e) => this.setState({ cardName: e.target.value })} />
                             </Col>
                             <Col span={3}>
                                 <Button type="primary" onClick={this.queryData}>查询</Button>
@@ -237,9 +238,11 @@ class EditableTable extends React.Component {
                         <Row gutter={16} style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col xs={6} sm={5} md={4} lg={2} xl={2}>
                                 <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
-``                            </Col>
+                            </Col>
                             <Col xs={2} sm={4} md={6}>
-                                <Button onClick={()=>{this.onDelete(this.state.selectedRowKeys)}}>删除卡类</Button>
+                                <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
+                                    <Button >删除卡类</Button>
+                                </Popconfirm>
                             </Col>
                         </Row>
 
@@ -293,7 +296,7 @@ class ModalEditableTable extends React.Component {
         this.setState({ data: dataSource });
     }
     handleAdd = () => {
-        
+
     }
     render() {
         const columns = [{
@@ -328,7 +331,7 @@ class ModalEditableTable extends React.Component {
                     columns={columns}
                     dataSource={this.state.data}
                     bordered
-                    pagination = {this.state.pagination}
+                    pagination={this.state.pagination}
                     onChange={(pagination) => this.handleChange(pagination)}
                 />
             </div>
