@@ -86,10 +86,18 @@ class EditableTable extends React.Component {
 
 
     // 模态框的处理函数
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
+    showModal = (method, record) => {
+        if (method == 'modify') {
+            this.setState({
+                modifyData: record,
+                visible: true
+            });
+        } else {
+            this.setState({
+                visible: true
+            });
+        }
+
     }
     handleOk = (obj) => {
         this.setState({
@@ -185,7 +193,7 @@ class EditableTable extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => this.showModal(record)}>修改</a>
+                        <a onClick={() => this.showModal('modify', record)}>修改</a>
                         &nbsp;&nbsp;
                                 <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
                             <a href="#">删除</a>
@@ -237,7 +245,7 @@ class EditableTable extends React.Component {
 
                         <Row gutter={16} style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col xs={6} sm={5} md={4} lg={2} xl={2}>
-                                <Button className="editable-add-btn" onClick={this.showModal}>新增卡类</Button>
+                                <Button className="editable-add-btn" onClick={()=>this.showModal('add')}>新增卡类</Button>
                             </Col>
                             <Col xs={2} sm={4} md={6}>
                                 <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
@@ -261,7 +269,7 @@ class EditableTable extends React.Component {
 
                     </div>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={this.handleOk}
+                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData={this.state.modifyData}
                     onCancel={this.handleCancel}></CardModal>
 
             </div>

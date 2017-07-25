@@ -79,11 +79,20 @@ public class InventoryService {
 	}
 
 	public String deleteType(Integer[] inventoryTypeIds) {
-		int success = this.inventoryTypeDao.delete(Arrays.asList(inventoryTypeIds));
-		if (success == 0) {
-			return JsonResFactory.buildOrg(RESCODE.DELETE_ERROR).toString();
-		} else if (success < inventoryTypeIds.length) {
-			return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
+		for(Integer inventoryTypeId : inventoryTypeIds){
+			String typeName = inventoryTypeDao.findById(inventoryTypeId).getTypeName();
+			this.inventoryTypeDao.delete(inventoryTypeId);
+			List<String> ids = inventoryDao.findByTypeName(typeName);
+			if (this.consumOrderDao.countInventoryInfoByIds(ids) > 0 || this.projectDao.countInventoryByIds(ids) > 0) {
+				log.debug("ConsumExtraInventoriesInfo或ProjectInventoriesInfo有对库存的引用，无法删除");
+				return JsonResFactory.buildOrg(RESCODE.UNABLE_TO_DELETE).toString();
+			}
+			int success = this.inventoryDao.delete(ids);
+			if (success == 0) {
+				return JsonResFactory.buildOrg(RESCODE.DELETE_ERROR).toString();
+			} else if (success < ids.size()) {
+				return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
+			}
 		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

@@ -72,5 +72,12 @@ public class InventoryDaoImpl implements InventoryDao {
 		return this.getSession().createSQLQuery(sql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> findByTypeName(String typeName) {
+		String sql = "select id from Inventory where typeName = :typeName";
+		return this.getSession().createSQLQuery(sql).setString("typeName", typeName).setCacheable(Constants.SELECT_CACHE).list();
+	}
+
 	
 }

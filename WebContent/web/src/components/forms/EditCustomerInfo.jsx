@@ -54,7 +54,6 @@ class CustomerInfo extends React.Component {
                 type: 'get',
                 dataType: 'json',
                 success: (res) => {
-                    console.log(res)
                     if (res.code == '0') {
                         let data = res.data, cars = data.cars, carBrand, lastMiles, carId, carType;
                         for (let item of cars) {
@@ -78,7 +77,7 @@ class CustomerInfo extends React.Component {
                                     ['consumAmout']: { $set: data.consumAmout },
                                     ['consumTimes']: { $set: data.consumTimes },
                                     ['lastVisit']: { $set: data.lastVisit },
-                                    ['licensePlate']: { $set: value},
+                                    ['licensePlate']: { $set: value },
                                     ['carType']: { $set: carType }
                                 })
                         }, () => {
