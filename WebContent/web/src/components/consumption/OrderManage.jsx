@@ -106,9 +106,9 @@ class OrderManage extends React.Component {
                     programId: this.state.query.programId ? this.state.query.programId : -1,
                     payState: this.state.query.payState ? this.state.query.payState : -1,
                     clientId: -1,
-                    state:this.state.query.state>-1?this.state.query.state:-1
+                    state: this.state.query.state > -1 ? this.state.query.state : -1
                 },
-    
+
                 startDate: this.state.query.dateString[0],
                 endDate: this.state.query.dateString[1],
                 dateType: this.state.query.dateType ? this.state.query.dateType : -1,
@@ -150,6 +150,7 @@ class OrderManage extends React.Component {
                         <Col span={8} id="type">
                             项目类别：
                         <Select allowClear style={{ width: 120 }} value={this.state.query.programId} onChange={(value) => this.setQueryData('programId', value)} getPopupContainer={() => document.getElementById('type')}>
+                                <Option value={null}>全部</Option>
                                 <Option value="1">美容</Option>
                                 <Option value="2">维修</Option>
                             </Select>
@@ -181,6 +182,7 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             时间类型：
                         <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('dateType', value)} getPopupContainer={() => document.getElementById('area')}>
+                                <Option value={null}>全部</Option>
                                 <Option value="0">单据时间</Option>
                                 <Option value="1">接车时间</Option>
                                 <Option value="2">交车时间</Option>
