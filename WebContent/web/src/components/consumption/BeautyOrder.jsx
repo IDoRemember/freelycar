@@ -203,6 +203,10 @@ class BeautyOrder extends React.Component {
             this.setState({
                 errorInfo: '*请输入接车人'
             })
+        } else {
+            this.setState({
+                errorInfo:''
+            })
         }
         this.setState({
             consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })

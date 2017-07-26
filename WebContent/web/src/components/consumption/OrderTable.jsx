@@ -161,7 +161,7 @@ class OrderTable extends React.Component {
                                 break;
                             case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a>;
                                 break;
-                            case 2: innertext = <Link to="" >
+                            case 2: innertext = <Link to={`/app/consumption/ordermanage/${record.id}`} >
                                 <span>查看</span>
                             </Link>;
                                 break;
