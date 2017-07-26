@@ -81,12 +81,8 @@ class BuyCard extends React.Component {
                 number: 99,
             },
             success: (res) => {
-                console.log(res.data)
                 if (res.code == '0') {
-                    console.log(res.data);
-               
                     this.setState({
-
                         cardList: res.data,
                     })
                 }
