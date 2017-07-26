@@ -148,6 +148,17 @@ class PutInStorage extends React.Component {
                         title="单据类型"
                         key="docType"
                         dataIndex="docType"
+                        render={(text,record,index)=>{
+                            let view = ''
+                            if(text == 0) {
+                                view = '入库'
+                            } else if(text==1) {
+                                view = '维修出库'
+                            } else {
+                                view = '美容出库'
+                            }
+                            return <span>{view}</span>
+                        }}
                     />
                     <Col
                         title="单价"
