@@ -112,7 +112,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 		sb.append("FROM (");
 		sb.append("SELECT i.amount AS income,0 AS expend,DATE_FORMAT(i.payDate, '%Y-%m') AS payDate FROM incomeorder AS i ");
 		sb.append("WHERE i.payDate >= :start AND i.payDate <= :end");
-		sb.append(" UNION ");
+		sb.append(" UNION ALL ");
 		sb.append("SELECT 0 AS income,e.amount AS expend,DATE_FORMAT(e.payDate, '%Y-%m') AS payDate FROM expendorder AS e ");
 		sb.append("WHERE e.payDate >= :start AND e.payDate <= :end");
 		sb.append(") AS t ");
