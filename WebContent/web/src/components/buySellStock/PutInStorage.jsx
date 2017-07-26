@@ -124,7 +124,7 @@ class PutInStorage extends React.Component {
         for (let item of this.state.data) {
 
             totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
-            if (item.price && item.amount) {
+            if (item.price && item.amount &&item.provider) {
                 oneDisabled++
             }
         }
