@@ -32,7 +32,7 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<InventoryOrder> list(int from, int number) {
-		String hql = "from InventoryOrder order by createDate desc";
+		String hql = "from InventoryOrder where type = 0 order by createDate desc";
 		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(number)
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}

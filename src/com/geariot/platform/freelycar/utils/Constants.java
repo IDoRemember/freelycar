@@ -25,7 +25,7 @@ public class Constants {
 	public static final int PROJECT_WITH_CARD = 0;
 	public static final int PROJECT_WITH_CASH = 1;
 	
-	public static final String CARD_PROGRAM = "Card";
+	public static final String CARD_PROGRAM = "办卡";
 	
 	public static final String STAFF_NAME_SPLIT = ";";
 	
