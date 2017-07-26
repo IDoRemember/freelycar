@@ -161,9 +161,9 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             车辆状态：
                             <div style={{ display: "inline-block" }}>
-                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 0);}} type={this.state.query.state==0?'primary':null}>接</Button>
-                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 1);}} type={this.state.query.state==1?'primary':null}>完</Button>
-                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 2);}} type={this.state.query.state==2?'primary':null}>交</Button>
+                                <Button size="large" shape="circle" onClick={() => {if(this.state.query.state !== 0){this.setQueryData('state', 0)}else{this.setQueryData('state',null)}}} type={this.state.query.state==0?'primary':null}>接</Button>
+                                <Button size="large" shape="circle"  onClick={() => {if(this.state.query.state !== 1){this.setQueryData('state', 1)}else{this.setQueryData('state',null)}}} type={this.state.query.state==1?'primary':null}>完</Button>
+                                <Button size="large" shape="circle"  onClick={() => {if(this.state.query.state !== 2){this.setQueryData('state', 2)}else{this.setQueryData('state',null)}}} type={this.state.query.state==2?'primary':null}>交</Button>
                             </div>
                         </Col>
                     </Row>
