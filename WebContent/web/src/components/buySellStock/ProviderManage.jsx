@@ -243,7 +243,7 @@ class ProviderManage extends React.Component {
                 } else {
                     message.error(result.msg)
                     this.setState({
-                        data: datalist,
+                        data: [],
                         pagination: { total: 0 }
                     })
                 }
