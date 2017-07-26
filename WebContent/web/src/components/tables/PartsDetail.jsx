@@ -79,21 +79,15 @@ class PartsDetail extends React.Component {
                     }
                 }
                 if (same == 0) {
-                    let obj = {
-                        name: data[i].partName,
-                        brandName: data[i].brand,
-                        standard: data[i].standard,
-                        property: data[i].attribute,
-                        price: data[i].price,
-                        amount: data[i].inventory,
-                        key: data[i].key
-                    }
+                    let obj = data[i];
                     datalist.unshift(obj)
                 }
             }
         } else {
             datalist.unshift(...data)
         }
+
+
         this.setState({
             view: false,
             parts: datalist

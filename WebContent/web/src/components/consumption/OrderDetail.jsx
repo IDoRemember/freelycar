@@ -148,6 +148,7 @@ class BeautyDetail extends React.Component {
             sumPrice: 0,
             fixsumPrice: 0,
             inventoryPrice: 0,
+            payState:0,
             serviceData: [],
             fixData: [],
             inventoryData: [],
@@ -210,14 +211,14 @@ class BeautyDetail extends React.Component {
 
 
     }
-<<<<<<< HEAD
-    onclick = () => {
-        hashHistory.push(`/app/consumption/accountingcenter/${this.props.params.orderId}`)
-=======
+    
     onclick=()=>{
           hashHistory.push(`/app/consumption/costclose/${this.props.params.orderId}`)
->>>>>>> 5d24d8bae68d983b72beec7f324846b774cf8324
     }
+    onreturn=()=>{
+       history.go(-1)
+    }
+
     GetClientInfo() {
         $.ajax({
             url: 'api/order/queryid',
@@ -249,6 +250,7 @@ class BeautyDetail extends React.Component {
                 let Miles = obj.miles;
                 let name = obj.clientName;
                 let phone = obj.phone;
+                
                 let parkingLocation = obj.parkingLocation;
                 let pickTime = obj.pickTime;
                 let finishTime = obj.finishTime;
@@ -278,10 +280,12 @@ class BeautyDetail extends React.Component {
                     }
                     inventoryList.push(inventoryItem)
                 }
+                console.log(obj.payState)
                 this.setState({
                     inventoryData: inventoryList,
                     totalPrice: totalPrice,
                     inventoryPrice: inventoryprice,
+                    payState:obj.payState,
                 })
                 var inventorylist = this.state.inventoryData;
                 let inventoryTable = {
@@ -316,7 +320,7 @@ class BeautyDetail extends React.Component {
                         Itemprice: objservice[i].price,
                         price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
-                        CardNum: objservice[i].cardId,
+                        CardNum:objservice[i].cardId==''?'-':(objservice[i].cardName+'--'+objservice[i].cardId),
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
 
@@ -435,7 +439,8 @@ class BeautyDetail extends React.Component {
                     元
                 </div>
             </Card>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => this.onclick(true)}>结算</Button>
+        {this.state.payState==0&&<Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => this.onclick(true)}>结算</Button>}
+        {this.state.payState==1&&<Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} onClick={() => this.onreturn()}>返回</Button>}
             {/*<Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>保存</Button>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>*/}
         </div>

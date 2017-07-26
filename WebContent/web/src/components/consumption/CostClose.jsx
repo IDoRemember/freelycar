@@ -124,8 +124,8 @@ class CostClose extends React.Component {
 
         const cardInfo = [];
         this.state.feeDetail.map((item, index) => {
-            if (item.cardName) {
-                const item = <div key={index} style={{ marginLeft: '20px' }}>
+            if (item && item.cardName && item.cardId) {
+                const html = <div key={index} style={{ marginLeft: '20px' }}>
                     <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
                             {item.cardId}
@@ -145,7 +145,7 @@ class CostClose extends React.Component {
                         </div>
                     </div>
                 </div>
-                cardInfo.push(item);
+                cardInfo.push(html);
             }
         })
 

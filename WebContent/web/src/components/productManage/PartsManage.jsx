@@ -602,7 +602,7 @@ class BeautyOrder extends React.Component {
                 return <span>{index + 1}</span>
             }
         }, {
-            title: '类型名称',
+            title: '类别名称',
             dataIndex: 'typeName',
             key: 'typeName'
         }, {

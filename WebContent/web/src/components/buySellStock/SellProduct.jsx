@@ -19,16 +19,16 @@ class PutInStorage extends React.Component {
     }
     componentDidMount() {
 
-        this.loadData(1, 10);
+        this.loadData(1, 10,0);
         this.loadAdmin();
     }
 
     //条件查询
     conditionQuery = () => {
-        this.loadData(1, 10, this.state.inventoryOrderId, this.state.adminId);
+        this.loadData(1, 10, 0,this.state.inventoryOrderId, this.state.adminId);
     }
 
-    loadData = (page, number, inventoryOrderId, adminId, type) => {
+    loadData = (page, number,type,inventoryOrderId, adminId) => {
         var obj = {};
         obj.inventoryOrderId = inventoryOrderId;
         obj.adminId = adminId;
@@ -54,7 +54,6 @@ class PutInStorage extends React.Component {
                             data.push(i);
                         }
                     }
-
                     this.setState({
                         data: data
                     });
@@ -148,6 +147,17 @@ class PutInStorage extends React.Component {
                         title="单据类型"
                         key="docType"
                         dataIndex="docType"
+                        render={(text,record,index)=>{
+                            let view = ''
+                            if(text == 0) {
+                                view = '入库'
+                            } else if(text==1) {
+                                view = '维修出库'
+                            } else {
+                                view = '美容出库'
+                            }
+                            return <span>{view}</span>
+                        }}
                     />
                     <Col
                         title="单价"

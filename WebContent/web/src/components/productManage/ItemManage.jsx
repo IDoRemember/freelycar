@@ -57,7 +57,7 @@ class BeautyOrder extends React.Component {
             progId: '',//条件查询的项目类别id
             pagination: {},
             tabkey: 1,
-            view: false,//modal之上的modal
+            modal2: false,//modal之上的modal
             invData: []//关联的配件 
         }
     }
@@ -87,9 +87,9 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
+                    console.log(res);
                     let tableDate = [];//表格显示的数据
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
@@ -98,8 +98,10 @@ class BeautyOrder extends React.Component {
                         for (let item in obj) {
                             if (item == 'id')
                                 tableItem.key = obj[item];
-                            else if (item == 'program')
+                            else if (item == 'program') {
                                 tableItem.program = obj[item].name;
+                                tableItem.programId = obj[item].id;
+                            }
                             else
                                 tableItem[item] = obj[item];
                         }
@@ -127,7 +129,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -207,12 +208,6 @@ class BeautyOrder extends React.Component {
         this.setState({ tabkey: key });
     }
 
-    // tab1模态框的处理函数
-    showModal = () => {
-        this.setState({
-            visible: true,
-        });
-    }
 
     handleOk = (e) => {
         //修改为关联配件
@@ -253,9 +248,7 @@ class BeautyOrder extends React.Component {
             traditional: true,
             success: (result) => {
                 let code = result.code;
-
                 if (code == '0') {
-
                     obj.program = this.state.form.program;
                     obj.key = result.data.id;
                     obj.createDate = result.data.createDate;
@@ -295,39 +288,33 @@ class BeautyOrder extends React.Component {
 
     //修改功能
     modifyMethod = (record) => {
+        console.log(record);
+        let invData = [];//local varible
+        let inventoryInfos = record.inventoryInfos;
+        for(let item of inventoryInfos){
+            let temp = item.inventory;
+            temp.id = item.id;
+            temp.number = item.number;
+            temp.key = item.id;
+            invData.push(temp);
+        }
+        console.log(invData);
         this.setState({
-            visible: true
+            visible: true,
+            form: update(this.state.form, {
+                ['name']: { $set: record.name },
+                ['programId']: { $set: record.programId },
+                ['program']: { $set: record.program },
+                ['price']: { $set: record.price },
+                ['referWorkTime']: { $set: record.referWorkTime },
+                ['pricePerUnit']: { $set: record.pricePerUnit },
+                ['comment']: { $set: record.comment },
+            }),
+            invData:invData
         })
     }
 
-    modeShow = () => {
-        this.setState({
-            view: true
-        })
-    }
 
-
-    handleCancel = (e) => {
-        console.log(e);
-        this.setState({
-            visible: false,
-        });
-    }
-
-    //第二个modal
-    handleCancelView = () => {
-        this.setState({
-            view: false
-        });
-    }
-    handleOkView = (selectedRows) => {
-        console.log(selectedRows);
-        this.setState({
-            view: false
-        });
-
-        this.setState({ invData: selectedRows });
-    }
     //表格删除
     onCellChange = (index, key) => {
         return (value) => {
@@ -395,7 +382,6 @@ class BeautyOrder extends React.Component {
         let obj = {};
         obj.name = this.state.form2.name;
         obj.comment = this.state.form2.comment;
-        console.log('zzzz');
         $.ajax({
             url: 'api/program/add',
             data: obj,
@@ -413,8 +399,6 @@ class BeautyOrder extends React.Component {
                 }
             }
         })
-
-
         this.setState({ visibleType: false });
     }
 
@@ -497,35 +481,32 @@ class BeautyOrder extends React.Component {
             }
         }, {
             title: '配件编号',
-            dataIndex: 'partId',
-            key: 'partId'
+            dataIndex: 'id',
+            key: 'id'
         }, {
             title: '配件名称',
-            dataIndex: 'partName',
-            key: 'partName'
+            dataIndex: 'name',
+            key: 'name'
         }, {
             title: '配件品牌',
-            dataIndex: 'brand',
-            key: 'brand'
+            dataIndex: 'brandName',
+            key: 'brandName'
         }, {
             title: '配件类别',
-            dataIndex: 'category',
-            key: 'category',
-            render: (value, record, index) => {
-                return <span>{value.typeName}</span>
-            }
+            dataIndex: 'typeName',
+            key: 'typeName'
         }, {
             title: '规格属性',
-            dataIndex: 'attribute',
-            key: 'attribute'
+            dataIndex: 'property',
+            key: 'property'
         }, {
             title: '配件价格',
             dataIndex: 'price',
             key: 'price'
         }, {
             title: '可用库存',
-            dataIndex: 'inventory',
-            key: 'inventory'
+            dataIndex: 'amount',
+            key: 'amount'
         }, {
             title: '数量',
             dataIndex: 'count',
@@ -631,7 +612,7 @@ class BeautyOrder extends React.Component {
                                 </Row>
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={this.showModal} >新增项目</Button>
+                                        <Button onClick={()=>{this.setState({visible:true})}} >新增项目</Button>
                                     </Col>
                                     <Col span={8}>
                                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedIds)}>
@@ -644,7 +625,7 @@ class BeautyOrder extends React.Component {
                                         title="新增项目"
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
-                                        onCancel={this.handleCancel}
+                                        onCancel={() => { this.setState({ visible: false }) }}
                                         width='80%'
                                     >
                                         <Form onSubmit={this.changehandleSubmit}>
@@ -668,6 +649,7 @@ class BeautyOrder extends React.Component {
                                                             style={{ width: '100%' }}
                                                             onChange={(value) => this.onValueChange('program', value)}
                                                             labelInValue
+                                                            defaultValue={{ key: this.state.form.programId + '', label: this.state.form.program }}
                                                         >
                                                             {this.state.programItem}
                                                         </Select>
@@ -718,13 +700,12 @@ class BeautyOrder extends React.Component {
                                             </Row>
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
-                                                <Button type="primary" onClick={() => this.modeShow()}>新增配件</Button>
-                                                <PartsSearch view={this.state.view} handleCancel={this.handleCancelView} handleOk={this.handleOkView}></PartsSearch>
+                                                <Button type="primary" onClick={() => { this.setState({ modal2: true }) }}>新增配件</Button>
+                                                <PartsSearch view={this.state.modal2} handleCancel={() => { this.setState({ modal2: false }) }} handleOk={(selectedRows) => { this.setState({ modal2: false, invData: selectedRows }) }}></PartsSearch>
                                             </Row>
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
                                                 <Table
-                                                    rowSelection={rowSelection}
                                                     columns={modalInv}
                                                     dataSource={this.state.invData}
                                                     bordered
