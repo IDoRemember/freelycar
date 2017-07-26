@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Select, Table, message, Popconfirm, Form, InputNumber, Modal, Input } from 'antd';
+import { Row, Col, Card, Button, Select, Table, message, Popconfirm, Form, InputNumber, Modal, Input,message } from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const Option = Select.Option;
@@ -17,6 +17,7 @@ class ProviderManage extends React.Component {
             pagination: {
 
             },
+            errorMsg: '',
             loading: true,
             selectedRowKeys: [],
             selectedIds: [],
@@ -149,12 +150,15 @@ class ProviderManage extends React.Component {
         })
     }
     handleOk = (e) => {
-        this.setState({
-            visible: false,
-        });
+
         if (this.state.form.name == '') {
-            message.error('请输入供应商名称')
+            this.setState({
+                errorMsg: '请输入供应商名称'
+            })
         } else {
+            this.setState({
+                visible: false,
+            });
             $.ajax({
                 type: 'post',
                 url: 'api/provider/add',
@@ -192,11 +196,13 @@ class ProviderManage extends React.Component {
             })
         }
     }
+
     handleCancel = (e) => {
         this.setState({
             visible: false,
         });
     }
+
     startQuery = () => {
         $.ajax({
             type: 'GET',
@@ -234,10 +240,17 @@ class ProviderManage extends React.Component {
                             })
                         }
                     }
+                } else {
+                    message.error(result.msg)
+                    this.setState({
+                        data: datalist,
+                        pagination: { total: 0 }
+                    })
                 }
             }
         })
     }
+
     onDelete = (idArray) => {
         $.ajax({
             type: 'post',
@@ -333,6 +346,10 @@ class ProviderManage extends React.Component {
                             </Col>
                             <Col span={8} style={{ textAlign: 'right' }}>
                                 <Input value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+
+                            </Col>
+                            <Col span={8}>
+                                <span style={{ color: 'red' }}> {!this.state.form.name != '' && this.state.errorMsg ? this.state.errorMsg : ''}</span>
                             </Col>
                         </Row>
 

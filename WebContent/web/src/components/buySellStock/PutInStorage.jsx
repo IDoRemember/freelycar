@@ -145,7 +145,7 @@ class PutInStorage extends React.Component {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
             totalPrice = totalPrice + (item.number ? item.price * item.number : 0)
-            if (item.price && item.number) {
+            if (item.price && item.number &&item.provider) {
                 oneDisabled++
             }
         }
@@ -215,7 +215,7 @@ class PutInStorage extends React.Component {
                         />
                         <Col
                             title="配件类别"
-                            key=" category"
+                            key="category"
                             dataIndex="category"
                         />
                         <Col
