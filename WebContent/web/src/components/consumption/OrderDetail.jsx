@@ -210,14 +210,11 @@ class BeautyDetail extends React.Component {
 
 
     }
-<<<<<<< HEAD
-    onclick = () => {
-        hashHistory.push(`/app/consumption/accountingcenter/${this.props.params.orderId}`)
-=======
+    
     onclick=()=>{
           hashHistory.push(`/app/consumption/costclose/${this.props.params.orderId}`)
->>>>>>> 5d24d8bae68d983b72beec7f324846b774cf8324
     }
+
     GetClientInfo() {
         $.ajax({
             url: 'api/order/queryid',
