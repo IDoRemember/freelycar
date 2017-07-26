@@ -122,7 +122,6 @@ class PutInStorage extends React.Component {
     render() {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
-
             totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
             if (item.price && item.amount &&item.provider) {
                 oneDisabled++

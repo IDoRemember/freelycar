@@ -402,7 +402,9 @@ class ProviderManage extends React.Component {
                             </Col>
                         </Row>
                     </Modal>
-                    <Button onClick={() => this.onDelete(this.state.selectedIds)}>删除供应商</Button>
+                    <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete(this.state.selectedIds)}>
+                        <Button>删除供应商</Button>
+                    </Popconfirm>
                 </div>
                 <Table loading={this.state.loading} pagination={this.state.pagination} bordered onChange={(pagination) => this.handleTableChange(pagination)} columns={this.state.conlums} dataSource={this.state.data} rowSelection={rowSelection} />
             </Card >
