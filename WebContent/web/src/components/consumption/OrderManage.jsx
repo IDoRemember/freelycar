@@ -22,8 +22,10 @@ class OrderManage extends React.Component {
                 licensePlate: '',
                 programId: null,
                 payState: null,
+                startDate: '',
                 dateString: [],
-                dataType: null,
+                endDate: '',
+                dateType: null,
                 state: null
             }
         }
@@ -88,7 +90,8 @@ class OrderManage extends React.Component {
                 startDate: '',
                 dateString: [],
                 endDate: '',
-                dateType: null
+                dateType: null,
+                state: null
             }
         })
     }
@@ -189,11 +192,11 @@ class OrderManage extends React.Component {
                                 <Option value="3">完工时间</Option>
                             </Select>
                         </Col>
-                        <Col span={8} id="timepicker">
+                        {this.state.query.dateType && <Col span={8} id="timepicker">
                             <div>
                                 <RangePicker onChange={(dates, dateString) => this.setQueryData('dateString', dateString)} getPopupContainer={() => document.getElementById('timepicker')} />
                             </div>
-                        </Col>
+                        </Col>}
                         <Col span={8} />
                     </Row>
                     <Row gutter={16} style={{ marginBottom: "10px" }}>
