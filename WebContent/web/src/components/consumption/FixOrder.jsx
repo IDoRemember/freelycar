@@ -252,7 +252,7 @@ class FixOrder extends React.Component {
                 <span style={{ fontSize: '18px' }}>故障描述：</span><Input type="textarea" rows={2} style={{ display: 'inline-block', marginBottom: '10px' }} onChange={(e) => { this.saveInfo({ faultDesc: e.target.value }) }} />
                 <span style={{ fontSize: '18px' }}>维修建议：</span><Input type="textarea" rows={2} style={{ display: 'inline-block' }} onChange={(e) => { this.saveInfo({ repairAdvice: e.target.value }) }} />
             </Card>
-            <ServiceTable pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
+            <ServiceTable clientId={this.state.consumOrder.clientId} pushInventory={this.pushInventory} cards={this.state.cards} getPartsDetail={(parts) => this.getPartsDetail(parts)} staffList={this.state.staffList} saveInfo={this.saveInfo} optionService={this.state.optionService} programId={2} dataService={this.state.dataService} />
             {parts}
             <Card>
                 <div style={{ textAlign: 'right' }}>
