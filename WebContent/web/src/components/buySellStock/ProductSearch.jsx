@@ -170,7 +170,7 @@ class ProductSearch extends React.Component {
                 <div>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
                         <Col span={10} style={{ verticalAlign: 'middle' }}>
-                            商品名：<Search
+                            配件名：<Search
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
                                 onSearch={value => this.getList(value, -1, 1, 10)}
@@ -179,7 +179,7 @@ class ProductSearch extends React.Component {
                             />
                         </Col>
                         <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
-                            商品类别：<Select
+                            配件类别：<Select
                                 showSearch
                                 style={{ width: '200px' }}
                                 placeholder="选择商品类别进行搜索"

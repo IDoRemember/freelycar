@@ -49,11 +49,11 @@ class PutInStorage extends React.Component {
                 return <span>{index + 1}</span>
             }
         }, {
-            title: '商品名称',
+            title: '配件名称',
             dataIndex: 'name',
             key: 'name'
         }, {
-            title: '商品类别',
+            title: '配件类别',
             dataIndex: 'typeName',
             key: 'typeName'
         }, {
