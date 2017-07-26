@@ -141,8 +141,15 @@ class ProgramSearch extends React.Component {
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
+                let oldRows = this.state.selectedRows
+                for (let item of selectedRows) {
+                    oldRows = oldRows.filter((obj) => {
+                        return item.key !== obj.key;
+                    });
+                }
+                oldRows.push.apply(oldRows, selectedRows)
                 this.setState({
-                    selectedRows: selectedRows
+                    selectedRows: oldRows
                 })
             },
 

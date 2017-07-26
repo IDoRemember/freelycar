@@ -50,6 +50,7 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
+        console.log(data)
         let datalist = this.state.data
         if (datalist.length > 0) {
             for (let i = 0; i < data.length; i++) {
