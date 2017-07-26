@@ -190,7 +190,7 @@ class ServiceTable extends React.Component {
                     key="memberCard"
                     dataIndex="memberCard"
                     render={(text, record, index) => {
-                        let cards = [], projectInfos = [], cardOptions
+                        let cards = [], projectInfos = [], cardOptions=[]
                         this.props.cards ? this.props.cards.map((item, index) => {
                             for (let projectItem of item.projectInfos) {
                                 let obj = {
@@ -198,7 +198,7 @@ class ServiceTable extends React.Component {
                                     name: projectItem.project.name,
                                     times: projectItem.remaining
                                 }
-                                if (projectItem.id == record.key) {
+                                if (projectItem.project.id == record.projectId) {
                                     cards.push(item)
                                 }
                                 projectInfos.push(obj)
