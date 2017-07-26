@@ -13,20 +13,20 @@ const columns = [{
     }
 }, {
     title: '配件编号',
-    dataIndex: 'partId',
-    key: 'partId'
+    dataIndex: 'id',
+    key: 'id'
 }, {
     title: '配件名称',
-    dataIndex: 'partName',
-    key: 'partName'
+    dataIndex: 'name',
+    key: 'name'
 }, {
     title: '配件品牌',
-    dataIndex: 'brand',
-    key: 'brand'
+    dataIndex: 'brandName',
+    key: 'brandName'
 }, {
     title: '配件类别',
-    dataIndex: 'category',
-    key: 'category'
+    dataIndex: 'typeName',
+    key: 'typeName'
 }, {
     title: '属性',
     dataIndex: 'property',
@@ -41,8 +41,8 @@ const columns = [{
     key: 'price'
 }, {
     title: '可用库存',
-    dataIndex: 'inventory',
-    key: 'inventory'
+    dataIndex: 'amount',
+    key: 'amount'
 }, {
     title: '备注',
     dataIndex: 'comment',
@@ -56,7 +56,7 @@ class PartsSearch extends React.Component {
             selectedRows: [],
             typeList: [],
             type: '',
-            visible: this.props.view,
+            visible: this.props.modal2,
             partName: '',
             pagination: {},
             data: [],
@@ -69,7 +69,7 @@ class PartsSearch extends React.Component {
     componentWillReceiveProps(newProps) {
         if (newProps.view != this.state.visible) {
             this.setState({
-                visible: newProps.view
+                visible: newProps.modal2
             })
         }
     }
@@ -99,32 +99,18 @@ class PartsSearch extends React.Component {
                 number: pageSize
             },
             success: (result) => {
-                console.log(result);
                 if (result.code == "0") {
                     this.setState({ loading: false })
-                    let datalist = []
-                    for (let i = 0; i < result.data.length; i++) {
-                        let dataitem = {
-                            key: result.data[i].id,
-                            partId: result.data[i].id,
-                            partName: result.data[i].name,
-                            attribute: result.data[i].property,
-                            standard: result.data[i].standard,
-                            price: result.data[i].price,
-                            brand: result.data[i].brandName,
-                            inventory: result.data[i].amount,
-                            category: result.data[i].typeName,
-                            comment: result.data[i].comment,
-                            provider: result.data[i].provider
-                        }
-                        datalist.push(dataitem)
-                        if (datalist.length == result.data.length) {
-                            this.setState({
-                                data: datalist,
-                                pagination: { total: result.realSize },
-                            })
-                        }
+                    let datalist = result.data;
+
+                    for (let item of datalist) {
+                        item.key = item.id;
                     }
+                    this.setState({
+                        data: datalist,
+                        pagination: { total: result.realSize },
+                    })
+
                 } else if (result.code == '2') {
                     this.setState({
                         data: [],
@@ -136,7 +122,6 @@ class PartsSearch extends React.Component {
     }
 
     handleTableChange = (pagination) => {
-        console.log(pagination)
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
@@ -144,8 +129,6 @@ class PartsSearch extends React.Component {
         })
 
         this.getList(this.state.partName, this.state.type, pagination.current, 10)
-
-
     }
 
     setSearchName = (value) => {
@@ -177,6 +160,7 @@ class PartsSearch extends React.Component {
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked
             }),
+
         }, partTypeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
         }), radioStyle = {
