@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, DatePicker } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table,message, Row, Col, Popconfirm, DatePicker } from 'antd';
 import { Link } from 'react-router';
 import moment from 'moment';
 import $ from 'jquery'
@@ -128,6 +128,11 @@ class PutInStorage extends React.Component {
                         data: data,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
+                } else if(result.code == '2') { 
+                    message.error(result.msg)
+                    this.setState({
+                        data:[]
+                    })
                 }
             }
         })
@@ -212,6 +217,7 @@ class PutInStorage extends React.Component {
                                 style={{ width: '200px' }}
                                 placeholder="选择制单人"
                                 optionFilterProp="children"
+                                allowClear
                                 onChange={(value) => this.setOrderMaker(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
@@ -222,7 +228,7 @@ class PutInStorage extends React.Component {
                     </Col>
                     <Col span={8} >
                         <div style={{ height: '28px', lineHeight: '28px' }}>
-                            <Button type="primary" onClick={() => this.queryList(this.state.orderNumber, null, 1, 10)}>
+                            <Button type="primary" onClick={() => this.queryList(this.state.orderNumber, this.state.orderMaker, 1, 10)}>
                                 查询
                             </Button>
                         </div>
