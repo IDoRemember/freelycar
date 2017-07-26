@@ -244,7 +244,6 @@ class BeautyOrder extends React.Component {
 
         obj.inventoryInfos = arr;
 
-        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/project/add',
@@ -253,7 +252,6 @@ class BeautyOrder extends React.Component {
             data: JSON.stringify(obj),
             traditional: true,
             success: (result) => {
-                console.log(result);
                 let code = result.code;
 
                 if (code == '0') {
@@ -277,7 +275,6 @@ class BeautyOrder extends React.Component {
     //为state的form
     onValueChange = (key, value) => {
         if (key == 'program') {
-            console.log(value);
             this.setState({
                 form: update(this.state.form, { ['program']: { $set: value.label }, ['programId']: { $set: value.key } })
             })
@@ -287,6 +284,7 @@ class BeautyOrder extends React.Component {
             })
     }
 
+
     //改变关联的配件中的number属性
     onInValueChange = (index, value) => {
         this.setState({
@@ -294,6 +292,13 @@ class BeautyOrder extends React.Component {
         })
     }
 
+
+    //修改功能
+    modifyMethod = (record) => {
+        this.setState({
+            visible: true
+        })
+    }
 
     modeShow = () => {
         this.setState({
@@ -471,8 +476,11 @@ class BeautyOrder extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
+                        <a onClick={() => { this.modifyMethod(record) }}>修改</a>
+                        &nbsp;
+                        &nbsp;
                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
-                            <a href="#">删除</a>
+                            <a>删除</a>
                         </Popconfirm>
                     </div>
                 );
@@ -583,8 +591,6 @@ class BeautyOrder extends React.Component {
                 this.setState({
                     selectedIds: selectedRowKeys
                 })
-
-                //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked

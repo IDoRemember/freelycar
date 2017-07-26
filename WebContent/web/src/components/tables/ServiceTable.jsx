@@ -239,7 +239,7 @@ class ServiceTable extends React.Component {
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
-                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={`/app/member/memberShip/${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={this.props.clientId == ''?`/app/member/memberShip`:`/app/member/memberShip/${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
                             </Select>
                             </div>
                         }

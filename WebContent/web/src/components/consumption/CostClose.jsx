@@ -1,8 +1,9 @@
 import React from 'react';
 import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Link } from 'react-router';
+import { Link ,hashHistory} from 'react-router';
 import $ from 'jquery';
+
 
 const RadioGroup = Radio.Group;
 const radioStyle = {
@@ -76,6 +77,7 @@ class CostClose extends React.Component {
             success: (res) => {
                 if (res.code == '0') {
                     message.success('结算成功');
+                    hashHistory.push('/app/consumption/orderManage');
                 } else {
                     message.error('结算失败');
                 }

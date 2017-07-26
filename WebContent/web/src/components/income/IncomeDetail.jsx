@@ -17,6 +17,7 @@ class IncomeDetail extends React.Component {
         super(props)
         this.state = {
             pagination: {},
+            incomeStat:null,
             selectedRowKeys: [],
             loading: false,
             data: []
@@ -87,11 +88,9 @@ class IncomeDetail extends React.Component {
             }
         }, {
             title: '项目',
-            dataIndex: 'type',
-            key: 'type',
-            render: (text, record, index) => {
-                return <span>{text == 1 ? '消费' : '办卡'}</span>
-            }
+            dataIndex: 'programName',
+            key: 'programName',
+        
         }, {
             title: '金额',
             dataIndex: 'amount',

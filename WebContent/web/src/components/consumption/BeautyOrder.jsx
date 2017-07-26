@@ -203,6 +203,10 @@ class BeautyOrder extends React.Component {
             this.setState({
                 errorInfo: '*请输入接车人'
             })
+        } else {
+            this.setState({
+                errorInfo:''
+            })
         }
         this.setState({
             consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })
@@ -222,7 +226,7 @@ class BeautyOrder extends React.Component {
                         if (res.code == '0') {
                             message.success(res.text);
                             if (isFinish) {
-                                hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
                             } else {
                                 hashHistory.push(`/app/consumption/ordermanage`)
                             }
