@@ -102,46 +102,7 @@ class ServiceTable extends React.Component {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
         }), staffOptions = this.props.staffList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.name}</Option>
-        }), cardOptions = this.props.cards ? this.props.cards.map((item, index) => {
-
-            let projectInfos = []
-            for (let item of item.projectInfos) {
-                let obj = {
-                    key: item.id,
-                    name: item.project.name,
-                    times: item.remaining
-                }
-                projectInfos.push(obj)
-            }
-            const content = (
-                <div style={{ width: '200px' }}>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >卡类名称：</Col>
-                        <Col span={12}>{item.service.name}</Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >卡类属性：</Col>
-                        <Col span={12}>{item.service.type == '1' ? '组合次卡' : '次卡'}</Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >售卡金额：</Col>
-                        <Col span={12}>{item.service.price}</Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >有效期：</Col>
-                        <Col span={12}>{item.service.validTime}年</Col>
-                    </Row>
-                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >剩余次数明细：</Col>
-                    </Row>
-                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
-                </div>
-            );
-            const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
-                {item.service.name + item.service.id}
-            </Popover>
-            return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
-        }) : []
+        })
 
         return <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }}>
             <div style={{ fontSize: '16px', marginBottom: '10px' }}> 服务项目&nbsp;&nbsp;&nbsp;
@@ -229,6 +190,52 @@ class ServiceTable extends React.Component {
                     key="memberCard"
                     dataIndex="memberCard"
                     render={(text, record, index) => {
+                        let cards = [], projectInfos = [], cardOptions
+                        this.props.cards ? this.props.cards.map((item, index) => {
+                            for (let projectItem of item.projectInfos) {
+                                let obj = {
+                                    key: projectItem.id,
+                                    name: projectItem.project.name,
+                                    times: projectItem.remaining
+                                }
+                                if (projectItem.id == record.key) {
+                                    cards.push(item)
+                                }
+                                projectInfos.push(obj)
+                            }
+
+                        }) : []
+                        cardOptions = cards.map((item, index) => {
+                            const content = (
+                                <div style={{ width: '200px' }}>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类名称：</Col>
+                                        <Col span={12}>{item.service.name}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类属性：</Col>
+                                        <Col span={12}>{item.service.type == '1' ? '组合次卡' : '次卡'}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >售卡金额：</Col>
+                                        <Col span={12}>{item.service.price}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >有效期：</Col>
+                                        <Col span={12}>{item.service.validTime}年</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >剩余次数明细：</Col>
+                                    </Row>
+                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
+                                </div>
+                            );
+                            const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
+                                {item.service.name + item.service.id}
+                            </Popover>
+                            return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
+                        })
+
                         if ((index + 1) < this.state.data.length) {
                             return <div id="memberCard"><Select showSearch
                                 style={{ width: '120px', maxHeight: '200px' }}
@@ -239,7 +246,7 @@ class ServiceTable extends React.Component {
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
                                 {cardOptions}
-                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={this.props.clientId == ''?`/app/member/memberShip`:`/app/member/memberShip/${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
+                                <Option style={{ padding: '0', textAlign: 'center' }} key={-1} value={'会员开卡'}><Link to={this.props.clientId == '' ? `/app/member/memberShip` : `/app/member/memberShip/${this.props.clientId}`} style={{ display: 'block', padding: '7px 8px' }}>会员开卡</Link></Option>
                             </Select>
                             </div>
                         }
