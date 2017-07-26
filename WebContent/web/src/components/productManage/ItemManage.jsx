@@ -87,9 +87,9 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
+                    console.log(res);
                     let tableDate = [];//表格显示的数据
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
@@ -98,8 +98,10 @@ class BeautyOrder extends React.Component {
                         for (let item in obj) {
                             if (item == 'id')
                                 tableItem.key = obj[item];
-                            else if (item == 'program')
+                            else if (item == 'program') {
                                 tableItem.program = obj[item].name;
+                                tableItem.programId = obj[item].id;
+                            }
                             else
                                 tableItem[item] = obj[item];
                         }
@@ -127,7 +129,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -295,8 +296,14 @@ class BeautyOrder extends React.Component {
 
     //修改功能
     modifyMethod = (record) => {
+        console.log(record);
         this.setState({
-            visible: true
+            visible: true,
+            form: update(this.state.form, {
+                ['name']: { $set: record.name },
+                ['programId']: { $set: record.programId },
+
+            })
         })
     }
 
@@ -668,6 +675,7 @@ class BeautyOrder extends React.Component {
                                                             style={{ width: '100%' }}
                                                             onChange={(value) => this.onValueChange('program', value)}
                                                             labelInValue
+                                                            defaultValue={{key:this.state.form.programId, label:this.state.form.program}}
                                                         >
                                                             {this.state.programItem}
                                                         </Select>
