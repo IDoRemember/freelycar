@@ -104,7 +104,7 @@
         </property> -->
     	<property name="filterChainDefinitions">
         	<value>
-        		/freelycar/api/#/** = authc
+        		<!-- /freelycar/api/#/** = authc -->
             	<!-- # some example chain definitions:
         		/api/shiro = anon
         		/api/test/* = authc
