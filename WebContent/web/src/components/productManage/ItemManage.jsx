@@ -289,6 +289,16 @@ class BeautyOrder extends React.Component {
     //修改功能
     modifyMethod = (record) => {
         console.log(record);
+        let invData = [];//local varible
+        let inventoryInfos = record.inventoryInfos;
+        for(let item of inventoryInfos){
+            let temp = item.inventory;
+            temp.id = item.id;
+            temp.number = item.number;
+            temp.key = item.id;
+            invData.push(temp);
+        }
+        console.log(invData);
         this.setState({
             visible: true,
             form: update(this.state.form, {
@@ -299,7 +309,8 @@ class BeautyOrder extends React.Component {
                 ['referWorkTime']: { $set: record.referWorkTime },
                 ['pricePerUnit']: { $set: record.pricePerUnit },
                 ['comment']: { $set: record.comment },
-            })
+            }),
+            invData:invData
         })
     }
 
@@ -690,7 +701,7 @@ class BeautyOrder extends React.Component {
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
                                                 <Button type="primary" onClick={() => { this.setState({ modal2: true }) }}>新增配件</Button>
-                                                <PartsSearch modal2={this.state.modal2} handleCancel={() => { this.setState({ modal2: false }) }} handleOk={(selectedRows) => { this.setState({ modal2: false, invData: selectedRows }) }}></PartsSearch>
+                                                <PartsSearch view={this.state.modal2} handleCancel={() => { this.setState({ modal2: false }) }} handleOk={(selectedRows) => { this.setState({ modal2: false, invData: selectedRows }) }}></PartsSearch>
                                             </Row>
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>

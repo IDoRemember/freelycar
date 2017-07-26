@@ -56,7 +56,7 @@ class PartsSearch extends React.Component {
             selectedRows: [],
             typeList: [],
             type: '',
-            visible: this.props.modal2,
+            visible: this.props.view,
             partName: '',
             pagination: {},
             data: [],
@@ -69,7 +69,7 @@ class PartsSearch extends React.Component {
     componentWillReceiveProps(newProps) {
         if (newProps.view != this.state.visible) {
             this.setState({
-                visible: newProps.modal2
+                visible: newProps.view
             })
         }
     }
