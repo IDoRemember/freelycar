@@ -220,7 +220,7 @@ class FixOrder extends React.Component {
                     if (res.code == '0') {
                         message.success(res.text);
                         if (isFinish) {
-                            hashHistory.push(`/app/consumption/accountingcenter/${res.id}`)
+                            hashHistory.push(`/app/consumption/costclose/${res.id}`)
                         } else {
                             hashHistory.push(`/app/consumption/ordermanage`)
                         }
