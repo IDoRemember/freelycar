@@ -50,23 +50,10 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
-        //console.log(data)
-        // let datalist = this.state.data
-        // if (datalist.length > 0) {
-        //     for (let i = 0; i < data.length; i++) {
-        //         let same = 0;
-        //         for (let j = 0; j < datalist.length; j++) {
-        //             if (data[i].partId == datalist[j].partId) {
-        //                 same++
-        //             }
-        //         }
-        //         if (same == 0) {
-        //             datalist.push(data[i])
-        //         }
-        //     }
-        // } else {
-        //     datalist.push(...data)
-        // }
+        for(let item of data){
+            item.amount = 1;
+            item.price = null;
+        }
         this.setState({
             view: false,
             data: data,
@@ -96,10 +83,12 @@ class PutInStorage extends React.Component {
             })
         }
         if (this.state.error == '') {
+            let instockArray = []
             console.log(this.state.data)
             let inv = this.state.data;
             for (let item of inv) {
                 item.inventoryId = item.id;
+                delete (item.id);
             }
 
             $.ajax({
@@ -138,6 +127,7 @@ class PutInStorage extends React.Component {
                 oneDisabled++
             }
         }
+
         if (oneDisabled == this.state.data.length) {
             disabled = false
         }
@@ -217,15 +207,15 @@ class PutInStorage extends React.Component {
                             key="price"
                             dataIndex="price"
                             render={(text, record, index) => {
-                                return <InputNumber style={{ width: '100px' }} defaultValue={text} onChange={(value) => this.changeData('price', value, index)} />
+                                return <InputNumber style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
                             }}
                         />
                         <Col
                             title="数量"
-                            key="number"
-                            dataIndex="number"
+                            key="amount"
+                            dataIndex="amount"
                             render={(text, record, index) => {
-                                return <InputNumber min={1} defaultValue={1} style={{ width: '100px' }} onChange={(value) => this.changeData('number', value, index)} />
+                                return <InputNumber min={1} defaultValue={1} style={{ width: '100px' }} onChange={(value) => this.changeData('amount', value, index)} />
                             }}
                         />
                         <Col
