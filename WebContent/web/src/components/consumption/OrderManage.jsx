@@ -161,9 +161,9 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             车辆状态：
                             <div style={{ display: "inline-block" }}>
-                                <Button size="large" shape="circle" onClick={() => this.setQueryData('state', 0)}>接</Button>
-                                <Button size="large" shape="circle" onClick={() => this.setQueryData('state', 1)}>完</Button>
-                                <Button size="large" shape="circle" onClick={() => this.setQueryData('state', 2)}>交</Button>
+                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 0);}} type={this.state.query.state==0?'primary':null}>接</Button>
+                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 1);}} type={this.state.query.state==1?'primary':null}>完</Button>
+                                <Button size="large" shape="circle" onClick={() => {this.setQueryData('state', 2);}} type={this.state.query.state==2?'primary':null}>交</Button>
                             </div>
                         </Col>
                     </Row>
@@ -174,7 +174,7 @@ class OrderManage extends React.Component {
                         </Col>
                         <Col span={8} id="pay-state">
                             结算状态：
-                        <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
+                        <Select allowClear value={this.state.query.payState} style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
                                 <Option value={null}>全部</Option>
                                 <Option value="0">未结算</Option>
                                 <Option value=" 1">已结算</Option>
@@ -184,7 +184,7 @@ class OrderManage extends React.Component {
                     <Row gutter={16} style={{ marginBottom: "10px" }} id="area">
                         <Col span={8} >
                             时间类型：
-                        <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('dateType', value)} getPopupContainer={() => document.getElementById('area')}>
+                        <Select allowClear value={this.state.query.dateType} style={{ width: 120 }} onChange={(value) => this.setQueryData('dateType', value)} getPopupContainer={() => document.getElementById('area')}>
                                 <Option value={null}>全部</Option>
                                 <Option value="0">单据时间</Option>
                                 <Option value="1">接车时间</Option>
