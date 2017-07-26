@@ -253,7 +253,9 @@ class BeautyDetail extends React.Component {
                 
                 let parkingLocation = obj.parkingLocation;
                 let pickTime = obj.pickTime;
-                let finishTime = obj.finishTime;
+                let finishTime = (obj.finishTime)?obj.finishTime:"未完工";
+
+                let deliverTime = (obj.deliverTime)?obj.deliverTime:"未交车";
                 let staffString = ''
                 // for (let i = 0; i < staffList.length; i++) {
                 //      staffString += staffList[i].name + ' 、 ';
@@ -370,6 +372,7 @@ class BeautyDetail extends React.Component {
                             parkingLocation: parkingLocation,
                             pickTime: pickTime,
                             finishTime: finishTime,
+                            deliverTime:deliverTime,
                             staffs: staffString,
                         },
 
