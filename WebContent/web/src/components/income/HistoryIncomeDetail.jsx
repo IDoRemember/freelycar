@@ -94,7 +94,7 @@ class HistoryIncomeDetail extends React.Component {
                     <br />
                     <br />
 
-                    <Table loading={this.state.data.length > 0 ? false : true} bordered columns={columns} onChange={this.handleTableChange} dataSource={this.state.data} />
+                    <Table pagination={this.state.pagination} loading={this.state.data.length > 0 ? false : true} bordered columns={columns} onChange={this.handleTableChange} dataSource={this.state.data} />
                 </Card>
             </div>
         );
