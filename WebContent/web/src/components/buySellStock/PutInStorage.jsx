@@ -84,7 +84,7 @@ class PutInStorage extends React.Component {
         }
         if (this.state.error == '') {
             let instockArray = []
-            console.log(this.state.data)
+            //console.log(this.state.data)
             let inv = this.state.data;
             for (let item of inv) {
                 item.inventoryId = item.id;
