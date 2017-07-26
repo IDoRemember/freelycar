@@ -76,6 +76,7 @@ class CostClose extends React.Component {
             success: (res) => {
                 if (res.code == '0') {
                     message.success('结算成功');
+                    hashHistory.push('/app/consumption/orderManage');
                 } else {
                     message.error('结算失败');
                 }
