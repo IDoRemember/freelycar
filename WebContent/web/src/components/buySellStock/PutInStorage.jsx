@@ -45,7 +45,6 @@ class PutInStorage extends React.Component {
         })
     }
     modeShow = () => {
-        console.log(this.state.view)
         this.setState({
             view: true
         })

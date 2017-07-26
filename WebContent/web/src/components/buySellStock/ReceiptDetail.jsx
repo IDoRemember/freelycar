@@ -31,7 +31,7 @@ class PutInStorage extends React.Component {
                 if (result.code == "0") {
                     this.setState({
                         data: data,
-                        createDate:result.data.createDate
+                        createDate: result.data.createDate
                     })
                 }
             }
@@ -74,23 +74,19 @@ class PutInStorage extends React.Component {
             dataIndex: 'provider',
             key: 'provider',
             render: (text, record, index) => {
-                return <span>{text?text.name:''}</span>
+                return <span>{text ? text.name : ''}</span>
             }
         }, {
             title: '合计',
             dataIndex: 'total',
             key: 'total',
-            render: (value, record, index) => {
-                const obj = {
-                    children: value,
-                    props: {},
-                };
-                if (index == this.state.data.length-1) {
-                    obj.props.rowSpan = this.state.data.length
-                } else {
-                    obj.props.rowSpan = 0
+            render: (text, record, index) => {
+                return {
+                    children: <a>{text}</a>,
+                    props: {
+                        rowSpan: index == 0 ? this.state.data.length : 0
+                    }
                 }
-                return obj
             }
         }]
         return <div>
