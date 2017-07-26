@@ -52,26 +52,26 @@ class PutInStorage extends React.Component {
     }
     handleOk = (data) => {
         console.log(data)
-        let datalist = this.state.data
-        if (datalist.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                let same = 0;
-                for (let j = 0; j < datalist.length; j++) {
-                    if (data[i].partId == datalist[j].partId) {
-                        same++
-                    }
-                }
-                if (same == 0) {
-                    datalist.push(data[i])
-                }
-            }
-        } else {
-            datalist.push(...data)
-        }
+        // let datalist = this.state.data
+        // if (datalist.length > 0) {
+        //     for (let i = 0; i < data.length; i++) {
+        //         let same = 0;
+        //         for (let j = 0; j < datalist.length; j++) {
+        //             if (data[i].partId == datalist[j].partId) {
+        //                 same++
+        //             }
+        //         }
+        //         if (same == 0) {
+        //             datalist.push(data[i])
+        //         }
+        //     }
+        // } else {
+        //     datalist.push(...data)
+        // }
         this.setState({
             view: false,
-            data: datalist,
-            display: datalist.length > 0 ? 'block' : 'none'
+            data: data,
+            display: data.length > 0 ? 'block' : 'none'
         })
     }
 
@@ -206,23 +206,23 @@ class PutInStorage extends React.Component {
                         />
                         <Col
                             title="配件编号"
-                            dataIndex="partId"
-                            key="partId"
+                            dataIndex="id"
+                            key="id"
                         />
                         <Col
                             title="配件名称"
-                            key="partName"
-                            dataIndex="partName"
+                            key="name"
+                            dataIndex="name"
                         />
                         <Col
                             title="配件类别"
-                            key=" category"
-                            dataIndex="category"
+                            key=" typeName"
+                            dataIndex="typeName"
                         />
                         <Col
                             title="规格属性"
-                            key="attribute"
-                            dataIndex="attribute"
+                            key="property"
+                            dataIndex="property"
                         />
                         <Col
                             title="单价"
@@ -237,7 +237,7 @@ class PutInStorage extends React.Component {
                             key="number"
                             dataIndex="number"
                             render={(text, record, index) => {
-                                return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeData('number', value, index)} />
+                                return <InputNumber min={1} defaultValue={1} style={{ width: '100px' }} onChange={(value) => this.changeData('number', value, index)} />
                             }}
                         />
                         <Col
@@ -262,7 +262,7 @@ class PutInStorage extends React.Component {
                             key="DeductionCardTime"
                             dataIndex="DeductionCardTime"
                             render={(text, record, index) => {
-                                return <span>{record.number ? record.number * record.price : 0}</span>
+                                return <span>{record.amount ? record.amount * record.price : 0}</span>
                             }}
                         />
                         <Col
