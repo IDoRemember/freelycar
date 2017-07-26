@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import PartsDetail from '../tables/PartsDetail.jsx';
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Select, Table, message, Popconfirm, Form, InputNumber, Modal, Input,message } from 'antd';
+import { Row, Col, Card, Button, Select, Table, message, Popconfirm, Form, InputNumber, Modal, Input } from 'antd';
 import $ from 'jquery';
 const FormItem = Form.Item;
 const Option = Select.Option;
