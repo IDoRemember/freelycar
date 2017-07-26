@@ -55,7 +55,7 @@ class PutInStorage extends React.Component {
             for (let i = 0; i < data.length; i++) {
                 let same = 0;
                 for (let j = 0; j < datalist.length; j++) {
-                    if (data[i].partId == datalist[j].partId) {
+                    if (data[i].id == datalist[j].id) {
                         same++
                     }
                 }
