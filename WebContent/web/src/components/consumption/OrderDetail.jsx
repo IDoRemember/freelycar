@@ -320,7 +320,7 @@ class BeautyDetail extends React.Component {
                         Itemprice: objservice[i].price,
                         price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
-                        CardNum: objservice[i].cardId,
+                        CardNum:objservice[i].cardId==''?'-':(objservice[i].cardName+'--'+objservice[i].cardId),
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
 

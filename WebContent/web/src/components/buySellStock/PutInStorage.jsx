@@ -50,27 +50,14 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
-        console.log(data)
-        let datalist = this.state.data
-        if (datalist.length > 0) {
-            for (let i = 0; i < data.length; i++) {
-                let same = 0;
-                for (let j = 0; j < datalist.length; j++) {
-                    if (data[i].partId == datalist[j].partId) {
-                        same++
-                    }
-                }
-                if (same == 0) {
-                    datalist.push(data[i])
-                }
-            }
-        } else {
-            datalist.push(...data)
+        for(let item of data){
+            item.amount = 1;
+            item.price = null;
         }
         this.setState({
             view: false,
-            data: datalist,
-            display: datalist.length > 0 ? 'block' : 'none'
+            data: data,
+            display: data.length > 0 ? 'block' : 'none'
         })
     }
 
@@ -97,22 +84,13 @@ class PutInStorage extends React.Component {
         }
         if (this.state.error == '') {
             let instockArray = []
-            console.log(this.state.data)
-            for (let item of this.state.data) {
-                
-                let instockObject = {
-                    inventoryId: item.partId,
-                    name: item.partName,
-                    typeName: item.category,
-                    brandName: item.brand,
-                    standard: item.standard,
-                    property: item.attribute,
-                    provider: { id: item.provider.id },
-                    amount: item.number ? item.number : 1,
-                    price: item.price,
-                }
-                instockArray.push(instockObject)
+            //console.log(this.state.data)
+            let inv = this.state.data;
+            for (let item of inv) {
+                item.inventoryId = item.id;
+                delete (item.id);
             }
+
             $.ajax({
                 url: 'api/inventory/instock',
                 contentType: 'application/json;charset=utf-8',
@@ -124,7 +102,7 @@ class PutInStorage extends React.Component {
                     totalAmount: totalAmount,
                     totalPrice: totalPrice,
                     orderMaker: { id: localStorage.getItem('userId') },
-                    inventoryInfos: instockArray
+                    inventoryInfos: inv
                 }),
                 traditional: true,
                 success: (result) => {
@@ -144,11 +122,13 @@ class PutInStorage extends React.Component {
     render() {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
-            totalPrice = totalPrice + (item.number ? item.price * item.number : 0)
-            if (item.price && item.number &&item.provider) {
+
+            totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
+            if (item.price && item.amount) {
                 oneDisabled++
             }
         }
+
         if (oneDisabled == this.state.data.length) {
             disabled = false
         }
@@ -205,23 +185,23 @@ class PutInStorage extends React.Component {
                         />
                         <Col
                             title="配件编号"
-                            dataIndex="partId"
-                            key="partId"
+                            dataIndex="id"
+                            key="id"
                         />
                         <Col
                             title="配件名称"
-                            key="partName"
-                            dataIndex="partName"
+                            key="name"
+                            dataIndex="name"
                         />
                         <Col
                             title="配件类别"
-                            key="category"
-                            dataIndex="category"
+                            key=" typeName"
+                            dataIndex="typeName"
                         />
                         <Col
                             title="规格属性"
-                            key="attribute"
-                            dataIndex="attribute"
+                            key="property"
+                            dataIndex="property"
                         />
                         <Col
                             title="单价"
@@ -233,10 +213,10 @@ class PutInStorage extends React.Component {
                         />
                         <Col
                             title="数量"
-                            key="number"
-                            dataIndex="number"
+                            key="amount"
+                            dataIndex="amount"
                             render={(text, record, index) => {
-                                return <InputNumber min={1} style={{ width: '100px' }} onChange={(value) => this.changeData('number', value, index)} />
+                                return <InputNumber min={1} defaultValue={1} style={{ width: '100px' }} onChange={(value) => this.changeData('amount', value, index)} />
                             }}
                         />
                         <Col
@@ -261,7 +241,7 @@ class PutInStorage extends React.Component {
                             key="DeductionCardTime"
                             dataIndex="DeductionCardTime"
                             render={(text, record, index) => {
-                                return <span>{record.number ? record.number * record.price : 0}</span>
+                                return <span>{record.amount ? record.amount * record.price : 0}</span>
                             }}
                         />
                         <Col
