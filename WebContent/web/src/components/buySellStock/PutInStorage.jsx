@@ -50,7 +50,7 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
-        console.log(data)
+        //console.log(data)
         // let datalist = this.state.data
         // if (datalist.length > 0) {
         //     for (let i = 0; i < data.length; i++) {
@@ -96,23 +96,12 @@ class PutInStorage extends React.Component {
             })
         }
         if (this.state.error == '') {
-            let instockArray = []
             console.log(this.state.data)
-            for (let item of this.state.data) {
-                
-                let instockObject = {
-                    inventoryId: item.partId,
-                    name: item.partName,
-                    typeName: item.category,
-                    brandName: item.brand,
-                    standard: item.standard,
-                    property: item.attribute,
-                    provider: { id: item.provider.id },
-                    amount: item.number ? item.number : 1,
-                    price: item.price,
-                }
-                instockArray.push(instockObject)
+            let inv = this.state.data;
+            for (let item of inv) {
+                item.inventoryId = item.id;
             }
+
             $.ajax({
                 url: 'api/inventory/instock',
                 contentType: 'application/json;charset=utf-8',
@@ -124,7 +113,7 @@ class PutInStorage extends React.Component {
                     totalAmount: totalAmount,
                     totalPrice: totalPrice,
                     orderMaker: { id: localStorage.getItem('userId') },
-                    inventoryInfos: instockArray
+                    inventoryInfos: inv
                 }),
                 traditional: true,
                 success: (result) => {
@@ -144,8 +133,8 @@ class PutInStorage extends React.Component {
     render() {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
-            totalPrice = totalPrice + (item.number ? item.price * item.number : 0)
-            if (item.price && item.number) {
+            totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
+            if (item.price && item.amount) {
                 oneDisabled++
             }
         }
@@ -228,7 +217,7 @@ class PutInStorage extends React.Component {
                             key="price"
                             dataIndex="price"
                             render={(text, record, index) => {
-                                return <InputNumber style={{ width: '100px' }} onChange={(value) => this.changeData('price', value, index)} />
+                                return <InputNumber style={{ width: '100px' }} defaultValue={text} onChange={(value) => this.changeData('price', value, index)} />
                             }}
                         />
                         <Col
