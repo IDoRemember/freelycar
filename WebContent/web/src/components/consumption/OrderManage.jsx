@@ -171,7 +171,8 @@ class OrderManage extends React.Component {
                         <Col span={8} id="pay-state">
                             结算状态：
                         <Select allowClear style={{ width: 120 }} onChange={(value) => this.setQueryData('payState', value)} getPopupContainer={() => document.getElementById('pay-state')}>
-                                <Option value="0">挂单中</Option>
+                                <Option value={null}>全部</Option>
+                                <Option value="0">未结算</Option>
                                 <Option value=" 1">已结算</Option>
                             </Select>
                         </Col>
