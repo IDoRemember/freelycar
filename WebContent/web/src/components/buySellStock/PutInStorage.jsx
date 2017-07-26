@@ -50,13 +50,29 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
-        for(let item of data){
+        let datalist = this.state.data
+        if (datalist.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let same = 0;
+                for (let j = 0; j < datalist.length; j++) {
+                    if (data[i].partId == datalist[j].partId) {
+                        same++
+                    }
+                }
+                if (same == 0) {
+                    datalist.push(data[i])
+                }
+            }
+        } else {
+            datalist.push(...data)
+        }
+        for (let item of datalist) {
             item.amount = 1;
             item.price = null;
         }
         this.setState({
             view: false,
-            data: data,
+            data: datalist,
             display: data.length > 0 ? 'block' : 'none'
         })
     }
@@ -123,7 +139,7 @@ class PutInStorage extends React.Component {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
             totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
-            if (item.price && item.amount &&item.provider) {
+            if (item.price && item.amount && item.provider) {
                 oneDisabled++
             }
         }
