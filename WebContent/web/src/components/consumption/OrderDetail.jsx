@@ -20,6 +20,14 @@ const serviceColumns = [{
     dataIndex: 'project',
     key: 'project',
 }, {
+    title: '项目价格',
+    dataIndex: 'Itemprice',
+    key: 'Itemprice',
+}, {
+    title: '单项小计',
+    dataIndex: 'price',
+    key: 'price',
+}, {
     title: '施工人员',
     dataIndex: 'StaffName',
     key: 'StaffName',
@@ -28,10 +36,6 @@ const serviceColumns = [{
     title: '会员卡号',
     dataIndex: 'CardNum',
     key: 'CardNum',
-}, {
-    title: '项目价格',
-    dataIndex: 'price',
-    key: 'price',
 }, {
     title: '抵扣卡次',
     dataIndex: 'DeductionCardTime',
@@ -51,6 +55,10 @@ const fixColumns = [{
     key: 'project',
 }, {
     title: '项目价格',
+    dataIndex: 'Itemprice',
+    key: 'Itemprice',
+}, {
+    title: '单项小计',
     dataIndex: 'price',
     key: 'price',
 }, {
@@ -202,8 +210,13 @@ class BeautyDetail extends React.Component {
 
 
     }
+<<<<<<< HEAD
+    onclick = () => {
+        hashHistory.push(`/app/consumption/accountingcenter/${this.props.params.orderId}`)
+=======
     onclick=()=>{
           hashHistory.push(`/app/consumption/costclose/${this.props.params.orderId}`)
+>>>>>>> 5d24d8bae68d983b72beec7f324846b774cf8324
     }
     GetClientInfo() {
         $.ajax({
@@ -289,7 +302,7 @@ class BeautyDetail extends React.Component {
 
                 for (let i = 0; i < objservice.length; i++) {
                     var sumprice = sumprice + objservice[i].price;
-                    var fixsumprice = fixsumprice + (objservice[i].price+objservice[i].referWorkTime* objservice[i].pricePerUnit);
+                    var fixsumprice = fixsumprice + (objservice[i].price + objservice[i].referWorkTime * objservice[i].pricePerUnit);
                     let staffList = objservice[i].staffs;
                     let staffString = ''
                     for (let i = 0; i < staffList.length; i++) {
@@ -300,6 +313,7 @@ class BeautyDetail extends React.Component {
                         key: objservice[i].id,
                         id: objservice[i].id,
                         project: objservice[i].name,
+                        Itemprice: objservice[i].price,
                         price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
                         CardNum: objservice[i].cardId,
@@ -311,11 +325,12 @@ class BeautyDetail extends React.Component {
                         id: objservice[i].id,
                         project: objservice[i].name,
                         number: '1',
+                        Itemprice: objservice[i].price,
                         price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
                         worktime: objservice[i].referWorkTime,
                         singlePrice: objservice[i].pricePerUnit,
-                        singleSummation:objservice[i].price+objservice[i].referWorkTime* objservice[i].pricePerUnit,
+                        singleSummation: objservice[i].price + objservice[i].referWorkTime * objservice[i].pricePerUnit,
                         CardNum: objservice[i].cardId,
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
@@ -327,7 +342,7 @@ class BeautyDetail extends React.Component {
                             serviceData: serviceList,
                             fixData: fixList,
                             sumPrice: sumprice,
-                            fixsumPrice:fixsumprice
+                            fixsumPrice: fixsumprice
                         })
 
                     }
@@ -387,7 +402,7 @@ class BeautyDetail extends React.Component {
         return <div>
             <BreadcrumbCustom first="消费开单" second="单据详情" />
             <Card style={{ marginBottom: '10px' }}>当前状态：
-                <Steps current={this.state.current}>
+                <Steps current={this.state.current+1}>
                     <Step title="接车" />
                     <Step title="完成" />
                     <Step title="交车" />
@@ -402,15 +417,15 @@ class BeautyDetail extends React.Component {
             </Card>
             }
             {this.state.programId == 1 && <Card style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
+                <div style={{ fontSize: '18px', marginBottom: '10px', fontSize: '16px' }}>服务项目</div>
                 <Table className="accountTable" columns={serviceColumns} dataSource={this.state.serviceData} bordered />
             </Card>}
-            {this.state.programId == 2 && <Card style={{ marginBottom: '10px' }}>
+            {this.state.programId == 2 && <Card style={{ marginBottom: '10px', fontSize: '16px' }}>
                 <div style={{ fontSize: '18px', marginBottom: '10px' }}>服务项目</div>
                 <Table className="accountTable" columns={fixColumns} dataSource={this.state.fixData} bordered />
             </Card>}
             <Card style={{ marginBottom: '10px' }}>
-                <div style={{ fontSize: '18px', marginBottom: '10px' }}>配件明细</div>
+                <div style={{ fontSize: '18px', marginBottom: '10px', fontSize: '16px' }}>配件明细</div>
                 <Table className="accountTable" columns={partsDetail} dataSource={this.state.inventoryData} bordered />
             </Card>
             <Card>

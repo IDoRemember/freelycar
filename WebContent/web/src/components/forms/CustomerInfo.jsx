@@ -61,10 +61,11 @@ class CustomerInfo extends React.Component {
                         客户姓名：
                         <span style={{ width: '100px' }}>{this.props.form.name}</span>
                     </Col>
-                    <Col span={8} >
-                        停车位置：
-                        <span style={{ width: '100px' }}>{this.props.form.parkingLocation}</span>
+                    <Col span={8}>
+                        完工时间：
+                        <span style={{ width: '100px' }}>{this.props.form.pickTime}</span>
                     </Col>
+                    
                     
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -76,9 +77,9 @@ class CustomerInfo extends React.Component {
                         手机号码：
                         <span style={{ width: '100px' }}>{this.props.form.phone}</span>
                     </Col>
-                    <Col span={8}>
-                        接车时间：
-                        <span style={{ width: '100px' }}>{this.props.form.pickTime}</span>
+                  <Col span={8} >
+                        交车时间：
+                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
                     </Col>
                     
                 </Row>
@@ -87,15 +88,15 @@ class CustomerInfo extends React.Component {
                         上次里程：
                         <span style={{ width: '100px' }}>{this.props.form.lastMiles}km</span>
                     </Col>
+                      <Col span={8} >
+                        停车位置：
+                        <span style={{ width: '100px' }}>{this.props.form.parkingLocation}</span>
+                    </Col>
                     {/*<Col span={8}>
                         历史消费：
                         <span style={{ width: '100px' }}>￥19999</span>
                     </Col>*/}
-                    <Col span={8}></Col>
-                    <Col span={8} >
-                        交车时间：
-                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
-                    </Col>
+             
                    
                     
                 </Row>
@@ -108,6 +109,10 @@ class CustomerInfo extends React.Component {
                         实时积分：
                         <span style={{ width: '100px' }}>5000</span>
                     </Col>*/}
+                      <Col span={8}>
+                        接车时间：
+                        <span style={{ width: '100px' }}>{this.props.form.pickTime}</span>
+                    </Col>
                     <Col span={8}></Col>
                    
                    
