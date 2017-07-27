@@ -243,11 +243,11 @@ class BeautyOrder extends React.Component {
 
     render() {
         const parts = this.state.parts.map((item, index) => {
-            if (this.state.parts.length > (index + 1)) {
+        if (this.state.parts.length > (index + 1)) {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0
+        let partsPrice = 0, projectPrice = 0, price = 0,disabled=true,builders=0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -255,6 +255,19 @@ class BeautyOrder extends React.Component {
             partsPrice = partsPrice + item.inventory.price * item.number
         }
         price = partsPrice + projectPrice
+
+        if(this.state.consumOrder.carId !== ''&&this.state.consumOrder.projects.length>1&&this.state.consumOrder.pickTime !== ''&&this.state.consumOrder.pickCarStaff) {
+            this.state.consumOrder.projects.forEach((item,index)=>{
+                if(item.staffs){
+                    builders++
+                }
+            })
+              if(builders.length == this.state.consumOrder.projects.length) {
+                  disabled = false
+              }
+        }
+
+      
 
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
@@ -278,10 +291,10 @@ class BeautyOrder extends React.Component {
             </Card>
             <span style={{ color: 'red' }}>{this.state.errorInfo}</span>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
+                <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
+                <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>

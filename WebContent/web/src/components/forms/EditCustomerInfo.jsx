@@ -1,7 +1,7 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
-import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button } from 'antd';
+import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button,message} from 'antd';
 import styled from "styled-components"
 import update from 'immutability-helper'
 import $ from 'jquery'
