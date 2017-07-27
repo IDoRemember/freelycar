@@ -19,16 +19,16 @@ class PutInStorage extends React.Component {
     }
     componentDidMount() {
 
-        this.loadData(1, 10,0);
+        this.loadData(1, 10, 0);
         this.loadAdmin();
     }
 
     //条件查询
     conditionQuery = () => {
-        this.loadData(1, 10, 0,this.state.inventoryOrderId, this.state.adminId);
+        this.loadData(1, 10, 0, this.state.inventoryOrderId, this.state.adminId);
     }
 
-    loadData = (page, number,type,inventoryOrderId, adminId) => {
+    loadData = (page, number, type, inventoryOrderId, adminId) => {
         var obj = {};
         obj.inventoryOrderId = inventoryOrderId;
         obj.adminId = adminId;
@@ -57,6 +57,12 @@ class PutInStorage extends React.Component {
                     this.setState({
                         data: data
                     });
+                } else {
+                    message.error(result.msg)
+                    this.setState({
+                        data: [],
+                        pagination: { total: 0 }
+                    })
                 }
             }
 
@@ -112,12 +118,12 @@ class PutInStorage extends React.Component {
 
                     <Col span={9} >
                         制单人：
-                        <Select style={{ width: '120px',marginRight:'20px' }} onChange={(e) => this.handleChange(e)}>
+                        <Select style={{ width: '120px', marginRight: '20px' }} onChange={(e) => this.handleChange(e)}>
                             {adminOption}
                         </Select>
-                          <Button type="primary" onClick={() => { this.conditionQuery() }}>查询</Button>
+                        <Button type="primary" onClick={() => { this.conditionQuery() }}>查询</Button>
                     </Col>
-                  
+
                 </Row>
                 <Table dataSource={this.state.data} bordered>
                     <Col
@@ -147,11 +153,11 @@ class PutInStorage extends React.Component {
                         title="单据类型"
                         key="docType"
                         dataIndex="docType"
-                        render={(text,record,index)=>{
+                        render={(text, record, index) => {
                             let view = ''
-                            if(text == 0) {
+                            if (text == 0) {
                                 view = '入库'
-                            } else if(text==1) {
+                            } else if (text == 1) {
                                 view = '维修出库'
                             } else {
                                 view = '美容出库'
