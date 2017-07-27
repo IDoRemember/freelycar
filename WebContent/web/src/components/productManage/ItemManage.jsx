@@ -224,6 +224,10 @@ class BeautyOrder extends React.Component {
         obj.comment = form.comment;
         obj.program = { id: form.programId };
 
+        if(form.id){
+            obj.id = form.id;
+        }
+
         let arr = [];
         let invArray = this.state.invData;
         for (let i = 0, len = invArray.length; i < len; i++) {
@@ -291,14 +295,13 @@ class BeautyOrder extends React.Component {
         console.log(record);
         let invData = [];//local varible
         let inventoryInfos = record.inventoryInfos;
-        for(let item of inventoryInfos){
+        for (let item of inventoryInfos) {
             let temp = item.inventory;
             temp.id = item.id;
             temp.number = item.number;
             temp.key = item.id;
             invData.push(temp);
         }
-        console.log(invData);
         this.setState({
             visible: true,
             form: update(this.state.form, {
@@ -309,8 +312,9 @@ class BeautyOrder extends React.Component {
                 ['referWorkTime']: { $set: record.referWorkTime },
                 ['pricePerUnit']: { $set: record.pricePerUnit },
                 ['comment']: { $set: record.comment },
+                ['id']: { $set: record.key },
             }),
-            invData:invData
+            invData: invData
         })
     }
 
@@ -415,6 +419,7 @@ class BeautyOrder extends React.Component {
                 form2: update(this.state.form2, { [key]: { $set: value } })
             })
     }
+
 
 
 
@@ -612,7 +617,7 @@ class BeautyOrder extends React.Component {
                                 </Row>
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={()=>{this.setState({visible:true})}} >新增项目</Button>
+                                        <Button onClick={() => { this.setState({ visible: true }) }} >新增项目</Button>
                                     </Col>
                                     <Col span={8}>
                                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedIds)}>
@@ -701,7 +706,7 @@ class BeautyOrder extends React.Component {
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>
                                                 <Button type="primary" onClick={() => { this.setState({ modal2: true }) }}>新增配件</Button>
-                                                <PartsSearch view={this.state.modal2} handleCancel={() => { this.setState({ modal2: false }) }} handleOk={(selectedRows) => { this.setState({ modal2: false, invData: selectedRows }) }}></PartsSearch>
+                                                <PartsSearch view={this.state.modal2} handleCancel={() => { this.setState({ modal2: false }) }} handleOk={(selectedRows) => { this.setState({ modal2: false, invData: this.state.invData.concat(selectedRows) }) }}></PartsSearch>
                                             </Row>
 
                                             <Row style={{ marginTop: '5px', marginBottom: '5px' }}>

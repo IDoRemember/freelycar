@@ -54,6 +54,7 @@ class PartsSearch extends React.Component {
         this.state = {
             loading: true,
             selectedRows: [],
+            selectedRowKeys: ['inv20170724f3popv'],
             typeList: [],
             type: '',
             visible: this.props.view,
@@ -152,14 +153,17 @@ class PartsSearch extends React.Component {
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
+                console.log(selectedRowKeys);
                 this.setState({
-                    selectedRows: selectedRows
+                    selectedRows: selectedRows,
+                    selectedRowKeys: selectedRowKeys
                 })
             },
+            selectedRowKeys: this.state.selectedRowKeys
 
-            getCheckboxProps: record => ({
-                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-            }),
+            // getCheckboxProps: record => ({
+            //     disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+            // }),
 
         }, partTypeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
