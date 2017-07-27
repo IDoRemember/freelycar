@@ -51,7 +51,7 @@ public class ClientDaoImpl implements ClientDao {
 
 	@Override
 	public void save(Client client) {
-		this.getSession().save(client);
+		this.getSession().saveOrUpdate(client);
 	}
 
 	@Override
