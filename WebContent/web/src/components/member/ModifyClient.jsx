@@ -66,7 +66,13 @@ class ModifyClient extends React.Component {
                     console.log(res)
                     var obj = res.client;
                     let car = [];
-                    let cards=obj.cards
+                    var cards=obj.cards
+                    // let cardItem=[];
+                    // obj.cards.map((item,index)=>{
+                    //         item.expirationDate=new Date(item.expirationDate),
+                    //         item.payDate=new Date(item.payDate)
+                    //     cardItem.push(item)
+                    // })
                     obj.cars.map((item, index) => {
                         car.push({
                             licensePlate: item.licensePlate,
@@ -84,6 +90,7 @@ class ModifyClient extends React.Component {
                     })
                     this.setState({
                         cars: car,
+                        // cards:cardItem
                         cards:cards
                     })
 

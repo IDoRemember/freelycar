@@ -300,9 +300,7 @@ class AddClient extends React.Component {
                             </Select>
                         </Col>
                         <Col span={8} id='startTime'>保险开始日期:
-                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }}
-                                getCalendarContainer={() => document.getElementById('startTime')}
-                            />
+                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>

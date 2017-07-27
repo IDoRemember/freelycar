@@ -365,7 +365,7 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.phoneclassName}>手机号码格式有误</span>
                         </Col>
-                        <Col span={8} ><span style={{ color: "red" }}>*</span>车牌号：
+                        <Col span={8} ><span style={{ color: "red",marginLeft:"-5px" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.licensePlateClassName}>车牌号格式有误</span>
                         </Col>
@@ -385,11 +385,11 @@ class BuyCard extends React.Component {
                         </Col>
 
                         <Col span={8} >推荐人：
-                            <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.recommendName} onChange={(e) => this.onValueChange('recommendName', e.target.value)} />
+                            <Input style={{ width: '150px', marginLeft: '15px' }} value={this.state.clientInfo.recommendName} onChange={(e) => this.onValueChange('recommendName', e.target.value)} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={8} offset={4} id="provider-area">车辆型号:
+                        <Col span={8} offset={4} id="provider-area"><span style={{ color: "red" }}>*</span>车辆型号:
                             <Select showSearch
                                 style={{ width: '140px', marginLeft: '10px' }}
                                 placeholder="请选择车辆型号"
@@ -440,7 +440,7 @@ class BuyCard extends React.Component {
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={8} offset={4} >
                             <div style={{ display: 'inline-block', width: '80%' }}>支付方式:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                                 <div style={{ display: 'inline-block', marginLeft: '12px' }}>
                                     <Select defaultValue="现金" style={{ width: 140, marginLeft: 15, maxHeight: '100px' }} onChange={(value) => this.payhandleChange(value)} >
                                         <Option value="0">现金</Option>
                                         <Option value="1">刷卡</Option>
@@ -453,7 +453,7 @@ class BuyCard extends React.Component {
                         </Col>
                         <Col span={8} id='staff'>
                             <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
-                                 <div style={{ display: 'inline-block', marginLeft: '10px' }}>
+                                 <div style={{ display: 'inline-block', marginLeft: '105x' }}>
                                     <Select showSearch
                                         style={{ width: '140px', marginLeft: '10px' }}
                                         placeholder="选择办卡人员"
