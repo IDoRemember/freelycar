@@ -49,7 +49,7 @@ class IncomeSearch extends React.Component {
     }
     getIncomeExpend = (mode) => {
         $.ajax({
-            url: 'api/stat/' + mode,
+            url: '/api/stat/' + mode,
             data: {
                 income: 1,
                 expend: 1,
@@ -69,7 +69,7 @@ class IncomeSearch extends React.Component {
     getYearList=()=>{
         let myDate = new Date()
         $.ajax({
-            url: 'api/stat/monthlybyyear',
+            url: '/api/stat/monthlybyyear',
             data: {
                 selectYear:new Date(myDate.getFullYear()+'')
             },

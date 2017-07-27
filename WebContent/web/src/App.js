@@ -29,7 +29,7 @@ class App extends Component {
     }
      queryAdmin = () => {
         $.ajax({
-            url: 'api/admin/getaccount',
+            url: '/api/admin/getaccount',
             type: "GET",
             data: {
                 account: localStorage.getItem('username'),

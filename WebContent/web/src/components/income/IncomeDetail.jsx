@@ -35,7 +35,7 @@ class IncomeDetail extends React.Component {
             datastrings = localStorage.getItem('datastrings').split(',')
         }
         $.ajax({
-            url: 'api/stat/' + mode,
+            url: '/api/stat/' + mode,
             data: {
                 startTime: datastrings ? new Date(datastrings[0]) : null,
                 endTime: datastrings ? new Date(datastrings[1]) : null,

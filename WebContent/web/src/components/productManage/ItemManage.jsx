@@ -82,7 +82,7 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/project/query',
+            url: 'api/project/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -123,7 +123,7 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/program/list',
+            url: 'api/program/list',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -156,7 +156,7 @@ class BeautyOrder extends React.Component {
 
     loadProgram = () => {
         $.ajax({
-            url: '/api/program/listall',
+            url: 'api/program/listall',
             dataType: 'json',
             type: 'get',
             success: (res) => {
@@ -361,10 +361,10 @@ class BeautyOrder extends React.Component {
         let url = '';
         let data = {};
         if (tabkey == 1) {
-            url = '/api/project/delete';
+            url = 'api/project/delete';
             data = { projectIds: idArray };
         } else if (tabkey == 2) {
-            url = '/api/program/delete';
+            url = 'api/program/delete';
             data = { programIds: idArray };
         }
 

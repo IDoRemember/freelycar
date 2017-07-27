@@ -94,7 +94,7 @@ class CardModal extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/project/query',
+            url: 'api/project/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',
