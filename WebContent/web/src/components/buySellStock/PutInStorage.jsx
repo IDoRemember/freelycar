@@ -50,6 +50,10 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
+        console.log(data)
+        data.map((item,index)=>{
+            item.price = null
+        })
         let datalist = this.state.data
         if (datalist.length > 0) {
             for (let i = 0; i < data.length; i++) {
@@ -67,8 +71,7 @@ class PutInStorage extends React.Component {
             datalist.push(...data)
         }
         for (let item of datalist) {
-            item.amount = 1;
-            item.price = null;
+            item.amount = item.amount?item.amount:1;
         }
         this.setState({
             view: false,
@@ -138,7 +141,7 @@ class PutInStorage extends React.Component {
     render() {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions
         for (let item of this.state.data) {
-            totalPrice = totalPrice + (item.amount ? item.price * item.amount : 0)
+            totalPrice = totalPrice + (item.amount&&item.price ? item.price * item.amount : 0)
             if (item.price && item.amount && item.provider) {
                 oneDisabled++
             }

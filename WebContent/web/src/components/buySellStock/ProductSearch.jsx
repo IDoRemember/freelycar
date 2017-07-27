@@ -170,10 +170,9 @@ class ProductSearch extends React.Component {
                 <div>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
                         <Col span={10} style={{ verticalAlign: 'middle' }}>
-                            配件名：<Search
+                            配件名：<Input
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
-                                onSearch={value => this.getList(value, -1, 1, 10)}
                                 onChange={e => this.setTradeName(e.target.value)}
                                 value={this.state.tradeName}
                             />
@@ -190,7 +189,7 @@ class ProductSearch extends React.Component {
                             >
                                 {plateOptions}
                             </Select>
-                            <Button onClick={() => this.getList(null, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+                            <Button onClick={() => this.getList(this.state.tradeName, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
 
                         </Col>
                     </Row>

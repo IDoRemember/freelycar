@@ -63,7 +63,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8}>
                         完工时间：
-                        <span style={{ width: '100px' }}>{this.props.form.pickTime}</span>
+                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
                     </Col>
                     
                     
@@ -79,7 +79,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                   <Col span={8} >
                         交车时间：
-                        <span style={{ width: '100px' }}>{this.props.form.finishTime}</span>
+                        <span style={{ width: '100px' }}>{this.props.form.deliverTime}</span>
                     </Col>
                     
                 </Row>

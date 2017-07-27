@@ -1,6 +1,7 @@
 import React from 'react';
 import { Row, Col, Button, Table, Modal, Select, Input, Radio } from 'antd';
 import $ from 'jquery'
+import update from 'immutability-helper'
 const Search = Input.Search,
     Option = Select.Option,
     RadioGroup = Radio.Group;
@@ -153,17 +154,20 @@ class PartsSearch extends React.Component {
     render() {
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(selectedRowKeys);
+                let oldRows = this.state.selectedRows
+                for (let item of selectedRows) {
+                    oldRows = oldRows.filter((obj) => {
+                        return item.key !== obj.key;
+                    });
+                }
+                oldRows.push.apply(oldRows, selectedRows)
                 this.setState({
-                    selectedRows: selectedRows,
-                    selectedRowKeys: selectedRowKeys
+                    selectedRows: oldRows
                 })
             },
-            selectedRowKeys: this.state.selectedRowKeys
-
-            // getCheckboxProps: record => ({
-            //     disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-            // }),
+            getCheckboxProps: record => ({
+                disabled: record.name === 'Disabled User',    // Column configuration not to be checked
+            }),
 
         }, partTypeOptions = this.state.typeList.map((item, index) => {
             return <Option key={index} value={item.id + ''}>{item.typeName}</Option>
