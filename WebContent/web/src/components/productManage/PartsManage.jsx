@@ -170,7 +170,7 @@ class BeautyOrder extends React.Component {
                     obj.brandName = this.state.form.brandName;
                     obj.typeName = this.state.form.typeName;
                     this.setState({
-                        visible:false,
+                        visible: false,
                         data: [...this.state.data, obj],
                     });
 
@@ -239,14 +239,18 @@ class BeautyOrder extends React.Component {
     }
 
     handleOk2 = (e) => {
-        this.setState({
-            visible2: false,
-        });
-
         let form = this.state.form2;
         var obj = {};
         obj.typeName = form.typeName;
         obj.comment = form.comment;
+
+
+        //check require
+        if (obj.typeName == '') {
+            message.warn('配件类别名称必填项');
+            return false;
+        }
+
         $.ajax({
             type: 'post',
             url: 'api/inventory/addtype',
@@ -259,6 +263,7 @@ class BeautyOrder extends React.Component {
                     console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
+                         visible2: false,
                     });
                 }
             }
@@ -277,14 +282,16 @@ class BeautyOrder extends React.Component {
         });
     }
     handleOk3 = (e) => {
-        this.setState({
-            visible3: false,
-        });
-
         let form = this.state.form2;
         var obj = {};
         obj.name = form.name;
         obj.comment = form.comment;
+
+        //check require
+        if(form.name==''){
+            message.warn('品牌名称必填项');
+            return false;
+        }
         $.ajax({
             type: 'post',
             url: 'api/inventory/addbrand',
@@ -296,6 +303,7 @@ class BeautyOrder extends React.Component {
                     obj.key = obj.id;
                     this.setState({
                         data: [...this.state.data, obj],
+                        visible3: false,
                     });
                 }
             }

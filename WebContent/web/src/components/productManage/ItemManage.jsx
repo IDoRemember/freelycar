@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber ,message} from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import PartsSearch from '../model/PartsSearch.jsx';
@@ -208,12 +208,12 @@ class BeautyOrder extends React.Component {
     }
 
 
-    //新增修改配件 modal确认
+    //新增 修改 配件 modal确认
     handleOk = (e) => {
         let form = this.state.form;
         var obj = {};
         obj.name = form.name;
-        obj.price = form.price;
+        obj.price = form.price=='' ? 0 : form.price;
         obj.referWorkTime = form.referWorkTime;
         obj.pricePerUnit = form.pricePerUnit;
         obj.comment = form.comment;
@@ -222,6 +222,19 @@ class BeautyOrder extends React.Component {
         if (form.id) {
             obj.id = form.id;
         }
+
+
+        //check require
+        if(form.name==''){
+            message.warn('项目名称必填项');
+            return false;
+        }
+        if(form.programId==''){
+            message.warn('项目类别必填项');
+            return false;
+        }
+
+
 
         let arr = [];
         let invArray = this.state.invData;
@@ -239,7 +252,6 @@ class BeautyOrder extends React.Component {
 
         obj.inventoryInfos = arr;
 
-        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/project/add',
@@ -412,11 +424,18 @@ class BeautyOrder extends React.Component {
 
 
     //tab2的函数
-    //增加配额件
+    //增加配件
     handleInvOn = () => {
         let obj = {};
         obj.name = this.state.form2.name;
         obj.comment = this.state.form2.comment;
+
+        //check require
+        if(obj.name==''){
+            message.warn('配件名称必填项');
+            return false;
+        }
+
         $.ajax({
             url: 'api/program/add',
             data: obj,
