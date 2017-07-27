@@ -121,10 +121,15 @@ class FixOrder extends React.Component {
         });
     }
 
-    routerWillLeave(nextLocation) {
-        return '确认要离开？';
+    routerWillLeave = (nextLocation) => {
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
     }
-    
+
+
     queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
@@ -140,11 +145,17 @@ class FixOrder extends React.Component {
             }
         })
     }
+
     saveInfo = (params) => {
         this.setState({
-            consumOrder: update(this.state.consumOrder, { $merge: params })
+            consumOrder: update(this.state.consumOrder, { $merge: params }),
+
         }, () => {
-            console.log(this.state.consumOrder)
+            if (this.state.consumOrder.licensePlate !== '' || this.state.consumOrder.projects.length > 0) {
+                this.setState({
+                    isPop: true
+                })
+            }
         })
     }
 
@@ -227,6 +238,9 @@ class FixOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         message.success(res.text);
+                        this.setState({
+                            isPop: false
+                        })
                         if (isFinish) {
                             hashHistory.push(`/app/consumption/costclose/${res.id}`)
                         } else {
