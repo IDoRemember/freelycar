@@ -14,6 +14,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 @Table
 public class Client {
@@ -33,6 +36,9 @@ public class Client {
 	private Set<Card> cards;
 	private int consumTimes;
 	private float consumAmout;
+	
+	
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date lastVisit;
 	public int getAge() {
 		return age;

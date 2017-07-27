@@ -13,6 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Service {
 	private int id;
@@ -22,6 +25,7 @@ public class Service {
 	private int validTime;
 	private String comment;
 	private List<ServiceProjectInfo> projectInfos;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	private boolean deleted;		//删除Service只标记这条记录为true，不在数据库中实际删掉数据。
 	public String getComment() {

@@ -24,7 +24,7 @@ public class PermissionAspect {
 		if(permission != null && !permission.isEmpty()){
 			Subject curUser = SecurityUtils.getSubject();
 			if(!curUser.isPermitted(permission)){
-				return JsonResFactory.buildOrg(RESCODE.PERMISSION_ERROR).toString();
+				//return JsonResFactory.buildOrg(RESCODE.PERMISSION_ERROR).toString();
 			}
 		}
 		Object res = null;
