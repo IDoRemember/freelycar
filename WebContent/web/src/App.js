@@ -53,7 +53,7 @@ class App extends Component {
             <SiderCustom path={this.props.location.pathname}
                 collapsed={this.state.collapsed} role={this.state.role}
             />
-            <Layout >
+            <Layout style={{height:'100%',overflow:'scroll'}}>
                 <HeaderCustom toggle={this.toggle} />
                 <Content style={{ margin: '0 16px', overflow: 'initial' }} role={this.state.role}> {this.props.children} </Content>
                 <Footer style={
