@@ -240,12 +240,13 @@ class FixOrder extends React.Component {
                         message.success(res.text);
                         this.setState({
                             isPop: false
+                        }, () => {
+                            if (isFinish) {
+                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
+                            } else {
+                                hashHistory.push(`/app/consumption/ordermanage`)
+                            }
                         })
-                        if (isFinish) {
-                            hashHistory.push(`/app/consumption/costclose/${res.id}`)
-                        } else {
-                            hashHistory.push(`/app/consumption/ordermanage`)
-                        }
                     }
                 }
             })
