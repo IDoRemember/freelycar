@@ -140,7 +140,7 @@ public class ConsumOrderService {
 			order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 			order.setCreateDate(new Date());
 			order.setInventoryInfos(list);
-			order.setState(0);
+			order.setState(1);
 			order.setTotalAmount(totalAmount);
 			order.setTotalPrice(totalPrice);
 			order.setType(consumOrder.getProgramId());
@@ -179,7 +179,7 @@ public class ConsumOrderService {
 		JsonConfig config = JsonResFactory.dateConfig();
 		order.setFinishTime(date);
 		order.setComment(comment);
-		order.setState(1);
+		order.setState(2);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
 	}
 
@@ -194,7 +194,7 @@ public class ConsumOrderService {
 		}
 		log.debug("消费订单(id:" + order.getId() + ")交车, 时间:" + date + ", 备注:" + comment);
 		JsonConfig config = JsonResFactory.dateConfig();
-		order.setState(2);
+		order.setState(3);
 		order.setDeliverTime(date);
 		order.setComment(comment);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
