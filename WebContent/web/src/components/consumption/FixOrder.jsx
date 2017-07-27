@@ -88,6 +88,10 @@ class FixOrder extends React.Component {
     componentDidMount() {
         this.queryAdmin()
         this.getStaffList()
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -117,6 +121,10 @@ class FixOrder extends React.Component {
         });
     }
 
+    routerWillLeave(nextLocation) {
+        return '确认要离开？';
+    }
+    
     queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
@@ -237,7 +245,7 @@ class FixOrder extends React.Component {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0,disabled=true
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }

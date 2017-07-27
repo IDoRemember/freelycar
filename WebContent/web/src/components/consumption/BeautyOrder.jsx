@@ -87,6 +87,10 @@ class BeautyOrder extends React.Component {
     componentDidMount() {
         this.queryAdmin()
         this.getStaffList()
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -112,6 +116,10 @@ class BeautyOrder extends React.Component {
                 }
             }
         });
+    }
+
+    routerWillLeave(nextLocation) {
+        return '确认要离开？';
     }
 
     queryAdmin = () => {
@@ -203,13 +211,13 @@ class BeautyOrder extends React.Component {
             this.setState({
                 errorInfo: '* 请输入接车人'
             })
-        } else if(this.state.consumOrder.projects.length<1) {
+        } else if (this.state.consumOrder.projects.length < 1) {
             this.setState({
-                errorInfo:'* 请选择项目'
+                errorInfo: '* 请选择项目'
             })
         } else {
             this.setState({
-                errorInfo:''
+                errorInfo: ''
             })
         }
         this.setState({
@@ -224,7 +232,7 @@ class BeautyOrder extends React.Component {
                     // traditional: true,
                     data: JSON.stringify(this.state.consumOrder),
                     success: (res) => {
-                        if(res.code != '0') {
+                        if (res.code != '0') {
                             message.warning(res.msg)
                         }
                         if (res.code == '0') {
@@ -243,11 +251,11 @@ class BeautyOrder extends React.Component {
 
     render() {
         const parts = this.state.parts.map((item, index) => {
-        if (this.state.parts.length > (index + 1)) {
+            if (this.state.parts.length > (index + 1)) {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0,disabled=true,builders=0
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true, builders = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -256,18 +264,18 @@ class BeautyOrder extends React.Component {
         }
         price = partsPrice + projectPrice
 
-        if(this.state.consumOrder.carId !== ''&&this.state.consumOrder.projects.length>1&&this.state.consumOrder.pickTime !== ''&&this.state.consumOrder.pickCarStaff) {
-            this.state.consumOrder.projects.forEach((item,index)=>{
-                if(item.staffs){
+        if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 1 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
+            this.state.consumOrder.projects.forEach((item, index) => {
+                if (item.staffs) {
                     builders++
                 }
             })
-              if(builders.length == this.state.consumOrder.projects.length) {
-                  disabled = false
-              }
+            if (builders.length == this.state.consumOrder.projects.length) {
+                disabled = false
+            }
         }
 
-      
+
 
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />

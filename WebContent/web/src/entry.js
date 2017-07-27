@@ -44,14 +44,14 @@ import BusinessSummary from './components/dataTable/BusinessSummary.jsx';
 //system
 import StaffManage from './components/systemSetting/StaffManage.jsx';
 import AccountManage from './components/systemSetting/AccountManage.jsx';
-import StaffDetail from './components/systemSetting/StaffDetail.jsx';      
-   
+import StaffDetail from './components/systemSetting/StaffDetail.jsx';
+
 const routes = < Route path={"/"} components={Page} >
     <Route path={"login"} component={Login} />
-    <Route path={"app"}  component={App} >
+    <Route path={"app"} component={App} >
         <Route path={"consumption"} >
-            <Route path={"beautyorder"} component={BeautyOrder} />
-            <Route path={"fixorder"}  component={FixOrder} />
+            <Route path={"beautyorder"}  component={BeautyOrder} />
+            <Route path={"fixorder"} component={FixOrder} />
             <Route path={"costclose/:orderId"} component={CostClose} />
             <Route path={"ordermanage"} component={OrderManage} />
             <Route path={"ordermanage/:orderId"} component={OrderDetail} />
@@ -59,7 +59,7 @@ const routes = < Route path={"/"} components={Page} >
         <Route path={"incomeManage"} >
             <Route path={"incomeSearch"} component={IncomeSearch} />
             <Route path={"incomeSearch/incomedetail/:mode"} component={IncomeDetail} />
-            <Route path={"incomeSearch/paydetail/:mode"} component = {PayDetail}/>
+            <Route path={"incomeSearch/paydetail/:mode"} component={PayDetail} />
             <Route path={"historyAccount"} component={HistoricalAccount} />
             <Route path={"historyIncomeDetail/:Date"} component={HistoryIncomeDetail} />
             <Route path={"historyOutcomeDetail/:Date"} component={HistoryOutcomeDetail} />
@@ -69,16 +69,16 @@ const routes = < Route path={"/"} components={Page} >
             <Route path={"memberShip(/:id)"} component={BuyCard} />
             <Route path={"customer"} component={ClientInfo} />
             <Route path={"customer/:id"} component={ClientDetail} />
-            <Route path={"modifyclient/:id"} component={ModifyClient} /> 
+            <Route path={"modifyclient/:id"} component={ModifyClient} />
             <Route path={"customer/:id/payhistory"} component={PayHistory} />
-            <Route path={"addclient"} component={AddClient}/>
+            <Route path={"addclient"} component={AddClient} />
         </Route>
         <Route path={"buySellStock"} >
             <Route path={"productSearch"} component={ProductSearch} />
             <Route path={"buyProduct"} component={PutInStorage} />
             <Route path={"sellProduct"} component={SellProduct} />
             <Route path={"providerManage"} component={ProviderManage} />
-            <Route path={"productReceipts/:receiptId"} component={ReceiptDetail}/>
+            <Route path={"productReceipts/:receiptId"} component={ReceiptDetail} />
         </Route>
         <Route path={"productManage"} >
             <Route path={"itemManage"} component={ItemManage} />
