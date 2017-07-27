@@ -62,7 +62,7 @@ class ClientDetail extends React.Component {
                 key:'query',
                 render: (text, record, index) => {
                         return <span style={{ marginRight: '10px' }}  >  
-                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }} oncl={() => this.showCardModal(record.id)}>查看详情</a>   
+                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }} onClick={() => this.showCardModal(record)}>查看详情</a>   
                             </span>
 
                      
@@ -164,6 +164,9 @@ class ClientDetail extends React.Component {
             carData: [],
             payData: []
         }
+    }
+    showCardModal(obj){
+        console.log(obj)
     }
     componentDidMount() {
         this.getBrandList();
@@ -663,7 +666,7 @@ class ClientDetail extends React.Component {
 
 
                 </Modal>
-                <Modal title="会员卡详情" visible={this.state.visible}
+                {/* <Modal title="会员卡详情" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
                     okText="保存" cancelText="取消"
                     width='60%'>
@@ -689,7 +692,7 @@ class ClientDetail extends React.Component {
                                     </Row>
                                     <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
                                 </div>
-                    </Modal>
+                    </Modal> */}
             </div >
         )
     }
