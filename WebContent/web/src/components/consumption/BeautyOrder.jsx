@@ -142,14 +142,14 @@ class BeautyOrder extends React.Component {
             }
         })
     }
-    
+
     saveInfo = (params) => {
         this.setState({
             consumOrder: update(this.state.consumOrder, { $merge: params }),
-        },()=>{
-            if(this.state.consumOrder.licensePlate!==''||this.state.consumOrder.projects.length>0){
+        }, () => {
+            if (this.state.consumOrder.licensePlate !== '' || this.state.consumOrder.projects.length > 0) {
                 this.setState({
-                    isPop:true
+                    isPop: true
                 })
             }
         })
@@ -251,12 +251,13 @@ class BeautyOrder extends React.Component {
                             message.success(res.text);
                             this.setState({
                                 isPop: false
+                            }, () => {
+                                if (isFinish) {
+                                    hashHistory.push(`/app/consumption/costclose/${res.id}`)
+                                } else {
+                                    hashHistory.push(`/app/consumption/ordermanage`)
+                                }
                             })
-                            if (isFinish) {
-                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
-                            } else {
-                                hashHistory.push(`/app/consumption/ordermanage`)
-                            }
                         }
                     }
                 })
@@ -281,16 +282,16 @@ class BeautyOrder extends React.Component {
 
         if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 1 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
             this.state.consumOrder.projects.forEach((item, index) => {
-                if (item.staffs) {
+                if (item.staffs && item.staffs.length > 0) {
                     builders++
                 }
             })
-            if (builders.length == this.state.consumOrder.projects.length) {
+            if (builders == this.state.consumOrder.projects.length) {
                 disabled = false
             }
         }
 
-
+        console.log(this.state.consumOrder)
 
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
