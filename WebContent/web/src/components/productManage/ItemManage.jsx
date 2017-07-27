@@ -89,7 +89,6 @@ class BeautyOrder extends React.Component {
             success: (res) => {
                 let code = res.code;
                 if (code == '0') {
-                    console.log(res);
                     let tableDate = [];//表格显示的数据
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
@@ -209,12 +208,8 @@ class BeautyOrder extends React.Component {
     }
 
 
+    //新增修改配件 modal确认
     handleOk = (e) => {
-        //修改为关联配件
-        this.setState({
-            visible: false,
-        });
-
         let form = this.state.form;
         var obj = {};
         obj.name = form.name;
@@ -224,25 +219,27 @@ class BeautyOrder extends React.Component {
         obj.comment = form.comment;
         obj.program = { id: form.programId };
 
-        if(form.id){
+        if (form.id) {
             obj.id = form.id;
         }
 
         let arr = [];
         let invArray = this.state.invData;
         for (let i = 0, len = invArray.length; i < len; i++) {
-            let obj = invArray[i];
-            let newObj = {};//传值的obj
-            newObj.number = obj.number == undefined ? 1 : obj.number;
 
+            let obj1 = invArray[i];
+            let newObj = {};//传值的obj
+            newObj.number = obj1.number == undefined ? 1 : obj1.number;
+            newObj.id = obj1.inventoryInfoId;
             let inventory = {};
-            inventory.id = obj.key;
+            inventory.id = obj1.key;
             newObj.inventory = inventory;
             arr.push(newObj);
         }
 
         obj.inventoryInfos = arr;
 
+        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/project/add',
@@ -251,14 +248,28 @@ class BeautyOrder extends React.Component {
             data: JSON.stringify(obj),
             traditional: true,
             success: (result) => {
+                console.log(result);
                 let code = result.code;
                 if (code == '0') {
                     obj.program = this.state.form.program;
                     obj.key = result.data.id;
                     obj.createDate = result.data.createDate;
-                    this.setState({
-                        data: [...this.state.data, obj],
-                    });
+
+                    if (form.index) {//index occur indicate modify
+                        this.setState({
+                            data: update(this.state.data, { [form.index]: { $set: obj } }),
+                            visible: false
+                        })
+                    } else {
+                        this.setState({
+                            data: [...this.state.data, obj],
+                            visible: false
+                        });
+
+                    }
+
+
+
                 }
 
             }
@@ -289,17 +300,36 @@ class BeautyOrder extends React.Component {
         })
     }
 
+    //新增项目按钮
+    addProject = () => {
+        //新增我要的是一个空的表单
+        this.setState({
+            visible: true,
+            form: update(this.state.form, {
+                ['name']: { $set: '' },
+                ['programId']: { $set: '' },
+                ['program']: { $set: '' },
+                ['price']: { $set: '' },
+                ['referWorkTime']: { $set: '' },
+                ['pricePerUnit']: { $set: '' },
+                ['comment']: { $set: '' },
+                ['id']: { $set: '' },
+            }),
+            invData: []
+        })
+
+    }
 
     //修改功能
-    modifyMethod = (record) => {
-        console.log(record);
+    modifyMethod = (record, index) => {
+        //console.log(record);
         let invData = [];//local varible
         let inventoryInfos = record.inventoryInfos;
         for (let item of inventoryInfos) {
             let temp = item.inventory;
-            temp.id = item.id;
-            temp.number = item.number;
-            temp.key = item.id;
+            temp.key = temp.id;
+            temp.number = item.number ? item.number : 1;
+            temp.inventoryInfoId = item.id;
             invData.push(temp);
         }
         this.setState({
@@ -313,6 +343,7 @@ class BeautyOrder extends React.Component {
                 ['pricePerUnit']: { $set: record.pricePerUnit },
                 ['comment']: { $set: record.comment },
                 ['id']: { $set: record.key },
+                ['index']: { $set: index },//可以知道修改的是那一行
             }),
             invData: invData
         })
@@ -465,7 +496,7 @@ class BeautyOrder extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => { this.modifyMethod(record) }}>修改</a>
+                        <a onClick={() => { this.modifyMethod(record, index) }}>修改</a>
                         &nbsp;
                         &nbsp;
                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
@@ -617,7 +648,7 @@ class BeautyOrder extends React.Component {
                                 </Row>
                                 <Row style={{ marginTop: '40px', marginBottom: '20px' }}>
                                     <Col span={2}>
-                                        <Button onClick={() => { this.setState({ visible: true }) }} >新增项目</Button>
+                                        <Button onClick={() => { this.addProject() }} >新增项目</Button>
                                     </Col>
                                     <Col span={8}>
                                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedIds)}>
@@ -714,8 +745,7 @@ class BeautyOrder extends React.Component {
                                                     columns={modalInv}
                                                     dataSource={this.state.invData}
                                                     bordered
-                                                    pagination={this.state.pagination}
-                                                    onChange={(pagination) => this.handleChange(pagination)}
+                                                    pagination={false}
                                                 />
                                             </Row>
 
