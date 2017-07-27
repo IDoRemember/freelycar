@@ -87,6 +87,7 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
+                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -187,7 +188,7 @@ class BeautyOrder extends React.Component {
 
         let tabkey = this.state.tabkey;
         if (tabkey == 1) {
-            this.loadData(pagination.current, 10);
+            this.loadData(pagination.current, 10,this.state.projName, this.state.progId);
         } else if (tabkey == 2) {
             this.loadDataTab2(pagination.current, 10);
         }
