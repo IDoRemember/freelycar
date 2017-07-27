@@ -45,7 +45,7 @@ class AddClient extends React.Component {
     componentDidMount() {
         $.ajax({
             type: 'GET',
-            url: '/api/car/listbrand',
+            url: 'api/car/listbrand',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
@@ -106,7 +106,7 @@ class AddClient extends React.Component {
                 } else {
                     $.ajax({
                         type: 'post',
-                        url: '/api/client/add',
+                        url: 'api/client/add',
                         datatype: 'json',
                         contentType: 'application/json;charset=utf-8',
                         data: JSON.stringify({

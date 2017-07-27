@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, DatePicker } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, DatePicker, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
 import OrderTable from './OrderTable.jsx'
@@ -14,7 +14,6 @@ class OrderManage extends React.Component {
             option: [],
             type: '美容',
             pagination: {
-
             },
             data: [],
             query: {
@@ -59,7 +58,6 @@ class OrderManage extends React.Component {
                         data: dataArray,
                         pagination: { total: res.realSize },
                     })
-
                 }
             }
         })
@@ -68,6 +66,10 @@ class OrderManage extends React.Component {
     setQueryData = (key, data) => {
         this.setState({
             query: update(this.state.query, { [key]: { $set: data } })
+        }, () => {
+            if (key == 'state') {
+                this.getQuery(1, 10)
+            }
         })
     }
 
@@ -96,7 +98,7 @@ class OrderManage extends React.Component {
         })
     }
 
-    getQuery = () => {
+    getQuery = (page, pageNumber) => {
         $.ajax({
             url: 'api/order/query',
             contentType: 'application/json;charset=utf-8',
@@ -109,14 +111,13 @@ class OrderManage extends React.Component {
                     programId: this.state.query.programId ? this.state.query.programId : -1,
                     payState: this.state.query.payState ? this.state.query.payState : -1,
                     clientId: -1,
-                    state: this.state.query.state > -1 ? this.state.query.state : -1
+                    state:this.state.query.state? this.state.query.state : -1
                 },
-
                 startDate: this.state.query.dateString[0],
                 endDate: this.state.query.dateString[1],
                 dateType: this.state.query.dateType ? this.state.query.dateType : -1,
-                page: 1,
-                number: 10
+                page: page,
+                number: pageNumber
             }),
             success: (res) => {
                 if (res.code == '0') {
@@ -125,11 +126,14 @@ class OrderManage extends React.Component {
                         item.key = item.id
                     }
                     this.setState({
-                        data: dataArray
+                        data: dataArray,
+                        pagination: { total: res.realSize }
                     })
-                } else if (res.code == '2') {
+                } else {
+                    message.error(res.msg)
                     this.setState({
-                        data: []
+                        data: [],
+                        pagination: { total: 0 }
                     })
                 }
             }
@@ -161,9 +165,9 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             车辆状态：
                             <div style={{ display: "inline-block" }}>
-                                <Button size="large" shape="circle" onClick={() => {if(this.state.query.state !== 0){this.setQueryData('state', 0)}else{this.setQueryData('state',null)}}} type={this.state.query.state==0?'primary':null}>接</Button>
-                                <Button size="large" shape="circle"  onClick={() => {if(this.state.query.state !== 1){this.setQueryData('state', 1)}else{this.setQueryData('state',null)}}} type={this.state.query.state==1?'primary':null}>完</Button>
-                                <Button size="large" shape="circle"  onClick={() => {if(this.state.query.state !== 2){this.setQueryData('state', 2)}else{this.setQueryData('state',null)}}} type={this.state.query.state==2?'primary':null}>交</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 1) { this.setQueryData('state',1) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 1 ? 'primary' : null}>接</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 2) { this.setQueryData('state',2) } else { this.setQueryData('state', null) } }} type={this.state.query.state ==2 ? 'primary' : null}>完</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 3) { this.setQueryData('state',3) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 3 ? 'primary' : null}>交</Button>
                             </div>
                         </Col>
                     </Row>
@@ -201,7 +205,7 @@ class OrderManage extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: "10px" }}>
                         <Col span={8}>
-                            <Button type="primary" onClick={() => this.getQuery()}>查询</Button>
+                            <Button type="primary" onClick={() => this.getQuery(1, 10)}>查询</Button>
                             <Button type="primary" onClick={() => this.startClear()}>清空</Button>
                         </Col>
                     </Row>

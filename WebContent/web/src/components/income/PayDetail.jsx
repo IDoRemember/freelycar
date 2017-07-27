@@ -100,11 +100,8 @@ class PayDetail extends React.Component {
         filteredInfo = filteredInfo || {};
         const columns = [{
             title: '支出项目',
-            dataIndex: 'payment',
-            key: 'payment',
-            render: (text, record, index) => {
-                return <span>{text == '0' ? '商品入库' : '其他'}</span>
-            }
+            dataIndex: 'type',
+            key: 'type'
         }, {
             title: '金额',
             dataIndex: 'amount',

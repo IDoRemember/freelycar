@@ -106,6 +106,7 @@ public class ClientService {
 		exist.setName(client.getName());
 		exist.setPhone(client.getPhone());
 		exist.setState(client.getState());
+		clientDao.save(exist);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 

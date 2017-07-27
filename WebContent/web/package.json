@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --progress --inline --compress",
-    "build": "NODE_ENV=production webpack --config ./webpack.production.config.js --progress"
+    "build": "set NODE_ENV=production && webpack --config ./webpack.production.config.js --progress"
   },
   "repository": {
     "type": "git",
@@ -40,16 +40,17 @@
     "webpack-dev-server": "^1.15.0"
   },
   "dependencies": {
+    "antd": "^2.9.3",
+    "babel-plugin-import": "^1.1.1",
+    "echarts-for-react": "^1.2.0",
+    "html-webpack-plugin": "^2.29.0",
     "react": "^15.3.1",
     "react-dom": "^15.3.1",
-    "echarts-for-react": "^1.2.0",
     "react-draft-wysiwyg": "^1.9.6",
     "react-draggable": "^2.2.4",
     "react-quill": "^1.0.0-rc.2",
     "react-router": "^3.0.2",
     "recharts": "^0.22.3",
-    "antd": "^2.9.3",
-    "babel-plugin-import": "^1.1.1",
     "screenfull": "^3.2.0",
     "styled-components": "^1.4.3"
   }

@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber ,message} from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import PartsSearch from '../model/PartsSearch.jsx';
@@ -82,11 +82,12 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/project/query',
+            url: 'api/project/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',
             success: (res) => {
+                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -123,7 +124,7 @@ class BeautyOrder extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/program/list',
+            url: 'api/program/list',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -156,7 +157,7 @@ class BeautyOrder extends React.Component {
 
     loadProgram = () => {
         $.ajax({
-            url: '/api/program/listall',
+            url: 'api/program/listall',
             dataType: 'json',
             type: 'get',
             success: (res) => {
@@ -187,7 +188,7 @@ class BeautyOrder extends React.Component {
 
         let tabkey = this.state.tabkey;
         if (tabkey == 1) {
-            this.loadData(pagination.current, 10);
+            this.loadData(pagination.current, 10,this.state.projName, this.state.progId);
         } else if (tabkey == 2) {
             this.loadDataTab2(pagination.current, 10);
         }
@@ -208,12 +209,12 @@ class BeautyOrder extends React.Component {
     }
 
 
-    //新增修改配件 modal确认
+    //新增 修改 配件 modal确认
     handleOk = (e) => {
         let form = this.state.form;
         var obj = {};
         obj.name = form.name;
-        obj.price = form.price;
+        obj.price = form.price=='' ? 0 : form.price;
         obj.referWorkTime = form.referWorkTime;
         obj.pricePerUnit = form.pricePerUnit;
         obj.comment = form.comment;
@@ -222,6 +223,19 @@ class BeautyOrder extends React.Component {
         if (form.id) {
             obj.id = form.id;
         }
+
+
+        //check require
+        if(form.name==''){
+            message.warn('项目名称必填项');
+            return false;
+        }
+        if(form.programId==''){
+            message.warn('项目类别必填项');
+            return false;
+        }
+
+
 
         let arr = [];
         let invArray = this.state.invData;
@@ -239,7 +253,6 @@ class BeautyOrder extends React.Component {
 
         obj.inventoryInfos = arr;
 
-        console.log(obj);
         $.ajax({
             type: 'post',
             url: 'api/project/add',
@@ -361,10 +374,10 @@ class BeautyOrder extends React.Component {
         let url = '';
         let data = {};
         if (tabkey == 1) {
-            url = '/api/project/delete';
+            url = 'api/project/delete';
             data = { projectIds: idArray };
         } else if (tabkey == 2) {
-            url = '/api/program/delete';
+            url = 'api/program/delete';
             data = { programIds: idArray };
         }
 
@@ -412,11 +425,18 @@ class BeautyOrder extends React.Component {
 
 
     //tab2的函数
-    //增加配额件
+    //增加配件
     handleInvOn = () => {
         let obj = {};
         obj.name = this.state.form2.name;
         obj.comment = this.state.form2.comment;
+
+        //check require
+        if(obj.name==''){
+            message.warn('配件名称必填项');
+            return false;
+        }
+
         $.ajax({
             url: 'api/program/add',
             data: obj,
@@ -587,18 +607,6 @@ class BeautyOrder extends React.Component {
             title: '备注',
             dataIndex: 'comment',
             key: 'comment'
-        }, {
-            title: '操作',
-            dataIndex: 'operation',
-            render: (text, record, index) => {
-                return (
-                    <div>
-                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
-                            <a href="#">删除</a>
-                        </Popconfirm>
-                    </div>
-                );
-            },
         }];
 
         // rowSelection object indicates the need for row selection

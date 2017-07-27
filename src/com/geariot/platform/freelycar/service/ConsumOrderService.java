@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
@@ -58,6 +59,9 @@ public class ConsumOrderService {
 
 	@Autowired
 	private InventoryOrderDao inventoryOrderDao;
+	
+	@Autowired
+	private CarDao carDao;
 	
 	@Autowired
 	private CardDao cardDao;
@@ -122,6 +126,11 @@ public class ConsumOrderService {
 			}
 			
 		}
+		//对Car添加LastMile
+		Car car=carDao.findByLicense(consumOrder.getLicensePlate());
+		car.setLastMiles(consumOrder.getMiles());
+		carDao.save(car);
+		
 		this.orderDao.save(consumOrder);
 		log.debug("保存之前order----------" + consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");

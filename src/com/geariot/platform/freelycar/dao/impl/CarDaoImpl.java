@@ -57,4 +57,10 @@ public class CarDaoImpl implements CarDao {
 		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@Override
+	public void save(Car car) {
+		Session session = this.getSession();
+		session.save(car);
+	}
+
 }

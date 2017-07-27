@@ -1,7 +1,7 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link } from 'react-router';
-import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button,message} from 'antd';
+import { Row, Col, Select, Input, Card, Dropdown, Menu, Icon, DatePicker, Modal, Button, message } from 'antd';
 import styled from "styled-components"
 import update from 'immutability-helper'
 import $ from 'jquery'
@@ -85,7 +85,7 @@ class CustomerInfo extends React.Component {
                         })
                         this.props.getCards(data.cards)
 
-                    }else {
+                    } else {
                         message.error(res.msg)
                     }
                 }
@@ -146,7 +146,7 @@ class CustomerInfo extends React.Component {
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
                     <Col span={8} >
-                        <span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>
+
                         停车位置：
                         <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('parkingLocation', e.target.value) }} />
                     </Col>
@@ -184,6 +184,7 @@ class CustomerInfo extends React.Component {
                     </Col>
 
                     <Col span={8}>
+                        <span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>
                         接车时间：
                         <DatePicker showTime format="YYYY-MM-DD HH:mm:ss" onChange={(time) => this.handleValueChange('pickTime', new Date())} />
                     </Col>

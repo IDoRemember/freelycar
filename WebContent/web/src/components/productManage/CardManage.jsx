@@ -47,7 +47,7 @@ class EditableTable extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/service/query',
+            url: 'api/service/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -87,9 +87,8 @@ class EditableTable extends React.Component {
 
     // 模态框的处理函数
     showModal = (method, record) => {
-        console.log(method);
         if (method == 'modify') {
-        console.log(record);
+            console.log(record);
             this.setState({
                 modifyData: record,
                 visible: true

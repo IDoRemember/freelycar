@@ -61,12 +61,11 @@ class ClientDetail extends React.Component {
                 dataIndex:'queryInfo',
                 key:'query',
                 render: (text, record, index) => {
-                        return <span>
-                            <span style={{ marginRight: '10px' }}>  
-                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>查看详情</a>   
+                        return <span style={{ marginRight: '10px' }}  >  
+                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }} oncl={() => this.showCardModal(record.id)}>查看详情</a>   
                             </span>
 
-                        </span>
+                     
                     }
             }],
 
@@ -664,6 +663,33 @@ class ClientDetail extends React.Component {
 
 
                 </Modal>
+                <Modal title="会员卡详情" visible={this.state.visible}
+                    onOk={this.handleOk} onCancel={this.handleCancel}
+                    okText="保存" cancelText="取消"
+                    width='60%'>
+                      <div style={{ width: '200px' }}>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类名称：</Col>
+                                        <Col span={12}>{item.service.name}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类属性：</Col>
+                                        <Col span={12}>{item.service.type == '1' ? '组合次卡' : '次卡'}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >售卡金额：</Col>
+                                        <Col span={12}>{item.service.price}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >有效期：</Col>
+                                        <Col span={12}>{item.service.validTime}年</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >剩余次数明细：</Col>
+                                    </Row>
+                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
+                                </div>
+                    </Modal>
             </div >
         )
     }

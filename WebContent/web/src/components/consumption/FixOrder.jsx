@@ -88,6 +88,10 @@ class FixOrder extends React.Component {
     componentDidMount() {
         this.queryAdmin()
         this.getStaffList()
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -117,6 +121,15 @@ class FixOrder extends React.Component {
         });
     }
 
+    routerWillLeave = (nextLocation) => {
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
+    }
+
+
     queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
@@ -132,11 +145,17 @@ class FixOrder extends React.Component {
             }
         })
     }
+
     saveInfo = (params) => {
         this.setState({
-            consumOrder: update(this.state.consumOrder, { $merge: params })
+            consumOrder: update(this.state.consumOrder, { $merge: params }),
+
         }, () => {
-            console.log(this.state.consumOrder)
+            if (this.state.consumOrder.licensePlate !== '' || this.state.consumOrder.projects.length > 0) {
+                this.setState({
+                    isPop: true
+                })
+            }
         })
     }
 
@@ -219,11 +238,15 @@ class FixOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         message.success(res.text);
-                        if (isFinish) {
-                            hashHistory.push(`/app/consumption/costclose/${res.id}`)
-                        } else {
-                            hashHistory.push(`/app/consumption/ordermanage`)
-                        }
+                        this.setState({
+                            isPop: false
+                        }, () => {
+                            if (isFinish) {
+                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
+                            } else {
+                                hashHistory.push(`/app/consumption/ordermanage`)
+                            }
+                        })
                     }
                 }
             })
@@ -237,7 +260,7 @@ class FixOrder extends React.Component {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0,disabled=true
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -287,7 +310,7 @@ class FixOrder extends React.Component {
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
+           
         </div>
     }
 }

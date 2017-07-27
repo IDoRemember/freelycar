@@ -13,6 +13,7 @@ class BeautyOrder extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
+            isPop: false,
             parts: [],
             staffList: [],
             optionService: [],
@@ -87,6 +88,10 @@ class BeautyOrder extends React.Component {
     componentDidMount() {
         this.queryAdmin()
         this.getStaffList()
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -114,6 +119,14 @@ class BeautyOrder extends React.Component {
         });
     }
 
+    routerWillLeave = (nextLocation) => {
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
+    }
+
     queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
@@ -129,9 +142,16 @@ class BeautyOrder extends React.Component {
             }
         })
     }
+
     saveInfo = (params) => {
         this.setState({
-            consumOrder: update(this.state.consumOrder, { $merge: params })
+            consumOrder: update(this.state.consumOrder, { $merge: params }),
+        }, () => {
+            if (this.state.consumOrder.licensePlate !== '' || this.state.consumOrder.projects.length > 0) {
+                this.setState({
+                    isPop: true
+                })
+            }
         })
     }
 
@@ -203,13 +223,13 @@ class BeautyOrder extends React.Component {
             this.setState({
                 errorInfo: '* 请输入接车人'
             })
-        } else if(this.state.consumOrder.projects.length<1) {
+        } else if (this.state.consumOrder.projects.length < 1) {
             this.setState({
-                errorInfo:'* 请选择项目'
+                errorInfo: '* 请选择项目'
             })
         } else {
             this.setState({
-                errorInfo:''
+                errorInfo: ''
             })
         }
         this.setState({
@@ -224,16 +244,20 @@ class BeautyOrder extends React.Component {
                     // traditional: true,
                     data: JSON.stringify(this.state.consumOrder),
                     success: (res) => {
-                        if(res.code != '0') {
+                        if (res.code != '0') {
                             message.warning(res.msg)
                         }
                         if (res.code == '0') {
                             message.success(res.text);
-                            if (isFinish) {
-                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
-                            } else {
-                                hashHistory.push(`/app/consumption/ordermanage`)
-                            }
+                            this.setState({
+                                isPop: false
+                            }, () => {
+                                if (isFinish) {
+                                    hashHistory.push(`/app/consumption/costclose/${res.id}`)
+                                } else {
+                                    hashHistory.push(`/app/consumption/ordermanage`)
+                                }
+                            })
                         }
                     }
                 })
@@ -243,11 +267,11 @@ class BeautyOrder extends React.Component {
 
     render() {
         const parts = this.state.parts.map((item, index) => {
-        if (this.state.parts.length > (index + 1)) {
+            if (this.state.parts.length > (index + 1)) {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={1} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0,disabled=true,builders=0
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true, builders = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -256,18 +280,18 @@ class BeautyOrder extends React.Component {
         }
         price = partsPrice + projectPrice
 
-        if(this.state.consumOrder.carId !== ''&&this.state.consumOrder.projects.length>1&&this.state.consumOrder.pickTime !== ''&&this.state.consumOrder.pickCarStaff) {
-            this.state.consumOrder.projects.forEach((item,index)=>{
-                if(item.staffs){
+        if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 1 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
+            this.state.consumOrder.projects.forEach((item, index) => {
+                if (item.staffs && item.staffs.length > 0) {
                     builders++
                 }
             })
-              if(builders.length == this.state.consumOrder.projects.length) {
-                  disabled = false
-              }
+            if (builders == this.state.consumOrder.projects.length) {
+                disabled = false
+            }
         }
 
-      
+        console.log(this.state.consumOrder)
 
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
@@ -296,7 +320,7 @@ class BeautyOrder extends React.Component {
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
-            <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
+      
         </div>
     }
 }

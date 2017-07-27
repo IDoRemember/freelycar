@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber ,message} from 'antd';
+import { Row, Col, Card, Button, DatePicker, Table, Input, Select, Popconfirm, Modal, Form, InputNumber, message } from 'antd';
 import { Link } from 'react-router';
 // import ModalTable from '../productManage/ModalTable.jsx';
 import update from 'immutability-helper'
@@ -75,7 +75,16 @@ class CardModal extends React.Component {
     componentWillReceiveProps(newProps) {
         if (newProps.visible != this.props.visible) {
             this.setState({
-                visible: newProps.visible
+                visible: newProps.visible,
+                form: update(this.state.form,
+                    {
+                        name: { $set: newProps.modifyData.name ? newProps.modifyData.name : '' },
+                        type: { $set: newProps.modifyData.type ? newProps.modifyData.type : '' },
+                        price: { $set: newProps.modifyData.price ? newProps.modifyData.price : '' },
+                        validTime: { $set: newProps.modifyData.validTime ? newProps.modifyData.validTime : '' },
+                        comment: { $set: newProps.modifyData.comment ? newProps.modifyData.comment : '' },
+
+                    })
             })
         }
 
@@ -83,6 +92,7 @@ class CardModal extends React.Component {
 
     //加载数据
     componentDidMount() {
+        console.log(this.props.modifyData);
         this.loadData(1, 10);
     }
 
@@ -94,7 +104,7 @@ class CardModal extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/project/query',
+            url: 'api/project/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',
@@ -117,8 +127,8 @@ class CardModal extends React.Component {
                         tableDate.push(tableItem);
                     }
                     this.setState({ itemData: tableDate, pagination: { total: res.realSize }, });
-                }else{
-                    this.setState({ itemData: [], pagination: { total: 0 }});
+                } else {
+                    this.setState({ itemData: [], pagination: { total: 0 } });
                 }
 
             }
@@ -150,24 +160,25 @@ class CardModal extends React.Component {
             projs.push(projInfo);
         }
         obj.projectInfos = projs;
+
         //check field require
-        if(obj.name==''){
+        if (obj.name == '') {
             message.warn('卡类名称是必填项');
             return false;
         }
-        if(obj.price==''){
+        if (obj.price == '') {
             message.warn('售卡金额是必填项');
             return false;
         }
-        if(obj.type==''){
+        if (obj.type == '') {
             message.warn('卡类属性是必填项');
             return false;
         }
-        if(obj.validTime==''){
+        if (obj.validTime == '') {
             message.warn('有效期是必填项');
             return false;
         }
-        if(projs.length==0){
+        if (projs.length == 0) {
             message.warn('必须关联项目');
             return false;
         }
@@ -187,7 +198,7 @@ class CardModal extends React.Component {
                     obj.key = res.data.id
                     obj.createDate = res.data.createDate;
                     obj.type = obj.type == 0 ? '次卡' : '组合卡';
-                  
+
                     p.onOk(obj)
 
                     //清空模态框数据
@@ -209,7 +220,7 @@ class CardModal extends React.Component {
 
     //处理翻页
     handlePageChange = (p) => {
-        this.loadData(p.current,10)
+        this.loadData(p.current, 10)
     }
 
     //为form的赋值
@@ -221,7 +232,7 @@ class CardModal extends React.Component {
 
     //为项目中赋值times的属性
     onChangeTimes = (index, value) => {
-        console.log(index +"---"+value);
+        console.log(index + "---" + value);
         this.setState({
             selectedRows: update(this.state.selectedRows, { [index]: { ['times']: { $set: value } } })
         })
@@ -353,14 +364,14 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.props.modifyData.name?this.props.modifyData.name:this.state.form.name} />
+                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.state.form.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.props.modifyData.type?this.props.modifyData.type:this.state.form.type}>
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.state.form.type}>
                                 <Option value="0">次卡</Option>
                                 <Option value="1">组合卡</Option>
                             </Select>
@@ -370,21 +381,21 @@ class CardModal extends React.Component {
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.props.modifyData.price?this.props.modifyData.price:this.state.form.price} />
+                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.state.form.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.props.modifyData.validTime?this.props.modifyData.validTime:this.state.form.validTime} />
+                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.state.form.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.props.modifyData.comment?this.props.modifyData.comment:this.state.form.comment} />
+                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.state.form.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>

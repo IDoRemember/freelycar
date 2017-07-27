@@ -32,7 +32,9 @@ class BusinessSummary extends React.Component {
                 alipay: '0%',
                 wechatpay: '0%'
             }],
-            proportionData: []
+            proportionData: [],
+            memberPay: 0,//会员消费
+            notMenberPay: 0,//散客消费
         }
     }
     componentDidMount() {
@@ -46,6 +48,7 @@ class BusinessSummary extends React.Component {
             dataType: 'json',
             data: data == undefined ? {} : data,
             success: (result) => {
+                console.log(result);
                 if (result.code == "0") {
                     let pay = {};
                     pay.key = -1;
@@ -70,6 +73,17 @@ class BusinessSummary extends React.Component {
                     for (let item of programPayDetail) {
                         item.key = item.programName;
                     }
+
+
+                    //会员散客消费
+                    let mp = result.memberPay;
+                    for (let item of mp) {
+                        if (item.member) 
+                            this.setState({ memberPay: item.amount });
+                        else
+                            this.setState({ notMenberPay: item.amount });
+                    }
+
                     this.setState({
                         pay: [pay],
                         proportionData: programPayDetail
@@ -130,11 +144,11 @@ class BusinessSummary extends React.Component {
                     </Row>
                 </div>
                 <div>
-                    <Row>
+                    <Row style={{ marginTop: '27px' }}>
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实收金额">
-                                    <h1>￥0</h1>
+                                    <h1>￥{this.state.memberPay+this.state.notMenberPay}</h1>
                                 </Card>
                             </div>
                         </Col>
@@ -142,14 +156,14 @@ class BusinessSummary extends React.Component {
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }}>
                                 <Card className="nature-outcome" title="会员消费金额">
-                                    <h1>￥0</h1>
+                                    <h1>￥{this.state.memberPay}</h1>
                                 </Card>
                             </div>
                         </Col>
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }}>
                                 <Card className="nature-grey" title="散客消费金额">
-                                    <h1>￥0</h1>
+                                    <h1>￥{this.state.notMenberPay}</h1>
                                 </Card>
                             </div>
                         </Col>
@@ -158,12 +172,6 @@ class BusinessSummary extends React.Component {
                 <div>
                     <h2 style={{ padding: '10px' }}>收款方式</h2>
                     <Table className="accountTable" dataSource={this.state.pay} bordered>
-                        <Col
-                            title="支付方式"
-                            dataIndex="payway"
-                            key="payway"
-
-                        />
                         <Col
                             title="现金"
                             dataIndex="cash"
