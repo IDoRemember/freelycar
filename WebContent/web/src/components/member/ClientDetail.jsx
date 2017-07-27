@@ -160,7 +160,7 @@ class ClientDetail extends React.Component {
     getBrandList = () => {
         $.ajax({
             type: 'GET',
-            url: '/api/car/listbrand',
+            url: 'api/car/listbrand',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
@@ -413,7 +413,7 @@ class ClientDetail extends React.Component {
         let forms = this.state.form;
         $.ajax({
             type: 'post',
-            url: '/api/client/addcar',
+            url: 'api/client/addcar',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({

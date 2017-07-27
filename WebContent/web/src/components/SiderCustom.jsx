@@ -94,7 +94,6 @@ class SiderCustom extends Component {
                         key="/app/consumption"
                         title={<span><Icon type="switcher" /><span className="nav-text">消费开单</span></span>}
                     >
-
                         <Menu.Item key="/app/consumption/beautyorder"><Link to={'/app/consumption/beautyOrder'}>美容开单</Link></Menu.Item>
                         <Menu.Item key="/app/consumption/fixorder"><Link to={'/app/consumption/fixOrder'}>维修开单</Link></Menu.Item>
                         <Menu.Item key="/app/consumption/ordermanage"><Link to={'/app/consumption/orderManage'}>单据管理</Link></Menu.Item>

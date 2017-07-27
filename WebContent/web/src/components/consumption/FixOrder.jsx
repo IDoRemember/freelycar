@@ -88,6 +88,10 @@ class FixOrder extends React.Component {
     componentDidMount() {
         this.queryAdmin()
         this.getStaffList()
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             url: 'api/project/name',
             type: 'get',
@@ -117,26 +121,41 @@ class FixOrder extends React.Component {
         });
     }
 
+    routerWillLeave = (nextLocation) => {
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
+    }
+
+
     queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
             type: "GET",
             data: {
                 account: localStorage.getItem('username'),
-            
+
             },
             success: (res) => {
                 this.saveInfo({
-                    orderMaker:{id:res.data.role.id}
+                    orderMaker: { id: res.data.role.id }
                 })
             }
         })
     }
+
     saveInfo = (params) => {
         this.setState({
-            consumOrder: update(this.state.consumOrder, { $merge: params })
+            consumOrder: update(this.state.consumOrder, { $merge: params }),
+
         }, () => {
-            console.log(this.state.consumOrder)
+            if (this.state.consumOrder.licensePlate !== '' || this.state.consumOrder.projects.length > 0) {
+                this.setState({
+                    isPop: true
+                })
+            }
         })
     }
 
@@ -219,6 +238,9 @@ class FixOrder extends React.Component {
                     console.log(res)
                     if (res.code == '0') {
                         message.success(res.text);
+                        this.setState({
+                            isPop: false
+                        })
                         if (isFinish) {
                             hashHistory.push(`/app/consumption/costclose/${res.id}`)
                         } else {
@@ -237,7 +259,7 @@ class FixOrder extends React.Component {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -245,6 +267,18 @@ class FixOrder extends React.Component {
             partsPrice = partsPrice + item.inventory.price * item.number
         }
         price = partsPrice + projectPrice
+
+
+        if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length < 1 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
+            this.state.consumOrder.projects.forEach((item, index) => {
+                if (item.staffs.length > 0) {
+                    builders++
+                }
+            })
+            if (builders.length == this.state.consumOrder.projects.length) {
+                disabled = false
+            }
+        }
         return <div>
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
@@ -270,10 +304,10 @@ class FixOrder extends React.Component {
                 </div>
             </Card>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
+                <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
-                <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
+                <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
             <Button type="primary" style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'}>重新开单</Button>
         </div>

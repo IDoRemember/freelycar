@@ -108,7 +108,7 @@ class PayHistory extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/client/consumhist',
+            url: 'api/client/consumhist',
             dataType: 'json',
             data: jsonData,
             type: 'GET',
