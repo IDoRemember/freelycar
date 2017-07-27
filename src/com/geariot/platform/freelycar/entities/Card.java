@@ -14,11 +14,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Card {
 	private int id;
 	private Service service;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date payDate;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date expirationDate;
 	private int payMethod; // 0,1,2,3,4  现金,刷卡,支付宝,微信,易付宝
 	private Set<CardProjectRemainingInfo> projectInfos;
