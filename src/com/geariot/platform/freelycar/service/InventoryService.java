@@ -14,12 +14,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
+import com.geariot.platform.freelycar.dao.ExpendOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryBrandDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryTypeDao;
 import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Admin;
+import com.geariot.platform.freelycar.entities.ExpendOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
@@ -64,6 +66,9 @@ public class InventoryService {
 
 	@Autowired
 	private ProjectDao projectDao;
+	
+	@Autowired
+	private ExpendOrderDao expendOrderDao;
 
 	public String addType(InventoryType inventoryType) {
 		InventoryType exist = inventoryTypeDao.findByName(inventoryType.getTypeName());
@@ -251,6 +256,13 @@ public class InventoryService {
 			}
 		}
 		this.inventoryOrderDao.save(order);
+		
+		ExpendOrder expendOrder = new ExpendOrder();
+		expendOrder.setAmount(order.getTotalPrice());
+		expendOrder.setPayDate(new Date());
+		expendOrder.setType("采购入库");
+		expendOrderDao.save(expendOrder);
+		
 		log.debug("入库单(id:" + order.getId() + ")保存成功");
 		if (!fails.isEmpty()) {
 			JSONArray array = JSONArray.fromObject(fails);

@@ -140,6 +140,11 @@ class ProviderManage extends React.Component {
                             })
                         }
                     }
+                } else {
+                    this.setState({
+                        data: [],
+                        pagination: { total: 0 },
+                    })
                 }
             },
         })
