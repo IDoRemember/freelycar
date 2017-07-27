@@ -124,11 +124,11 @@ class OrderTable extends React.Component {
                 title: '车辆状态', dataIndex: 'state', key: 'state',
                 render: (text, record, index) => {
                     let innertext = ''
-                    if (text == 0) {
+                    if (text == 1) {
                         innertext = '已接车'
-                    } else if (text == 1) {
-                        innertext = '已完工'
                     } else if (text == 2) {
+                        innertext = '已完工'
+                    } else if (text == 3) {
                         innertext = ' 已交车'
                     }
                     return <span>{innertext}</span>
@@ -148,20 +148,20 @@ class OrderTable extends React.Component {
                     let innertext = ''
                     if (record.payState == 0) {
                         switch (record.state) {
-                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
+                            case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
                                 break;
-                            case 1: innertext = <span><Link to={`/app/consumption/costclose/${record.id}`} style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a></span>;
+                            case 2: innertext = <span><Link to={`/app/consumption/costclose/${record.id}`} style={{ marginRight: '10px' }}>结算</Link><a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a></span>;
                                 break;
-                            case 2: innertext = <Link to={`/app/consumption/costclose/${record.id}`} >结算</Link>;
+                            case 3: innertext = <Link to={`/app/consumption/costclose/${record.id}`} >结算</Link>;
                                 break;
                         }
                     } else {
                         switch (record.state) {
-                            case 0: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
+                            case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ finishModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>完工</a>;
                                 break;
-                            case 1: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a>;
+                            case 2: innertext = <a href="javascript:void(0);" onClick={() => this.setState({ reverseModal: true, consumOrder: { consumOrderId: record.id, index: index } })}>交车</a>;
                                 break;
-                            case 2: innertext = <Link to={`/app/consumption/ordermanage/${record.id}`} >
+                            case 3: innertext = <Link to={`/app/consumption/ordermanage/${record.id}`} >
                                 <span>查看</span>
                             </Link>;
                                 break;

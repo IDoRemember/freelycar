@@ -111,7 +111,7 @@ class OrderManage extends React.Component {
                     programId: this.state.query.programId ? this.state.query.programId : -1,
                     payState: this.state.query.payState ? this.state.query.payState : -1,
                     clientId: -1,
-                    state: this.state.query.state > -1 ? this.state.query.state : -1
+                    state:this.state.query.state? this.state.query.state : -1
                 },
                 startDate: this.state.query.dateString[0],
                 endDate: this.state.query.dateString[1],
@@ -165,9 +165,9 @@ class OrderManage extends React.Component {
                         <Col span={8} >
                             车辆状态：
                             <div style={{ display: "inline-block" }}>
-                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 0) { this.setQueryData('state', 0) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 0 ? 'primary' : null}>接</Button>
-                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 1) { this.setQueryData('state', 1) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 1 ? 'primary' : null}>完</Button>
-                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 2) { this.setQueryData('state', 2) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 2 ? 'primary' : null}>交</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 1) { this.setQueryData('state',1) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 1 ? 'primary' : null}>接</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 2) { this.setQueryData('state',2) } else { this.setQueryData('state', null) } }} type={this.state.query.state ==2 ? 'primary' : null}>完</Button>
+                                <Button size="large" shape="circle" onClick={() => { if (this.state.query.state !== 3) { this.setQueryData('state',3) } else { this.setQueryData('state', null) } }} type={this.state.query.state == 3 ? 'primary' : null}>交</Button>
                             </div>
                         </Col>
                     </Row>
