@@ -161,7 +161,7 @@ class ServiceTable extends React.Component {
                     }}
                 />
                 <Col
-                    title="施工人员"
+                    title="施工人员(必选)"
                     key="builder"
                     dataIndex="builder"
                     render={(text, record, index) => {

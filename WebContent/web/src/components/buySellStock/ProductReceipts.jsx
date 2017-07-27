@@ -26,7 +26,8 @@ class PutInStorage extends React.Component {
     }
 
     componentWillReceiveProps(){
-        this.getList(1,10)
+        this.getList(1,10);
+
     }
 
     

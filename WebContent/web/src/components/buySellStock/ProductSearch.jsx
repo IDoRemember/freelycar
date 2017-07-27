@@ -128,6 +128,12 @@ class ProductSearch extends React.Component {
                             })
                         }
                     }
+                } else {
+                    message.error(result.msg)
+                    this.setState({
+                        data:[],
+                        pagination:{total:0}
+                    })
                 }
             },
         })

@@ -193,15 +193,19 @@ class BeautyOrder extends React.Component {
         price = partsPrice + projectPrice
         if (this.state.consumOrder.carId == '') {
             this.setState({
-                errorInfo: '*请输入车牌号'
+                errorInfo: '* 请输入车牌号'
             })
         } else if (this.state.consumOrder.pickTime == '') {
             this.setState({
-                errorInfo: '*请输入接车时间'
+                errorInfo: '* 请输入接车时间'
             })
         } else if (!this.state.consumOrder.pickCarStaff) {
             this.setState({
-                errorInfo: '*请输入接车人'
+                errorInfo: '* 请输入接车人'
+            })
+        } else if(this.state.consumOrder.projects.length<1) {
+            this.setState({
+                errorInfo:'* 请选择项目'
             })
         } else {
             this.setState({
