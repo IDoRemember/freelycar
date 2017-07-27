@@ -13,6 +13,8 @@ public interface CarDao {
 	Car findByLicense(String licensePlate);
 
 	List<String> queryLicensePlate(String queryText);
-
+	
+	void save(Car car);
+	
 	List<CarBrand> listBrand();
 }
