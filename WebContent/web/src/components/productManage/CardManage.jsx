@@ -47,7 +47,7 @@ class EditableTable extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/service/query',
+            url: 'api/service/query',
             data: jsonData,
             dataType: 'json',
             type: 'get',

@@ -182,7 +182,7 @@ class BuyCard extends React.Component {
             if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
                 $.ajax({
                     type: 'post',
-                    url: '/api/client/add',
+                    url: 'api/client/add',
                     datatype: 'json',
                     contentType: 'application/json;charset=utf-8',
                     data: JSON.stringify({

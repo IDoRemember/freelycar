@@ -33,7 +33,7 @@ class PutInStorage extends React.Component {
     
     getAdminList = () => {
         $.ajax({
-            url: '/api/admin/list',
+            url: 'api/admin/list',
             data: {
                 page: 1,
                 number: 99
@@ -49,7 +49,7 @@ class PutInStorage extends React.Component {
     }
     getList = (page, number) => {
         $.ajax({
-            url: '/api/inventory/listorder',
+            url: 'api/inventory/listorder',
             data: {
                 page: page,
                 number: number

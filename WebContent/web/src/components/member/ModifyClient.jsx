@@ -38,7 +38,7 @@ class ModifyClient extends React.Component {
         this.getClientInfo()
         $.ajax({
             type: 'GET',
-            url: '/api/car/listbrand',
+            url: 'api/car/listbrand',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
@@ -111,7 +111,7 @@ class ModifyClient extends React.Component {
         let forms = this.state.form;
         $.ajax({
             type: 'post',
-            url: '/api/client/modify',
+            url: 'api/client/modify',
             dataType: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({

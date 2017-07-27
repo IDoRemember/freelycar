@@ -97,7 +97,7 @@ class ClientInfo extends React.Component {
     getBrand=()=>{
           $.ajax({
             type: 'GET',
-            url: '/api/car/listbrand',
+            url: 'api/car/listbrand',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
@@ -120,7 +120,7 @@ class ClientInfo extends React.Component {
     /*name接口有没有？？？ */
     getName = () => {
         $.ajax({
-            url: '/api/client/querynames',
+            url: 'api/client/querynames',
             data: {
                 name: "",
             },
@@ -142,7 +142,7 @@ class ClientInfo extends React.Component {
         jsonData.page = page;
         jsonData.number = number;
         $.ajax({
-            url: '/api/client/query',
+            url: 'api/client/query',
             data: jsonData,
             type: 'get',
             success: (res) => {
@@ -195,7 +195,7 @@ class ClientInfo extends React.Component {
     //获取分页
     getList = (page, pageSize) => {
         $.ajax({
-            url: "/api/client/list",
+            url: "api/client/list",
             type: "GET",
             data: {
                 page: page,

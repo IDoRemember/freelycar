@@ -87,7 +87,7 @@ class OrderTable extends React.Component {
     reverseCar = () => {
         this.setState({ reverseModal: false })
         $.ajax({
-            url: '/api/order/deliver',
+            url: 'api/order/deliver',
             type: 'post',
             data: {
                 consumOrderId: this.state.consumOrder.consumOrderId,
