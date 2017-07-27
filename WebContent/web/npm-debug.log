@@ -10,7 +10,7 @@
 6 silly lifecycle webpack-app@1.0.0~predev: no script for predev, continuing
 7 info lifecycle webpack-app@1.0.0~dev: webpack-app@1.0.0
 8 verbose lifecycle webpack-app@1.0.0~dev: unsafe-perm in lifecycle true
-9 verbose lifecycle webpack-app@1.0.0~dev: PATH: D:\nodejs\node_modules\npm\bin\node-gyp-bin;E:\freelycar\WebContent\web\node_modules\.bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;D:\nodejs\;D:\TortoiseSVN\bin;C:\Users\Administrator\AppData\Roaming\npm;d:\Microsoft VS Code\bin
+9 verbose lifecycle webpack-app@1.0.0~dev: PATH: D:\nodejs\node_modules\npm\bin\node-gyp-bin;E:\freelycar\WebContent\web\node_modules\.bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;D:\nodejs\;D:\TortoiseSVN\bin;C:\Git\bin
 10 verbose lifecycle webpack-app@1.0.0~dev: CWD: E:\freelycar\WebContent\web
 11 silly lifecycle webpack-app@1.0.0~dev: Args: [ '/d /s /c',
 11 silly lifecycle   'webpack-dev-server --progress --inline --compress' ]
