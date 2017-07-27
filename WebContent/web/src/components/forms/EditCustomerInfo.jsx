@@ -85,6 +85,8 @@ class CustomerInfo extends React.Component {
                         })
                         this.props.getCards(data.cards)
 
+                    }else {
+                        message.error(res.msg)
                     }
                 }
             });
@@ -133,9 +135,10 @@ class CustomerInfo extends React.Component {
             </div>
             <Card bodyStyle={{ background: '#fff' }} style={{ marginBottom: '10px' }} >
                 <Row gutter={16} style={{ marginBottom: "10px" }}>
-                    <Col span={8} >车牌号码：
+                    <Col span={8} ><span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>车牌号码：
                         <Input onChange={(e) => { this.licenseChange(e.target.value) }} style={{ width: '100px' }} />
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} /></Link>
+
                     </Col>
                     <Col span={8} >
                         客户姓名：
@@ -143,6 +146,7 @@ class CustomerInfo extends React.Component {
                         <Link to='/app/member/addclient' ><Icon type="plus-circle-o" style={{ marginLeft: '10px', cursor: 'pointer' }} ></Icon></Link>
                     </Col>
                     <Col span={8} >
+                        <span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>
                         停车位置：
                         <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('parkingLocation', e.target.value) }} />
                     </Col>
@@ -157,6 +161,7 @@ class CustomerInfo extends React.Component {
                         <span style={{ width: '100px' }}>{this.state.carInfo.phone}</span>
                     </Col>
                     <Col span={8}>
+                        <span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>
                         接车人员：
                           <Select
                             style={{ width: '100px' }}
