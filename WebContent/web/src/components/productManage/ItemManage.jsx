@@ -607,18 +607,6 @@ class BeautyOrder extends React.Component {
             title: '备注',
             dataIndex: 'comment',
             key: 'comment'
-        }, {
-            title: '操作',
-            dataIndex: 'operation',
-            render: (text, record, index) => {
-                return (
-                    <div>
-                        <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
-                            <a href="#">删除</a>
-                        </Popconfirm>
-                    </div>
-                );
-            },
         }];
 
         // rowSelection object indicates the need for row selection
