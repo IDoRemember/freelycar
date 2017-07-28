@@ -336,12 +336,16 @@ class CardModal extends React.Component {
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                //selectedRowKeys  key-->id
+                let oldRows = this.state.selectedRows;
+                for (let item of selectedRows) {
+                    oldRows = oldRows.filter((obj) => {
+                        return item.key !== obj.key;
+                    });
+                }
+                oldRows.push.apply(oldRows, selectedRows)
                 this.setState({
-                    selectedRowKeys: selectedRowKeys,
-                    selectedRows: selectedRows
+                    selectedRows: oldRows
                 })
-                //console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
             },
             getCheckboxProps: record => ({
                 disabled: record.name === 'Disabled User',    // Column configuration not to be checked

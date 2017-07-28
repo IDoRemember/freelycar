@@ -208,6 +208,18 @@ class EditableTable extends React.Component {
         // rowSelection object indicates the need for row selection
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
+
+                // let oldRows = this.state.selectedRows
+                // for (let item of selectedRows) {
+                //     oldRows = oldRows.filter((obj) => {
+                //         return item.key !== obj.key;
+                //     });
+                // }
+                // oldRows.push.apply(oldRows, selectedRows)
+                // this.setState({
+                //     selectedRows: oldRows
+                // })
+
                 this.setState({ selectedRowKeys: selectedRowKeys });
             },
             getCheckboxProps: record => ({
