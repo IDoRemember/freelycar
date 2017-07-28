@@ -17,6 +17,7 @@ class FixOrder extends React.Component {
             parts: [],
             staffList: [],
             optionService: [],
+            errorInfo: '',
             dataInventory: [{
                 key: -1,
                 index: -1,
@@ -215,7 +216,7 @@ class FixOrder extends React.Component {
         message.error('请继续更改');
     }
 
-     confirm = (isFinish) => {
+    confirm = (isFinish) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -334,6 +335,7 @@ class FixOrder extends React.Component {
                     元
                 </div>
             </Card>
+            <span style={{ color: 'red' }}>{this.state.errorInfo}</span>
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(true)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >结算</Button>
             </Popconfirm>
