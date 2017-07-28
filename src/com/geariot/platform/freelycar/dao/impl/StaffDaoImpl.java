@@ -103,7 +103,7 @@ public class StaffDaoImpl implements StaffDao {
 		String sql = "select projectInfoId from projectinfo_staff where staffId = :staffId";
 		List<Object> projectInfoId = this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
 		if (projectInfoId != null && !projectInfoId.isEmpty()) {
-			String hql = "from ProjectInfo where id in :projectInfoId";
+			String hql = "from ProjectInfo where id in :projectInfoId order by createDate desc";
 			return this.getSession().createQuery(hql).setParameterList("projectInfoId", projectInfoId)
 					.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 		} else {
