@@ -296,8 +296,6 @@ class BeautyOrder extends React.Component {
             }
         }
 
-        console.log(this.state.consumOrder)
-
         return <div>
             <BreadcrumbCustom first="消费开单" second="美容开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />

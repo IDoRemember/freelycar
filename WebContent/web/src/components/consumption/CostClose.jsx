@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link, hashHistory } from 'react-router';
+import update from 'immutability-helper'
 import $ from 'jquery';
 
 
@@ -21,14 +22,33 @@ class CostClose extends React.Component {
             payMethod: '0',//支付方式
             cardCost: 0,//卡抵扣的钱
             allCost: 0,//所有的钱
-
-
+            referWorkTime: 0,//工时
+            pricePerUnit: 0,//单价
+            programId: 1,
         }
     }
-    onChange = (e) => {
+
+    onChange = (key, value, record, index) => {
         this.setState({
-            value: e.target.value,
+            feeDetail: update(this.state.feeDetail, {
+                [index]: {
+                    [key]: { $set: value },
+                }
+            })
+        },()=>{
+            let feeDetail = this.state.feeDetail;
+            let newSum = 0;
+            for(let item of feeDetail){
+                newSum += item.price+(item.referWorkTime*item.pricePerUnit);
+            }
+            this.setState({
+                allCost:newSum
+            });
+
         });
+
+
+
     }
 
     componentDidMount() {
@@ -38,6 +58,7 @@ class CostClose extends React.Component {
             data: { consumOrderId: this.props.params.orderId },
             dataType: 'json',
             success: (res) => {
+                console.log(res);
                 let cardCost = 0;//卡扣的钱
                 if (res.code == '0') {
                     let dataArr = res.data.projects;
@@ -56,7 +77,8 @@ class CostClose extends React.Component {
                     this.setState({
                         feeDetail: dataArr,
                         cardCost: cardCost,
-                        allCost: res.data.totalPrice
+                        allCost: res.data.totalPrice,
+                        programId: res.data.programId,
                     });
                 }
             }
@@ -92,8 +114,24 @@ class CostClose extends React.Component {
         const columns = [
             { title: '项目名称', dataIndex: 'name', key: 'itemName' },
             { title: '项目费用', dataIndex: 'price', key: 'itemFee' },
-            { title: '实际工时', dataIndex: 'referWorkTime', key: 'workHour' },
-            { title: '工时单价', dataIndex: 'pricePerUnit', key: 'perHourCost' },
+            {
+                title: '实际工时', dataIndex: 'referWorkTime', key: 'workHour', render: (text, record, index) => {
+                    if (this.state.programId == 1) {
+                        return <span>{text}</span>
+                    } else {
+                        return <InputNumber min={1} max={99} defaultValue={text} onChange={(e) => { this.onChange('referWorkTime', e, record, index) }} />
+                    }
+                }
+            },
+            {
+                title: '工时单价', dataIndex: 'pricePerUnit', key: 'perHourCost', render: (text, record, index) => {
+                    if (this.state.programId == 1) {
+                        return <span>{text}</span>
+                    } else {
+                        return <InputNumber min={1} max={99} defaultValue={text} onChange={(e) => { this.onChange('pricePerUnit', e, record, index) }} />
+                    }
+                }
+            },
             {
                 title: '配件金额', dataIndex: 'inventory', key: 'productFee', render: (text, record, index) => {
                     let rowId = record.projectId;
