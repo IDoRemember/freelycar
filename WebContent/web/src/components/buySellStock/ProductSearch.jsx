@@ -5,7 +5,7 @@ import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import update from 'immutability-helper'
 import $ from 'jquery'
-import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table } from 'antd';
+import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table,message } from 'antd';
 const Option = Select.Option,
     SubMenu = Menu.SubMenu,
     Search = Input.Search
