@@ -215,6 +215,10 @@ class BeautyOrder extends React.Component {
             this.setState({
                 errorInfo: '* 请输入车牌号'
             })
+        } else if (Number(this.state.consumOrder.miles) < Number(this.state.consumOrder.lastMiles)) {
+            this.setState({
+                errorInfo: '* 本次里程不能小于上次里程'
+            })
         } else if (this.state.consumOrder.pickTime == '') {
             this.setState({
                 errorInfo: '* 请输入接车时间'
@@ -245,7 +249,8 @@ class BeautyOrder extends React.Component {
                     data: JSON.stringify(this.state.consumOrder),
                     success: (res) => {
                         if (res.code != '0') {
-                            message.warning(res.msg)
+                            message.error(res.msg)
+
                         }
                         if (res.code == '0') {
                             message.success(res.text);
