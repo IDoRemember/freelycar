@@ -42,6 +42,7 @@ class BusinessSummary extends React.Component {
     }
 
     getIncomeExpend = (mode, data) => {
+        console.log(mode);
         $.ajax({
             url: 'api/stat/' + mode,
             type: 'get',
@@ -77,12 +78,13 @@ class BusinessSummary extends React.Component {
 
                     //会员散客消费
                     let mp = result.memberPay;
-                    for (let item of mp) {
-                        if (item.member) 
-                            this.setState({ memberPay: item.amount });
-                        else
-                            this.setState({ notMenberPay: item.amount });
-                    }
+                    if (mp)
+                        for (let item of mp) {
+                            if (item.member)
+                                this.setState({ memberPay: item.amount });
+                            else
+                                this.setState({ notMenberPay: item.amount });
+                        }
 
                     this.setState({
                         pay: [pay],
@@ -103,9 +105,9 @@ class BusinessSummary extends React.Component {
         const mode = e.target.value;
         this.setState({ mode: mode });
         if (mode == 'paytoday') {
-            this.getIncomeExpend(mode)
+            this.getIncomeExpend(mode);
         } else if (mode == 'paymonth') {
-            this.getIncomeExpend(mode)
+            this.getIncomeExpend(mode);
         }
     }
 
@@ -148,7 +150,7 @@ class BusinessSummary extends React.Component {
                         <Col span={8}>
                             <div style={{ padding: '10px', textAlign: 'center' }} >
                                 <Card className="nature-income" title="实收金额">
-                                    <h1>￥{this.state.memberPay+this.state.notMenberPay}</h1>
+                                    <h1>￥{this.state.memberPay + this.state.notMenberPay}</h1>
                                 </Card>
                             </div>
                         </Col>

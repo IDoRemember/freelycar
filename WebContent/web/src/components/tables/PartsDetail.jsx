@@ -114,7 +114,7 @@ class PartsDetail extends React.Component {
             <div style={{ fontSize: '16px', marginBottom: '10px' }}>   {this.props.title}配件&nbsp;&nbsp;&nbsp;
             <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }} onClick={() => { this.setState({ view: true }) }}><Icon type="plus-circle-o" />&nbsp;增加</div></div>
             <PartsSearch view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></PartsSearch>
-            <Table className="accountTable" dataSource={this.state.parts} bordered>
+            {this.state.parts.length>0&& <Table className="accountTable" dataSource={this.state.parts} bordered>
                 <Col
                     title="序号"
                     dataIndex="index"
@@ -160,7 +160,7 @@ class PartsDetail extends React.Component {
                     dataIndex="amount"
                     render={(text, record, index) => {
                         if (index + 1 < this.state.parts.length) {
-                            return <span>{text}</span>
+                            return <span style={{color:text==0?'red':''}}>{text}</span>
                         }
                     }}
                 />
@@ -205,7 +205,7 @@ class PartsDetail extends React.Component {
                         }
                     }}
                 />
-            </Table>
+            </Table>}
         </Card>
     }
 }
