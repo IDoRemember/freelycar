@@ -94,7 +94,10 @@ class BusinessSummary extends React.Component {
 
                 } else {
                     this.setState({
-                        proportionData: []
+                        proportionData: [],
+                        memberPay: 0,//会员消费
+                        notMenberPay: 0,//散客消费
+                        pay: [],
                     });
                 }
             }
