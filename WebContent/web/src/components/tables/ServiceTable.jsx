@@ -237,7 +237,7 @@ class ServiceTable extends React.Component {
                                 </div>
                             );
                             const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
-                                {item.service.name + item.service.id}
+                                {item.service.name + item.id}
                             </Popover>
                             return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
                         })
