@@ -42,6 +42,7 @@ class AccountManage extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (result) => {
+                console.log(result);
                 let staffInfo = result.staffInfo;
                 this.setState({
                     form: update(this.state.form,
@@ -63,8 +64,8 @@ class AccountManage extends React.Component {
                     }
 
                     this.setState({
-                        data: result.data
-                        //pagination: { total: result.realSize }
+                        data: result.data,
+                        pagination: { total: result.realSize }
                     })
                 }
             }
@@ -82,10 +83,7 @@ class AccountManage extends React.Component {
     }
 
     handleChange = (pagination, filters, sorter) => {
-        this.setState({
-            filteredInfo: filters,
-            sortedInfo: sorter,
-        });
+        this.queryAccount(this.props.params.id, pagination.current, 10)
     }
 
 
@@ -117,32 +115,21 @@ class AccountManage extends React.Component {
             dataIndex: 'licensePlate',
             key: 'licensePlate'
         }, {
-            title: '车辆型号',
-            dataIndex: 'carType',
-            key: 'carType'
+            title: '品牌型号',
+            dataIndex: 'brandName',
+            key: 'brandName'
         }, {
             title: '项目名称',
-            dataIndex: 'projects',
-            key: 'projects',
-            render: (text, record, index) => {
-                let project = text.map((item, index) => {
-                    if (index < text.length - 1) {
-                        return <span key={index}>{item.projectName} 、</span>
-                    } else {
-                        return <span key={index}>{item.projectName}</span>
-                    }
-                })
-
-                return <span>{project}</span>
-            }
+            dataIndex: 'name',
+            key: 'name',
         }, {
             title: '金额',
-            dataIndex: 'totalPrice',
-            key: 'totalPrice'
+            dataIndex: 'price',
+            key: 'price'
         }, {
             title: '服务时间',
-            dataIndex: 'deliverTime',
-            key: 'deliverTime'
+            dataIndex: 'createDate',
+            key: 'createDate'
         }];
 
         const rowSelection = {

@@ -77,6 +77,7 @@ class BusinessSummary extends React.Component {
 
                     //会员散客消费
                     let mp = result.memberPay;
+                    if(mp)
                     for (let item of mp) {
                         if (item.member) 
                             this.setState({ memberPay: item.amount });
