@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination,message, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, message, Icon, Modal } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -22,6 +22,9 @@ class OtherPay extends React.Component {
             typeList: [],
             nowType: null,
             selectedRowKeys: [],
+            error1: '',
+            error2: '',
+            error3: '',
             pagination: {
                 showTotal: (total) => {
                     return <span style={{ marginRight: '20px' }}>共&nbsp;{total}&nbsp;条</span>
@@ -95,8 +98,8 @@ class OtherPay extends React.Component {
                     })
                 } else {
                     this.setState({
-                        data:[]
-                    }) 
+                        data: []
+                    })
                     message.error(result.msg, 5)
                 }
             }
@@ -180,7 +183,7 @@ class OtherPay extends React.Component {
         this.setState({
             pagination: pager
         })
-        this.getList(pagination.current, 10,this.state.nowType)
+        this.getList(pagination.current, 10, this.state.nowType)
     }
 
     addPay = () => {
@@ -189,9 +192,25 @@ class OtherPay extends React.Component {
         })
     }
     handleAddOk = () => {
-        this.setState({
-            view: false
-        });
+        if (this.state.form.payType == '') {
+            this.setState({
+                error2: "* 请选择支出类别"
+            })
+        } else if (!this.state.form.amount) {
+            this.setState({
+                error3: '* 请输入支出金额'
+            })
+        } else if (!this.state.form.expendDate) {
+            this.setState({
+                error1: '* 请选择单据日期'
+            })
+        } else {
+            this.setState({
+                error1: '',
+                error2: '',
+                error3: '',
+            })
+        }
         $.ajax({
             url: 'api/charge/add',
             type: 'post',
@@ -217,7 +236,8 @@ class OtherPay extends React.Component {
                             dateString: null,
                             payType: '',
                             amount: null,
-                            comment: ''
+                            comment: '',
+                            view: false
                         }
                     })
                 }
@@ -300,7 +320,7 @@ class OtherPay extends React.Component {
                                 labelInValue
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
-                            <Option key={-1} value={null}>全部</Option>
+                                <Option key={-1} value={null}>全部</Option>
                                 {typeOptions}
                             </Select>
                             <Icon type="plus-circle-o" onClick={this.showModal} style={{ marginLeft: '10px', color: '#108ee9', cursor: 'pointer' }} />
@@ -321,7 +341,7 @@ class OtherPay extends React.Component {
                             />
                         </Col>
                         <Col span={8}>
-                            <Button type="primary" onClick={() => this.getList(1, 10,this.state.nowType)}>查询</Button>
+                            <Button type="primary" onClick={() => this.getList(1, 10, this.state.nowType)}>查询</Button>
                         </Col>
                     </Row>
                 </Card>
@@ -334,15 +354,18 @@ class OtherPay extends React.Component {
                             onOk={this.handleAddOk}
                             onCancel={this.handleAddCancel}
                         >
-                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                            <Row gutter={20} style={{ marginBottom: '10px' }}>
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     单据日期：
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     <DatePicker value={this.state.form.dateString ? moment(this.state.form.dateString).startOf('day') : null} format={dateFormat} style={{ width: '150px' }} onChange={(date, dateString) => this.setFormData('dateString', dateString)} />
                                 </Col>
+                                <Col span={8} style={{ textAlign: 'left' }}>
+                                    <span style={{ color: 'red' }}>{this.state.error1}</span>
+                                </Col>
                             </Row>
-                            <Row gutter={16} style={{ marginBottom: '10px' }} id="area">
+                            <Row gutter={20} style={{ marginBottom: '10px' }} id="area">
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     支出类别：
                             </Col>
@@ -355,18 +378,22 @@ class OtherPay extends React.Component {
                                         onChange={(value) => this.setFormData('payType', value)}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                     >
-                                        
                                         {typeOptions}
-
                                     </Select>
                                 </Col>
+                                <Col span={8} style={{ textAlign: 'left' }}>
+                                    <span style={{ color: 'red' }}>{this.state.error1}</span>
+                                </Col>
                             </Row>
-                            <Row gutter={16} style={{ marginBottom: '10px' }}>
+                            <Row gutter={20} style={{ marginBottom: '10px' }}>
                                 <Col span={8} style={{ textAlign: 'right' }}>
                                     支出金额：
                             </Col>
                                 <Col span={8}>
                                     <Input value={this.state.form.amount} style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
+                                </Col>
+                                <Col span={8} style={{ textAlign: 'left' }}>
+                                    <span style={{ color: 'red' }}>{this.state.error1}</span>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
