@@ -203,6 +203,7 @@ class AccountManage extends React.Component {
                                     pagination={this.state.pagination}
                                     onChange={(pagination) => this.handleTableChange(pagination)}
                                     columns={columns}
+                                  
                                     dataSource={this.state.data}
                                     bordered
                                 />
