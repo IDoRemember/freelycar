@@ -30,17 +30,17 @@ class IndexPage extends React.Component {
                 {
                     title: '消费开单',
                     items: [{
-                        background: '#a9c3e4',
+                        background: 'rgb(51,105,232)',
                         text: '美容开单',
                         url: '/app/consumption/beautyOrder',
                         over: 'none'
                     }, {
-                        background: '#a9c3e4',
+                        background: 'rgb(51,105,232)',
                         text: '维修开单',
                         url: '/app/consumption/fixOrder',
                         over: 'none'
                     }, {
-                        background: '#a9c3e4',
+                        background: 'rgb(51,105,232)',
                         text: '单据管理',
                         url: '/app/consumption/orderManage',
                         over: 'none'
@@ -49,17 +49,17 @@ class IndexPage extends React.Component {
                     title: '收支管理',
                     items: [
                         {
-                            background: '#eafd89',
+                            background: 'rgb(238,178,17)',
                             text: '收支查询',
                             url: '/app/incomeManage/incomeSearch',
                             over: 'none'
                         }, {
-                            background: '#eafd89',
+                            background: 'rgb(238,178,17)',
                             text: '历史收支查询',
                             url: '/app/incomeManage/historyAccount',
                             over: 'none'
                         }, {
-                            background: '#eafd89',
+                            background: 'rgb(238,178,17)',
                             text: '其他支出',
                             url: '/app/incomeManage/otherPay',
                             over: 'none'
@@ -69,12 +69,12 @@ class IndexPage extends React.Component {
                     title: '会员管理',
                     items: [
                         {
-                            background: '#a3c07e',
+                            background: 'rgb(0,153,37)',
                             text: '会员办理',
                             url: '/app/member/memberShip',
                             over: 'none'
                         }, {
-                            background: '#a3c07e',
+                            background: 'rgb(0,153,37)',
                             text: '客户管理',
                             url: '/app/member/customer',
                             over: 'none'
@@ -84,27 +84,27 @@ class IndexPage extends React.Component {
                     title: '进销存管理',
                     items: [
                         {
-                            background: '#a3c07e',
+                            background: 'rgb(213,15,37)',
                             text: '库存查询',
                             url: '/app/buySellStock/productSearch',
                             over: 'none'
                         }, {
-                            background: '#a3c07e',
+                            background: 'rgb(213,15,37)',
                             text: '入库',
                             url: '/app/buySellStock/buyProduct',
                             over: 'none'
                         }, {
-                            background: '#a3c07e',
+                            background: 'rgb(213,15,37)',
                             text: '出库',
                             url: '/app/buySellStock/sellProduct',
                             over: 'none'
                         }, {
-                            background: '#a3c07e',
+                            background: 'rgb(213,15,37)',
                             text: '库存单据',
                             url: '/app/buySellStock/productReceipts',
                             over: 'none'
                         }, {
-                            background: '#a3c07e',
+                            background: 'rgb(213,15,37)',
                             text: '供应商管理',
                             url: '/app/buySellStock/providerManage',
                             over: 'none'
@@ -139,12 +139,12 @@ class IndexPage extends React.Component {
                 }, {
                     title: '系统设置',
                     items: [{
-                        background: '#f8e4dd',
+                        background: 'rgb(39,0,153)',
                         text: '员工管理',
                         url: '/app/productManage/itemManage',
                         over: 'none'
                     }, {
-                        background: '#f8e4dd',
+                        background: 'rgb(39,0,153)',
                         text: '账户管理',
                         url: '/app/productManage/itemManage',
                         over: 'none'
