@@ -488,24 +488,24 @@ public class InventoryService {
 		
 		//创建 退货出库单据 
 		InventoryOrder order = new InventoryOrder();
-		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
+		String id = IDGenerator.generate(IDGenerator.OUT_STOCK);
+		order.setId(id);
 		order.setCreateDate(new Date());
-		order.setInventoryInfos(lists);
 		order.setTotalPrice(inventoryOrder.getTotalPrice());
 		order.setTotalAmount(inventoryOrder.getTotalAmount());
 		order.setType(3);
 		this.inventoryOrderDao.save(order);
-		
+		System.out.println("***************************");
 		//在IncomeOrder中添加 收入
 		IncomeOrder incomeOrder = new IncomeOrder();
 		incomeOrder.setAmount(inventoryOrder.getTotalPrice());
 		incomeOrder.setProgramName("退货出库");
 		incomeOrder.setPayDate(new Date());
 		incomeOrderDao.save(incomeOrder);
+		System.out.println("***************************");
 		
-		
-		this.inventoryOrderDao.delfindByOrderId(orderId);
 		this.inventoryOrderDao.deleteOrder(orderId);
+		this.inventoryOrderDao.setByOrderId(orderId,id);
 		
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}

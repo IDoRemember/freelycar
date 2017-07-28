@@ -89,9 +89,9 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 	}
 
 	@Override
-	public void delfindByOrderId(String orderId) {
-		String sql = "delete from inventoryOrderInfo where inventoryOrderId = :orderId";
-		this.getSession().createSQLQuery(sql).setString("orderId", orderId).executeUpdate();
+	public void setByOrderId(String orderId, String id) {
+		String sql = "update inventoryorderinfo set inventoryOrderId = :id where inventoryOrderId = :orderId";
+		this.getSession().createSQLQuery(sql).setString("orderId", orderId).setString("id", id).executeUpdate();
 	}
 
 	

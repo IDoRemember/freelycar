@@ -25,5 +25,5 @@ public interface InventoryOrderDao {
 	
 	List<InventoryOrderInfo> findInfoByProviderId(int providerId);
 	
-	void delfindByOrderId(String orderId);
+	void setByOrderId(String orderId, String id);
 }
