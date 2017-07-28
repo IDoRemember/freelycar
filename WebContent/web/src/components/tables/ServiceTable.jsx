@@ -95,7 +95,6 @@ class ServiceTable extends React.Component {
 
             this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
         });
-
     }
     render() {
         const projectOptions = this.props.optionService.map((item, index) => {
