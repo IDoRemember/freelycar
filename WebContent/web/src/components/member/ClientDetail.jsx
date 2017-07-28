@@ -428,11 +428,9 @@ class ClientDetail extends React.Component {
     showModal = () => {
         this.setState({
             visible: true,
-
         });
     }
     showCardModal(obj) {
-        console.log(obj);
         this.setState({
             cardvisible: true,
             carddetail: obj

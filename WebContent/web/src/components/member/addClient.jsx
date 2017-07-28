@@ -11,6 +11,7 @@ class AddClient extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            isPop: false,
             option: [],
             type: [],
             value: '男',
@@ -43,6 +44,10 @@ class AddClient extends React.Component {
         }
     }
     componentDidMount() {
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
         $.ajax({
             type: 'GET',
             url: 'api/car/listbrand',
@@ -60,6 +65,14 @@ class AddClient extends React.Component {
             }
         })
     }
+    routerWillLeave = (nextLocation) => {
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
+    }
+
     CheckInfo = () => {
         var phonecheck = this.state.form.phone;
 
@@ -212,7 +225,8 @@ class AddClient extends React.Component {
     }
     onValueChange = (key, value) => {
         this.setState({
-            form: update(this.state.form, { [key]: { $set: value } })
+            form: update(this.state.form, { [key]: { $set: value } }),
+               isPop: false,
         })
     }
 

@@ -30,6 +30,8 @@ class OrderTable extends React.Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             data: newProps.data
+        }, () => {
+            console.log(this.state.data)
         })
     }
 
@@ -136,6 +138,7 @@ class OrderTable extends React.Component {
             },
             { title: '停车位置', dataIndex: 'parkingLocation', key: 'parkingLocation' },
             { title: '接车时间', dataIndex: 'pickTime', key: 'pickTime' },
+            { title: '完工时间', dataIndex: 'finishTime', key: 'finishTime' },
             { title: '交车时间', dataIndex: 'deliverTime', key: 'deliverTime' },
             {
                 title: '结算状态', dataIndex: 'payState', key: 'payState',
@@ -240,7 +243,7 @@ class OrderTable extends React.Component {
                 <Row gutter={8}>
                     <div className="gutter-box">
                         <Card bordered>
-                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) => this.props.onChange(pagination)} dataSource={this.state.data} ></Table>
+                            <Table columns={columns} pagination={this.props.pagination} onChange={(pagination) => this.props.onChange(pagination)} dataSource={this.state.data} bordered></Table>
                         </Card>
                     </div>
                 </Row>
