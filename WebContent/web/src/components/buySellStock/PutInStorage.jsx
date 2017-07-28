@@ -71,7 +71,7 @@ class PutInStorage extends React.Component {
             datalist.push(...data)
         }
         for (let item of datalist) {
-            item.amount = item.amount?item.amount:1;
+            item.amount = 1;
         }
         this.setState({
             view: false,
