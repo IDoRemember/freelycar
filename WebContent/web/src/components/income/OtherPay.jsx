@@ -220,7 +220,7 @@ class OtherPay extends React.Component {
             })
         }
 
-        if (this.state.error1 == '' && this.state.error2 == '' && this.state.error3 == '') {
+        if (this.state.form.dateString && this.state.form.payType !== '' && this.state.form.amount) {
             $.ajax({
                 url: 'api/charge/add',
                 type: 'post',
