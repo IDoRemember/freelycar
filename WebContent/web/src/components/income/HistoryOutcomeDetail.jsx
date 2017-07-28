@@ -84,9 +84,7 @@ class BeautyOrder extends React.Component {
             title: '支出项目',
             dataIndex: 'type',
             key: 'type',
-            render: (text, record, index) => {
-                return <span>{text == '0' ? '商品入库' : '其他'}</span>
-            }
+       
         }, {
             title: '金额',
             dataIndex: 'amount',

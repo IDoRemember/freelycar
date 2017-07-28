@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, DatePicker, Modal, Radio, message } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, DatePicker, Modal, Radio, message,Popover } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CarTable from '../tables/CarTable.jsx';
@@ -31,6 +31,7 @@ class ClientDetail extends React.Component {
             client: this.props.params.id,
             value: this.props.value,
             editable: false,
+            licensePlateClassName: "hidden",
             visible: false,
             pagination: {
             },
@@ -41,7 +42,8 @@ class ClientDetail extends React.Component {
             }, {
                 title: '卡名称',
                 dataIndex: 'cardname',
-                key: 'cardname'
+                key: 'cardname',
+            
             }, {
                 title: '会员卡类',
                 dataIndex: 'cardClasses',
@@ -54,6 +56,17 @@ class ClientDetail extends React.Component {
                 title: '制单人',
                 dataIndex: 'makePeople',
                 key: 'makePeople'
+            },{
+                title:'操作',
+                dataIndex:'queryInfo',
+                key:'query',
+                render: (text, record, index) => {
+                        return <span style={{ marginRight: '10px' }}  >  
+                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }} onClick={() => this.showCardModal(record)}>查看详情</a>   
+                            </span>
+
+                     
+                    }
             }],
 
             carColumns: [{
@@ -152,6 +165,9 @@ class ClientDetail extends React.Component {
             payData: []
         }
     }
+    showCardModal(obj){
+        console.log(obj)
+    }
     componentDidMount() {
         this.getBrandList();
         this.getClientInfo();
@@ -160,7 +176,7 @@ class ClientDetail extends React.Component {
     getBrandList = () => {
         $.ajax({
             type: 'GET',
-            url: 'api/car/listbrand',
+            url: '/api/car/listbrand',
             datatype: 'json',
             contentType: 'application/json;charset=utf-8',
             data: {},
@@ -245,7 +261,7 @@ class ClientDetail extends React.Component {
                         let cardItem = {
                             key: objcard[j].id,
                             cardNum: objcard[j].id,
-                            cardClasses: objcard[j].service.type=="0" ? "次卡" : "组合次卡",
+                            cardClasses: objcard[j].service.type == "0" ? "次卡" : "组合次卡",
                             transactionTime: objcard[j].payDate,
                             cardname: objcard[j].service.name,
                             makePeople: objcard[j].orderMaker.name,
@@ -261,7 +277,7 @@ class ClientDetail extends React.Component {
                     let clientInfo = {
                         name: obj.name,
                         phone: obj.phone,
-                        birthday: obj.birthday!=undefined?obj.birthday:"",
+                        birthday: obj.birthday != undefined ? obj.birthday : "",
                         gender: obj.gender,
                         driverLicense: obj.driverLicense,
                         idNumber: obj.idNumber,
@@ -284,7 +300,7 @@ class ClientDetail extends React.Component {
                             case 0: paymeth = "现金";
                                 break;
                             case 1: paymeth = "刷卡";
-                                break;    
+                                break;
                             case 2: paymeth = "支付宝";
                                 break;
                             case 3: paymeth = "微信";
@@ -292,7 +308,7 @@ class ClientDetail extends React.Component {
                             case 4: paymeth = "易付宝";
                                 break;
                         }
-                  //      let servicePeople=objpay[k].programName=="Card"?objcard[k].orderMaker.name: objpay[k].staffNames;
+                        //      let servicePeople=objpay[k].programName=="Card"?objcard[k].orderMaker.name: objpay[k].staffNames;
 
                         let payItem = {
 
@@ -302,10 +318,10 @@ class ClientDetail extends React.Component {
                             payMoney: objpay[k].amount,
                             payType: paymeth,
                             // carType: "911",
-                         //   servicePeople: servicePeople,
+                            //   servicePeople: servicePeople,
                             serviceTime: objpay[k].payDate,
                             insuranceMoney: objpay[k].amount,
-                         //   serviceState: "完成",
+                            //   serviceState: "完成",
                         }
                         paylist.push(payItem);
                     }
@@ -364,8 +380,8 @@ class ClientDetail extends React.Component {
 
     handleChange = (e) => {
         console.log(e)
-        let typelist = this.state.option[e].types;
-        console.log(this.state.option[e].types)
+        let typelist = this.state.option[e-1].types;
+        console.log(this.state.option[e-1].types)
         this.setState({
             carId: e,
             type: typelist
@@ -394,60 +410,70 @@ class ClientDetail extends React.Component {
 
         });
     }
-    hideModal = () => {
-        this.setState({
-            visible: false,
-        });
-    }
-    onChange = (date, dateString) => {
-        console.log(date, dateString);
-    }
+    // hideModal = () => {
+    //     this.setState({
+    //         visible: false,
+    //     });
+    // }
+    // onChange = (date, dateString) => {
+    //     console.log(date, dateString);
+    // }
     handleOk = () => {
         this.saveData();
         this.getClientInfo();
-        this.setState({
-            visible: false
-        });
+
     }
     saveData = () => {
         let forms = this.state.form;
-        $.ajax({
-            type: 'post',
-            url: 'api/client/addcar',
-            datatype: 'json',
-            contentType: 'application/json;charset=utf-8',
-            data: JSON.stringify({
-                //select选择
-                type: {
-                    id: this.state.typeId,
-                    // CarBrand:{
-                    //     // name:'lambor',
-                    //     // id:'3',
+        if (this.licensePlateCheckInfo()) {
+            if (!(forms.licensePlate && this.state.typeId)) {
+                message.error("请输入必填信息")
+            } else {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/client/addcar',
+                    datatype: 'json',
+                    contentType: 'application/json;charset=utf-8',
+                    data: JSON.stringify({
+                        //select选择
+                        type: {
+                            id: this.state.typeId,
+                            // CarBrand:{
+                            //     // name:'lambor',
+                            //     // id:'3',
 
-                    // },
-                    // type: 
-                },
-                licensePlate: forms.licensePlate,
-                //时间选择
-                insuranceStarttime: forms.insuranceStarttime,
-                //时间选择
-                insuranceEndtime: forms.insuranceEndtime,
-                insuranceAmount: forms.insuranceAmount,
-                frameNumber: forms.frameNumber,
-                engineNumber: forms.engineNumber,
-                //时间选择
-                licenseDate: forms.licenseDate,
-                newCar: forms.newCar,
-                lastMiles: forms.lastMiles,
-                miles: forms.miles,
-                client: {
-                    id: this.props.params.id
-                }
-            }),
-            success: (res) => {
-                this.getClientInfo();
+                            // },
+                            // type: 
+                        },
+                        licensePlate: forms.licensePlate,
+                        //时间选择
+                        insuranceStarttime: forms.insuranceStarttime,
+                        //时间选择
+                        insuranceEndtime: forms.insuranceEndtime,
+                        insuranceAmount: forms.insuranceAmount,
+                        frameNumber: forms.frameNumber,
+                        engineNumber: forms.engineNumber,
+                        //时间选择
+                        licenseDate: forms.licenseDate,
+                        newCar: forms.newCar,
+                        lastMiles: forms.lastMiles,
+                        miles: forms.miles,
+                        client: {
+                            id: this.props.params.id
+                        }
+                    }),
+                    success: (res) => {
+                        if(res.code==0){
+                        this.getClientInfo();
+                        this.setState({
+                            visible: false
+                        });}else{
+                            message.error(res.msg)
+                        }
+                    }
+                })
             }
-        })
+        }
     }
 
     insuranceStarttimeonChange = (time) => {
@@ -488,6 +514,22 @@ class ClientDetail extends React.Component {
     onOk = (value) => {
         console.log('onOk: ', value);
     }
+    licensePlateCheckInfo = () => {
+        var licensePlatecheck = this.state.form.licensePlate;
+        var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
+     //   console.log(re.test(licensePlatecheck))
+        if (!re.test(licensePlatecheck)) {
+            this.setState({
+                licensePlateClassName: "display"
+            })
+            return false
+        } else {
+            this.setState({
+                licensePlateClassName: "hidden"
+            })
+            return true;
+        }
+    }
     render() {
         const { value, editable } = this.state;
         const RadioGroup = Radio.Group;
@@ -505,7 +547,7 @@ class ClientDetail extends React.Component {
                         <Col span={3}></Col>
                         <Col span={6}>姓名：<span style={{ width: '200px' }} >{this.state.form.name}</span></Col>
                         <Col span={6}>手机号：<span style={{ width: '200px' }} >{this.state.form.phone} </span></Col>
-                      <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0,10)}</span></Col>
+                        <Col span={6}>生日：<span>{(this.state.form.birthday).substring(0, 10)}</span></Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>
@@ -533,13 +575,17 @@ class ClientDetail extends React.Component {
                 </Card>
                 <Modal title="新增车辆" visible={this.state.visible}
                     onOk={this.handleOk} onCancel={this.handleCancel}
-                    okText="保存" cancelText="取消">
+                    okText="保存" cancelText="取消"
+                    width='60%'
+                >
 
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >车牌号：
+                        <Col span={3}></Col>
+                        <Col span={10} ><span style={{ marginLeft: '-5px', color: "red" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '10px' }} value={this.state.form.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
+                            <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.licensePlateClassName}>车牌号格式有误</span>
                         </Col>
-                        <Col span={12} id="car-brand">车辆品牌:
+                        <Col span={10} id="car-brand"><span style={{ marginLeft: '-5px', color: "red" }}>*</span>车辆品牌:
                             <Select showSearch
                                 style={{ width: '150px', marginLeft: '35px' }}
                                 placeholder="请选择车辆品牌"
@@ -553,7 +599,8 @@ class ClientDetail extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >是否新车：
+                        <Col span={3}></Col>
+                        <Col span={10} >是否新车：
                             <div style={{ display: 'inline-block', marginLeft: '5px' }}>
                                 <RadioGroup onChange={this.isnewcar} value={this.state.carvalue}>
                                     <Radio value={'true'}>是</Radio>
@@ -561,7 +608,7 @@ class ClientDetail extends React.Component {
                                 </RadioGroup>
                             </div>
                         </Col>
-                        <Col span={12} id="car-type">车辆型号:
+                        <Col span={10} id="car-type"><span style={{ marginLeft: '-5px', color: "red" }}>*</span>车辆型号:
                             <Select showSearch
                                 style={{ width: '150px', marginLeft: '35px' }}
                                 placeholder="请选择车辆型号"
@@ -575,39 +622,43 @@ class ClientDetail extends React.Component {
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >保险金额：
+                        <Col span={3}></Col>
+                        <Col span={10} >保险金额：
                         <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.insuranceAmount} onChange={(e) => this.onValueChange('insuranceAmount', e.target.value)} />
                         </Col>
 
-                        <Col span={12}>保险开始日期:
+                        <Col span={10}>保险开始日期:
                             <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >上次里程：
+                        <Col span={3}></Col>
+                        <Col span={10} >上次里程：
                             <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} />
                         </Col>
-                        <Col span={12}>保险截止日期:
+                        <Col span={10}>保险截止日期:
                             <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
                         </Col>
 
 
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >本次里程：
+                        <Col span={3}></Col>
+                        <Col span={10} >本次里程：
                             <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.miles} onChange={(e) => this.onValueChange('miles', e.target.value)} />
                         </Col>
-                        <Col span={12}>上牌时间:
+                        <Col span={10}>上牌时间:
                             <DatePicker onChange={this.licensetimeonChange} style={{ marginLeft: '35px', width: '150px' }} />
 
                         </Col>
 
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
-                        <Col span={12} >车架号：
+                        <Col span={3}></Col>
+                        <Col span={10} >车架号：
                         <Input style={{ width: '150px', marginLeft: '15px' }} value={this.state.form.frameNumber} onChange={(e) => this.onValueChange('frameNumber', e.target.value)} />
                         </Col>
-                        <Col span={12} >发动机号：
+                        <Col span={10} >发动机号：
                         <Input style={{ width: '150px', marginLeft: '25px' }} value={this.state.form.engineNumber} onChange={(e) => this.onValueChange('engineNumber', e.target.value)} />
                         </Col>
                     </Row>
@@ -615,6 +666,33 @@ class ClientDetail extends React.Component {
 
 
                 </Modal>
+                {/* <Modal title="会员卡详情" visible={this.state.visible}
+                    onOk={this.handleOk} onCancel={this.handleCancel}
+                    okText="保存" cancelText="取消"
+                    width='60%'>
+                      <div style={{ width: '200px' }}>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类名称：</Col>
+                                        <Col span={12}>{item.service.name}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >卡类属性：</Col>
+                                        <Col span={12}>{item.service.type == '1' ? '组合次卡' : '次卡'}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >售卡金额：</Col>
+                                        <Col span={12}>{item.service.price}</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >有效期：</Col>
+                                        <Col span={12}>{item.service.validTime}年</Col>
+                                    </Row>
+                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
+                                        <Col span={12} >剩余次数明细：</Col>
+                                    </Row>
+                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
+                                </div>
+                    </Modal> */}
             </div >
         )
     }
