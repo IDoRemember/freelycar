@@ -1,7 +1,7 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import Chart from '../charts/EchartsPie.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table,message } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import { Link } from 'react-router';
@@ -93,6 +93,7 @@ class BusinessSummary extends React.Component {
 
 
                 } else {
+                    message.warn(result.msg);
                     this.setState({
                         proportionData: [],
                         memberPay: 0,//会员消费
