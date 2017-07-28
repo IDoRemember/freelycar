@@ -710,7 +710,8 @@ class ClientDetail extends React.Component {
                 </Modal>
                 <Modal title="会员卡详情" visible={this.state.cardvisible}
                     onOk={this.cardhandleOk} onCancel={this.cardhandleCancel}
-                    okText="保存" cancelText="取消"
+                    okText="确定" 
+                    className="carddetail"
                 >
                     <div >
                         <Row gutter={16} style={{ marginBottom: '15px' }}>
