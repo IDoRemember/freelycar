@@ -280,7 +280,7 @@ class BeautyOrder extends React.Component {
         }
         price = partsPrice + projectPrice
 
-        if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 1 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
+        if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 0 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
             this.state.consumOrder.projects.forEach((item, index) => {
                 if (item.staffs && item.staffs.length > 0) {
                     builders++
@@ -320,7 +320,6 @@ class BeautyOrder extends React.Component {
             <Popconfirm title="当前开单信息确认无误吗?" onConfirm={() => this.confirm(false)} onCancel={() => this.cancel()} okText="是" cancelText="否">
                 <Button type="primary" disabled={disabled} style={{ float: 'right', margin: '10px', width: '100px', height: '50px' }} size={'large'} >保存</Button>
             </Popconfirm>
-      
         </div>
     }
 }
