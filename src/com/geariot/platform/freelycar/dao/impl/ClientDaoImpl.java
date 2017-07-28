@@ -71,7 +71,7 @@ public class ClientDaoImpl implements ClientDao {
 
 	@Override
 	public long getQueryCount(String andCondition) {
-		StringBuffer basic = new StringBuffer("select count(*) from Client");
+		StringBuffer basic = new StringBuffer("select count(*) from Client where isMember = true");
 		String hql = QueryUtils.createQueryString(basic, andCondition, ORDER_CON.NO_ORDER).toString();
 		return (long) this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).uniqueResult();
 	}

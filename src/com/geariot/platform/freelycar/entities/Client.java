@@ -37,6 +37,7 @@ public class Client {
 	private Set<Card> cards;
 	private int consumTimes;
 	private float consumAmout;
+	private Boolean isMember;  
 	
 	
 	@JsonDeserialize(using=JsonDateDeserialize.class)
@@ -156,6 +157,12 @@ public class Client {
 				+ ", phone=" + phone + ", birthday=" + birthday + ", dirveLicense=" + driverLicense + ", state=" + state
 				+ ", points=" + points + ", recommendName=" + recommendName + ", createDate=" + createDate + ", cars="
 				+ cars + ", cards=" + cards + "]";
+	}
+	public Boolean getIsMember() {
+		return isMember;
+	}
+	public void setIsMember(Boolean isMember) {
+		this.isMember = isMember;
 	}
 	
 	

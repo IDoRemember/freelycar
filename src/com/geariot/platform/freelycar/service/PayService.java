@@ -100,7 +100,7 @@ public class PayService {
 		client.setConsumTimes(client.getConsumTimes() + 1);
 		client.setConsumAmout(client.getConsumAmout() + order.getAmount());
 		client.setLastVisit(new Date());
-		
+		client.setIsMember(true);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 	
