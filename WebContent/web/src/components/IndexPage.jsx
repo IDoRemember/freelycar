@@ -195,7 +195,7 @@ class IndexPage extends React.Component {
             if (newtab.length == 1) {
                 nowTab.push(...this.state.tab[newtab].items)
             } else {
-                nowTab.push(this.state.tab[newcd[0]].items[newtab[1]])
+                nowTab.push(this.state.tab[newtab[0]].items[newtab[1]])
             }
         }
         this.setState({ nowTab: [...new Set(nowTab)] })
