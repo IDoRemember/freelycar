@@ -21,6 +21,7 @@ import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
+import com.geariot.platform.freelycar.entities.CardProjectRemainingInfo;
 import com.geariot.platform.freelycar.entities.ConsumExtraInventoriesInfo;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
@@ -49,22 +50,22 @@ import net.sf.json.JsonConfig;
 public class ConsumOrderService {
 
 	private static final Logger log = LogManager.getLogger(ConsumOrderService.class);
-	
+
 	@Autowired
 	private ConsumOrderDao orderDao;
-	
+
 	@Autowired
 	private InventoryDao inventoryDao;
 
 	@Autowired
 	private InventoryOrderDao inventoryOrderDao;
-	
+
 	@Autowired
 	private CardDao cardDao;
-	
+
 	@Autowired
 	private ProjectDao projectDao;
-	
+
 	public String book(ConsumOrder consumOrder) {
 		log.debug("修改之前order----------" + consumOrder);
 		String consumOrderId = IDGenerator.generate(IDGenerator.MAINTAIN_CONSUM);
@@ -75,16 +76,44 @@ public class ConsumOrderService {
 		List<InventoryOrderInfo> list = new ArrayList<>();
 		float totalAmount = 0.0f;
 		float totalPrice = 0.0f;
-		//比较消耗数量与库存实际数量
-		for(ConsumExtraInventoriesInfo info : infos){
-			Inventory inventory = inventoryDao.findById(info.getInventory().getId()); 
-			log.debug("订单需要消耗库存(id:" + inventory.getId() + ", 名称：" +  inventory.getName() 
-			+ ")总计" + info.getNumber() + inventory.getStandard());
+
+		// 判断项目付款方式
+		Set<ProjectInfo> projects = consumOrder.getProjects();
+		for (ProjectInfo proinfo : projects) {
+			log.debug(("项目(id:" + proinfo.getProjectId() + ", 名称:" + proinfo.getName() + ")" + "付款方式:"
+					+ proinfo.getPayMethod()));
+			// 如果用卡付款，根据设置的卡id与项目id查找剩余次数信息
+			if (proinfo.getPayMethod() == Constants.PROJECT_WITH_CARD) {
+				CardProjectRemainingInfo remain = this.cardDao.getProjectRemainingInfo(proinfo.getCardId(),
+						proinfo.getProjectId());
+				// 没有找到，卡未设置或卡中没有对应的项目信息，操作回滚
+				if (remain == null) {
+					log.debug("该项目尝试用卡次支付但没有对应卡信息。本次订单操作回滚");
+					throw new ForRollbackException(RESCODE.NOT_SET_PAY_CARD.getMsg(),
+							RESCODE.NOT_SET_PAY_CARD.getValue());
+				} else {
+					// 找到剩余次数信息，但剩余次数不够支付卡次的，返回次数不足,，操作回滚
+					if (remain.getRemaining() < proinfo.getPayCardTimes()) {
+						log.debug("该项目尝试用卡(id:" + proinfo.getCardId() + " ,对应剩余次数:" + remain.getRemaining() + ")"
+								+ "不足支付次数:" + proinfo.getPayCardTimes() + "。本次订单操作回滚");
+						throw new ForRollbackException(RESCODE.CARD_REMAINING_NOT_ENOUGH.getMsg(),
+								RESCODE.CARD_REMAINING_NOT_ENOUGH.getValue());
+					}
+				}
+			}
+		}
+
+		// 比较消耗数量与库存实际数量
+		for (ConsumExtraInventoriesInfo info : infos) {
+			Inventory inventory = inventoryDao.findById(info.getInventory().getId());
+			log.debug("订单需要消耗库存(id:" + inventory.getId() + ", 名称：" + inventory.getName() + ")总计" + info.getNumber()
+					+ inventory.getStandard());
 			log.debug("实际库存剩余：" + inventory.getAmount() + inventory.getStandard());
-			//如果库存不足，抛出异常，操作回滚
-			if(inventory.getAmount() < info.getNumber()){
+			// 如果库存不足，抛出异常，操作回滚
+			if (inventory.getAmount() < info.getNumber()) {
 				log.debug("实际库存不足，当前操作回滚，订单添加失败");
-				throw new ForRollbackException(RESCODE.INVENTORY_NOT_ENOUGH.getMsg(), RESCODE.INVENTORY_NOT_ENOUGH.getValue());
+				throw new ForRollbackException(RESCODE.INVENTORY_NOT_ENOUGH.getMsg(),
+						RESCODE.INVENTORY_NOT_ENOUGH.getValue());
 			}
 			inventory.setAmount(inventory.getAmount() - info.getNumber());
 			InventoryOrderInfo temp = new InventoryOrderInfo();
@@ -101,8 +130,8 @@ public class ConsumOrderService {
 			totalAmount += temp.getAmount();
 			totalPrice += temp.getPrice();
 		}
-		//获取project信息保存到该订单
-		for(ProjectInfo pInfo : consumOrder.getProjects()){
+		// 获取project信息保存到该订单
+		for (ProjectInfo pInfo : consumOrder.getProjects()) {
 			Set<Staff> staffs = pInfo.getStaffs();
 			pInfo.setStaffs(staffs);
 			Project project = this.projectDao.findProjectById(pInfo.getProjectId());
@@ -112,25 +141,25 @@ public class ConsumOrderService {
 			pInfo.setLicensePlate(consumOrder.getLicensePlate());
 			pInfo.setBrandName(consumOrder.getCarBrand());
 			pInfo.setCreateDate(new Date());
-			if(pInfo.getCardId() != 0 ){
+			if (pInfo.getCardId() != 0) {
 				Card payCard = this.cardDao.getCardById(pInfo.getCardId());
 				pInfo.setCardName(payCard.getService().getName());
 				pInfo.setPayMethod(0);
-			}else{
+			} else {
 				pInfo.setPayMethod(1);
 			}
-			
+
 		}
-		/*//对Car添加LastMile
-		Car car=carDao.findByLicense(consumOrder.getLicensePlate());
-		car.setLastMiles(consumOrder.getMiles());
-		carDao.save(car);
-		*/
+		/*
+		 * //对Car添加LastMile Car
+		 * car=carDao.findByLicense(consumOrder.getLicensePlate());
+		 * car.setLastMiles(consumOrder.getMiles()); carDao.save(car);
+		 */
 		this.orderDao.save(consumOrder);
 		log.debug("保存之前order----------" + consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
-		//创建出库订单并保存
-		if(list != null && !list.isEmpty()){
+		// 创建出库订单并保存
+		if (list != null && !list.isEmpty()) {
 			InventoryOrder order = new InventoryOrder();
 			order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 			order.setCreateDate(new Date());
@@ -148,16 +177,17 @@ public class ConsumOrderService {
 	public String list(int page, int number) {
 		int from = (page - 1) * number;
 		List<ConsumOrder> list = this.orderDao.list(from, number);
-		if(list == null || list.isEmpty()){
+		if (list == null || list.isEmpty()) {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		long realSize = this.orderDao.getCount();
-		int size = (int) Math.ceil(realSize/(double)number);
+		int size = (int) Math.ceil(realSize / (double) number);
 		JsonConfig config = JsonResFactory.dateConfig();
 		JsonPropertyFilter filter = new JsonPropertyFilter();
 		filter.setColletionProperties(CarType.class, Provider.class);
 		config.setJsonPropertyFilter(filter);
-		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
+		config.registerPropertyExclusions(Admin.class,
+				new String[] { "password", "role", "current", "createDate", "comment" });
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		obj.put(Constants.RESPONSE_SIZE_KEY, size);
@@ -167,7 +197,7 @@ public class ConsumOrderService {
 
 	public String finish(String consumOrderId, Date date, String comment) {
 		ConsumOrder order = this.orderDao.findById(consumOrderId);
-		if(order == null){
+		if (order == null) {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		log.debug("消费订单(id:" + order.getId() + ")施工完成, 完成时间:" + date + ", 备注:" + comment);
@@ -175,15 +205,15 @@ public class ConsumOrderService {
 		order.setFinishTime(date);
 		order.setComment(comment);
 		order.setState(2);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONObject.fromObject(order, config)).toString();
 	}
 
 	public String deliverCar(String consumOrderId, Date date, String comment) {
 		ConsumOrder order = this.orderDao.findById(consumOrderId);
-		if(order == null){
+		if (order == null) {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		if(order.getState() < 1){
+		if (order.getState() < 1) {
 			log.debug("消费订单(id:" + order.getId() + ")施工未完成，无法交车");
 			return JsonResFactory.buildOrg(RESCODE.WORK_NOT_FINISH).toString();
 		}
@@ -192,71 +222,70 @@ public class ConsumOrderService {
 		order.setState(3);
 		order.setDeliverTime(date);
 		order.setComment(comment);
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,JSONObject.fromObject(order, config)).toString();
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, JSONObject.fromObject(order, config)).toString();
 	}
 
-	
-	//***************************
-	//***************************
-	//freelycar v1.0 暂不提供订单修改接口
-	
-	/*public String modify(ConsumOrder consumOrder) {
-		ConsumOrder exist = this.orderDao.findById(consumOrder.getId());
-		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
-		}
-		exist.setLicensePlate(consumOrder.getLicensePlate());
-		exist.setCarId(consumOrder.getCarId());
-		exist.setCarBrand(consumOrder.getCarBrand());
-		exist.setCarType(consumOrder.getCarType());
-		exist.setInventoryInfos(consumOrder.getInventoryInfos());
-		exist.setParkingLocation(consumOrder.getParkingLocation());
-		exist.setPickTime(consumOrder.getPickTime());
-		exist.setTotalPrice(consumOrder.getTotalPrice());
-		exist.setProjects(consumOrder.getProjects());
-		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
-	}*/
+	// ***************************
+	// ***************************
+	// freelycar v1.0 暂不提供订单修改接口
+
+	/*
+	 * public String modify(ConsumOrder consumOrder) { ConsumOrder exist =
+	 * this.orderDao.findById(consumOrder.getId()); if(exist == null){ return
+	 * JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString(); }
+	 * exist.setLicensePlate(consumOrder.getLicensePlate());
+	 * exist.setCarId(consumOrder.getCarId());
+	 * exist.setCarBrand(consumOrder.getCarBrand());
+	 * exist.setCarType(consumOrder.getCarType());
+	 * exist.setInventoryInfos(consumOrder.getInventoryInfos());
+	 * exist.setParkingLocation(consumOrder.getParkingLocation());
+	 * exist.setPickTime(consumOrder.getPickTime());
+	 * exist.setTotalPrice(consumOrder.getTotalPrice());
+	 * exist.setProjects(consumOrder.getProjects()); return
+	 * JsonResFactory.buildOrg(RESCODE.SUCCESS).toString(); }
+	 */
 
 	public String query(ConsumOrderQueryCondition condition) {
 		String andCondition = this.buildAndCondition(condition);
 		int from = (condition.getPage() - 1) * condition.getNumber();
 		List<ConsumOrder> list = this.orderDao.query(andCondition, from, condition.getNumber());
-		if(list == null || list.isEmpty()){
+		if (list == null || list.isEmpty()) {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
 		long realSize = this.orderDao.getQueryCount(andCondition);
-		int size = (int) Math.ceil(realSize/(double) condition.getNumber());
+		int size = (int) Math.ceil(realSize / (double) condition.getNumber());
 		JsonConfig config = JsonResFactory.dateConfig();
 		JsonPropertyFilter filter = new JsonPropertyFilter();
-		filter.setColletionProperties(Car.class, CarType.class, Card.class, ProjectInventoriesInfo.class, Project.class);
+		filter.setColletionProperties(Car.class, CarType.class, Card.class, ProjectInventoriesInfo.class,
+				Project.class);
 		config.setJsonPropertyFilter(filter);
-		config.registerPropertyExclusions(Admin.class, new String[]{"password", "role", "current", "createDate", "comment"});
+		config.registerPropertyExclusions(Admin.class,
+				new String[] { "password", "role", "current", "createDate", "comment" });
 		JSONArray array = JSONArray.fromObject(list, config);
 		net.sf.json.JSONObject res = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array);
 		res.put(Constants.RESPONSE_SIZE_KEY, size);
 		return res.toString();
 	}
 
-	private String buildAndCondition(ConsumOrderQueryCondition condition){
-		//生成条件查询and后缀语句
+	private String buildAndCondition(ConsumOrderQueryCondition condition) {
+		// 生成条件查询and后缀语句
 		ConsumOrder order = condition.getConsumOrder();
 		String licensePlate = order.getLicensePlate();
 		int programId = order.getProgramId();
 		int clientId = order.getClientId();
 		int state = order.getState();
-		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, 
-				String.valueOf(programId), String.valueOf(order.getPayState()), 
-				String.valueOf(clientId), String.valueOf(state)).createStatement();
+		String temp = new ConsumOrderAndQueryCreator(order.getId(), licensePlate, String.valueOf(programId),
+				String.valueOf(order.getPayState()), String.valueOf(clientId), String.valueOf(state)).createStatement();
 		StringBuilder sb = new StringBuilder(temp.trim());
 		Date startDate = condition.getStartDate();
 		Date endDate = condition.getEndDate();
-		if(startDate != null || endDate != null){
+		if (startDate != null || endDate != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			String[] types = {" createDate ", " deliverTime ", " pickTime ", " finishTime "};
+			String[] types = { " createDate ", " deliverTime ", " pickTime ", " finishTime " };
 			int dateType = condition.getDateType();
 			boolean and = sb.length() != 0;
-			if(startDate != null){
-				if(and){
+			if (startDate != null) {
+				if (and) {
 					sb.append(" and");
 				}
 				sb.append(types[dateType]);
@@ -265,7 +294,7 @@ public class ConsumOrderService {
 				sb.append("'");
 				and = true;
 			}
-			if(endDate != null){
+			if (endDate != null) {
 				sb.append(" and");
 				sb.append(types[dateType]);
 				sb.append(" < '");
@@ -277,14 +306,14 @@ public class ConsumOrderService {
 		log.debug("消费订单查询语句生成条件：" + andCondition);
 		return andCondition;
 	}
-	
+
 	public String getOrderById(String consumOrderId) {
 		ConsumOrder order = this.orderDao.findById(consumOrderId);
-		if(order == null){
+		if (order == null) {
 			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
 		}
-		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, 
+		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,
 				net.sf.json.JSONObject.fromObject(order, JsonResFactory.dateConfig())).toString();
 	}
-	
+
 }
