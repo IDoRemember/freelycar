@@ -204,6 +204,7 @@ class ServiceTable extends React.Component {
                             }
 
                         }) : []
+                        console.log()
                         cardOptions = cards.map((item, index) => {
                             const content = (
                                 <div style={{ width: '200px' }}>
@@ -226,7 +227,7 @@ class ServiceTable extends React.Component {
                                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                                         <Col span={12} >剩余次数明细：</Col>
                                     </Row>
-                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
+                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={item.projectInfos} />
                                 </div>
                             );
                             const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
@@ -256,28 +257,11 @@ class ServiceTable extends React.Component {
                     key="DeductionCardTime"
                     dataIndex="DeductionCardTime"
                     render={(text, record, index) => {
-                        if (index !== this.state.data.length - 1) {
-                            let disabled = true
-                            if (this.state.data[index].cardId) {
-                                let card = this.props.cards.map((item, index) => {
-                                    if (item.id == this.state.data[index].cardId) {
-                                        return item
-                                    }
-                                })
-                                card.projectInfos.map((projectItem, index) => {
-                                    if (projectItem.project.id == record.projectId && projectItem.project.times) {
 
-                                        disabled = true
-                                    } else {
-                                        disabled = false
-                                    }
-                                })
-
-                            }
-                            if ((index + 1) < this.state.data.length) {
-                                return <InputNumber disabled={disabled} min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
-                            }
+                        if ((index + 1) < this.state.data.length) {
+                            return <InputNumber disabled={disabled} min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
                         }
+
                     }}
                 />
                 <Col
