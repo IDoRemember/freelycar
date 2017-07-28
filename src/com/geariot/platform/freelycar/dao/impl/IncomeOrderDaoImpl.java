@@ -336,7 +336,7 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	@Override
 	public List<IncomeOrder> listIncomeOrderByClientId(String condition, int clientId, int from, int pageSize) {
 		StringBuffer basic = new StringBuffer("from IncomeOrder where clientId = :clientId");
-		String hql = QueryUtils.createQueryString(basic, condition, ORDER_CON.NO_ORDER).toString();
+		String hql = QueryUtils.createString(basic, condition, ORDER_CON.DESC_ORDER).toString();
 		return this.getSession().createQuery(hql).setInteger("clientId", clientId)
 				.setFirstResult(from).setMaxResults(pageSize)
 				.setCacheable(Constants.SELECT_CACHE).list();

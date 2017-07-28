@@ -79,4 +79,35 @@ public class QueryUtils {
 		
 		return  basicQueryStr;
 	}
+	
+	public static StringBuffer createString(StringBuffer basicQueryStr, String creatorStr, ORDER_CON orderByTime)
+	{
+		
+		String prefix = " and ";
+		if(basicQueryStr.indexOf("where") == -1)
+			prefix = " where ";
+		if(creatorStr != null && !creatorStr.isEmpty())
+		{
+			basicQueryStr.append(prefix);
+			basicQueryStr.append(creatorStr);
+		}
+		switch(orderByTime)
+		{
+			case DESC_ORDER:
+				basicQueryStr.append(" order by payDate desc");
+				break;
+			case ASC_ORDER:
+				basicQueryStr.append(" order by payDate asc");
+				break;
+			case RAND_ORDER:
+				basicQueryStr.append(" ORDER BY RAND()");
+				break;
+			default:
+				break;
+				
+		}
+		logger.debug("复合查询sql:" + basicQueryStr.toString());
+		
+		return  basicQueryStr;
+	}
 }
