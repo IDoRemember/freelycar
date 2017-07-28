@@ -260,7 +260,7 @@ class FixOrder extends React.Component {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />
             }
         })
-        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true
+        let partsPrice = 0, projectPrice = 0, price = 0, disabled = true , builders = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
         }
@@ -272,14 +272,15 @@ class FixOrder extends React.Component {
 
         if (this.state.consumOrder.carId !== '' && this.state.consumOrder.projects.length > 0 && this.state.consumOrder.pickTime !== '' && this.state.consumOrder.pickCarStaff) {
             this.state.consumOrder.projects.forEach((item, index) => {
-                if (item.staffs.length > 0) {
+                if (item.staffs && item.staffs.length > 0) {
                     builders++
                 }
             })
-            if (builders.length == this.state.consumOrder.projects.length) {
+            if (builders == this.state.consumOrder.projects.length) {
                 disabled = false
             }
         }
+
         return <div>
             <BreadcrumbCustom first="消费开单" second="维修开单" />
             <CustomerInfo getCards={this.getCards} MemberButton={true} type={1} staffList={this.state.staffList} saveInfo={this.saveInfo} />
