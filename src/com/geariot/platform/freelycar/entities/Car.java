@@ -11,6 +11,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.geariot.platform.freelycar.utils.JsonDateDeserialize;
+
 @Entity
 public class Car {
 	private int id;
@@ -27,6 +30,7 @@ public class Car {
 	private boolean newCar;
 	private int lastMiles;
 	private int miles;
+	@JsonDeserialize(using=JsonDateDeserialize.class)
 	private Date createDate;
 	@ManyToOne(cascade={}, fetch=FetchType.EAGER)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))

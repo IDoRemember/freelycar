@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -48,6 +49,7 @@ public class Client {
 	}
 	@OneToMany(cascade={CascadeType.ALL}, fetch=FetchType.EAGER)
 	@JoinColumn(name="clientId", foreignKey=@ForeignKey(name="none"))
+	@OrderBy("payDate asc")
 	public Set<Card> getCards() {
 		return cards;
 	}

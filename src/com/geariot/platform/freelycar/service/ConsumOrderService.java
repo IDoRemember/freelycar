@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
@@ -61,9 +60,6 @@ public class ConsumOrderService {
 	private InventoryOrderDao inventoryOrderDao;
 	
 	@Autowired
-	private CarDao carDao;
-	
-	@Autowired
 	private CardDao cardDao;
 	
 	@Autowired
@@ -81,7 +77,7 @@ public class ConsumOrderService {
 		float totalPrice = 0.0f;
 		//比较消耗数量与库存实际数量
 		for(ConsumExtraInventoriesInfo info : infos){
-			Inventory inventory = inventoryDao.findById(info.getInventory().getId());
+			Inventory inventory = inventoryDao.findById(info.getInventory().getId()); 
 			log.debug("订单需要消耗库存(id:" + inventory.getId() + ", 名称：" +  inventory.getName() 
 			+ ")总计" + info.getNumber() + inventory.getStandard());
 			log.debug("实际库存剩余：" + inventory.getAmount() + inventory.getStandard());
