@@ -141,38 +141,38 @@ class BeautyOrder extends React.Component {
         //check field require
         if (obj.name == '') {
             this.setState({
-                error1: '配件名称是必填项'
+                error1: '请输入配件名称'
             })
         } else {
             this.setState({
-                error1: '配件名称是必填项'
+                error1: ''
             })
         }
         if (obj.brandId == '') {
             this.setState({
-                error2: '配件品牌是必填项'
+                error2: '请输入配件品牌'
             })
         } else {
             this.setState({
-                error2: '配件品牌是必填项'
+                error2: ''
             })
         }
         if (obj.typeId == '') {
             this.setState({
-                error3: '配件类别是必填项'
+                error3: '请选择类别'
             })
         } else {
             this.setState({
-                error3: '配件类别是必填项'
+                error3: ''
             })
         }
         if (obj.price == '') {
             this.setState({
-                error4: '配件价格是必填项'
+                error4: '请输入配件价格'
             })
         } else {
             this.setState({
-                error4: '配件价格是必填项'
+                error4: ''
             })
         }
         if (obj.price !== '' && obj.typeId !== '' && obj.brandId !== '' && obj.name) {
@@ -194,8 +194,35 @@ class BeautyOrder extends React.Component {
                         obj.typeName = this.state.form.typeName;
                         this.setState({
                             visible: false,
+                            form: {
+                                name: '',
+                                brandId: '',
+                                brandName: '',
+                                typeId: '',
+                                typeName: '',
+                                property: '',
+                                standard: '',
+                                price: '',
+                                comment: ''
+                            },
                             data: [...this.state.data, obj],
                         });
+                    } else {
+                        message.error(result.msg)
+                        this.setState({
+                            visible: false,
+                            form: {
+                                name: '',
+                                brandId: '',
+                                brandName: '',
+                                typeId: '',
+                                typeName: '',
+                                property: '',
+                                standard: '',
+                                price: '',
+                                comment: ''
+                            }
+                        })
                     }
                 }
             });
@@ -204,6 +231,21 @@ class BeautyOrder extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: '',
+            form: {
+                name: '',
+                brandId: '',
+                brandName: '',
+                typeId: '',
+                typeName: '',
+                property: '',
+                standard: '',
+                price: '',
+                comment: ''
+            },
         });
     }
     //end of modal
@@ -750,7 +792,6 @@ class BeautyOrder extends React.Component {
                                     </Col>
 
 
-                                    {/*查询的模态框*/}
                                     <Modal
                                         title="新增配件"
                                         visible={this.state.visible}
@@ -764,7 +805,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件名称"
                                             >
                                                 <Input placeholder="" value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
-                                                <span style={{color:'red'}}>{this.state.error1}</span>
+                                                <span style={{ color: 'red' }}>{this.state.error1}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -772,12 +813,13 @@ class BeautyOrder extends React.Component {
                                             >
                                                 <Select
                                                     style={{ width: '100%' }}
+                                                    value={{ key: this.state.form.brandId }}
                                                     onChange={(value) => this.onValueChange('brand', value)}
                                                     labelInValue
                                                 >
                                                     {this.state.brandItem}
                                                 </Select>
-                                                <span style={{color:'red'}}>{this.state.error2}</span>
+                                                <span style={{ color: 'red' }}>{this.state.error2}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -786,11 +828,12 @@ class BeautyOrder extends React.Component {
                                                 <Select
                                                     style={{ width: '100%' }}
                                                     onChange={(value) => this.onValueChange('type', value)}
+                                                    value={{ key: this.state.form.typeId }}
                                                     labelInValue
                                                 >
                                                     {this.state.typeItem}
                                                 </Select>
-                                                <span style={{color:'red'}}>{this.state.error3}</span>
+                                                <span style={{ color: 'red' }}>{this.state.error3}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -809,7 +852,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件价格"
                                             >
                                                 <Input placeholder="" value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
-                                                  <span style={{color:'red'}}>{this.state.error4}</span>
+                                                <span style={{ color: 'red' }}>{this.state.error4}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
