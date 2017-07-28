@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Card, Table, Radio, Select, InputNumber, Input, Button, Checkbox, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Link ,hashHistory} from 'react-router';
+import { Link, hashHistory } from 'react-router';
 import $ from 'jquery';
 
 
@@ -169,7 +169,7 @@ class CostClose extends React.Component {
                                 <Row>
                                     <Col xs={16} sm={16} md={10} lg={8} xl={6}>支付方式:
                                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                                            <Select defaultValue="现金" style={{ width: 120 }} onChange={(e) => { this.handleChange(e) }} >
+                                            <Select defaultValue="0" style={{ width: 120 }} onChange={(e) => { this.setState({ payMethod: e }) }} >
                                                 <Option value="0">现金</Option>
                                                 <Option value="1">刷卡</Option>
                                                 <Option value="2">支付宝</Option>
