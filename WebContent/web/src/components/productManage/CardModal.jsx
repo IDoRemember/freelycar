@@ -62,6 +62,8 @@ class CardModal extends React.Component {
             selectedRowKeys: [],
             selectedRows: [],
             form: {
+                id: undefined,
+                index: undefined,//该条记录所在的索引
                 name: '',
                 type: '',
                 price: '',
@@ -74,25 +76,56 @@ class CardModal extends React.Component {
     }
     componentWillReceiveProps(newProps) {
         if (newProps.visible != this.props.visible) {
-            this.setState({
-                visible: newProps.visible,
-                form: update(this.state.form,
-                    {
-                        name: { $set: newProps.modifyData.name ? newProps.modifyData.name : '' },
-                        type: { $set: newProps.modifyData.type ? newProps.modifyData.type : '' },
-                        price: { $set: newProps.modifyData.price ? newProps.modifyData.price : '' },
-                        validTime: { $set: newProps.modifyData.validTime ? newProps.modifyData.validTime : '' },
-                        comment: { $set: newProps.modifyData.comment ? newProps.modifyData.comment : '' },
 
-                    })
-            })
+            let modifyData = newProps.modifyData;
+            console.log(modifyData);
+            let projs = modifyData.projectInfos;
+            if (projs) {
+                let pjs = [];
+                for (let item of projs) {
+                    let proj = item.project;
+                    proj.key = proj.id;
+                    proj.times = item.times;
+                    proj.projectInfoId = item.id;
+                    pjs.push(proj);
+                }
+
+                this.setState({
+                    visible: newProps.visible,
+                    form: update(this.state.form,
+                        {
+                            id: { $set: modifyData.id },
+                            index: { $set: modifyData.index },
+                            name: { $set: modifyData.name ? modifyData.name : '' },
+                            type: { $set: modifyData.type },
+                            price: { $set: modifyData.price ? modifyData.price : '0' },
+                            validTime: { $set: modifyData.validTime ? modifyData.validTime : '' },
+                            comment: { $set: modifyData.comment ? modifyData.comment : '' },
+                        }),
+                    selectedRows: pjs,
+                })
+            } else {
+                this.setState({
+                    form: update(this.state.form,
+                        {
+                            id: { $set: undefined },
+                            index: { $set: undefined },
+                            name: { $set: '' },
+                            type: { $set: 0 },
+                            price: { $set: 0 },
+                            validTime: { $set: '' },
+                            comment: { $set: '' },
+                        }),
+                    selectedRows: [],
+                })
+
+            }
         }
 
     }
 
     //加载数据
     componentDidMount() {
-        console.log(this.props.modifyData);
         this.loadData(1, 10);
     }
 
@@ -152,8 +185,14 @@ class CardModal extends React.Component {
         let projs = [];
         for (let item of this.state.selectedRows) {
             let projInfo = {};
+
             let proj = {};
             proj.id = item.key;
+            // proj.program = item.program;
+            // proj.name = item.name;
+            if (item.projectInfoId) {
+                projInfo.id = item.projectInfoId;
+            }
             projInfo.project = proj;
             projInfo.times = (item.times == undefined ? 1 : item.times);
 
@@ -170,10 +209,6 @@ class CardModal extends React.Component {
             message.warn('售卡金额是必填项');
             return false;
         }
-        if (obj.type == '') {
-            message.warn('卡类属性是必填项');
-            return false;
-        }
         if (obj.validTime == '') {
             message.warn('有效期是必填项');
             return false;
@@ -183,8 +218,7 @@ class CardModal extends React.Component {
             return false;
         }
 
-
-
+        console.log(obj);
         $.ajax({
             url: 'api/service/add',
             data: JSON.stringify(obj),
@@ -193,11 +227,30 @@ class CardModal extends React.Component {
             contentType: 'application/json; charset=utf-8',
             traditional: true,
             success: (res) => {
+                console.log(res);
                 if (res.code == '0') {
                     //调用父类的onok
                     obj.key = res.data.id
                     obj.createDate = res.data.createDate;
-                    obj.type = obj.type == 0 ? '次卡' : '组合卡';
+                    obj.type = obj.type;
+
+                    let projs = [];
+                    for (let item of this.state.selectedRows) {
+                        let projInfo = {};
+
+                        let proj = {};
+                        proj.id = item.key;
+                        proj.program = item.program;
+                        proj.name = item.name;
+                        if (item.projectInfoId) {
+                            projInfo.id = item.projectInfoId;
+                        }
+                        projInfo.project = proj;
+                        projInfo.times = (item.times == undefined ? 1 : item.times);
+
+                        projs.push(projInfo);
+                    }
+                    obj.projectInfos = projs;
 
                     p.onOk(obj)
 
@@ -232,7 +285,6 @@ class CardModal extends React.Component {
 
     //为项目中赋值times的属性
     onChangeTimes = (index, value) => {
-        console.log(index + "---" + value);
         this.setState({
             selectedRows: update(this.state.selectedRows, { [index]: { ['times']: { $set: value } } })
         })
@@ -254,21 +306,8 @@ class CardModal extends React.Component {
         dataSource.splice(index, 1);
         this.setState({ dataSource });
     }
-    handleAdd = () => {
-        const { count, dataSource } = this.state;
-        const newData = {
-            key: count,
-            index: count,
-            projectName: `洗车 ${count}`,
-            restCount: `20 ${count}`,
-        };
-        this.setState({
-            dataSource: [...dataSource, newData],
-            count: count + 1,
-        });
-    }
-    render() {
 
+    render() {
         const FormItem = Form.Item;
         const Itemcolumns = [{
             title: '序号',
@@ -322,13 +361,16 @@ class CardModal extends React.Component {
         }, {
             title: '项目类别',
             dataIndex: 'program',
-            key: 'program'
+            key: 'program',
+            render: (text, record, index) => {
+                return <span>{text.name ? text.name : text}</span>
+            }
         }, {
             title: '可用次数',
             dataIndex: 'times',
             key: 'times',
             render: (text, record, index) => {
-                return <InputNumber min={1} max={99} defaultValue={1} onChange={(e) => { this.onChangeTimes(index, e) }} />
+                return <InputNumber min={1} max={99} defaultValue={text ? text : 1} onChange={(e) => { this.onChangeTimes(index, e) }} />
             }
 
         }];
@@ -342,7 +384,8 @@ class CardModal extends React.Component {
                         return item.key !== obj.key;
                     });
                 }
-                oldRows.push.apply(oldRows, selectedRows)
+                oldRows.push.apply(oldRows, selectedRows);
+                console.log(oldRows);
                 this.setState({
                     selectedRows: oldRows
                 })
@@ -375,7 +418,7 @@ class CardModal extends React.Component {
                             label="卡类属性"
                             hasFeedback
                         >
-                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.state.form.type}>
+                            <Select defaultValue="1" style={{ width: 120 }} onChange={(e) => { this.handleChange('type', e) }} value={this.state.form.type + ""}>
                                 <Option value="0">次卡</Option>
                                 <Option value="1">组合卡</Option>
                             </Select>
