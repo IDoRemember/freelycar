@@ -51,7 +51,7 @@ class StaffManage extends React.Component {
                 number: number
             },
             success: (result) => {
-          
+
                 if (result.code == "0") {
                     let datalist = result.data
                     for (let item of datalist) {
@@ -60,13 +60,13 @@ class StaffManage extends React.Component {
 
                     this.setState({
                         data: datalist,
-                          loading: false,
+                        loading: false,
                         pagination: { total: result.realSize }
                     })
                 } else {
                     this.setState({
                         data: [],
-                        loading:false
+                        loading: false
                     })
                     message.error(result.msg)
                 }
@@ -390,7 +390,10 @@ class StaffManage extends React.Component {
                                 <Button onClick={() => { this.showModal() }}>新增员工</Button>
                             </Col>
                             <Col span={8}>
-                                <Button onClick={() => { this.onDelete(this.state.selectedIds) }}>删除员工</Button>
+                                <Popconfirm title="确认删除吗?" onConfirm={() => { this.onDelete(this.state.selectedIds) }} okText="是" cancelText="否">
+
+                                    <Button>删除员工</Button>
+                                </Popconfirm>
                             </Col>
                         </Row>
                         <Row>
