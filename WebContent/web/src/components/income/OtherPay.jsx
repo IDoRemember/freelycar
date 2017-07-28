@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, message, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, message, Icon, Modal,Popconfirm } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -424,7 +424,9 @@ class OtherPay extends React.Component {
                                 </Col>
                             </Row>
                         </Modal>
-                        <Button onClick={() => this.deleteItems(this.state.selectedIds)}>删除</Button>
+                        <Popconfirm title="确认删除吗?" onConfirm={() => this.deleteItems(this.state.selectedIds)}  okText="是" cancelText="否">
+                            <Button>删除</Button>
+                        </Popconfirm>
                     </div>
                     <Table pagination={this.state.pagination} bordered columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} rowSelection={rowSelection} >
                     </Table>
