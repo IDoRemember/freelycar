@@ -52,30 +52,14 @@ class EditableTable extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
+                console.log(res);
                 let code = res.code;
                 if (code == '0') {
-                    let tableDate = [];//表格显示的数据
                     let arr = res.data;
-                    for (let i = 0, len = arr.length; i < len; i++) {
-                        let obj = arr[i];
-                        let tableItem = {};
-                        for (let item in obj) {
-                            if (item == 'id')
-                                tableItem.key = obj[item];
-                            else if (item == 'type') {
-                                let type = obj[item];
-                                if (type == 0)
-                                    type = '次卡';
-                                else if (type == 1)
-                                    type = '组合卡';
-                                tableItem[item] = type;
-                            }
-                            else
-                                tableItem[item] = obj[item];
-                        }
-                        tableDate.push(tableItem);
+                    for (let item of arr) {
+                        item.key = item.id;
                     }
-                    this.setState({ data: tableDate, pagination: { total: res.realSize }, });
+                    this.setState({ data: arr, pagination: { total: res.realSize }, });
                 }
 
             }
@@ -86,9 +70,9 @@ class EditableTable extends React.Component {
 
 
     // 模态框的处理函数
-    showModal = (method, record) => {
+    showModal = (method, record, index) => {
         if (method == 'modify') {
-            console.log(record);
+            record.index = index;
             this.setState({
                 modifyData: record,
                 visible: true
@@ -101,13 +85,22 @@ class EditableTable extends React.Component {
         }
 
     }
-    handleOk = (obj) => {
-        this.setState({
-            visible: false,
-            modifyData: {},
-            data: [...this.state.data, obj]
-        });
 
+    handleOk = (obj) => {
+        if (obj.index!=undefined) {
+            this.setState({
+                visible: false,
+                modifyData: {},
+                data: update(this.state.data, { [obj.index]: { $set: obj } })
+            });
+        } else {
+            this.setState({
+                visible: false,
+                modifyData: {},
+                data: [...this.state.data, obj]
+            });
+
+        }
     }
 
     handleCancel = (e) => {
@@ -171,7 +164,10 @@ class EditableTable extends React.Component {
         }, {
             title: '卡类属性',
             dataIndex: 'type',
-            key: 'type'
+            key: 'type',
+            render: (text, record, index) => {
+                return <span>{text == 0 ? '次卡' : '组合卡'}</span>
+            }
         }, {
             title: '售卡金额',
             dataIndex: 'price',
@@ -194,7 +190,7 @@ class EditableTable extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => this.showModal('modify', record)}>修改</a>
+                        <a onClick={() => this.showModal('modify', record, index)}>修改</a>
                         &nbsp;&nbsp;
                                 <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
                             <a href="#">删除</a>
@@ -258,7 +254,7 @@ class EditableTable extends React.Component {
 
                         <Row gutter={16} style={{ marginTop: '40px', marginBottom: '20px' }}>
                             <Col xs={6} sm={5} md={4} lg={2} xl={2}>
-                                <Button className="editable-add-btn" onClick={()=>this.showModal('add')}>新增卡类</Button>
+                                <Button className="editable-add-btn" onClick={() => this.showModal('add')}>新增卡类</Button>
                             </Col>
                             <Col xs={2} sm={4} md={6}>
                                 <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete(this.state.selectedRowKeys)}>
