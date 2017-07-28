@@ -211,38 +211,41 @@ class OtherPay extends React.Component {
                 error3: '',
             })
         }
-        $.ajax({
-            url: 'api/charge/add',
-            type: 'post',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify({
-                typeId: this.state.form.payType,
-                amount: this.state.form.amount,
-                comment: this.state.form.comment,
-                expendDate: this.state.form.dateString ? new Date(this.state.form.dateString) : null,
-            }),
-            traditional: true,
-            success: (result) => {
-                if (result.code == "0") {
-                    console.log(result.data)
-                    let data = result.data
-                    data['key'] = data.id
-                    data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''
-                    this.setState({
-                        data: update(this.state.data, { $unshift: [data] }),
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
-                        form: {
-                            dateString: null,
-                            payType: '',
-                            amount: null,
-                            comment: '',
+        if (this.state.error1 == '' && this.state.error2 == '' && this.state.error3 == '') {
+            $.ajax({
+                url: 'api/charge/add',
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify({
+                    typeId: this.state.form.payType,
+                    amount: this.state.form.amount,
+                    comment: this.state.form.comment,
+                    expendDate: this.state.form.dateString ? new Date(this.state.form.dateString) : null,
+                }),
+                traditional: true,
+                success: (result) => {
+                    if (result.code == "0") {
+                        console.log(result.data)
+                        let data = result.data
+                        data['key'] = data.id
+                        data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''
+                        this.setState({
+                            data: update(this.state.data, { $unshift: [data] }),
+                            pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
+                            form: {
+                                dateString: null,
+                                payType: '',
+                                amount: null,
+                                comment: ''
+                            },
                             view: false
-                        }
-                    })
+                        })
+                    }
                 }
-            }
-        })
+            })
+        }
+
     }
 
     handleCancel = () => {
@@ -382,7 +385,7 @@ class OtherPay extends React.Component {
                                     </Select>
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'left' }}>
-                                    <span style={{ color: 'red' }}>{this.state.error1}</span>
+                                    <span style={{ color: 'red' }}>{this.state.error2}</span>
                                 </Col>
                             </Row>
                             <Row gutter={20} style={{ marginBottom: '10px' }}>
@@ -393,7 +396,7 @@ class OtherPay extends React.Component {
                                     <Input value={this.state.form.amount} style={{ width: '150px' }} onChange={(e) => this.setFormData('amount', e.target.value)} />
                                 </Col>
                                 <Col span={8} style={{ textAlign: 'left' }}>
-                                    <span style={{ color: 'red' }}>{this.state.error1}</span>
+                                    <span style={{ color: 'red' }}>{this.state.error3}</span>
                                 </Col>
                             </Row>
                             <Row gutter={16} style={{ marginBottom: '10px' }}>
