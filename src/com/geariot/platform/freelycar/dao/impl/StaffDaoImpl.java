@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.geariot.platform.freelycar.dao.StaffDao;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
+import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -98,7 +99,7 @@ public class StaffDaoImpl implements StaffDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ConsumOrder> staffServiceDetails(int staffId, int from, int pageSize) {
+	public List<ProjectInfo> staffServiceDetails(int staffId, int from, int pageSize) {
 		String sql = "select projectInfoId from projectinfo_staff where staffId = :staffId";
 		List<Object> projectInfoId = this.getSession().createSQLQuery(sql).setInteger("staffId", staffId).list();
 		if (projectInfoId != null && !projectInfoId.isEmpty()) {
