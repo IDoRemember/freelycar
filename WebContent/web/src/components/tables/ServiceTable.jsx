@@ -109,7 +109,7 @@ class ServiceTable extends React.Component {
             <div style={{ display: 'inline-block', color: '#49a9ee', cursor: 'pointer' }} onClick={() => { this.setState({ view: true }) }}><Icon type="plus-circle-o" />&nbsp;增加</div>
             </div>
             <ProgramSearch programId={this.props.programId} view={this.state.view} handleCancel={this.handleCancel} handleOk={this.handleOk}></ProgramSearch>
-            <Table className="accountTable" dataSource={this.state.data} bordered >
+            {this.state.data.length>0 && <Table className="accountTable" dataSource={this.state.data} bordered >
                 <Col
                     title="序号"
                     dataIndex="index"
@@ -190,7 +190,7 @@ class ServiceTable extends React.Component {
                     key="memberCard"
                     dataIndex="memberCard"
                     render={(text, record, index) => {
-                        let cards = [], projectInfos = [], cardOptions=[]
+                        let cards = [], projectInfos = [], cardOptions = []
                         this.props.cards ? this.props.cards.map((item, index) => {
                             for (let projectItem of item.projectInfos) {
                                 let obj = {
@@ -275,7 +275,7 @@ class ServiceTable extends React.Component {
                         }
                     }}
                 />
-            </Table>
+            </Table>}
         </Card>
     }
 }
