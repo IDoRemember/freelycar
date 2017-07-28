@@ -110,7 +110,7 @@ class OtherPay extends React.Component {
         this.setState({
             nowType: value.key
         })
-        this.getList(1, 10, value.key);
+        // this.getList(1, 10, value.key);
     }
 
     onDelete = (index) => {
