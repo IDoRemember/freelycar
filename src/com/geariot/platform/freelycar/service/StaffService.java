@@ -17,6 +17,7 @@ import com.geariot.platform.freelycar.entities.CarType;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.ConsumOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
+import com.geariot.platform.freelycar.entities.ProjectInfo;
 import com.geariot.platform.freelycar.entities.Staff;
 import com.geariot.platform.freelycar.model.RESCODE;
 import com.geariot.platform.freelycar.utils.Constants;
@@ -144,7 +145,7 @@ public class StaffService {
 		}
 		else{
 			int from = (page - 1) * number;
-			List<ConsumOrder> list = staffDao.staffServiceDetails(staffId, from , number);
+			List<ProjectInfo> list = staffDao.staffServiceDetails(staffId, from , number);
 			if(list == null || list.isEmpty()){
 				net.sf.json.JSONObject obj = JsonResFactory.buildNet(RESCODE.NOT_FOUND);
 				obj.put("staffInfo",exist);
