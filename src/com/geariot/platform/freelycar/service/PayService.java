@@ -11,11 +11,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.geariot.platform.freelycar.dao.CarDao;
 import com.geariot.platform.freelycar.dao.CardDao;
 import com.geariot.platform.freelycar.dao.ClientDao;
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.dao.ServiceDao;
+import com.geariot.platform.freelycar.entities.Car;
 import com.geariot.platform.freelycar.entities.Card;
 import com.geariot.platform.freelycar.entities.CardProjectRemainingInfo;
 import com.geariot.platform.freelycar.entities.Client;
@@ -45,6 +47,9 @@ public class PayService {
 	
 	@Autowired
 	private CardDao cardDao;
+	
+	@Autowired
+    private CarDao carDao;
 	
 	@Autowired
 	private ConsumOrderDao consumOrderDao;
@@ -139,6 +144,11 @@ public class PayService {
 				totalPrice += info.getProjectPrice();
 			}*/
 		}
+		
+		//对Car添加LastMile
+        Car car=carDao.findByLicense(order.getLicensePlate());
+        car.setLastMiles(order.getMiles());
+        carDao.save(car);
 		
 		//现金支付的情况，直接进行结算
 		order.setPayState(1);
