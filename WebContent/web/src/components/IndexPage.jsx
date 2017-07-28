@@ -144,7 +144,7 @@ class IndexPage extends React.Component {
                         url: '/app/productManage/itemManage',
                         over: 'none'
                     }, {
-                        background: 'rgb(39,0,153)',
+                        background: 'rgb(39,0,190)',
                         text: '账户管理',
                         url: '/app/productManage/itemManage',
                         over: 'none'
