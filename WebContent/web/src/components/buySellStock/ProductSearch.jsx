@@ -176,7 +176,7 @@ class ProductSearch extends React.Component {
                 <div>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
                         <Col span={10} style={{ verticalAlign: 'middle' }}>
-                            配件名：<Input
+                            配件名称：<Input
                                 placeholder="输入商品名称"
                                 style={{ width: '200px', marginBottom: '10px' }}
                                 onChange={e => this.setTradeName(e.target.value)}
