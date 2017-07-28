@@ -75,7 +75,6 @@ public class ConsumOrderService {
 		consumOrder.setId(consumOrderId);
 		log.debug("客户id：" + consumOrder.getClientId() + ", 客户姓名:" + consumOrder.getClientName() + ", 尝试创建消费订单");
 		consumOrder.setCreateDate(new Date());
-		consumOrder.setState(0);
 		Set<ConsumExtraInventoriesInfo> infos = consumOrder.getInventoryInfos();
 		List<InventoryOrderInfo> list = new ArrayList<>();
 		float totalAmount = 0.0f;
@@ -126,11 +125,11 @@ public class ConsumOrderService {
 			}
 			
 		}
-		//对Car添加LastMile
+		/*//对Car添加LastMile
 		Car car=carDao.findByLicense(consumOrder.getLicensePlate());
 		car.setLastMiles(consumOrder.getMiles());
 		carDao.save(car);
-		
+		*/
 		this.orderDao.save(consumOrder);
 		log.debug("保存之前order----------" + consumOrder);
 		log.debug("消费订单(id:" + consumOrder.getId() + ")保存成功，准备创建出库订单并保存");
@@ -140,7 +139,7 @@ public class ConsumOrderService {
 			order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
 			order.setCreateDate(new Date());
 			order.setInventoryInfos(list);
-			order.setState(1);
+			order.setState(0);
 			order.setTotalAmount(totalAmount);
 			order.setTotalPrice(totalPrice);
 			order.setType(consumOrder.getProgramId());

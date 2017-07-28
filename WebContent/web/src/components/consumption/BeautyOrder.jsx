@@ -51,7 +51,7 @@ class BeautyOrder extends React.Component {
                 programName: '美容',
                 parkingLocation: '',
                 inventoryInfos: [],
-                state: 0,
+                state: 1,
                 totalPrice: '',
                 payState: 0,
                 pickTime: '',
