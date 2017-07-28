@@ -192,25 +192,34 @@ class OtherPay extends React.Component {
         })
     }
     handleAddOk = () => {
-        if (this.state.form.payType == '') {
-            this.setState({
-                error2: "* 请选择支出类别"
-            })
-        } else if (!this.state.form.amount) {
-            this.setState({
-                error3: '* 请输入支出金额'
-            })
-        } else if (!this.state.form.expendDate) {
+        if (!this.state.form.dateString) {
             this.setState({
                 error1: '* 请选择单据日期'
             })
         } else {
             this.setState({
-                error1: '',
-                error2: '',
-                error3: '',
+                error1: ''
             })
         }
+        if (this.state.form.payType == '') {
+            this.setState({
+                error2: "* 请选择支出类别"
+            })
+        } else {
+            this.setState({
+                error2: ''
+            })
+        }
+        if (!this.state.form.amount) {
+            this.setState({
+                error3: '* 请输入支出金额'
+            })
+        } else {
+            this.setState({
+                error3: ''
+            })
+        }
+
         if (this.state.error1 == '' && this.state.error2 == '' && this.state.error3 == '') {
             $.ajax({
                 url: 'api/charge/add',
