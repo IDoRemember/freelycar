@@ -66,6 +66,7 @@ class AddClient extends React.Component {
         })
     }
     routerWillLeave = (nextLocation) => {
+        console.log(this.state.isPop)
         if (this.state.isPop) {
             return '确认要离开？';
         } else {
@@ -208,16 +209,42 @@ class AddClient extends React.Component {
     }
     //时间选择函数
     birthdayonChange = (time) => {
-        console.log(time);
         this.state.form.birthday = new Date(time);
     }
     insuranceStarttimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceStarttime = new Date(time);
+        // let earlyTime=new Date(1988,08,02,00,00,00);
+        // console.log(earlyTime)
+
+        let end = this.state.form.insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.form.insuranceEndtime).getTime())
+      console.log(end)
+        if (new Date(time).getTime() > end) {
+            message.warning("截止时间必须大于开始时间")
+        } else {
+            this.setState({
+                form: update(this.state.form, { insuranceStarttime: { $set: new Date(time) } })
+            })
+        }
+        // this.setState({
+        //     form: { insuranceStarttime: new Date(time) }
+        // })
     }
     insuranceEndtimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceEndtime = new Date(time);
+      //  let start = this.state.form.insuranceStarttime
+         let start = this.state.form.insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.form.insuranceStarttime).getTime())
+        if (new Date(time).getTime() < start) {
+            console.log("false")
+            // this.setState({
+            //     form: { insuranceEndtime: new Date(time) }
+            // })
+            message.warning("截止时间必须大于开始时间")
+        } else {
+            this.setState({
+                form: update(this.state.form, { insuranceEndtime: { $set: new Date(time) } })
+
+            })
+        }
+
+
     }
     licensetimeonChange = (time) => {
         console.log(time);
@@ -226,7 +253,7 @@ class AddClient extends React.Component {
     onValueChange = (key, value) => {
         this.setState({
             form: update(this.state.form, { [key]: { $set: value } }),
-               isPop: false,
+            isPop: true,
         })
     }
 
@@ -314,7 +341,7 @@ class AddClient extends React.Component {
                             </Select>
                         </Col>
                         <Col span={8} id='startTime'>保险开始日期:
-                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px' }} />
+                            <DatePicker onChange={(value) => this.insuranceStarttimeonChange(value)} style={{ marginLeft: '10px' }} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -332,7 +359,7 @@ class AddClient extends React.Component {
                         </Col>
 
                         <Col span={8} id='endTime'>保险截止日期:
-                            <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px' }}
+                            <DatePicker onChange={(value) => this.insuranceEndtimeonChange(value)} style={{ marginLeft: '10px' }}
                                 getCalendarContainer={() => document.getElementById('endTime')}
                             />
                         </Col>
