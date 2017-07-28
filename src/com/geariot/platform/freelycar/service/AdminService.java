@@ -130,7 +130,8 @@ public class AdminService {
 			adminDao.save(admin);
 			Admin added = this.adminDao.findAdminByAccount(admin.getAccount());
 			JsonConfig config = JsonResFactory.dateConfig();
-			config.registerPropertyExclusions(Admin.class, new String[]{"password", "staff"});
+			//config.registerPropertyExclusions(Admin.class, new String[]{"password", "staff"});
+			config.registerPropertyExclusions(Admin.class, new String[]{"password"});
 			return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONObject.fromObject(added, config)).toString();
 		}
 	}

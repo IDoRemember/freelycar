@@ -32,7 +32,7 @@ public class ServiceDaoImpl implements ServiceDao{
 
 	@Override
 	public void save(Service service) {
-		 this.getSession().save(service);
+		 this.getSession().saveOrUpdate(service);
 	}
 
 	/*@Override
