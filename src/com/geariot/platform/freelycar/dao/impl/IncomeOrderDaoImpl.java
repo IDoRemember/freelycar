@@ -180,7 +180,6 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	public List<IncomeOrder> listByDateRange(Date startTime, Date endTime, int from, int pageSize) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.DATE, 1);
 		cal1.set(Calendar.HOUR, 0);
 		cal1.set(Calendar.MINUTE, 0);
 		cal1.set(Calendar.SECOND, 0);
@@ -199,7 +198,6 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	public List<IncomeOrder> listByDateRange(Date startTime, Date endTime) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.DATE, 1);
 		cal1.set(Calendar.HOUR, 0);
 		cal1.set(Calendar.MINUTE, 0);
 		cal1.set(Calendar.SECOND, 0);
@@ -260,7 +258,6 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	public List<Object[]> listByPayMethodRange(Date startTime, Date endTime) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.DATE, 1);
 		cal1.set(Calendar.HOUR, 0);
 		cal1.set(Calendar.MINUTE, 0);
 		cal1.set(Calendar.SECOND, 0);
@@ -410,7 +407,6 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	public List<Object[]> MemberPayRange(Date startTime, Date endTime) {
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.DATE, 1);
 		cal1.set(Calendar.HOUR, 0);
 		cal1.set(Calendar.MINUTE, 0);
 		cal1.set(Calendar.SECOND, 0);

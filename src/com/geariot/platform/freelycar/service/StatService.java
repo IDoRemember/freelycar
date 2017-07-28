@@ -393,6 +393,7 @@ public class StatService {
 			}
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
 		obj.put("programPayDetail", programPayDetail);
+		obj.put("memberPay", memberPayStats);
 		return obj.toString();
 		}
 }
@@ -420,6 +421,7 @@ public class StatService {
 			}
 		net.sf.json.JSONObject obj = JsonResFactory.buildNetWithData(RESCODE.SUCCESS, net.sf.json.JSONArray.fromObject(payMethodDetail));
 		obj.put("programPayDetail", programPayDetail);
+		obj.put("memberPay", memberPayStats);
 		return obj.toString();
 		}
 	}
