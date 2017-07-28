@@ -160,7 +160,7 @@ class PartsDetail extends React.Component {
                     dataIndex="amount"
                     render={(text, record, index) => {
                         if (index + 1 < this.state.parts.length) {
-                            return <span>{text}</span>
+                            return <span style={{color:text==0?'red':''}}>{text}</span>
                         }
                     }}
                 />
