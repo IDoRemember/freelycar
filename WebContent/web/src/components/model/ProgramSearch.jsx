@@ -181,7 +181,7 @@ class ProgramSearch extends React.Component {
                     项目名称：
                     <Input
                         placeholder="按项目名称进行搜索"
-                        style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
+                        style={{ width: '150px', marginBottom: '10px', marginLeft: '20px' }}
 
                         onChange={e => this.setSearchName(e.target.value)}
                         value={this.state.partName}
