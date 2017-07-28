@@ -56,6 +56,14 @@ class PutInStorage extends React.Component {
             title: '配件类别',
             dataIndex: 'typeName',
             key: 'typeName'
+        },{
+            title:'配件品牌',
+            dataIndex:'brandName',
+            key:'brandName'
+        },{
+            title:'规格',
+            dataIndex:'standard',
+            key:'standard'
         }, {
             title: '属性',
             dataIndex: 'property',

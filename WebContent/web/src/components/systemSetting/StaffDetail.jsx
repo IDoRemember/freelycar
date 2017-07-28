@@ -27,10 +27,10 @@ class AccountManage extends React.Component {
         }
     }
     componentDidMount() {
-        this.queryAccount(this.props.params.id, 1, 10)
+        this.queryAccount( 1, 10,this.props.params.id)
     }
 
-    queryAccount = (sid, page, number) => {
+    queryAccount = ( page, number,sid) => {
 
         $.ajax({
             url: 'api/staff/detail',
@@ -53,9 +53,7 @@ class AccountManage extends React.Component {
                             ['level']: { $set: staffInfo.level }
                         })
                 });
-                this.setState({
-                    loading: false
-                })
+
                 if (result.code == "0") {
 
                     let arr = result.data;
@@ -65,6 +63,13 @@ class AccountManage extends React.Component {
 
                     this.setState({
                         data: result.data,
+                        pagination: { total: result.realSize },
+                        loading: false
+                    })
+                } else {
+                    message.error(result.msg)
+                    this.setState({
+                        data: [],
                         pagination: { total: result.realSize }
                     })
                 }
@@ -83,7 +88,7 @@ class AccountManage extends React.Component {
     }
 
     handleChange = (pagination, filters, sorter) => {
-        this.queryAccount(this.props.params.id, pagination.current, 10)
+        this.queryAccount( pagination.current, 10,this.props.params.id)
     }
 
 
@@ -196,9 +201,9 @@ class AccountManage extends React.Component {
                                 <Table
                                     loading={this.state.loading}
                                     pagination={this.state.pagination}
-                                    rowSelection={rowSelection}
                                     onChange={(pagination) => this.handleTableChange(pagination)}
                                     columns={columns}
+                                  
                                     dataSource={this.state.data}
                                     bordered
                                 />
