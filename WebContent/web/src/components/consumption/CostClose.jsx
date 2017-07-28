@@ -25,6 +25,7 @@ class CostClose extends React.Component {
             referWorkTime: 0,//工时
             pricePerUnit: 0,//单价
             programId: 1,
+            checkedCard:true,
         }
     }
 
@@ -58,7 +59,6 @@ class CostClose extends React.Component {
             data: { consumOrderId: this.props.params.orderId },
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 let cardCost = 0;//卡扣的钱
                 if (res.code == '0') {
                     let dataArr = res.data.projects;
