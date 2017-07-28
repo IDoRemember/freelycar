@@ -240,6 +240,7 @@ class OtherPay extends React.Component {
                         data['key'] = data.id
                         data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''
                         this.setState({
+                            view: false,
                             data: update(this.state.data, { $unshift: [data] }),
                             pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
                             form: {
@@ -247,9 +248,10 @@ class OtherPay extends React.Component {
                                 payType: '',
                                 amount: null,
                                 comment: ''
-                            },
-                            view: false
+                            }
                         })
+                    } else {
+                        message.error(result.msg)
                     }
                 }
             })
@@ -260,11 +262,15 @@ class OtherPay extends React.Component {
     handleCancel = () => {
         this.setState({
             visible: false
+
         });
     }
     handleAddCancel = () => {
         this.setState({
-            view: false
+            view: false,
+            error3: '',
+            error1: '',
+            error2: ''
         });
     }
     setFormData = (key, data) => {
