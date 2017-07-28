@@ -215,7 +215,7 @@ class FixOrder extends React.Component {
         message.error('请继续更改');
     }
 
-    confirm = (isFinish) => {
+     confirm = (isFinish) => {
         let partsPrice = 0, projectPrice = 0, price = 0
         for (let item of this.state.consumOrder.projects) {
             projectPrice = projectPrice + item.price + item.pricePerUnit * item.referWorkTime
@@ -224,32 +224,62 @@ class FixOrder extends React.Component {
             partsPrice = partsPrice + item.inventory.price * item.number
         }
         price = partsPrice + projectPrice
+        if (this.state.consumOrder.carId == '') {
+            this.setState({
+                errorInfo: '* 请输入车牌号'
+            })
+        } else if (Number(this.state.consumOrder.miles) < Number(this.state.consumOrder.lastMiles)) {
+            this.setState({
+                errorInfo: '* 本次里程不能小于上次里程'
+            })
+        } else if (this.state.consumOrder.pickTime == '') {
+            this.setState({
+                errorInfo: '* 请输入接车时间'
+            })
+        } else if (!this.state.consumOrder.pickCarStaff) {
+            this.setState({
+                errorInfo: '* 请输入接车人'
+            })
+        } else if (this.state.consumOrder.projects.length < 1) {
+            this.setState({
+                errorInfo: '* 请选择项目'
+            })
+        } else {
+            this.setState({
+                errorInfo: ''
+            })
+        }
         this.setState({
             consumOrder: update(this.state.consumOrder, { totalPrice: { $set: price } })
         }, () => {
-            $.ajax({
-                type: 'post',
-                url: 'api/order/book',
-                contentType: 'application/json;charset=utf-8',
-                dataType: 'json',
-                // traditional: true,
-                data: JSON.stringify(this.state.consumOrder),
-                success: (res) => {
-                    console.log(res)
-                    if (res.code == '0') {
-                        message.success(res.text);
-                        this.setState({
-                            isPop: false
-                        }, () => {
-                            if (isFinish) {
-                                hashHistory.push(`/app/consumption/costclose/${res.id}`)
-                            } else {
-                                hashHistory.push(`/app/consumption/ordermanage`)
-                            }
-                        })
+            if (this.state.errorInfo == '') {
+                $.ajax({
+                    type: 'post',
+                    url: 'api/order/book',
+                    contentType: 'application/json;charset=utf-8',
+                    dataType: 'json',
+                    // traditional: true,
+                    data: JSON.stringify(this.state.consumOrder),
+                    success: (res) => {
+                        if (res.code != '0') {
+                            message.error(res.msg)
+
+                        }
+                        if (res.code == '0') {
+                            message.success(res.text);
+                            this.setState({
+                                isPop: false
+                            }, () => {
+                                if (isFinish) {
+                                    hashHistory.push(`/app/consumption/costclose/${res.id}`)
+                                } else {
+                                    hashHistory.push(`/app/consumption/ordermanage`)
+                                }
+                            })
+                        }
                     }
-                }
-            })
+                })
+            }
         })
     }
 
