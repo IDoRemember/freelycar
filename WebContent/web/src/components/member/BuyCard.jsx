@@ -455,7 +455,7 @@ class BuyCard extends React.Component {
                             <div style={{ display: 'inline-block', width: '80%' }}>办理人员:
                                  <div style={{ display: 'inline-block', marginLeft: '105x' }}>
                                     <Select showSearch
-                                        style={{ width: '140px', marginLeft: '10px' }}
+                                        style={{ width: '140px', marginLeft: '25px' }}
                                         placeholder="选择办卡人员"
                                         optionFilterProp="children"
                                         onChange={(value) => this.StaffhandleChange(value)}
