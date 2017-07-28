@@ -38,6 +38,10 @@ class BeautyOrder extends React.Component {
             visible3: false,
             data: [],
             tabkey: 1,
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: '',
             form: {
                 name: '',
                 brandId: '',
@@ -136,49 +140,66 @@ class BeautyOrder extends React.Component {
 
         //check field require
         if (obj.name == '') {
-            message.warn('配件名称是必填项');
-            return false;
+            this.setState({
+                error1: '配件名称是必填项'
+            })
+        } else {
+            this.setState({
+                error1: '配件名称是必填项'
+            })
         }
         if (obj.brandId == '') {
-            message.warn('配件品牌是必填项');
-            return false;
+            this.setState({
+                error2: '配件品牌是必填项'
+            })
+        } else {
+            this.setState({
+                error2: '配件品牌是必填项'
+            })
         }
         if (obj.typeId == '') {
-            message.warn('配件类别是必填项');
-            return false;
+            this.setState({
+                error3: '配件类别是必填项'
+            })
+        } else {
+            this.setState({
+                error3: '配件类别是必填项'
+            })
         }
         if (obj.price == '') {
-            message.warn('配件价格是必填项');
-            return false;
+            this.setState({
+                error4: '配件价格是必填项'
+            })
+        } else {
+            this.setState({
+                error4: '配件价格是必填项'
+            })
         }
-
-        $.ajax({
-            type: 'post',
-            url: 'api/inventory/add',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(obj),
-            success: (result) => {
-                //console.log(result);
-                let code = result.code;
-
-                if (code == '0') {
-                    let dt = result.data;
-                    obj.number = dt.id;
-                    obj.key = dt.id;
-                    obj.createDate = dt.createDate;
-                    obj.brandName = this.state.form.brandName;
-                    obj.typeName = this.state.form.typeName;
-                    this.setState({
-                        visible: false,
-                        data: [...this.state.data, obj],
-                    });
-
+        if (obj.price !== '' && obj.typeId !== '' && obj.brandId !== '' && obj.name) {
+            $.ajax({
+                type: 'post',
+                url: 'api/inventory/add',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(obj),
+                success: (result) => {
+                    //console.log(result);
+                    let code = result.code;
+                    if (code == '0') {
+                        let dt = result.data;
+                        obj.number = dt.id;
+                        obj.key = dt.id;
+                        obj.createDate = dt.createDate;
+                        obj.brandName = this.state.form.brandName;
+                        obj.typeName = this.state.form.typeName;
+                        this.setState({
+                            visible: false,
+                            data: [...this.state.data, obj],
+                        });
+                    }
                 }
-
-            }
-        });
-
+            });
+        }
     }
     handleCancel = (e) => {
         this.setState({
@@ -263,7 +284,7 @@ class BeautyOrder extends React.Component {
                     console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
-                         visible2: false,
+                        visible2: false,
                     });
                 }
             }
@@ -288,7 +309,7 @@ class BeautyOrder extends React.Component {
         obj.comment = form.comment;
 
         //check require
-        if(form.name==''){
+        if (form.name == '') {
             message.warn('品牌名称必填项');
             return false;
         }
@@ -743,6 +764,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件名称"
                                             >
                                                 <Input placeholder="" value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                                <span style={{color:'red'}}>{this.state.error1}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -755,6 +777,7 @@ class BeautyOrder extends React.Component {
                                                 >
                                                     {this.state.brandItem}
                                                 </Select>
+                                                <span style={{color:'red'}}>{this.state.error2}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -767,6 +790,7 @@ class BeautyOrder extends React.Component {
                                                 >
                                                     {this.state.typeItem}
                                                 </Select>
+                                                <span style={{color:'red'}}>{this.state.error3}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -785,6 +809,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件价格"
                                             >
                                                 <Input placeholder="" value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
+                                                  <span style={{color:'red'}}>{this.state.error4}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
