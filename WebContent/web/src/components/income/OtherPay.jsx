@@ -3,7 +3,7 @@ import CustomerInfo from '../forms/CustomerInfo.jsx'
 import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, message, Icon, Modal } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Pagination, message, Icon, Modal,Popconfirm } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router';
 import $ from 'jquery';
@@ -110,7 +110,7 @@ class OtherPay extends React.Component {
         this.setState({
             nowType: value.key
         })
-        this.getList(1, 10, value.key);
+        // this.getList(1, 10, value.key);
     }
 
     onDelete = (index) => {
@@ -220,7 +220,7 @@ class OtherPay extends React.Component {
             })
         }
 
-        if (this.state.error1 == '' && this.state.error2 == '' && this.state.error3 == '') {
+        if (this.state.form.dateString && this.state.form.payType !== '' && this.state.form.amount) {
             $.ajax({
                 url: 'api/charge/add',
                 type: 'post',
@@ -240,6 +240,7 @@ class OtherPay extends React.Component {
                         data['key'] = data.id
                         data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''
                         this.setState({
+                            view: false,
                             data: update(this.state.data, { $unshift: [data] }),
                             pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } }),
                             form: {
@@ -247,9 +248,10 @@ class OtherPay extends React.Component {
                                 payType: '',
                                 amount: null,
                                 comment: ''
-                            },
-                            view: false
+                            }
                         })
+                    } else {
+                        message.error(result.msg)
                     }
                 }
             })
@@ -260,11 +262,15 @@ class OtherPay extends React.Component {
     handleCancel = () => {
         this.setState({
             visible: false
+
         });
     }
     handleAddCancel = () => {
         this.setState({
-            view: false
+            view: false,
+            error3: '',
+            error1: '',
+            error2: ''
         });
     }
     setFormData = (key, data) => {
@@ -418,7 +424,9 @@ class OtherPay extends React.Component {
                                 </Col>
                             </Row>
                         </Modal>
-                        <Button onClick={() => this.deleteItems(this.state.selectedIds)}>删除</Button>
+                        <Popconfirm title="确认删除吗?" onConfirm={() => this.deleteItems(this.state.selectedIds)}  okText="是" cancelText="否">
+                            <Button>删除</Button>
+                        </Popconfirm>
                     </div>
                     <Table pagination={this.state.pagination} bordered columns={conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} rowSelection={rowSelection} >
                     </Table>

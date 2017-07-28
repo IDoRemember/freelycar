@@ -60,14 +60,6 @@ class ProductSearch extends React.Component {
                 title: '可用库存',
                 dataIndex: 'stock',
                 key: 'stock'
-            }, {
-                title: '供应商',
-                dataIndex: 'supplier',
-                key: 'supplier'
-            }, {
-                title: '联系方式',
-                dataIndex: 'phone',
-                key: 'phone'
             }],
             data: []
         }
@@ -176,8 +168,7 @@ class ProductSearch extends React.Component {
                 <div>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
                         <Col span={10} style={{ verticalAlign: 'middle' }}>
-                            配件名：<Input
-                                placeholder="输入商品名称"
+                            配件名称：<Input
                                 style={{ width: '200px', marginBottom: '10px' }}
                                 onChange={e => this.setTradeName(e.target.value)}
                                 value={this.state.tradeName}
@@ -187,7 +178,6 @@ class ProductSearch extends React.Component {
                             配件类别：<Select
                                 showSearch
                                 style={{ width: '200px' }}
-                                placeholder="选择商品类别进行搜索"
                                 optionFilterProp="children"
                                 onChange={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
@@ -196,7 +186,6 @@ class ProductSearch extends React.Component {
                                 {plateOptions}
                             </Select>
                             <Button onClick={() => this.getList(this.state.tradeName, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
-
                         </Col>
                     </Row>
                     < Table pagination={this.state.pagination} bordered columns={this.state.conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />

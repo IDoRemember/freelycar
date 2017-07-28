@@ -480,7 +480,9 @@ class AccountManage extends React.Component {
                                 <Button onClick={() => { this.showModal() }}>新增账户</Button>
                             </Col>
                             <Col span={8}>
-                                <Button onClick={() => { this.onDelete(this.state.selectedIds) }}>删除账户</Button>
+                             <Popconfirm title="确认删除吗?" onConfirm={() => { this.onDelete(this.state.selectedIds) }}  okText="是" cancelText="否">
+                                <Button>删除账户</Button>
+                            </Popconfirm>
                             </Col>
                         </Row>
                         <Row>

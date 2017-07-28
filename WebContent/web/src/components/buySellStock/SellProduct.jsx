@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, DatePicker,message } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, Row, Col, Popconfirm, DatePicker, message } from 'antd';
 import { Link } from 'react-router';
 import moment from 'moment';
 import $ from 'jquery'
@@ -159,8 +159,10 @@ class PutInStorage extends React.Component {
                                 view = '入库'
                             } else if (text == 1) {
                                 view = '维修出库'
-                            } else {
+                            } else if (text == 2) {
                                 view = '美容出库'
+                            } else {
+                                view = '退货出库'
                             }
                             return <span>{view}</span>
                         }}
