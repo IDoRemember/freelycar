@@ -191,7 +191,7 @@ class PartsSearch extends React.Component {
         >
             <Row gutter={24} style={{ marginBottom: '10px' }} id="parts-area">
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
-                    按配件名称进行搜索：
+                    配件名称：
                     <Input
                         style={{ width: '120px', marginBottom: '10px', marginLeft: '20px' }}
                         onChange={e => this.setSearchName(e.target.value)}
@@ -199,7 +199,7 @@ class PartsSearch extends React.Component {
                     />
                 </Col>
                 <Col span={10} style={{ verticalAlign: 'middle' }} >
-                    按配件类别进行搜索：
+                    配件类别：
                     <Select
                         showSearch
                         style={{ width: '120px', marginLeft: '20px' }}
