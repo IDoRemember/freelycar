@@ -16,7 +16,7 @@ import javax.persistence.OneToMany;
 public class InventoryOrder {
 	private String id;
 	private List<InventoryOrderInfo> inventoryInfos;
-	private int type;	//0,1,2=入库,维修出库,美容出库
+	private int type;	//0,1,2,3=入库,维修出库,美容出库,退货出库
 	private float totalAmount;
 	private float totalPrice;
 	private Admin orderMaker;

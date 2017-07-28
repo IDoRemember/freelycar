@@ -30,7 +30,8 @@ public enum RESCODE {
 	UNABLE_TO_DELETE(25, "所选项目被其他引用，无法删除"),
 	NO_INCOME(26, "无对应日期订单记录"),
 	UNSUPPORT_TYPE(27, "不支持该操作"),
-	NO_RECORD(28,"数据库无记录")
+	NO_RECORD(28,"数据库无记录"),
+	CANNOT_CANCEL_INVOICES(29,"配件库存不足以退货")
 	;
 	
 	// 定义私有变量

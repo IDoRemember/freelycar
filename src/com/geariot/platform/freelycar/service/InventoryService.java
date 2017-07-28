@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.geariot.platform.freelycar.dao.ConsumOrderDao;
 import com.geariot.platform.freelycar.dao.ExpendOrderDao;
+import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.dao.InventoryBrandDao;
 import com.geariot.platform.freelycar.dao.InventoryDao;
 import com.geariot.platform.freelycar.dao.InventoryOrderDao;
@@ -22,6 +23,7 @@ import com.geariot.platform.freelycar.dao.InventoryTypeDao;
 import com.geariot.platform.freelycar.dao.ProjectDao;
 import com.geariot.platform.freelycar.entities.Admin;
 import com.geariot.platform.freelycar.entities.ExpendOrder;
+import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.entities.Inventory;
 import com.geariot.platform.freelycar.entities.InventoryBrand;
 import com.geariot.platform.freelycar.entities.InventoryOrder;
@@ -69,6 +71,9 @@ public class InventoryService {
 	
 	@Autowired
 	private ExpendOrderDao expendOrderDao;
+	
+	@Autowired
+	private IncomeOrderDao incomeOrderDao;
 
 	public String addType(InventoryType inventoryType) {
 		InventoryType exist = inventoryTypeDao.findByName(inventoryType.getTypeName());
@@ -469,7 +474,39 @@ public class InventoryService {
 	}
 
 	public String deleteOrder(String orderId) {
+		InventoryOrder inventoryOrder = inventoryOrderDao.findById(orderId);
+		List<InventoryOrderInfo> lists = inventoryOrder.getInventoryInfos();
+		for(InventoryOrderInfo list : lists){
+			Inventory inventory = inventoryDao.findById(list.getInventoryId());
+			if(inventory.getAmount() >= list.getAmount()){
+				float amount = inventory.getAmount() - list.getAmount();
+				inventory.setAmount(amount);
+			}else{
+				return JsonResFactory.buildOrg(RESCODE.CANNOT_CANCEL_INVOICES).toString();
+			}
+		}
+		
+		//创建 退货出库单据 
+		InventoryOrder order = new InventoryOrder();
+		order.setId(IDGenerator.generate(IDGenerator.OUT_STOCK));
+		order.setCreateDate(new Date());
+		order.setInventoryInfos(lists);
+		order.setTotalPrice(inventoryOrder.getTotalPrice());
+		order.setTotalAmount(inventoryOrder.getTotalAmount());
+		order.setType(3);
+		this.inventoryOrderDao.save(order);
+		
+		//在IncomeOrder中添加 收入
+		IncomeOrder incomeOrder = new IncomeOrder();
+		incomeOrder.setAmount(inventoryOrder.getTotalPrice());
+		incomeOrder.setProgramName("退货出库");
+		incomeOrder.setPayDate(new Date());
+		incomeOrderDao.save(incomeOrder);
+		
+		
+		this.inventoryOrderDao.delfindByOrderId(orderId);
 		this.inventoryOrderDao.deleteOrder(orderId);
+		
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 

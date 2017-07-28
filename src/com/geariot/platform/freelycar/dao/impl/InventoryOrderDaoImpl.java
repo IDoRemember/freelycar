@@ -88,5 +88,11 @@ public class InventoryOrderDaoImpl implements InventoryOrderDao {
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@Override
+	public void delfindByOrderId(String orderId) {
+		String sql = "delete from inventoryOrderInfo where inventoryOrderId = :orderId";
+		this.getSession().createSQLQuery(sql).setString("orderId", orderId).executeUpdate();
+	}
 
+	
 }
