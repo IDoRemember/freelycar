@@ -263,7 +263,6 @@ class FixOrder extends React.Component {
                     success: (res) => {
                         if (res.code != '0') {
                             message.error(res.msg)
-
                         }
                         if (res.code == '0') {
                             message.success(res.text);
