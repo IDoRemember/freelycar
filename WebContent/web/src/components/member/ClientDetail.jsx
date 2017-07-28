@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, DatePicker, Modal, Radio, message,Popover } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Popconfirm, DatePicker, Modal, Radio, message, Popover } from 'antd';
 import { Link } from 'react-router';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CarTable from '../tables/CarTable.jsx';
@@ -7,20 +7,16 @@ import $ from 'jquery';
 import update from 'immutability-helper';
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
-const payData = [
-    {
-        key: 1,
-        indexNum: 1,
-        maintainItem: "洗车",
-        payMoney: "20",
-        payType: "支付宝",
-        carType: "911",
-        servicePeople: "小易,小爱",
-        serviceTime: "2017-5-23",
-        insuranceMoney: "3000",
-        serviceState: "已完成",
-    }
-]
+const columns = [{
+    title: '项目名称',
+    dataIndex: 'name',
+    key: 'name'
+}, {
+    title: '可用次数',
+    dataIndex: 'times',
+    key: 'times'
+}]
+
 
 class ClientDetail extends React.Component {
     constructor(props) {
@@ -33,7 +29,12 @@ class ClientDetail extends React.Component {
             editable: false,
             licensePlateClassName: "hidden",
             visible: false,
+            cardvisible: false,
+            cardDetailData: [],
             pagination: {
+            },
+            carddetail: {
+
             },
             cardColumns: [{
                 title: '卡号',
@@ -43,30 +44,30 @@ class ClientDetail extends React.Component {
                 title: '卡名称',
                 dataIndex: 'cardname',
                 key: 'cardname',
-            
+
             }, {
                 title: '会员卡类',
                 dataIndex: 'cardClasses',
                 key: 'cardClasses'
             }, {
                 title: '开卡时间',
-                dataIndex: 'transactionTime',
-                key: 'transactionTime'
+                dataIndex: 'payDate',
+                key: 'payDate'
             }, {
                 title: '制单人',
                 dataIndex: 'makePeople',
                 key: 'makePeople'
-            },{
-                title:'操作',
-                dataIndex:'queryInfo',
-                key:'query',
+            }, {
+                title: '操作',
+                dataIndex: 'queryInfo',
+                key: 'query',
                 render: (text, record, index) => {
-                        return <span style={{ marginRight: '10px' }}  >  
-                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }} onClick={() => this.showCardModal(record)}>查看详情</a>   
-                            </span>
+                    return <span style={{ marginRight: '10px' }}  >
+                        <a href="javascript:void(0);" style={{ marginLeft: '5px' }} onClick={() => this.showCardModal(record)}>查看详情</a>
+                    </span>
 
-                     
-                    }
+
+                }
             }],
 
             carColumns: [{
@@ -162,12 +163,11 @@ class ClientDetail extends React.Component {
             },
             cardData: [],
             carData: [],
-            payData: []
+            payData: [],
+
         }
     }
-    showCardModal(obj){
-        console.log(obj)
-    }
+
     componentDidMount() {
         this.getBrandList();
         this.getClientInfo();
@@ -233,6 +233,7 @@ class ClientDetail extends React.Component {
                     let carlist = [];
                     let cardlist = [];
                     let paylist = [];
+                    let cardDetaillist = []
                     //获取车辆信息
                     for (let i = 0; i < objcar.length; i++) {
                         let carItem = {
@@ -258,15 +259,35 @@ class ClientDetail extends React.Component {
                     //获取卡信息
 
                     for (let j = 0; j < objcard.length; j++) {
+                        console.log(objcard[j].service.price)
+                        let projectInfo = objcard[j].projectInfos
+                        let projectlist = []
+                        projectInfo.map((item, index) => {
+                            //   console.log(item)
+                            let projectItem = {
+                                key: index,
+                                name: item.project.name,
+                                times: item.remaining
+                            }
+
+                            projectlist.push(projectItem);
+                            console.log(projectlist)
+                        })
+
                         let cardItem = {
                             key: objcard[j].id,
                             cardNum: objcard[j].id,
                             cardClasses: objcard[j].service.type == "0" ? "次卡" : "组合次卡",
-                            transactionTime: objcard[j].payDate,
+                            payDate: objcard[j].payDate,
                             cardname: objcard[j].service.name,
                             makePeople: objcard[j].orderMaker.name,
+                            projectInfos: projectlist,
+                            expirationDate: objcard[j].expirationDate,
+                            price: objcard[j].service.price,
+                            validTime: objcard[j].service.validTime
                         }
                         cardlist.push(cardItem);
+
                         if (cardlist.length == objcard.length) {
                             this.setState({
                                 cardData: cardlist,
@@ -290,7 +311,7 @@ class ClientDetail extends React.Component {
 
                     })
 
-                    console.log(objpay.length)
+                    //           console.log(objpay.length)
                     //获取消费记录
 
                     for (let k = 0; k < (objpay.length > 3 ? 3 : objpay.length); k++) {
@@ -380,8 +401,8 @@ class ClientDetail extends React.Component {
 
     handleChange = (e) => {
         console.log(e)
-        let typelist = this.state.option[e-1].types;
-        console.log(this.state.option[e-1].types)
+        let typelist = this.state.option[e - 1].types;
+        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist
@@ -410,6 +431,14 @@ class ClientDetail extends React.Component {
 
         });
     }
+    showCardModal(obj) {
+        console.log(obj);
+        this.setState({
+            cardvisible: true,
+            carddetail: obj
+        })
+
+    }
     // hideModal = () => {
     //     this.setState({
     //         visible: false,
@@ -422,6 +451,18 @@ class ClientDetail extends React.Component {
         this.saveData();
         this.getClientInfo();
 
+    }
+    cardhandleOk = () => {
+        this.setState({
+            cardvisible: false,
+        });
+    }
+    cardhandleCancel = () => {
+        
+            this.setState({
+                cardvisible: false,
+            });
+        
     }
     saveData = () => {
         let forms = this.state.form;
@@ -463,11 +504,12 @@ class ClientDetail extends React.Component {
                         }
                     }),
                     success: (res) => {
-                        if(res.code==0){
-                        this.getClientInfo();
-                        this.setState({
-                            visible: false
-                        });}else{
+                        if (res.code == 0) {
+                            this.getClientInfo();
+                            this.setState({
+                                visible: false
+                            });
+                        } else {
                             message.error(res.msg)
                         }
                     }
@@ -517,7 +559,7 @@ class ClientDetail extends React.Component {
     licensePlateCheckInfo = () => {
         var licensePlatecheck = this.state.form.licensePlate;
         var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-     //   console.log(re.test(licensePlatecheck))
+        //   console.log(re.test(licensePlatecheck))
         if (!re.test(licensePlatecheck)) {
             this.setState({
                 licensePlateClassName: "display"
@@ -666,33 +708,29 @@ class ClientDetail extends React.Component {
 
 
                 </Modal>
-                {/* <Modal title="会员卡详情" visible={this.state.visible}
-                    onOk={this.handleOk} onCancel={this.handleCancel}
+                <Modal title="会员卡详情" visible={this.state.cardvisible}
+                    onOk={this.cardhandleOk} onCancel={this.cardhandleCancel}
                     okText="保存" cancelText="取消"
-                    width='60%'>
-                      <div style={{ width: '200px' }}>
-                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                                        <Col span={12} >卡类名称：</Col>
-                                        <Col span={12}>{item.service.name}</Col>
-                                    </Row>
-                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                                        <Col span={12} >卡类属性：</Col>
-                                        <Col span={12}>{item.service.type == '1' ? '组合次卡' : '次卡'}</Col>
-                                    </Row>
-                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                                        <Col span={12} >售卡金额：</Col>
-                                        <Col span={12}>{item.service.price}</Col>
-                                    </Row>
-                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                                        <Col span={12} >有效期：</Col>
-                                        <Col span={12}>{item.service.validTime}年</Col>
-                                    </Row>
-                                    <Row gutter={16} style={{ marginBottom: '15px' }}>
-                                        <Col span={12} >剩余次数明细：</Col>
-                                    </Row>
-                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
-                                </div>
-                    </Modal> */}
+                >
+                    <div >
+                        <Row gutter={16} style={{ marginBottom: '15px' }}>
+                       
+                            <Col span={12} >卡类名称：<span>{this.state.carddetail.cardname}</span></Col>
+                             <Col span={12} >卡类属性：<span>{this.state.carddetail.cardClasses}</span></Col>
+                        </Row>
+                        <Row gutter={16} style={{ marginBottom: '15px' }}>
+                           
+                            <Col span={12} >售卡金额：<span>{this.state.carddetail.price}</span></Col> 
+                            <Col span={12}>有效期：<span>{this.state.carddetail.validTime}年</span></Col>
+                        </Row>
+                        <Row gutter={16} style={{ marginBottom: '15px' }}>
+                           
+                            <Col span={12} >剩余次数明细：</Col>
+                        </Row>
+                       
+                        <Table size={'small'} pagination={false} bordered columns={columns} dataSource={this.state.carddetail.projectInfos} />
+                    </div>
+                </Modal>
             </div >
         )
     }
