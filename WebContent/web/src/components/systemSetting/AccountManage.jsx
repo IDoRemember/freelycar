@@ -110,13 +110,13 @@ class AccountManage extends React.Component {
                     }
                     this.setState({
                         data: datalist,
-                         loading:false,
+                        loading: false,
                         pagination: { total: result.realSize }
                     })
-                }  else {
+                } else {
                     this.setState({
                         data: [],
-                        loading:false
+                        loading: false
                     })
                     message.error(result.msg)
                 }
@@ -284,10 +284,10 @@ class AccountManage extends React.Component {
         })
     }
 
-    PreFixInterge=(num,n)=>{  
-  //num代表传入的数字，n代表要保留的字符的长度  
-         return (Array(n).join(0)+num).slice(-n);  
-    }  
+    PreFixInterge = (num, n) => {
+        //num代表传入的数字，n代表要保留的字符的长度  
+        return (Array(n).join(0) + num).slice(-n);
+    }
 
     render() {
         const positionOptions = this.state.positionOptions.map((item, index) => {
@@ -338,8 +338,8 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch style={{marginRight:'15px'}} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
-                        <span  onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{marginRight:'15px'}}>修改</a></span>
+                        <Switch style={{ marginRight: '15px' }} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
+                        <span onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{ marginRight: '15px' }}>修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.account])}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
@@ -367,20 +367,20 @@ class AccountManage extends React.Component {
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
                                     账号：
-                                    <Input style={{width:'140px'}} value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
+                                    <Input style={{ width: '140px' }} value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={5}>
                                 <div style={{ marginBottom: 16 }}>
                                     姓名：
-                                    <Input style={{width:'140px'}} value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
+                                    <Input style={{ width: '140px' }} value={this.state.accountName} onChange={(e) => { this.setState({ accountName: e.target.value }) }} />
                                 </div>
                             </Col>
                             <Col span={2}>
                                 <Button type="primary" onClick={() => { this.queryAccount(1, 10) }}>查询</Button>
                             </Col>
                             <Modal
-                                title="新增账户"
+                                title={this.state.modalstate == 'modify' ? '修改账户' : "新增账户"}
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
@@ -476,9 +476,9 @@ class AccountManage extends React.Component {
                                 <Button onClick={() => { this.showModal() }}>新增账户</Button>
                             </Col>
                             <Col span={8}>
-                             <Popconfirm title="确认删除吗?" onConfirm={() => { this.onDelete(this.state.selectedIds) }}  okText="是" cancelText="否">
-                                <Button>删除账户</Button>
-                            </Popconfirm>
+                                <Popconfirm title="确认删除吗?" onConfirm={() => { this.onDelete(this.state.selectedIds) }} okText="是" cancelText="否">
+                                    <Button>删除账户</Button>
+                                </Popconfirm>
                             </Col>
                         </Row>
                         <Row>
