@@ -151,14 +151,12 @@ public class Client {
 	public void setState(int state) {
 		this.state = state;
 	}
+	
 	@Override
-	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", age=" + age + ", idNumber=" + idNumber + ", gender=" + gender
-				+ ", phone=" + phone + ", birthday=" + birthday + ", dirveLicense=" + driverLicense + ", state=" + state
-				+ ", points=" + points + ", recommendName=" + recommendName + ", createDate=" + createDate + ", cars="
-				+ cars + ", cards=" + cards + "]";
-	}
-	public Boolean getIsMember() {
+    public String toString() {
+        return "Client [cars=" + cars + "]";
+    }
+    public Boolean getIsMember() {
 		return isMember;
 	}
 	public void setIsMember(Boolean isMember) {
