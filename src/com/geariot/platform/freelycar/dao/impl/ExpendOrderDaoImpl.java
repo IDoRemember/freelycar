@@ -16,7 +16,6 @@ import com.geariot.platform.freelycar.utils.Constants;
 @Repository
 public class ExpendOrderDaoImpl implements ExpendOrderDao{
 
-
 	@Autowired
 	private SessionFactory sessionFactory;
 	
@@ -161,6 +160,12 @@ public class ExpendOrderDaoImpl implements ExpendOrderDao{
 		String hql = "from ExpendOrder where payDate >= :date1 and payDate <= :date2";
 		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
+	}
+
+	@Override
+	public int delete(List<String> ids) {
+		String hql = "delete from ExpendOrder where reference in :ids";
+		return this.getSession().createQuery(hql).setParameterList("ids", ids).executeUpdate();
 	}
 	
 }
