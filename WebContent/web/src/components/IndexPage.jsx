@@ -160,13 +160,6 @@ class IndexPage extends React.Component {
     componentDidMount() {
         this.setState({
             nowTab: localStorage.getItem('nowTab') ? JSON.parse(localStorage.getItem('nowTab')) : []
-        },()=>{
-            if(this.state.nowTab.length>8){
-                this.setState({
-                    nowTab:this.state.nowTab.slice(0,7)
-                })
-                message.error('所选项目不得多于八条')
-            }
         })
     }
     deleteTab = (index) => {
@@ -243,9 +236,13 @@ class IndexPage extends React.Component {
                     // nowTab.push(this.state.tab[newtab[0]].items[newtab[1]])
                 }
             }
-            this.setState({ nowTab: [...new Set(nowTab)] }, () => {
+
+            this.setState({ nowTab: [...new Set(nowTab.slice(0, 7))] }, () => {
                 localStorage.setItem('nowTab', JSON.stringify(this.state.nowTab));
             })
+            if (nowTab.length > 8) {
+                message.error('所选项目不得多于八条')
+            }
         } else {
             message.error('所选项目不得多于八条')
         }
