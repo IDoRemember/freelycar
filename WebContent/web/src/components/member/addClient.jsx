@@ -112,6 +112,9 @@ class AddClient extends React.Component {
     //传数据
     saveData = (e) => {
         //console.log()
+        this.setState({
+            isPop:false
+        })
         let forms = this.state.form;
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
