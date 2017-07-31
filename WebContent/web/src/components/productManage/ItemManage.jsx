@@ -509,9 +509,7 @@ class BeautyOrder extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => { this.modifyMethod(record, index) }}>修改</a>
-                        &nbsp;
-                        &nbsp;
+                        <a onClick={() => { this.modifyMethod(record, index) }} style={{marginRight:'15px'}}>修改</a>
                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
                             <a>删除</a>
                         </Popconfirm>

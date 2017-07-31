@@ -9,7 +9,7 @@ const Option = Select.Option;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 11 }
     },
     wrapperCol: {
         xs: { span: 24 },
@@ -395,7 +395,7 @@ class CardModal extends React.Component {
         return (
             <div>
                 <Modal
-                    title="新增卡类"
+                    title={this.props.modifyData.id?'修改卡类':'新增卡类'}
                     visible={this.props.visible}
                     onOk={() => this.onOk()}
                     onCancel={() => this.props.onCancel()}

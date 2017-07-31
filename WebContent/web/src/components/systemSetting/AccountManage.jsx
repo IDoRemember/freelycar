@@ -338,8 +338,8 @@ class AccountManage extends React.Component {
                 key: 'operation',
                 render: (text, record, index) => {
                     return <span>
-                        <Switch style={{ marginRight: '10px' }} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
-                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
+                        <Switch style={{marginRight:'15px'}} checked={record.current} onChange={(value) => this.enableAccount(record.account, value, index)} />
+                        <span  onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{marginRight:'15px'}}>修改</a></span>
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.account])}>
                             <a href="javascript:void(0);">删除</a>
                         </Popconfirm>
