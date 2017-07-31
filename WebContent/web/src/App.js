@@ -27,7 +27,7 @@ class App extends Component {
         }
         this.queryAdmin()
     }
-     queryAdmin = () => {
+    queryAdmin = () => {
         $.ajax({
             url: 'api/admin/getaccount',
             type: "GET",

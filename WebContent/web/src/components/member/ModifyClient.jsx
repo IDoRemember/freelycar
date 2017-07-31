@@ -208,7 +208,7 @@ class ModifyClient extends React.Component {
             cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
         })
     }
-     birthdayonChange = (key, value) => {
+    birthdayonChange = (key, value) => {
         this.setState({
             form: update(this.state.form,  { [key]: { $set: value } } )
         })
