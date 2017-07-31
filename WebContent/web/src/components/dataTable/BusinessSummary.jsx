@@ -1,7 +1,7 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import Chart from '../charts/EchartsPie.jsx'
-import { Row, Col, Card, Button, Radio, DatePicker, Table,message } from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, message } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import { Link } from 'react-router';
@@ -48,6 +48,7 @@ class BusinessSummary extends React.Component {
             dataType: 'json',
             data: data == undefined ? {} : data,
             success: (result) => {
+                console.log(result);
                 if (result.code == "0") {
                     let pay = {};
                     pay.key = -1;
@@ -72,6 +73,10 @@ class BusinessSummary extends React.Component {
                     for (let item of programPayDetail) {
                         item.key = item.programName;
                     }
+                    this.setState({
+                        pay: [pay],
+                        proportionData: programPayDetail
+                    });
 
 
                     //会员散客消费
@@ -84,10 +89,6 @@ class BusinessSummary extends React.Component {
                                 this.setState({ notMenberPay: item.amount });
                         }
 
-                    this.setState({
-                        pay: [pay],
-                        proportionData: programPayDetail
-                    });
 
 
                 } else {
@@ -262,9 +263,8 @@ class BusinessSummary extends React.Component {
                             for (let item of programPayDetail) {
                                 sum += item.count;
                             }
-                            sum = text / sum;
-                            sum = sum.toFixed(2);
-                            return <span>{sum * 100}%</span>
+                            sum = ((text / sum) * 100).toFixed(2);
+                            return <span>{sum}%</span>
                         }}
                     />
                     <Col
