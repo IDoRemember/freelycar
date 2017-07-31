@@ -878,12 +878,12 @@ class BeautyOrder extends React.Component {
 
                             <div>
                                 <Row>
-                                    <Col span={4}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             配件类别：<Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
-                                    <Col span={2}>
+                                    <Col  span={2} offset={1}>
                                         <Button type="primary" onClick={this.queryData2}>查询</Button>
                                     </Col>
                                 </Row>
@@ -906,7 +906,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible2}
                                         onOk={this.handleOk2}
                                         onCancel={this.handleCancel2}
-                                        width='50%' >
+                                        width='30%' >
 
                                         <Form onSubmit={this.handleSubmit} className="login-form">
                                             <FormItem
@@ -945,7 +945,7 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="配件品牌" key="3">
                             <div>
                                 <Row>
-                                    <Col span={3}>
+                                    <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             配件品牌：
                                             <Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />

@@ -189,6 +189,7 @@ class PartsSearch extends React.Component {
             </Button>
             ]}
         >
+
             <Row gutter={24} style={{ marginBottom: '10px' }} id="parts-area">
                 <Col span={10} style={{ verticalAlign: 'middle' }}>
                     配件名称：
@@ -208,6 +209,7 @@ class PartsSearch extends React.Component {
                         onChange={(value) => this.setSearchType(value)}
                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                     >
+                        <Option key="-1">全部</Option>
                         {partTypeOptions}
                     </Select>
                 </Col>

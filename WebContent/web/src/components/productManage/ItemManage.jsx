@@ -4,7 +4,7 @@ import ServiceTable from '../tables/ServiceTable.jsx'
 import PartsDetail from '../tables/PartsDetail.jsx'
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import update from 'immutability-helper'
-import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber ,message} from 'antd';
+import { Row, Col, Card, Button, Radio, DatePicker, Table, Tabs, Input, Select, Icon, Modal, Form, Popconfirm, InputNumber, message } from 'antd';
 import moment from 'moment';
 import $ from 'jquery';
 import PartsSearch from '../model/PartsSearch.jsx';
@@ -186,7 +186,7 @@ class BeautyOrder extends React.Component {
 
         let tabkey = this.state.tabkey;
         if (tabkey == 1) {
-            this.loadData(pagination.current, 10,this.state.projName, this.state.progId);
+            this.loadData(pagination.current, 10, this.state.projName, this.state.progId);
         } else if (tabkey == 2) {
             this.loadDataTab2(pagination.current, 10);
         }
@@ -212,7 +212,7 @@ class BeautyOrder extends React.Component {
         let form = this.state.form;
         var obj = {};
         obj.name = form.name;
-        obj.price = form.price=='' ? 0 : form.price;
+        obj.price = form.price == '' ? 0 : form.price;
         obj.referWorkTime = form.referWorkTime;
         obj.pricePerUnit = form.pricePerUnit;
         obj.comment = form.comment;
@@ -224,11 +224,11 @@ class BeautyOrder extends React.Component {
 
 
         //check require
-        if(form.name==''){
+        if (form.name == '') {
             message.warn('项目名称必填项');
             return false;
         }
-        if(form.programId==''){
+        if (form.programId == '') {
             message.warn('项目类别必填项');
             return false;
         }
@@ -315,6 +315,7 @@ class BeautyOrder extends React.Component {
         //新增我要的是一个空的表单
         this.setState({
             visible: true,
+            modalstate: 'add',
             form: update(this.state.form, {
                 ['name']: { $set: '' },
                 ['programId']: { $set: '' },
@@ -343,6 +344,7 @@ class BeautyOrder extends React.Component {
         }
         this.setState({
             visible: true,
+            modalstate: 'modify',
             form: update(this.state.form, {
                 ['name']: { $set: record.name },
                 ['programId']: { $set: record.programId },
@@ -426,7 +428,7 @@ class BeautyOrder extends React.Component {
         obj.comment = this.state.form2.comment;
 
         //check require
-        if(obj.name==''){
+        if (obj.name == '') {
             message.warn('配件名称必填项');
             return false;
         }
@@ -508,7 +510,7 @@ class BeautyOrder extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => { this.modifyMethod(record, index) }} style={{marginRight:'15px'}}>修改</a>
+                        <a onClick={() => { this.modifyMethod(record, index) }} style={{ marginRight: '15px' }}>修改</a>
                         <Popconfirm title="确定要删除?" onConfirm={() => this.onDelete([record.key])}>
                             <a>删除</a>
                         </Popconfirm>
@@ -657,7 +659,7 @@ class BeautyOrder extends React.Component {
 
                                     {/*新增的模态框*/}
                                     <Modal
-                                        title="新增项目"
+                                        title={this.state.modalstate == 'add' ? "新增项目" : "修改项目"}
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={() => { this.setState({ visible: false }) }}

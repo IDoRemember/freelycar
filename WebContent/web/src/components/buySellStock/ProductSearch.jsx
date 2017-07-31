@@ -5,7 +5,7 @@ import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import update from 'immutability-helper'
 import $ from 'jquery'
-import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table,message } from 'antd';
+import { Row, Col, Card, Button, Input, Select, Menu, Icon, Switch, TreeSelect, Table, message } from 'antd';
 const Option = Select.Option,
     SubMenu = Menu.SubMenu,
     Search = Input.Search
@@ -59,7 +59,10 @@ class ProductSearch extends React.Component {
             }, {
                 title: '可用库存',
                 dataIndex: 'stock',
-                key: 'stock'
+                key: 'stock',
+                render: (text, record, index) => {
+                    return <span style={{ color: Number(text) == 0 ? 'red' : '' }}>{text}</span>
+                }
             }],
             data: []
         }
@@ -110,7 +113,7 @@ class ProductSearch extends React.Component {
                             stock: result.data[i].amount,
                             supplier: result.data[i].provider ? result.data[i].provider.name : '',
                             createDate: result.data[i].createDate,
-                            phone: result.data[i].provider?result.data[i].provider.phone:''
+                            phone: result.data[i].provider ? result.data[i].provider.phone : ''
                         }
                         datalist.push(dataitem)
                         if (datalist.length == result.data.length) {
@@ -123,8 +126,8 @@ class ProductSearch extends React.Component {
                 } else {
                     message.error(result.msg)
                     this.setState({
-                        data:[],
-                        pagination:{total:0}
+                        data: [],
+                        pagination: { total: 0 }
                     })
                 }
             },
@@ -167,25 +170,29 @@ class ProductSearch extends React.Component {
             <Card>
                 <div>
                     <Row gutter={24} style={{ marginBottom: '10px' }}>
-                        <Col span={10} style={{ verticalAlign: 'middle' }}>
+                        <Col span={6} style={{ verticalAlign: 'middle' }}>
                             配件名称：<Input
-                                style={{ width: '200px', marginBottom: '10px' }}
+                                style={{ width: '120px', marginBottom: '10px' }}
                                 onChange={e => this.setTradeName(e.target.value)}
                                 value={this.state.tradeName}
                             />
                         </Col>
-                        <Col span={10} style={{ verticalAlign: 'middle' }} id="provider-area">
+                        <Col span={6} style={{ verticalAlign: 'middle' }} id="provider-area">
                             配件类别：<Select
                                 showSearch
-                                style={{ width: '200px' }}
+                                style={{ width: '120px' }}
                                 optionFilterProp="children"
                                 onChange={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
                             >
+                                <Option key="-1" >全部</Option>
                                 {plateOptions}
                             </Select>
-                            <Button onClick={() => this.getList(this.state.tradeName, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
+
+                        </Col>
+                        <Col span={6}>
+                            <Button onClick={() => this.getList(this.state.tradeName, this.state.category, 1, 10)} type="primary" >查询</Button>
                         </Col>
                     </Row>
                     < Table pagination={this.state.pagination} bordered columns={this.state.conlums} dataSource={this.state.data} onChange={(pagination) => this.handleTableChange(pagination)} />

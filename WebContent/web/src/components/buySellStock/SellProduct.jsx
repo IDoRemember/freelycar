@@ -119,6 +119,7 @@ class PutInStorage extends React.Component {
                     <Col span={9} >
                         制单人：
                         <Select style={{ width: '120px', marginRight: '20px' }} onChange={(e) => this.handleChange(e)}>
+                            <Option key="-1" >全部</Option>
                             {adminOption}
                         </Select>
                         <Button type="primary" onClick={() => { this.conditionQuery() }}>查询</Button>

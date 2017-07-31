@@ -27,6 +27,10 @@ class StaffManage extends React.Component {
             positionOptions: ['店长', '维修工', '洗车工', '客户经理', '收银员', '会计'],
             levelOptions: ['  ', '初级', '中级', '高级'],
             modalstate: 'add',
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: '',
             form: {
                 id: '',
                 name: '',
@@ -149,33 +153,84 @@ class StaffManage extends React.Component {
                 comment: this.state.form.comment
             }
         }
-        $.ajax({
-            url: 'api/staff/' + this.state.modalstate,
-            type: 'post',
-            dataType: 'json',
-            data: obj,
-            success: (result) => {
-                if (result.code == "0") {
-                    if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
-                        this.setState({
-                            data: update(this.state.data, { [this.state.modifyIndex]: { $merge: this.state.form } })
-                        })
-                        message.success('修改成功', 5);
+        if (this.state.form.name == '') {
+            this.setState({
+                error1: '请填写员工姓名'
+            })
+        }
+        if (this.state.form.gender == '') {
+            this.setState({
+                error2: '请选择性别'
+            })
+        }
+        if (this.state.form.phone == '') {
+            this.setState({
+                error3: '请输入手机号'
+            })
+        }
+        if (this.state.form.position == '') {
+            this.setState({
+                error4: '请输入职位'
+            })
+        }
+        if (this.state.form.name !== '' && this.state.form.gender !== '' && this.state.form.phone !== '' && this.state.form.position !== '') {
+            $.ajax({
+                url: 'api/staff/' + this.state.modalstate,
+                type: 'post',
+                dataType: 'json',
+                data: obj,
+                success: (result) => {
+                    if (result.code == "0") {
+                        if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
+                            this.setState({
+                                data: update(this.state.data, { [this.state.modifyIndex]: { $merge: this.state.form } }),
+                                visible: false,
+                                form: {
+                                    id: '',
+                                    name: '',
+                                    gender: '',
+                                    phone: '',
+                                    position: '',
+                                    level: '',
+                                    comment: ''
+                                }
+                            })
+                            message.success('修改成功', 5);
+                        } else {
+                            result.data.key = result.data.id
+                            this.setState({
+                                data: update(this.state.data, { $push: [result.data] }),
+                                visible: false,
+                                form: {
+                                    id: '',
+                                    name: '',
+                                    gender: '',
+                                    phone: '',
+                                    position: '',
+                                    level: '',
+                                    comment: ''
+                                }
+                            })
+                            message.success('增加成功', 5)
+                        }
                     } else {
-                        result.data.key = result.data.id
+                        message.error(result.msg, 5);
                         this.setState({
-                            data: update(this.state.data, { $push: [result.data] })
+                            visible: false,
+                            form: {
+                                id: '',
+                                name: '',
+                                gender: '',
+                                phone: '',
+                                position: '',
+                                level: '',
+                                comment: ''
+                            }
                         })
-                        message.success('增加成功', 5)
                     }
-                } else {
-                    message.error(result.msg, 5);
                 }
-            }
-        })
-        this.setState({
-            visible: false,
-        });
+            })
+        }
     }
 
     handleTableChange = (pagination) => {
@@ -190,6 +245,19 @@ class StaffManage extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                name: '',
+                gender: '',
+                phone: '',
+                position: '',
+                level: '',
+                comment: ''
+            },
+            error1: '',
+            error2: '',
+            error3: '',
+            error4: ''
         });
     }
     modifyInfo = (record, index) => {
@@ -209,10 +277,10 @@ class StaffManage extends React.Component {
         })
     }
 
-    PreFixInterge=(num,n)=>{  
-  //num代表传入的数字，n代表要保留的字符的长度  
-         return (Array(n).join(0)+num).slice(-n);  
-    }  
+    PreFixInterge = (num, n) => {
+        //num代表传入的数字，n代表要保留的字符的长度  
+        return (Array(n).join(0) + num).slice(-n);
+    }
     render() {
         const positionOptions = this.state.positionOptions.map((item, index) => {
             return <Option key={index} value={item}>{item}</Option>
@@ -231,7 +299,7 @@ class StaffManage extends React.Component {
                 dataIndex: 'id',
                 key: 'id',
                 render: (text, record, index) => {
-                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{this.PreFixInterge(text,3)}</Link></span>
+                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{this.PreFixInterge(text, 3)}</Link></span>
                 }
             }, {
                 title: '员工姓名',
@@ -268,7 +336,7 @@ class StaffManage extends React.Component {
                 render: (text, record, index) => {
                     return <span>
 
-                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{marginRight:'15px'}}>修改</a></span>
+                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{ marginRight: '15px' }}>修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -310,7 +378,7 @@ class StaffManage extends React.Component {
                                 <Button type="primary" onClick={() => { this.queryStaff(1, 10) }}>查询</Button>
                             </Col>
                             <Modal
-                                title="新增员工"
+                                title={this.state.modalstate == 'modify' ? '修改员工' : '新增员工'}
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
@@ -321,6 +389,7 @@ class StaffManage extends React.Component {
                                     </Col>
                                     <Col span={8}>
                                         <Input value={this.state.form.name} onChange={(e) => this.setFormData('name', e.target.value)} />
+                                        <span style={{ color: 'red' }}>{this.state.error1}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -332,6 +401,7 @@ class StaffManage extends React.Component {
                                             <Radio value={'男'}>男</Radio>
                                             <Radio value={'女'}>女</Radio>
                                         </RadioGroup>
+                                        <div style={{ color: 'red' }}>{this.state.error2}</div>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -340,6 +410,7 @@ class StaffManage extends React.Component {
                                     </Col>
                                     <Col span={8}>
                                         <Input value={this.state.form.phone} onChange={(e) => this.setFormData('phone', e.target.value)} />
+                                        <span style={{ color: 'red' }}>{this.state.error3}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area1">
@@ -359,6 +430,7 @@ class StaffManage extends React.Component {
                                         >
                                             {positionOptions}
                                         </Select>
+                                        <span style={{ color: 'red' }}>{this.state.error4}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area">
