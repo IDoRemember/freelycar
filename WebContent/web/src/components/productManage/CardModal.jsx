@@ -407,7 +407,7 @@ class CardModal extends React.Component {
                             label="卡类名称"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.state.form.name} />
+                            <Input style={{ width: 120 }} onChange={(e) => { this.handleChange('name', e.target.value) }} value={this.state.form.name} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
@@ -424,21 +424,21 @@ class CardModal extends React.Component {
                             label="售卡金额"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.state.form.price} />
+                            <Input style={{ width: 120 }} onChange={(e) => { this.handleChange('price', e.target.value) }} value={this.state.form.price} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="有效期(年)"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.state.form.validTime} />
+                            <Input style={{ width: 120 }} onChange={(e) => { this.handleChange('validTime', e.target.value) }} value={this.state.form.validTime} />
                         </FormItem>
                         <FormItem
                             {...formItemLayout}
                             label="备注"
                             hasFeedback
                         >
-                            <Input onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.state.form.comment} />
+                            <Input style={{ width: 120 }} onChange={(e) => { this.handleChange('comment', e.target.value) }} value={this.state.form.comment} />
                         </FormItem>
                     </Form>
                     <Row style={{ marginBottom: '10px' }}>
