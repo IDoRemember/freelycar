@@ -2,6 +2,8 @@ import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx'
 import $ from 'jquery'
 import update from 'immutability-helper'
+import PreFixInterge from '../../utils/PreFixInterge.js'
+
 import { Row, Col, Card, Button, Radio, DatePicker, Table, Input, Select, Icon, Modal, Popconfirm, message, Switch } from 'antd';
 const Option = Select.Option;
 const { RangePicker } = DatePicker,
@@ -157,7 +159,7 @@ class AccountManage extends React.Component {
                                 <div style={{ marginBottom: 16 }}>
                                     员工工号：
                                     <span>
-                                        {this.state.form.id}
+                                        {PreFixInterge(this.state.form.id,3)}
                                     </span>
                                 </div>
                             </Col>

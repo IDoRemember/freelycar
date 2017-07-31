@@ -146,7 +146,7 @@ class CustomerInfo extends React.Component {
                     </Col>
                     <Col span={8} >
                         停车位置：
-                        <Input style={{ width: '100px' }} onChange={(e) => { this.handleValueChange('parkingLocation', e.target.value) }} />
+                        <Input style={{ width: '152px' }} onChange={(e) => { this.handleValueChange('parkingLocation', e.target.value) }} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -162,7 +162,7 @@ class CustomerInfo extends React.Component {
                         <span style={{ marginLeft: '-8px', color: 'red', marginRight: '2px' }}>*</span>
                         接车人员：
                           <Select
-                            style={{ width: '100px' }}
+                            style={{ width: '152px' }}
                             onChange={(value) => this.handleValueChange('pickCarStaff', { id: value })}
                             dropdownStyle={{ overflow: 'scroll' }}
                         >
