@@ -30,7 +30,7 @@ class ModifyClient extends React.Component {
 
             },
             cars: [],
-            cards:[],
+            cards: [],
 
         }
     }
@@ -66,7 +66,7 @@ class ModifyClient extends React.Component {
                     console.log(res)
                     var obj = res.client;
                     let car = [];
-                    var cards=obj.cards
+                    var cards = obj.cards
                     // let cardItem=[];
                     // obj.cards.map((item,index)=>{
                     //         item.expirationDate=new Date(item.expirationDate),
@@ -91,7 +91,7 @@ class ModifyClient extends React.Component {
                     this.setState({
                         cars: car,
                         // cards:cardItem
-                        cards:cards
+                        cards: cards
                     })
 
                     let clientInfo = {
@@ -100,7 +100,7 @@ class ModifyClient extends React.Component {
                         idNumber: obj.idNumber,
                         gender: obj.gender,
                         phone: obj.phone,
-                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) :"",
+                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) : "",
                         driverLicense: obj.driverLicense,
                         recommendName: obj.recommendName,
                         points: obj.points,
@@ -122,7 +122,7 @@ class ModifyClient extends React.Component {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({
-                id:this.props.params.id,
+                id: this.props.params.id,
                 name: forms.name,
                 age: forms.age,
                 idNumber: forms.idNumber,
@@ -130,11 +130,11 @@ class ModifyClient extends React.Component {
                 gender: forms.gender,
                 phone: forms.phone,
                 //时间选择
-                birthday:new Date(forms.birthday),
-                driverLicense:forms.driverLicense,
-                recommendName:forms.recommendName,
-                cars:this.state.cars,
-                cards:this.state.cards
+                birthday: new Date(forms.birthday),
+                driverLicense: forms.driverLicense,
+                recommendName: forms.recommendName,
+                cars: this.state.cars,
+                cards: this.state.cards
                 // cars: [{
                 //     //select选择
                 //     type: {
@@ -225,9 +225,35 @@ class ModifyClient extends React.Component {
             cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
         })
     }
-     birthdayonChange = (key, value) => {
+    insuranceStarttimeonChange = (key, time, index) => {
+        console.log(this.state.cars[index])
+        console.log(new Date(time).getTime() + 1)
+        console.log((this.state.cars[index].insuranceEndtime))
+
+        // let end = this.state.cars[index].insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.cars[index].insuranceEndtime).getTime())
+        // console.log(end)
+        // if (new Date(time).getTime() > end) {
+        //     message.warning("截止时间必须大于开始时间")
+        // } else {
+        //     this.setState({
+        //         cars: update(this.state.cars[index], { insuranceStarttime: { $set: new Date(time) } })
+        //     })
+        // }
+    }
+    insuranceEndtimeonChange = (key, time, index) => {
+        let start = this.state.cars[index].insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.cars[index].insuranceStarttime).getTime())
+        if (new Date(time).getTime() < start) {
+            console.log("false")
+            message.warning("截止时间必须大于开始时间")
+        } else {
+            this.setState({
+                cars: update(this.state.cars[index], { insuranceEndtime: { $set: new Date(time) } })
+            })
+        }
+    }
+    birthdayonChange = (key, value) => {
         this.setState({
-            form: update(this.state.form,  { [key]: { $set: value } } )
+            form: update(this.state.form, { [key]: { $set: value } })
         })
     }
     render() {
@@ -255,8 +281,7 @@ class ModifyClient extends React.Component {
                         </div>
                     </Col>
                     <Col span={8}>保险开始日期:
-                            <DatePicker onChange={(time) => this.carInfoChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
-                           
+                            <DatePicker onChange={(time) => this.insuranceStarttimeonChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
                         />
                     </Col>
                 </Row>
@@ -265,8 +290,8 @@ class ModifyClient extends React.Component {
                         <span style={{ marginLeft: '10px' }}>{item.type.type}</span>
                     </Col>
                     <Col span={8} >保险截止日期:
-                            <DatePicker onChange={(time) => this.carInfoChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
-            
+                            <DatePicker onChange={(time) => this.insuranceEndtimeonChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
+
                         />
                     </Col>
                 </Row>
@@ -276,7 +301,7 @@ class ModifyClient extends React.Component {
                         {/* <Input style={{ width: '150px', marginLeft: '2px' }} value={item.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} /> */}
                     </Col>
                     <Col span={8} >保险金额：
-                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('insuranceAmount', e.target.value,index)} />
+                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('insuranceAmount', e.target.value, index)} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -331,9 +356,9 @@ class ModifyClient extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
                         <Col span={8} offset={4} id="birthday"><span >生日：</span>
-                             <DatePicker onChange={(time) => this.birthdayonChange('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
+                            <DatePicker onChange={(time) => this.birthdayonChange('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
                                 getCalendarContainer={() => document.getElementById('birthday')}
-                            /> 
+                            />
 
                         </Col>
                         <Col span={8}>身份证号:

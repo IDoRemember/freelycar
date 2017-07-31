@@ -517,12 +517,26 @@ class ClientDetail extends React.Component {
     }
 
     insuranceStarttimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceStarttime = new Date(time);
+        let end = this.state.form.insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.form.insuranceEndtime).getTime())
+      console.log(end)
+        if (new Date(time).getTime() > end) {
+            message.warning("截止时间必须大于开始时间")
+        } else {
+            this.setState({
+                form: update(this.state.form, { insuranceStarttime: { $set: new Date(time) } })
+            })
+        }    
     }
     insuranceEndtimeonChange = (time) => {
-        console.log(time);
-        this.state.form.insuranceEndtime = new Date(time);
+         let start = this.state.form.insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.form.insuranceStarttime).getTime())
+        if (new Date(time).getTime() < start) {
+            console.log("false")
+            message.warning("截止时间必须大于开始时间")
+        } else {
+            this.setState({
+                form: update(this.state.form, { insuranceEndtime: { $set: new Date(time) } })
+            })
+        }
     }
     licensetimeonChange = (time) => {
         console.log(time);
@@ -532,6 +546,7 @@ class ClientDetail extends React.Component {
         this.setState({
             form: update(this.state.form, { [key]: { $set: value } })
         })
+        console.log(this.state.form.insuranceStarttime)
     }
     isnewcar = (e) => {
         console.log(e.target.value);
@@ -679,8 +694,6 @@ class ClientDetail extends React.Component {
                         <Col span={10}>保险截止日期:
                             <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
                         </Col>
-
-
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                         <Col span={3}></Col>

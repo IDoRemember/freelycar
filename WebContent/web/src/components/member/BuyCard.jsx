@@ -15,6 +15,7 @@ class BuyCard extends React.Component {
         super(props)
         this.state = {
             id: '',
+            isPop: false,
             option: [],
             adminList: [],
             cardList: [],
@@ -57,7 +58,7 @@ class BuyCard extends React.Component {
             carId: '',
             payMethod: '',
             visible: false,
-            modifyData:{}
+            modifyData: {}
         }
     }
 
@@ -71,6 +72,18 @@ class BuyCard extends React.Component {
         this.getCarBrand();
         this.getService();
         this.getStaff();
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
+    }
+    routerWillLeave = (nextLocation) => {
+        console.log(this.state.isPop)
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
     }
     getService = () => {
         $.ajax({
@@ -135,6 +148,7 @@ class BuyCard extends React.Component {
                     cardtype = "组合卡";
                 }
                 this.setState({
+                    isPop:true,
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
                     cardtype: cardtype,
@@ -153,7 +167,7 @@ class BuyCard extends React.Component {
             })
             return false;
         } else {
-             this.setState({
+            this.setState({
                 phoneclassName: "hidden"
             })
             return true;
@@ -170,7 +184,7 @@ class BuyCard extends React.Component {
             return false
         } else {
             this.setState({
-                 licensePlateClassName: "hidden"
+                licensePlateClassName: "hidden"
             })
             return true;
         }
@@ -179,43 +193,43 @@ class BuyCard extends React.Component {
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
                 let clientInfos = this.state.clientInfo;
-            if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
-                $.ajax({
-                    type: 'post',
-                    url: 'api/client/add',
-                    datatype: 'json',
-                    contentType: 'application/json;charset=utf-8',
-                    data: JSON.stringify({
-                        name: clientInfos.name,
-                        phone: clientInfos.phone,
-                        gender: clientInfos.gender,
-                        recommendName: clientInfos.recommendName,
-                        cars: [{
-                            //select选择
-                            type: {
-                                id: this.state.carId,
+                if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
+                    $.ajax({
+                        type: 'post',
+                        url: 'api/client/add',
+                        datatype: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        data: JSON.stringify({
+                            name: clientInfos.name,
+                            phone: clientInfos.phone,
+                            gender: clientInfos.gender,
+                            recommendName: clientInfos.recommendName,
+                            cars: [{
+                                //select选择
+                                type: {
+                                    id: this.state.carId,
 
-                            },
-                            licensePlate: clientInfos.licensePlate,
-                        }]
-                    }),
-                    success: (res) => {
-                        if (res.code == "0") {
-                            this.setState({
-                                clientId: res.data.id,
-                                haveClient: true
-                            });
-                            message.success("保存成功")
-                        } else {
-                            message.error(res.msg)
+                                },
+                                licensePlate: clientInfos.licensePlate,
+                            }]
+                        }),
+                        success: (res) => {
+                            if (res.code == "0") {
+                                this.setState({
+                                    clientId: res.data.id,
+                                    haveClient: true
+                                });
+                                message.success("保存成功")
+                            } else {
+                                message.error(res.msg)
+                            }
                         }
-                    }
-                })
-            } else {
-                message.error("请把必填信息补充完整！")
+                    })
+                } else {
+                    message.error("请把必填信息补充完整！")
+                }
             }
-            }
-            
+
         }
 
 
@@ -299,7 +313,8 @@ class BuyCard extends React.Component {
 
     onValueChange = (key, value) => {
         this.setState({
-            clientInfo: update(this.state.clientInfo, { [key]: { $set: value } })
+            clientInfo: update(this.state.clientInfo, { [key]: { $set: value } }),
+            isPop:true,
         })
     }
 
@@ -365,7 +380,7 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.phoneclassName}>手机号码格式有误</span>
                         </Col>
-                        <Col span={8} ><span style={{ color: "red",marginLeft:"-5px" }}>*</span>车牌号：
+                        <Col span={8} ><span style={{ color: "red", marginLeft: "-5px" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.licensePlateClassName}>车牌号格式有误</span>
                         </Col>
@@ -469,7 +484,7 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData = {this.state.modifyData}
+                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData={this.state.modifyData}
                     onCancel={this.handleCancel}>
                 </CardModal>
                 <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={() => this.SaveCard()}>办理</Button>
