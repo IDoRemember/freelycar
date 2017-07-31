@@ -163,7 +163,6 @@ class BeautyOrder extends React.Component {
                 let code = res.code;
                 if (code == '0') {
                     let programItem = [];//表格显示的数据
-                    programItem.push(<Option key='-1'>全部</Option>);
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
                         let obj = arr[i];
@@ -634,6 +633,7 @@ class BeautyOrder extends React.Component {
                                                 style={{ width: '140px' }}
                                                 onChange={(e) => this.setState({ progId: e })}
                                             >
+                                                <Option key='-1'>全部</Option>
                                                 {this.state.programItem}
                                             </Select>
                                         </div>

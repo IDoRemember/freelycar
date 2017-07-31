@@ -193,6 +193,7 @@ class BuyCard extends React.Component {
         }
     }
     SaveClient = () => {
+      
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
                 let clientInfos = this.state.clientInfo;
@@ -219,6 +220,7 @@ class BuyCard extends React.Component {
                         success: (res) => {
                             if (res.code == "0") {
                                 this.setState({
+                                   
                                     clientId: res.data.id,
                                     haveClient: true
                                 });
@@ -252,6 +254,9 @@ class BuyCard extends React.Component {
     SaveCard = () => {
         // var uid = localStorage.getItem('useId')
         // console.log(uid)
+          this.setState({
+             isPop:false,
+        })
         console.log(this.state.serviceId)
         if (this.state.serviceId){
             if (this.state.haveClient == true) {

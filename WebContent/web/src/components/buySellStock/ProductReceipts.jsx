@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Table,message, Row, Col, Popconfirm, DatePicker } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Table, message, Row, Col, Popconfirm, DatePicker } from 'antd';
 import { Link } from 'react-router';
 import moment from 'moment';
 import $ from 'jquery'
@@ -21,16 +21,16 @@ class PutInStorage extends React.Component {
         }
     }
     componentDidMount() {
-        this.getList(1, 10)
+        this.queryList(this.state.orderNumber, this.state.orderMaker, 1, 10)
         this.getAdminList()
     }
 
-    componentWillReceiveProps(){
-        this.getList(1,10);
+    componentWillReceiveProps() {
+        this.queryList(this.state.orderNumber, this.state.orderMaker, 1, 10)
 
     }
 
-    
+
     getAdminList = () => {
         $.ajax({
             url: 'api/admin/list',
@@ -47,41 +47,14 @@ class PutInStorage extends React.Component {
             }
         })
     }
-    getList = (page, number) => {
-        $.ajax({
-            url: 'api/inventory/listorder',
-            data: {
-                page: page,
-                number: number
-            },
-            success: (result) => {
-                if (result.code == "0") {
-                    let data = result.data
-                    for (let item of data) {
-                        item['key'] = item.id
-                    }
-                    if (data[data.length - 1]['key']) {
-                        this.setState({
-                            data: data,
-                            pagination: { total: result.realSize },
-                        })
-                    }
-                } else if (result.code == "2") {
-                    this.setState({
-                        data: [],
-                        pagination: { total: 0 }
-                    })
-                }
-            }
-        })
-    }
+
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
         this.setState({
             pagination: pager
         })
-        this.getList(pagination.current, 10)
+        this.queryList(this.state.orderNumber, this.state.orderMaker, pagination.current, 10)
     }
     onDelete = (id) => {
         $.ajax({
@@ -127,12 +100,14 @@ class PutInStorage extends React.Component {
                     }
                     this.setState({
                         data: data,
-                        pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
+                        pagination: { total: result.realSize }
+
                     });
-                } else if(result.code == '2') { 
+                } else {
                     message.error(result.msg)
                     this.setState({
-                        data:[]
+                        data: [],
+                        pagination: { total: 0 }
                     })
                 }
             }
@@ -223,6 +198,7 @@ class PutInStorage extends React.Component {
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
                             >
+                                <Option key="-1" >全部</Option>
                                 {adminList}
                             </Select>
                         </div>

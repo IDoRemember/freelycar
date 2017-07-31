@@ -121,7 +121,7 @@ public class ChargeService {
 		if(startTime != null){
 				Calendar cal1 = Calendar.getInstance();
 				cal1.setTimeInMillis(startTime.getTime());
-				cal1.set(Calendar.HOUR, 0);
+				cal1.set(Calendar.HOUR_OF_DAY, 0);
 				cal1.set(Calendar.MINUTE, 0);
 				cal1.set(Calendar.SECOND, 0);
 				start = sdf.format(cal1.getTime());
@@ -129,7 +129,7 @@ public class ChargeService {
 		if(endTime != null){
 				Calendar cal2 = Calendar.getInstance();
 				cal2.setTimeInMillis(endTime.getTime());
-				cal2.set(Calendar.HOUR, 0);
+				cal2.set(Calendar.HOUR_OF_DAY, 0);
 				cal2.set(Calendar.MINUTE, 0);
 				cal2.set(Calendar.SECOND, 0);
 				cal2.add(Calendar.DAY_OF_MONTH, 1);
