@@ -64,40 +64,17 @@ class ModalTable extends React.Component {
     //     };
     // }
     onChange = (value) => {
-        console.log(value);
     }
     onDelete = (index) => {
         const dataSource = [...this.state.dataSource];
         dataSource.splice(index, 1);
         this.setState({ dataSource });
     }
-    // handleAdd = () => {
-    //     const { count, dataSource } = this.state;
-    //     const newData = {
-    //         key: count,
-    //         name: `Edward King ${count}`,
-    //         age: 32,
-    //         address: `London, Park Lane no. ${count}`,
-    //     };
-    //     console.log(count)
-    //     this.setState({
-    //         dataSource: [...dataSource, newData],
-    //         count: count + 1,
-    //     });
-    // }
-
+ 
 
     render() {
-      //  const { dataSource } = this.state;
         const columns = this.columns;
-            // const rowSelection = {
-            //     onChange: (selectedRowKeys, selectedRows) => {
-            //         console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            //     },
-            //     getCheckboxProps: record => ({
-            //         disabled: record.name === 'Disabled User',    // Column configuration not to be checked
-            //     }),
-            // };
+
         return (
             <div>
                 <Table bordered size="small" pagination={false} dataSource={this.state.dataSource}  columns={columns}  />

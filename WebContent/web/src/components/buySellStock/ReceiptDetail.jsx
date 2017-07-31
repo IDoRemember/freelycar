@@ -22,7 +22,6 @@ class PutInStorage extends React.Component {
                 inventoryOrderId: this.props.params.receiptId
             },
             success: (result) => {
-                console.log(result)
                 let data = result.data.inventoryInfos
                 for (let item of data) {
                     item['key'] = item.id

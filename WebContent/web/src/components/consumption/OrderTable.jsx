@@ -30,8 +30,6 @@ class OrderTable extends React.Component {
     componentWillReceiveProps(newProps) {
         this.setState({
             data: newProps.data
-        }, () => {
-            console.log(this.state.data)
         })
     }
 

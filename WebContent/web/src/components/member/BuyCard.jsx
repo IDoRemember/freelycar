@@ -62,7 +62,6 @@ class BuyCard extends React.Component {
     }
 
     onChange = (e) => {
-        console.log("radio change", e.target.value);
         this.setState({
             value: e.target.value,
         });
@@ -111,14 +110,12 @@ class BuyCard extends React.Component {
         });
     }
     TypehandleChange = (value) => {
-        console.log(`selected ${value}`);
         this.setState({
             typeId: value
         })
     }
     CardhandleChange = (value) => {
-        console.log(value)
-        console.log(`selected ${value}`)
+  
         $.ajax({
             url: 'api/service/query',
             type: 'GET',

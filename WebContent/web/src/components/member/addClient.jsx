@@ -212,9 +212,6 @@ class AddClient extends React.Component {
         this.state.form.birthday = new Date(time);
     }
     insuranceStarttimeonChange = (time) => {
-        // let earlyTime=new Date(1988,08,02,00,00,00);
-        // console.log(earlyTime)
-
         let end = this.state.form.insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.form.insuranceEndtime).getTime())
       console.log(end)
         if (new Date(time).getTime() > end) {
@@ -223,28 +220,18 @@ class AddClient extends React.Component {
             this.setState({
                 form: update(this.state.form, { insuranceStarttime: { $set: new Date(time) } })
             })
-        }
-        // this.setState({
-        //     form: { insuranceStarttime: new Date(time) }
-        // })
+        }    
     }
     insuranceEndtimeonChange = (time) => {
-      //  let start = this.state.form.insuranceStarttime
          let start = this.state.form.insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.form.insuranceStarttime).getTime())
         if (new Date(time).getTime() < start) {
             console.log("false")
-            // this.setState({
-            //     form: { insuranceEndtime: new Date(time) }
-            // })
             message.warning("截止时间必须大于开始时间")
         } else {
             this.setState({
                 form: update(this.state.form, { insuranceEndtime: { $set: new Date(time) } })
-
             })
         }
-
-
     }
     licensetimeonChange = (time) => {
         console.log(time);
