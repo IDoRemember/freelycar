@@ -282,7 +282,6 @@ class BeautyDetail extends React.Component {
                     }
                     inventoryList.push(inventoryItem)
                 }
-                console.log(obj.payState)
                 this.setState({
                     inventoryData: inventoryList,
                     totalPrice: totalPrice,

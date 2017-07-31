@@ -34,7 +34,6 @@ class PutInStorage extends React.Component {
                         options: result.data
                     })
                 }
-                console.log(result)
             }
         })
     }
@@ -50,7 +49,6 @@ class PutInStorage extends React.Component {
         })
     }
     handleOk = (data) => {
-        console.log(data)
         data.map((item,index)=>{
             item.price = null
         })
@@ -103,7 +101,6 @@ class PutInStorage extends React.Component {
         }
         if (this.state.error == '') {
             let instockArray = []
-            //console.log(this.state.data)
             let inv = this.state.data;
             for (let item of inv) {
                 item.inventoryId = item.id;
@@ -131,12 +128,9 @@ class PutInStorage extends React.Component {
                             data: []
                         })
                     }
-                    console.log(result)
                 }
             })
         }
-        console.log(this.state.data)
-
     }
     render() {
         let totalPrice = 0, disabled = true, oneDisabled = 0, plateOptions

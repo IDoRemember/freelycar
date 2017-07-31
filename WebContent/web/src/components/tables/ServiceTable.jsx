@@ -84,7 +84,6 @@ class ServiceTable extends React.Component {
         }, () => {
             this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
         })
-
     }
     onDelete = (index) => {
         this.props.pushInventory([], this.state.data[index].id)
@@ -199,9 +198,6 @@ class ServiceTable extends React.Component {
                             }
 
                         }) : []
-
-
-                        console.log()
                         cardOptions = cards.map((item, index) => {
                             let projectInfos = []
                             for (let projectItem of item.projectInfos) {
