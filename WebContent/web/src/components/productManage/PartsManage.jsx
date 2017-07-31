@@ -292,6 +292,11 @@ class BeautyOrder extends React.Component {
     handleCancel2 = (e) => {
         this.setState({
             visible2: false,
+            form2: {
+                typeName: '',
+                comment: '',
+                name: ''
+            }
         });
     }
 
@@ -324,6 +329,11 @@ class BeautyOrder extends React.Component {
                     this.setState({
                         data: [...this.state.data, obj],
                         visible2: false,
+                        form2: {
+                            typeName: '',
+                            comment: '',
+                            name: ''
+                        }
                     });
                 }
             }
@@ -339,6 +349,11 @@ class BeautyOrder extends React.Component {
     showModal3 = () => {
         this.setState({
             visible3: true,
+            form2: {
+                typeName: '',
+                comment: '',
+                name: ''
+            }
         });
     }
     handleOk3 = (e) => {
@@ -347,7 +362,6 @@ class BeautyOrder extends React.Component {
         obj.name = form.name;
         obj.comment = form.comment;
 
-        //check require
         if (form.name == '') {
             message.warn('品牌名称必填项');
             return false;
@@ -364,6 +378,11 @@ class BeautyOrder extends React.Component {
                     this.setState({
                         data: [...this.state.data, obj],
                         visible3: false,
+                        form2: {
+                            typeName: '',
+                            comment: '',
+                            name: ''
+                        }
                     });
                 }
             }
@@ -788,7 +807,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
-                                        width='50%' >
+                                        width='30%' >
 
                                         <Form onSubmit={this.handleSubmit} className="login-form">
                                             <FormItem
@@ -880,10 +899,10 @@ class BeautyOrder extends React.Component {
                                 <Row>
                                     <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
-                                            配件类别：<Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
+                                            配件类别：<Input style={{ width: '120px' }} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
-                                    <Col  span={2} offset={1}>
+                                    <Col span={2} offset={1}>
                                         <Button type="primary" onClick={this.queryData2}>查询</Button>
                                     </Col>
                                 </Row>
@@ -948,7 +967,7 @@ class BeautyOrder extends React.Component {
                                     <Col span={5}>
                                         <div style={{ marginBottom: 16 }}>
                                             配件品牌：
-                                            <Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />
+                                            <Input style={{ width: '120px' }} onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />
                                         </div>
                                     </Col>
 
@@ -973,7 +992,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible3}
                                         onOk={this.handleOk3}
                                         onCancel={this.handleCancel3}
-                                        width='50%' >
+                                        width='30%' >
 
                                         <Form onSubmit={this.handleSubmit} className="login-form">
                                             <FormItem

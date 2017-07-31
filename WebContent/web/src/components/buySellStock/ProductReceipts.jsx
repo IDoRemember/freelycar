@@ -88,7 +88,7 @@ class PutInStorage extends React.Component {
             data: {
                 inventoryOrderId: inventoryOrderId,
                 adminId: adminId,
-                type:0,
+                type:1,
                 page: page,
                 number: number
             },
