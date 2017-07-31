@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Row, Col, DatePicker, Radio } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Row, Col, DatePicker, Radio, message } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper';
 import $ from 'jquery';
@@ -193,7 +193,13 @@ class ModifyClient extends React.Component {
             type: typelist
         })
     }
-
+    // insuranceEndtimeonChange=(key,time,index)=>{
+    //     ths
+    //     this.state.form.insuranceStarttime=new Date(time)
+    // }
+    // insuranceEndtime=(time)=>{
+    //     this.state.form.insuranceEndtime=new Date(time)
+    // }
 
     licensetimeonChange = (time) => {
         this.state.form.licensetime = new Date(time);
@@ -204,33 +210,32 @@ class ModifyClient extends React.Component {
         })
     }
     carInfoChange = (key, value, index) => {
-        this.setState({
-            cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
-        })
-    }
-    insuranceStarttimeonChange = (key, time, index) => {
-        console.log(this.state.cars[index])
-        console.log(new Date(time).getTime() + 1)
-        console.log((this.state.cars[index].insuranceEndtime))
-
-        // let end = this.state.cars[index].insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.cars[index].insuranceEndtime).getTime())
-        // console.log(end)
-        // if (new Date(time).getTime() > end) {
-        //     message.warning("截止时间必须大于开始时间")
-        // } else {
-        //     this.setState({
-        //         cars: update(this.state.cars[index], { insuranceStarttime: { $set: new Date(time) } })
-        //     })
-        // }
-    }
-    insuranceEndtimeonChange = (key, time, index) => {
-        let start = this.state.cars[index].insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.cars[index].insuranceStarttime).getTime())
-        if (new Date(time).getTime() < start) {
-            console.log("false")
-            message.warning("截止时间必须大于开始时间")
+        if(key=='insuranceStarttime'){
+            let starttime=new Date(value).getTime();
+            let endtime=(this.state.cars[index].insuranceEndtime)?new Date(this.state.cars[index].insuranceEndtime):(new Date(value).getTime() + 1)
+           if (starttime > endtime) {
+                message.warning("截止时间必须大于开始时间")
+            }else{
+                this.setState({
+                    cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+                })
+            }
+        }
+         else if (key == 'insuranceEndtime') {
+            console.log(new Date(value).getTime())
+            let endtime = new Date(value).getTime();
+            let starttime = (this.state.cars[index].insuranceStarttime) ? new Date(this.state.cars[index].insuranceStarttime) : (new Date(value).getTime() - 1)
+            if (starttime > endtime) {
+                message.warning("截止时间必须大于开始时间")
+            } else {
+                this.setState({
+                    cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+                })
+            }
         } else {
+
             this.setState({
-                cars: update(this.state.cars[index], { insuranceEndtime: { $set: new Date(time) } })
+                cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
             })
         }
     }
@@ -264,7 +269,7 @@ class ModifyClient extends React.Component {
                         </div>
                     </Col>
                     <Col span={8}>保险开始日期:
-                            <DatePicker onChange={(time) => this.insuranceStarttimeonChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
+                            <DatePicker onChange={(time) => this.carInfoChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
                         />
                     </Col>
                 </Row>
@@ -273,7 +278,7 @@ class ModifyClient extends React.Component {
                         <span style={{ marginLeft: '10px' }}>{item.type.type}</span>
                     </Col>
                     <Col span={8} >保险截止日期:
-                            <DatePicker onChange={(time) => this.insuranceEndtimeonChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
+                            <DatePicker onChange={(time) => this.carInfoChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
 
                         />
                     </Col>
