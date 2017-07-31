@@ -83,21 +83,7 @@ class PayHistory extends React.Component {
             queryStart: dateStrings[0],
             queryEnd: dateStrings[1]
         })
-        // localStorage.setItem('datastrings', dateStrings)
-        // if (this.state.mode == 'payrange') {
-        //     $.ajax({
-        //         url: 'api/stat/payrange',
-        //         data: {
-        //             startTime: new Date(dateStrings[0]),
-        //             endTime: new Date(dateStrings[1]),
-        //         },
-        //         success: (result) => {
-        //             if (result.code == "0") {
-        //                 console.log(result)
-        //             }
-        //         }
-        //     })
-        // }
+
     }
 
     loadData = (clientId, startTime, endTime, page, number) => {

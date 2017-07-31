@@ -207,7 +207,6 @@ class IndexPage extends React.Component {
     }
     onSelect = (selectedKeys, info) => {
 
-        // console.log('selected', selectedKeys, info);
     }
     onCheck = (checkedKeys, info) => {
         this.setState({

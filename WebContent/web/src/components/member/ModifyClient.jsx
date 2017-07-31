@@ -49,7 +49,6 @@ class ModifyClient extends React.Component {
 
 
                 })
-                console.log(this.state.option)
             }
         })
     }
@@ -63,7 +62,6 @@ class ModifyClient extends React.Component {
             },
             success: (res) => {
                 if (res.code == '0') {
-                    console.log(res)
                     var obj = res.client;
                     let car = [];
                     var cards=obj.cards
@@ -114,7 +112,6 @@ class ModifyClient extends React.Component {
     }
     //传数据
     saveData = (e) => {
-        //console.log()
         let forms = this.state.form;
         $.ajax({
             type: 'post',
@@ -164,7 +161,6 @@ class ModifyClient extends React.Component {
 
             success: (result) => {
                 if (result.code == "0") {
-                    console.log(result)
                     window.history.go(-1);
                     //  hashHistory.push('/app/member/customer')
                 }
@@ -173,21 +169,18 @@ class ModifyClient extends React.Component {
 
     }
     genderonChange = (e) => {
-        console.log(e.target.value);
         this.setState({
             value: e.target.value,
         });
         this.state.form.gender = e.target.value
     }
     isnewcar = (e) => {
-        console.log(e.target.value);
         this.setState({
             carvalue: e.target.value,
         });
         this.state.form.newCar = e.target.value
     }
     TypehandleChange = (value) => {
-        console.log(`selected ${value}`);
         this.setState({
             typeId: value
         })
@@ -195,24 +188,14 @@ class ModifyClient extends React.Component {
 
     handleChange = (e) => {
         let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist
         })
-        // $.ajax({
-        //     url:'/api/'
-        // })
-
     }
-    //时间选择函数
-    // birthdayonChange = (time) => {
-    //     console.log(time);
-    //     this.state.form.birthday = new Date(time);
-    // }
+
 
     licensetimeonChange = (time) => {
-        console.log(time);
         this.state.form.licensetime = new Date(time);
     }
     onValueChange = (key, value) => {

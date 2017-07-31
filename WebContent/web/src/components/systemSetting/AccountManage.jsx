@@ -60,7 +60,6 @@ class AccountManage extends React.Component {
                 type: type ? 1 : 0
             },
             success: (result) => {
-                console.log(result)
                 if (result.code == "0") {
                     this.setState({
                         data: update(this.state.data, { [index]: { $merge: { current: type } } })
@@ -81,7 +80,6 @@ class AccountManage extends React.Component {
                 this.setState({
                     loading: false
                 })
-                console.log(result)
                 if (result.code == "0") {
                     let datalist = result.data
                     for (let item of datalist) {
@@ -127,7 +125,6 @@ class AccountManage extends React.Component {
     }
 
     setFormData = (key, value) => {
-        console.log(value)
         this.setState({
             form: update(this.state.form, {
                 [key]: {
@@ -138,7 +135,6 @@ class AccountManage extends React.Component {
     }
 
     handleChange = (pagination, filters, sorter) => {
-        console.log('Various parameters', pagination, filters, sorter);
         this.setState({
             filteredInfo: filters,
             sortedInfo: sorter,
@@ -163,7 +159,6 @@ class AccountManage extends React.Component {
                             return account !== obj.account;
                         });
                     }
-                    console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -174,7 +169,6 @@ class AccountManage extends React.Component {
     }
 
     tabCallback = (key) => {
-        console.log(key);
     }
 
     // tab1模态框的处理函数
@@ -263,7 +257,6 @@ class AccountManage extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        console.log(pagination)
         this.setState({
             pagination: pager
         })
@@ -271,13 +264,11 @@ class AccountManage extends React.Component {
     }
 
     handleCancel = (e) => {
-        // console.log(e);
         this.setState({
             visible: false,
         });
     }
     modifyInfo = (record, index) => {
-        console.log(record, index)
         this.setState({
             visible: true,
             modalstate: 'modify',
@@ -359,7 +350,6 @@ class AccountManage extends React.Component {
                 this.setState({
                     selectedIds: selectedIds
                 })
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedIds: ', selectedRows);
             }
         }
         return (
