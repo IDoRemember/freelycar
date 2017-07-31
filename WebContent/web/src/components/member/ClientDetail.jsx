@@ -152,8 +152,8 @@ class ClientDetail extends React.Component {
                 points: '',
                 licensePlate: '',
                 insuranceStarttime: '',
-                insuranceEndtime: '',
-                insuranceAmount: '',
+                insuranceEndtime: "",
+                insuranceAmount: "",
                 frameNumber: '',
                 engineNumber: '',
                 licenseDate: '',
@@ -517,15 +517,17 @@ class ClientDetail extends React.Component {
     }
 
     insuranceStarttimeonChange = (time) => {
-        let end = this.state.form.insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.form.insuranceEndtime).getTime())
-      console.log(end)
-        if (new Date(time).getTime() > end) {
-            message.warning("截止时间必须大于开始时间")
-        } else {
+    //     console.log(new Date(time).getTime());
+    //     console.log(this.state.form.insuranceEndtime)
+    //    // let end = this.state.form.insuranceEndtime == '' ? (new Date(time).getTime() + 1) : ((this.state.form.insuranceEndtime).getTime())
+    //   console.log(end)
+    //     if (new Date(time).getTime() > end) {
+    //         message.warning("截止时间必须大于开始时间")
+    //     } else {
             this.setState({
                 form: update(this.state.form, { insuranceStarttime: { $set: new Date(time) } })
             })
-        }    
+     //   }    
     }
     insuranceEndtimeonChange = (time) => {
          let start = this.state.form.insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.form.insuranceStarttime).getTime())
@@ -683,7 +685,7 @@ class ClientDetail extends React.Component {
                         </Col>
 
                         <Col span={10}>保险开始日期:
-                            <DatePicker onChange={this.insuranceEndtimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
+                            <DatePicker onChange={(value) => this.insuranceStarttimeonChange(value)} style={{ marginLeft: '10px' }} />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -692,7 +694,9 @@ class ClientDetail extends React.Component {
                             <Input style={{ width: '150px', marginLeft: '2px' }} value={this.state.form.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} />
                         </Col>
                         <Col span={10}>保险截止日期:
-                            <DatePicker onChange={this.insuranceStarttimeonChange} style={{ marginLeft: '10px', width: '150px' }} />
+                             <DatePicker onChange={(value) => this.insuranceEndtimeonChange(value)} style={{ marginLeft: '10px' }}
+                               
+                            />
                         </Col>
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '15px' }}>

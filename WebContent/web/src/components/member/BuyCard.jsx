@@ -32,6 +32,7 @@ class BuyCard extends React.Component {
             price: '',
             orderMaker: '',
             serviceId: '',
+            uid: 1,
             clientId: parseInt(this.props.params.id),
             form: {
                 name: '',
@@ -71,6 +72,11 @@ class BuyCard extends React.Component {
         this.getCarBrand();
         this.getService();
         this.getStaff();
+        let uid = localStorage.getItem("userId")
+        console.log(uid)
+        this.setState({
+            orderMaker: uid
+        })
         this.props.router.setRouteLeaveHook(
             this.props.route,
             this.routerWillLeave
@@ -128,7 +134,7 @@ class BuyCard extends React.Component {
         })
     }
     CardhandleChange = (value) => {
-  
+
         $.ajax({
             url: 'api/service/query',
             type: 'GET',
@@ -145,7 +151,7 @@ class BuyCard extends React.Component {
                     cardtype = "组合卡";
                 }
                 this.setState({
-                    isPop:true,
+                    isPop: true,
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
                     cardtype: cardtype,
@@ -238,59 +244,71 @@ class BuyCard extends React.Component {
         this.state.clientInfo.gender = e.target.value
     }
     StaffhandleChange = (value) => {
+
         this.setState({
-            orderMaker: parseInt(value),
+            orderMaker: parseInt(value)
         })
     }
     SaveCard = () => {
-        if (this.state.haveClient == true) {
-            $.ajax({
-                url: 'api/pay/buycard',
-                type: 'POST',
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify({
-                    clientId: this.state.clientId,
-                    card: {
-                        service: {
-                            id: this.state.serviceId
+        // var uid = localStorage.getItem('useId')
+        // console.log(uid)
+        console.log(this.state.serviceId)
+        if (this.state.serviceId){
+            if (this.state.haveClient == true) {
+                $.ajax({
+                    url: 'api/pay/buycard',
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({
+                        clientId: this.state.clientId,
+                        card: {
+                            service: {
+                                id: this.state.serviceId
 
-                        },
-                        orderMaker: { id: this.state.orderMaker },
-                        payMethod: this.state.payMethod,
+                            },
+                            orderMaker: { id: ((this.state.orderMaker == "") ? this.state.uid : this.state.orderMaker) },
+                            payMethod: this.state.payMethod,
+                        }
+                    }),
+                    success: (res) => {
+                        message.success('保存成功!');
+                        hashHistory.push('/app/member/customer')
+
                     }
-                }),
-                success: (res) => {
-                    message.success('保存成功!');
-                    hashHistory.push('/app/member/customer')
+                })
+            } else if (this.props.params.id) {
+                $.ajax({
+                    url: 'api/pay/buycard',
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({
+                        clientId: this.state.clientId,
+                        card: {
+                            service: {
+                                id: this.state.serviceId
 
-                }
-            })
-        } else if (this.props.params.id) {
-            $.ajax({
-                url: 'api/pay/buycard',
-                type: 'POST',
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify({
-                    clientId: this.state.clientId,
-                    card: {
-                        service: {
-                            id: this.state.serviceId
+                            },
+                            orderMaker: { id: this.state.orderMaker },
+                            payMethod: this.state.payMethod,
+                        }
+                    }),
+                    success: (res) => {
+                        message.success('保存成功!');
+                        hashHistory.push('/app/member/customer')
 
-                        },
-                        orderMaker: { id: this.state.orderMaker },
-                        payMethod: this.state.payMethod,
                     }
-                }),
-                success: (res) => {
-                    message.success('保存成功!');
-                    hashHistory.push('/app/member/customer')
+                })
+            } else {
+                message.error('请先保存客户', 1.5);
 
-                }
-            })
-        } else {
-            message.error('请先保存客户', 1.5);
-
+            }
+        }else{
+            
+            message.error("请选择要办理的卡",1.5)
         }
+            
+        
+
     }
 
     getCarBrand = () => {
@@ -311,7 +329,7 @@ class BuyCard extends React.Component {
     onValueChange = (key, value) => {
         this.setState({
             clientInfo: update(this.state.clientInfo, { [key]: { $set: value } }),
-            isPop:true,
+            isPop: true,
         })
     }
 
