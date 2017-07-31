@@ -206,7 +206,7 @@ class OrderManage extends React.Component {
                     <Row gutter={16} style={{ marginBottom: "10px" }}>
                         <Col span={8}>
                             <Button type="primary" onClick={() => this.getQuery(1, 10)}>查询</Button>
-                            <Button type="primary" onClick={() => this.startClear()}>清空</Button>
+                            <Button  onClick={() => this.startClear()}>清空</Button>
                         </Col>
                     </Row>
                 </Card>
