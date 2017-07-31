@@ -126,9 +126,6 @@ class CustomerInfo extends React.Component {
         })
         return <div className="gutter-example" >
             <div style={{ marginBottom: '15px' }}>
-                <div style={{ width: '30%', display: 'inline-block' }}>单据日期：
-                    <span style={{ width: '150px' }}>2017-05-24 15:22:20</span>
-                </div>
                 <div style={{ width: '30%', display: 'inline-block' }}>开单人：
                     <span style={{ width: '150px' }}>小易爱车</span>
                 </div>

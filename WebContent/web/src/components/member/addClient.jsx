@@ -388,7 +388,7 @@ class AddClient extends React.Component {
                     <Button type="primary" style={{ marginRight: '50px' }} size='large' onClick={this.saveData}>
                         保存
                     </Button>
-                    <Button type="primary" size='large'>
+                    <Button  size='large'>
                         <Link to={'app/member/customer'}>取消</Link>
                     </Button>
                 </div>

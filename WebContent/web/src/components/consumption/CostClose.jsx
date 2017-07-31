@@ -109,8 +109,6 @@ class CostClose extends React.Component {
     }
 
     render() {
-
-
         const columns = [
             { title: '项目名称', dataIndex: 'name', key: 'itemName' },
             { title: '项目费用', dataIndex: 'price', key: 'itemFee' },
@@ -226,12 +224,12 @@ class CostClose extends React.Component {
                                 </Row>
 
                                 <Row style={{ marginTop: '30px', marginBottom: '50px' }}>
-                                    <Col xs={2} offset={10}>
+                                    <Col xs={3} offset={10}>
                                         < Button type="primary" onClick={() => { this.confirm() }}>确定</Button>
                                     </Col>
-                                    <Col xs={2}>
+                                    <Col xs={3}>
                                         <Link to="/app/consumption/orderManage">
-                                            < Button type="primary" >挂单</Button>
+                                            < Button >挂单</Button>
                                         </Link>
                                     </Col>
                                 </Row>
