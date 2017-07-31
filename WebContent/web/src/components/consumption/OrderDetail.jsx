@@ -37,9 +37,6 @@ const serviceColumns = [{
     title: '会员卡号',
     dataIndex: 'CardNum',
     key: 'CardNum',
-    render:(text,record,index)=>{
-        return <span>{PreFixInterge(Number(text),5)}</span>
-    }
 }, {
     title: '抵扣卡次',
     dataIndex: 'DeductionCardTime',
@@ -310,7 +307,7 @@ class BeautyDetail extends React.Component {
                         Itemprice: objservice[i].price,
                         price: objservice[i].price,
                         StaffName: staffString.substring(0, staffString.length - 2),
-                        CardNum:objservice[i].cardId?'-':(objservice[i].cardName+'--'+PreFixInterge(Number(objservice[i].cardId),5)),
+                        CardNum:objservice[i].cardId?(objservice[i].cardName+'--'+PreFixInterge(Number(objservice[i].cardId),5)):'-',
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
 
@@ -325,7 +322,7 @@ class BeautyDetail extends React.Component {
                         worktime: objservice[i].referWorkTime,
                         singlePrice: objservice[i].pricePerUnit,
                         singleSummation: objservice[i].price + objservice[i].referWorkTime * objservice[i].pricePerUnit,
-                       CardNum:objservice[i].cardId?'-':(objservice[i].cardName+'--'+PreFixInterge(Number(objservice[i].cardId),5)),
+                       CardNum:objservice[i].cardId?(objservice[i].cardName+'--'+PreFixInterge(Number(objservice[i].cardId),5)):'-',
                         DeductionCardTime: objservice[i].payCardTimes,
                     }
                     serviceList.push(serviceItem);
