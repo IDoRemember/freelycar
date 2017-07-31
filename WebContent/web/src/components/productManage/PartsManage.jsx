@@ -19,7 +19,7 @@ const TabPane = Tabs.TabPane;
 const formItemLayout = {
     labelCol: {
         xs: { span: 24 },
-        sm: { span: 6 }
+        sm: { span: 10 }
     },
     wrapperCol: {
         xs: { span: 24 },
@@ -557,7 +557,6 @@ class BeautyOrder extends React.Component {
                 let code = res.code;
                 if (code == '0') {
                     let typeItem = [];//表格显示的数据
-                    typeItem.push(<Option key='-1'>全部</Option>);
                     let arr = res.data;
                     for (let i = 0, len = arr.length; i < len; i++) {
                         let obj = arr[i];
@@ -763,6 +762,7 @@ class BeautyOrder extends React.Component {
                                             style={{ width: '140px' }}
                                             onChange={(value) => this.setState({ inventoryTypeId: value })}
                                         >
+                                            <Option key='-1'>全部</Option>
                                             {this.state.typeItem}
                                         </Select>
                                     </Col>
@@ -795,7 +795,7 @@ class BeautyOrder extends React.Component {
                                                 {...formItemLayout}
                                                 label="配件名称"
                                             >
-                                                <Input placeholder="" value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
+                                                <Input placeholder="" style={{ width: '120px' }} value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
                                                 <span style={{ color: 'red' }}>{this.state.error1}</span>
                                             </FormItem>
                                             <FormItem
@@ -803,7 +803,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件品牌"
                                             >
                                                 <Select
-                                                    style={{ width: '100%' }}
+                                                    style={{ width: '120px' }}
                                                     value={{ key: this.state.form.brandId }}
                                                     onChange={(value) => this.onValueChange('brand', value)}
                                                     labelInValue
@@ -817,7 +817,7 @@ class BeautyOrder extends React.Component {
                                                 label="所属分类"
                                             >
                                                 <Select
-                                                    style={{ width: '100%' }}
+                                                    style={{ width: '120px' }}
                                                     onChange={(value) => this.onValueChange('type', value)}
                                                     value={{ key: this.state.form.typeId }}
                                                     labelInValue
@@ -830,26 +830,26 @@ class BeautyOrder extends React.Component {
                                                 {...formItemLayout}
                                                 label="规格"
                                             >
-                                                <Input placeholder="" value={this.state.form.standard} onChange={(e) => this.onValueChange('standard', e.target.value)} />
+                                                <Input placeholder="" style={{ width: '120px' }} value={this.state.form.standard} onChange={(e) => this.onValueChange('standard', e.target.value)} />
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
                                                 label="属性"
                                             >
-                                                <Input placeholder="" value={this.state.form.property} onChange={(e) => this.onValueChange('property', e.target.value)} />
+                                                <Input style={{ width: '120px' }} placeholder="" value={this.state.form.property} onChange={(e) => this.onValueChange('property', e.target.value)} />
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
                                                 label="配件价格"
                                             >
-                                                <Input placeholder="" value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
+                                                <Input style={{ width: '120px' }} placeholder="" value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
                                                 <span style={{ color: 'red' }}>{this.state.error4}</span>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
                                                 label="备注"
                                             >
-                                                <Input placeholder="" value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
+                                                <Input style={{ width: '120px' }} placeholder="" value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
                                             </FormItem>
 
                                         </Form>
@@ -878,12 +878,12 @@ class BeautyOrder extends React.Component {
 
                             <div>
                                 <Row>
-                                    <Col span={5}>
+                                    <Col span={4}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input addonBefore="配件名称" onChange={(e) => this.setState({ inventoryName: e.target.value })} />
+                                            配件类别：<Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryName: e.target.value })} />
                                         </div>
                                     </Col>
-                                    <Col span={3}>
+                                    <Col span={2}>
                                         <Button type="primary" onClick={this.queryData2}>查询</Button>
                                     </Col>
                                 </Row>
@@ -945,13 +945,14 @@ class BeautyOrder extends React.Component {
                         <TabPane tab="配件品牌" key="3">
                             <div>
                                 <Row>
-                                    <Col span={4}>
+                                    <Col span={3}>
                                         <div style={{ marginBottom: 16 }}>
-                                            <Input onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />
+                                            配件品牌：
+                                            <Input style={{width:'120px'}} onChange={(e) => this.setState({ inventoryBrandName: e.target.value })} />
                                         </div>
                                     </Col>
 
-                                    <Col span={3} offset={1}>
+                                    <Col span={2} offset={1}>
                                         <Button type="primary" onClick={this.queryData3}>查询</Button>
                                     </Col>
                                 </Row>
