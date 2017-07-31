@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,24 +90,7 @@ public class ClientService {
 	}
 
 	public String modify(Client client) {
-		Client exist = clientDao.findById(client.getId());
-		if(exist == null){
-			return JsonResFactory.buildOrg(RESCODE.NOT_FOUND).toString();
-		}
-		/*if(this.clientDao.findByPhone(client.getPhone()) != null){
-			return JsonResFactory.buildOrg(RESCODE.PHONE_EXIST).toString();
-		}*/
-		exist.setAge(client.getAge());
-		exist.setBirthday(client.getBirthday());
-		exist.setCars(client.getCars());
-		//exist.setCards(client.getCards());
-		exist.setDriverLicense(client.getDriverLicense());
-		exist.setGender(client.getGender());
-		exist.setIdNumber(client.getIdNumber());
-		exist.setName(client.getName());
-		exist.setPhone(client.getPhone());
-		exist.setState(client.getState());
-		clientDao.save(exist);
+		clientDao.save(client);
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
 	}
 

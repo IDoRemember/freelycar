@@ -18,6 +18,7 @@ class PayHistory extends React.Component {
             payData: [],
             queryStart: '',
             queryEnd: '',
+            pagination: {},
             Columns: [
                 {
                     title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
@@ -27,9 +28,9 @@ class PayHistory extends React.Component {
                 { title: '项目', dataIndex: 'maintainItem', key: 'maintainItem' },
                 { title: '消费金额', dataIndex: 'payMoney', key: 'payMoney' },
                 { title: '支付方式', dataIndex: 'payType', key: 'payType' },
-              //  { title: '服务人员', dataIndex: 'servicePeople', key: 'servicePeople' },
+                //  { title: '服务人员', dataIndex: 'servicePeople', key: 'servicePeople' },
                 { title: '服务时间', dataIndex: 'serviceTime', key: 'serviceTime' },
-              //  { title: '状态', dataIndex: 'serviceState', key: 'serviceState' },
+                //  { title: '状态', dataIndex: 'serviceState', key: 'serviceState' },
             ]
         }
     }
@@ -56,6 +57,11 @@ class PayHistory extends React.Component {
             todayEnd.setMinutes(59);
             todayEnd.setSeconds(59)
             this.loadData(this.props.params.id, todayStart, todayEnd, 1, 10)
+
+            this.setState({
+                queryStart: todayStart,
+                queryEnd: todayEnd
+            });
         } else if (key == 2) {
             var MonthStart = new Date();
             var MonthEnd = new Date();
@@ -67,15 +73,24 @@ class PayHistory extends React.Component {
             MonthEnd.setMinutes(59);
             MonthEnd.setSeconds(59);
             this.loadData(this.props.params.id, MonthStart, MonthEnd, 1, 10)
+            this.setState({
+                queryStart: MonthStart,
+                queryEnd: MonthEnd
+            });
 
         } else if (key == 3) {
             var AllStart = new Date(1900, 4, 28, 0, 0, 1);
             var AllEnd = new Date(2500, 4, 28, 0, 0, 1);
             this.loadData(this.props.params.id, AllStart, AllEnd, 1, 10)
+            this.setState({
+                queryStart: AllStart,
+                queryEnd: AllEnd
+            });
+
         }
     }
     queryTime = () => {
-        this.loadData(this.props.params.id, new Date(this.state.queryStart), new Date(this.state.queryEnd), 1, 10)
+        this.loadData(this.props.params.id, new Date(this.state.queryStart), new Date(this.state.queryEnd), 1, 10);
     }
 
     onTimeSelected = (dates, dateStrings) => {
@@ -84,6 +99,11 @@ class PayHistory extends React.Component {
             queryEnd: dateStrings[1]
         })
 
+    }
+
+    handlePageChange = (p) => {
+        console.log(p.current);
+        this.loadData(this.props.params.id, new Date(this.state.queryStart), new Date(this.state.queryEnd), p.current, 10);
     }
 
     loadData = (clientId, startTime, endTime, page, number) => {
@@ -99,11 +119,8 @@ class PayHistory extends React.Component {
             data: jsonData,
             type: 'GET',
             success: (res) => {
+                console.log(res);
                 if (res.code == '0') {
-                    this.setState({
-                        amount: res.amount,
-                    })
-                  //  var objcard=res.client.cards;
                     var objpay = res.data;
                     let paylist = [];
                     for (let k = 0; k < objpay.length; k++) {
@@ -113,7 +130,7 @@ class PayHistory extends React.Component {
                             case 0: paymeth = "现金";
                                 break;
                             case 1: paymeth = "刷卡";
-                                break;    
+                                break;
                             case 2: paymeth = "支付宝";
                                 break;
                             case 3: paymeth = "微信";
@@ -121,7 +138,6 @@ class PayHistory extends React.Component {
                             case 4: paymeth = "易付宝";
                                 break;
                         }
-         //               let servicePeople = objpay[k].programName == "Card" ? objcard[k].orderMaker.name : objpay[k].staffNames;
 
                         let payItem = {
                             key: objpay[k].id,
@@ -129,21 +145,19 @@ class PayHistory extends React.Component {
                             maintainItem: objpay[k].programName,
                             payMoney: objpay[k].amount,
                             payType: paymeth,
-                            // carType: "911",
-                           // servicePeople: servicePeople,
                             serviceTime: objpay[k].payDate,
                             insuranceMoney: objpay[k].amount,
-                          //  serviceState: "完成",
                         }
                         paylist.push(payItem);
-                        if (paylist.length == objpay.length) {
-                            this.setState({
-                                payData: paylist,
-                            })
-                        }
                     }
-                }
-                else if (res.code == "2") {
+
+                    console.log(res.realSize);
+                    this.setState({
+                        amount: res.amount,
+                        payData: paylist,
+                        pagination: { total: res.realSize }
+                    })
+                } else if (res.code == "2") {
                     this.setState({
                         payData: [],
                         amount: 0
@@ -160,13 +174,13 @@ class PayHistory extends React.Component {
                     <TabPane tab="今日" key="1">
                         <Card>
                             <div style={{ marginBottom: '20px', fontSize: '16px' }}>合计消费：<span>{this.state.amount}</span></div>
-                            <Table columns={this.state.Columns} dataSource={this.state.payData} bordered></Table>
+                            <Table columns={this.state.Columns} dataSource={this.state.payData} pagination={this.state.pagination} onChange={(pagination) => this.handlePageChange(pagination)} bordered></Table>
                         </Card>
                     </TabPane>
                     <TabPane tab="本月" key="2">
                         <Card>
                             <div style={{ marginBottom: '20px', fontSize: '16px' }}>合计消费：<span>{this.state.amount}</span></div>
-                            <Table columns={this.state.Columns} dataSource={this.state.payData} bordered></Table>
+                            <Table columns={this.state.Columns} dataSource={this.state.payData} pagination={this.state.pagination} onChange={(pagination) => this.handlePageChange(pagination)} bordered></Table>
                         </Card>
                     </TabPane>
                     <TabPane tab="全部" key="3">
@@ -178,7 +192,14 @@ class PayHistory extends React.Component {
                                 onChange={(dates, dateStrings) => { this.onTimeSelected(dates, dateStrings) }}
                             />
                             <Button type="primary" onClick={this.queryTime} style={{ marginLeft: '10px' }}>查询</Button>
-                            <Table columns={this.state.Columns} dataSource={this.state.payData} style={{ marginTop: '20px' }} bordered></Table>
+                            <Table
+                                columns={this.state.Columns}
+                                dataSource={this.state.payData}
+                                style={{ marginTop: '20px' }}
+                                bordered
+                                pagination={this.state.pagination}
+                                onChange={(pagination) => this.handlePageChange(pagination)}
+                            ></Table>
                         </Card>
                     </TabPane>
                 </Tabs>

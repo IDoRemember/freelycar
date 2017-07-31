@@ -39,6 +39,7 @@ import com.geariot.platform.freelycar.utils.query.InventoryAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryBean;
 import com.geariot.platform.freelycar.utils.query.InventoryBrandAndQueryCreator;
 import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator;
+import com.geariot.platform.freelycar.utils.query.InventoryOrderAndQueryCreator2;
 import com.geariot.platform.freelycar.utils.query.InventoryTypeAndQueryCreator;
 
 import net.sf.json.JSONArray;
@@ -353,6 +354,10 @@ public class InventoryService {
 				+ startTime + "; endTime:" + endTime + ")");
 		int from = (page - 1) * number;
 		String temp = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId, type).createStatement();
+		if(type == "1"){
+			type = "0"; 
+			temp = new InventoryOrderAndQueryCreator2(inventoryOrderId, adminId, type).createStatement();
+		}
 		String andCondition = null;
 		if (startTime != null || endTime != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
