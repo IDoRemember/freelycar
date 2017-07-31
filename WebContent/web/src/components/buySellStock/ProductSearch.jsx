@@ -183,6 +183,7 @@ class ProductSearch extends React.Component {
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
                             >
+                                 <Option key="-1" >全部</Option>
                                 {plateOptions}
                             </Select>
                             <Button onClick={() => this.getList(this.state.tradeName, this.state.category, 1, 10)} type="primary" style={{ marginLeft: '10px' }} size={'large'}>查询</Button>
