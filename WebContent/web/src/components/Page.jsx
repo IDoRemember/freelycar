@@ -13,8 +13,6 @@ class Page extends React.Component {
     componentDidMount() {
         if (!this.state.loginState) {
             hashHistory.push('/login')
-        } else {
-            hashHistory.push('/app')
         }
     }
 

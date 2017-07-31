@@ -189,9 +189,9 @@ class EditableTable extends React.Component {
             render: (text, record, index) => {
                 return (
                     <div>
-                        <a onClick={() => this.showModal('modify', record, index)}>修改</a>
-                        &nbsp;&nbsp;
-                                <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
+                        <a onClick={() => this.showModal('modify', record, index)} style={{marginRight:'15px'}}>修改</a>
+                        
+                        <Popconfirm title="确认要删除吗?" onConfirm={() => this.onDelete([record.key])}>
                             <a href="#">删除</a>
                         </Popconfirm>
                     </div>

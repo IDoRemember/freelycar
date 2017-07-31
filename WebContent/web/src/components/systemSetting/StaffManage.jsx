@@ -268,7 +268,7 @@ class StaffManage extends React.Component {
                 render: (text, record, index) => {
                     return <span>
 
-                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);">修改</a></span>
+                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{marginRight:'15px'}}>修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
