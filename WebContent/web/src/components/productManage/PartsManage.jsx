@@ -906,7 +906,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible2}
                                         onOk={this.handleOk2}
                                         onCancel={this.handleCancel2}
-                                        width='50%' >
+                                        width='30%' >
 
                                         <Form onSubmit={this.handleSubmit} className="login-form">
                                             <FormItem
