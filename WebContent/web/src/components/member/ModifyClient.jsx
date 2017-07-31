@@ -1,6 +1,6 @@
 import React from 'react';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
-import { Card, Button, Input, Select, Menu, Icon, Row, Col, DatePicker, Radio } from 'antd';
+import { Card, Button, Input, Select, Menu, Icon, Row, Col, DatePicker, Radio, message } from 'antd';
 import { Link } from 'react-router';
 import update from 'immutability-helper';
 import $ from 'jquery';
@@ -30,7 +30,7 @@ class ModifyClient extends React.Component {
 
             },
             cars: [],
-            cards:[],
+            cards: [],
 
         }
     }
@@ -64,7 +64,7 @@ class ModifyClient extends React.Component {
                 if (res.code == '0') {
                     var obj = res.client;
                     let car = [];
-                    var cards=obj.cards
+                    var cards = obj.cards
                     // let cardItem=[];
                     // obj.cards.map((item,index)=>{
                     //         item.expirationDate=new Date(item.expirationDate),
@@ -89,7 +89,7 @@ class ModifyClient extends React.Component {
                     this.setState({
                         cars: car,
                         // cards:cardItem
-                        cards:cards
+                        cards: cards
                     })
 
                     let clientInfo = {
@@ -98,7 +98,7 @@ class ModifyClient extends React.Component {
                         idNumber: obj.idNumber,
                         gender: obj.gender,
                         phone: obj.phone,
-                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) :"",
+                        birthday: (obj.birthday) ? (obj.birthday).substring(0, 10) : "",
                         driverLicense: obj.driverLicense,
                         recommendName: obj.recommendName,
                         points: obj.points,
@@ -119,7 +119,7 @@ class ModifyClient extends React.Component {
             dataType: 'json',
             contentType: 'application/json;charset=utf-8',
             data: JSON.stringify({
-                id:this.props.params.id,
+                id: this.props.params.id,
                 name: forms.name,
                 age: forms.age,
                 idNumber: forms.idNumber,
@@ -127,11 +127,11 @@ class ModifyClient extends React.Component {
                 gender: forms.gender,
                 phone: forms.phone,
                 //时间选择
-                birthday:new Date(forms.birthday),
-                driverLicense:forms.driverLicense,
-                recommendName:forms.recommendName,
-                cars:this.state.cars,
-                cards:this.state.cards
+                birthday: new Date(forms.birthday),
+                driverLicense: forms.driverLicense,
+                recommendName: forms.recommendName,
+                cars: this.state.cars,
+                cards: this.state.cards
                 // cars: [{
                 //     //select选择
                 //     type: {
@@ -193,7 +193,13 @@ class ModifyClient extends React.Component {
             type: typelist
         })
     }
-
+    // insuranceEndtimeonChange=(key,time,index)=>{
+    //     ths
+    //     this.state.form.insuranceStarttime=new Date(time)
+    // }
+    // insuranceEndtime=(time)=>{
+    //     this.state.form.insuranceEndtime=new Date(time)
+    // }
 
     licensetimeonChange = (time) => {
         this.state.form.licensetime = new Date(time);
@@ -204,13 +210,38 @@ class ModifyClient extends React.Component {
         })
     }
     carInfoChange = (key, value, index) => {
-        this.setState({
-            cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
-        })
+        if(key=='insuranceStarttime'){
+            let starttime=new Date(value).getTime();
+            let endtime=(this.state.cars[index].insuranceEndtime)?new Date(this.state.cars[index].insuranceEndtime):(new Date(value).getTime() + 1)
+           if (starttime > endtime) {
+                message.warning("截止时间必须大于开始时间")
+            }else{
+                this.setState({
+                    cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+                })
+            }
+        }
+         else if (key == 'insuranceEndtime') {
+            console.log(new Date(value).getTime())
+            let endtime = new Date(value).getTime();
+            let starttime = (this.state.cars[index].insuranceStarttime) ? new Date(this.state.cars[index].insuranceStarttime) : (new Date(value).getTime() - 1)
+            if (starttime > endtime) {
+                message.warning("截止时间必须大于开始时间")
+            } else {
+                this.setState({
+                    cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+                })
+            }
+        } else {
+
+            this.setState({
+                cars: update(this.state.cars, { [index]: { [key]: { $set: value } } })
+            })
+        }
     }
     birthdayonChange = (key, value) => {
         this.setState({
-            form: update(this.state.form,  { [key]: { $set: value } } )
+            form: update(this.state.form, { [key]: { $set: value } })
         })
     }
     render() {
@@ -239,7 +270,6 @@ class ModifyClient extends React.Component {
                     </Col>
                     <Col span={8}>保险开始日期:
                             <DatePicker onChange={(time) => this.carInfoChange('insuranceStarttime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceStarttime}
-                           
                         />
                     </Col>
                 </Row>
@@ -249,7 +279,7 @@ class ModifyClient extends React.Component {
                     </Col>
                     <Col span={8} >保险截止日期:
                             <DatePicker onChange={(time) => this.carInfoChange('insuranceEndtime', time, index)} style={{ marginLeft: '10px' }} placeholder={item.insuranceEndtime}
-            
+
                         />
                     </Col>
                 </Row>
@@ -259,7 +289,7 @@ class ModifyClient extends React.Component {
                         {/* <Input style={{ width: '150px', marginLeft: '2px' }} value={item.lastMiles} onChange={(e) => this.onValueChange('lastMiles', e.target.value)} /> */}
                     </Col>
                     <Col span={8} >保险金额：
-                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('insuranceAmount', e.target.value,index)} />
+                        <Input style={{ width: '140px', marginLeft: '25px' }} value={item.insuranceAmount} onChange={(e) => this.carInfoChange('insuranceAmount', e.target.value, index)} />
                     </Col>
                 </Row>
                 <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -314,9 +344,9 @@ class ModifyClient extends React.Component {
                     </Row>
                     <Row gutter={16} style={{ marginBottom: '12px' }}>
                         <Col span={8} offset={4} id="birthday"><span >生日：</span>
-                             <DatePicker onChange={(time) => this.birthdayonChange('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
+                            <DatePicker onChange={(time) => this.birthdayonChange('birthday', time)} style={{ marginLeft: '15px' }} placeholder={this.state.form.birthday}
                                 getCalendarContainer={() => document.getElementById('birthday')}
-                            /> 
+                            />
 
                         </Col>
                         <Col span={8}>身份证号:

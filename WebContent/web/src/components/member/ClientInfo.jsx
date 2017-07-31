@@ -74,10 +74,10 @@ class ClientInfo extends React.Component {
                                     <span >开卡</span>
                                 </Link>
                                  <Link to={'app/member/modifyclient/' + record.id} >
-                                    <span style={{ marginLeft: '5px' }}>修改</span>
+                                    <span style={{ marginLeft: '15px' }}>修改</span>
                                 </Link>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
-                                    <a href="javascript:void(0);" style={{ marginLeft: '5px' }}>删除</a>
+                                    <a href="javascript:void(0);" style={{ marginLeft: '15px' }}>删除</a>
                                 </Popconfirm>
                             </span>
 

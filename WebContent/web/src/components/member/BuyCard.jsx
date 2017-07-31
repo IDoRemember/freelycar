@@ -15,6 +15,7 @@ class BuyCard extends React.Component {
         super(props)
         this.state = {
             id: '',
+            isPop: false,
             option: [],
             adminList: [],
             cardList: [],
@@ -31,6 +32,7 @@ class BuyCard extends React.Component {
             price: '',
             orderMaker: '',
             serviceId: '',
+            uid: 1,
             clientId: parseInt(this.props.params.id),
             form: {
                 name: '',
@@ -57,7 +59,7 @@ class BuyCard extends React.Component {
             carId: '',
             payMethod: '',
             visible: false,
-            modifyData:{}
+            modifyData: {}
         }
     }
 
@@ -70,6 +72,23 @@ class BuyCard extends React.Component {
         this.getCarBrand();
         this.getService();
         this.getStaff();
+        let uid = localStorage.getItem("userId")
+        console.log(uid)
+        this.setState({
+            orderMaker: uid
+        })
+        this.props.router.setRouteLeaveHook(
+            this.props.route,
+            this.routerWillLeave
+        )
+    }
+    routerWillLeave = (nextLocation) => {
+        console.log(this.state.isPop)
+        if (this.state.isPop) {
+            return '确认要离开？';
+        } else {
+            return;
+        }
     }
     getService = () => {
         $.ajax({
@@ -115,7 +134,7 @@ class BuyCard extends React.Component {
         })
     }
     CardhandleChange = (value) => {
-  
+
         $.ajax({
             url: 'api/service/query',
             type: 'GET',
@@ -132,6 +151,7 @@ class BuyCard extends React.Component {
                     cardtype = "组合卡";
                 }
                 this.setState({
+                    isPop: true,
                     vaild: res.data[0].validTime,
                     price: res.data[0].price,
                     cardtype: cardtype,
@@ -150,7 +170,7 @@ class BuyCard extends React.Component {
             })
             return false;
         } else {
-             this.setState({
+            this.setState({
                 phoneclassName: "hidden"
             })
             return true;
@@ -167,7 +187,7 @@ class BuyCard extends React.Component {
             return false
         } else {
             this.setState({
-                 licensePlateClassName: "hidden"
+                licensePlateClassName: "hidden"
             })
             return true;
         }
@@ -176,43 +196,43 @@ class BuyCard extends React.Component {
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
                 let clientInfos = this.state.clientInfo;
-            if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
-                $.ajax({
-                    type: 'post',
-                    url: 'api/client/add',
-                    datatype: 'json',
-                    contentType: 'application/json;charset=utf-8',
-                    data: JSON.stringify({
-                        name: clientInfos.name,
-                        phone: clientInfos.phone,
-                        gender: clientInfos.gender,
-                        recommendName: clientInfos.recommendName,
-                        cars: [{
-                            //select选择
-                            type: {
-                                id: this.state.carId,
+                if (clientInfos.name && clientInfos.phone && this.state.carId && clientInfos.licensePlate) {
+                    $.ajax({
+                        type: 'post',
+                        url: 'api/client/add',
+                        datatype: 'json',
+                        contentType: 'application/json;charset=utf-8',
+                        data: JSON.stringify({
+                            name: clientInfos.name,
+                            phone: clientInfos.phone,
+                            gender: clientInfos.gender,
+                            recommendName: clientInfos.recommendName,
+                            cars: [{
+                                //select选择
+                                type: {
+                                    id: this.state.carId,
 
-                            },
-                            licensePlate: clientInfos.licensePlate,
-                        }]
-                    }),
-                    success: (res) => {
-                        if (res.code == "0") {
-                            this.setState({
-                                clientId: res.data.id,
-                                haveClient: true
-                            });
-                            message.success("保存成功")
-                        } else {
-                            message.error(res.msg)
+                                },
+                                licensePlate: clientInfos.licensePlate,
+                            }]
+                        }),
+                        success: (res) => {
+                            if (res.code == "0") {
+                                this.setState({
+                                    clientId: res.data.id,
+                                    haveClient: true
+                                });
+                                message.success("保存成功")
+                            } else {
+                                message.error(res.msg)
+                            }
                         }
-                    }
-                })
-            } else {
-                message.error("请把必填信息补充完整！")
+                    })
+                } else {
+                    message.error("请把必填信息补充完整！")
+                }
             }
-            }
-            
+
         }
 
 
@@ -224,59 +244,71 @@ class BuyCard extends React.Component {
         this.state.clientInfo.gender = e.target.value
     }
     StaffhandleChange = (value) => {
+
         this.setState({
-            orderMaker: parseInt(value),
+            orderMaker: parseInt(value)
         })
     }
     SaveCard = () => {
-        if (this.state.haveClient == true) {
-            $.ajax({
-                url: 'api/pay/buycard',
-                type: 'POST',
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify({
-                    clientId: this.state.clientId,
-                    card: {
-                        service: {
-                            id: this.state.serviceId
+        // var uid = localStorage.getItem('useId')
+        // console.log(uid)
+        console.log(this.state.serviceId)
+        if (this.state.serviceId){
+            if (this.state.haveClient == true) {
+                $.ajax({
+                    url: 'api/pay/buycard',
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({
+                        clientId: this.state.clientId,
+                        card: {
+                            service: {
+                                id: this.state.serviceId
 
-                        },
-                        orderMaker: { id: this.state.orderMaker },
-                        payMethod: this.state.payMethod,
+                            },
+                            orderMaker: { id: ((this.state.orderMaker == "") ? this.state.uid : this.state.orderMaker) },
+                            payMethod: this.state.payMethod,
+                        }
+                    }),
+                    success: (res) => {
+                        message.success('保存成功!');
+                        hashHistory.push('/app/member/customer')
+
                     }
-                }),
-                success: (res) => {
-                    message.success('保存成功!');
-                    hashHistory.push('/app/member/customer')
+                })
+            } else if (this.props.params.id) {
+                $.ajax({
+                    url: 'api/pay/buycard',
+                    type: 'POST',
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify({
+                        clientId: this.state.clientId,
+                        card: {
+                            service: {
+                                id: this.state.serviceId
 
-                }
-            })
-        } else if (this.props.params.id) {
-            $.ajax({
-                url: 'api/pay/buycard',
-                type: 'POST',
-                contentType: "application/json;charset=utf-8",
-                data: JSON.stringify({
-                    clientId: this.state.clientId,
-                    card: {
-                        service: {
-                            id: this.state.serviceId
+                            },
+                            orderMaker: { id: this.state.orderMaker },
+                            payMethod: this.state.payMethod,
+                        }
+                    }),
+                    success: (res) => {
+                        message.success('保存成功!');
+                        hashHistory.push('/app/member/customer')
 
-                        },
-                        orderMaker: { id: this.state.orderMaker },
-                        payMethod: this.state.payMethod,
                     }
-                }),
-                success: (res) => {
-                    message.success('保存成功!');
-                    hashHistory.push('/app/member/customer')
+                })
+            } else {
+                message.error('请先保存客户', 1.5);
 
-                }
-            })
-        } else {
-            message.error('请先保存客户', 1.5);
-
+            }
+        }else{
+            
+            message.error("请选择要办理的卡",1.5)
         }
+            
+        
+
     }
 
     getCarBrand = () => {
@@ -296,7 +328,8 @@ class BuyCard extends React.Component {
 
     onValueChange = (key, value) => {
         this.setState({
-            clientInfo: update(this.state.clientInfo, { [key]: { $set: value } })
+            clientInfo: update(this.state.clientInfo, { [key]: { $set: value } }),
+            isPop: true,
         })
     }
 
@@ -362,7 +395,7 @@ class BuyCard extends React.Component {
                             <Input style={{ width: '140px', marginLeft: '21px' }} value={this.state.clientInfo.phone} onChange={(e) => this.onValueChange('phone', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.phoneclassName}>手机号码格式有误</span>
                         </Col>
-                        <Col span={8} ><span style={{ color: "red",marginLeft:"-5px" }}>*</span>车牌号：
+                        <Col span={8} ><span style={{ color: "red", marginLeft: "-5px" }}>*</span>车牌号：
                             <Input style={{ width: '150px', marginLeft: '14px' }} value={this.state.clientInfo.licensePlate} onChange={(e) => this.onValueChange('licensePlate', e.target.value)} />
                             <span style={{ color: "red", fontSize: "12px", verticalAlign: "middle", marginLeft: "10px" }} className={this.state.licensePlateClassName}>车牌号格式有误</span>
                         </Col>
@@ -466,7 +499,7 @@ class BuyCard extends React.Component {
                         </Col>
                     </Row>
                 </Card>
-                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData = {this.state.modifyData}
+                <CardModal visible={this.state.visible} onOk={this.handleOk} modifyData={this.state.modifyData}
                     onCancel={this.handleCancel}>
                 </CardModal>
                 <Button type="primary" style={{ display: 'block', margin: '10px auto', width: '100px', height: '50px' }} size={'large'} onClick={() => this.SaveCard()}>办理</Button>

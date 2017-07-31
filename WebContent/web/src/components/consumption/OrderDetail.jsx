@@ -397,7 +397,7 @@ class BeautyDetail extends React.Component {
         return <div>
             <BreadcrumbCustom first="消费开单" second="单据详情" />
             <Card style={{ marginBottom: '10px' }}>当前状态：
-                <Steps current={this.state.current+1}>
+                <Steps current={this.state.current}>
                     <Step title="接车" />
                     <Step title="完成" />
                     <Step title="交车" />
