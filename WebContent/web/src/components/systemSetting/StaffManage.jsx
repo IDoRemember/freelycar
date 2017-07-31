@@ -209,10 +209,10 @@ class StaffManage extends React.Component {
         })
     }
 
-    PreFixInterge=(num,n)=>{  
-  //num代表传入的数字，n代表要保留的字符的长度  
-         return (Array(n).join(0)+num).slice(-n);  
-    }  
+    PreFixInterge = (num, n) => {
+        //num代表传入的数字，n代表要保留的字符的长度  
+        return (Array(n).join(0) + num).slice(-n);
+    }
     render() {
         const positionOptions = this.state.positionOptions.map((item, index) => {
             return <Option key={index} value={item}>{item}</Option>
@@ -231,7 +231,7 @@ class StaffManage extends React.Component {
                 dataIndex: 'id',
                 key: 'id',
                 render: (text, record, index) => {
-                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{this.PreFixInterge(text,3)}</Link></span>
+                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{this.PreFixInterge(text, 3)}</Link></span>
                 }
             }, {
                 title: '员工姓名',
@@ -268,7 +268,7 @@ class StaffManage extends React.Component {
                 render: (text, record, index) => {
                     return <span>
 
-                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{marginRight:'15px'}}>修改</a></span>
+                        <span style={{ marginRight: '10px' }} onClick={() => { this.modifyInfo(record, index) }}> <a href="javascript:void(0);" style={{ marginRight: '15px' }}>修改</a></span>
 
                         <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
                             <a href="javascript:void(0);">删除</a>
@@ -310,7 +310,7 @@ class StaffManage extends React.Component {
                                 <Button type="primary" onClick={() => { this.queryStaff(1, 10) }}>查询</Button>
                             </Col>
                             <Modal
-                                title="新增员工"
+                                title={this.state.modalstate == 'modify' ? '修改员工' : '新增员工'}
                                 visible={this.state.visible}
                                 onOk={this.handleOk}
                                 onCancel={this.handleCancel}
