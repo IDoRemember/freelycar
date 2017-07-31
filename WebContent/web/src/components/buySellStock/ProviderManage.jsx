@@ -161,22 +161,18 @@ class ProviderManage extends React.Component {
         var test = reg.test(phonenum);
         console.log(test)
         var phonecheck
-        if(phonenum==''){
-            phonecheck=false;
-        }else if(test){
+        if (phonenum == '') {
+            phonecheck = false;
+        } else if (test) {
 
-            phonecheck=false;
-        }else{
-            phonecheck=true
+            phonecheck = false;
+        } else {
+            phonecheck = true
         }
-        console.log(phonecheck)
+
         if (this.state.form.name == '') {
             this.setState({
                 errorMsg: '请输入供应商名称'
-            })
-        } else if (phonecheck) {
-            this.setState({
-                phonecheck: '手机号格式有误'
             })
         } else {
             this.setState({
@@ -212,6 +208,15 @@ class ProviderManage extends React.Component {
                         }
                         this.setState({
                             data: update(this.state.data, { $push: [newdata] }),
+                            form: {
+                                name: '',
+                                linkman: '',
+                                phonenumber: '',
+                                mail: '',
+                                landline: '',
+                                address: '',
+                                remarks: ''
+                            },
                             pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                         })
                     }
@@ -223,6 +228,15 @@ class ProviderManage extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            form: {
+                name: '',
+                linkman: '',
+                phonenumber: '',
+                mail: '',
+                landline: '',
+                address: '',
+                remarks: ''
+            },
         });
     }
 
