@@ -198,9 +198,6 @@ class ServiceTable extends React.Component {
                             }
 
                         }) : []
-
-
-                        console.log()
                         cardOptions = cards.map((item, index) => {
                             let projectInfos = []
                             for (let projectItem of item.projectInfos) {
