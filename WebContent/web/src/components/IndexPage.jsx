@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import BreadcrumbCustom from './BreadcrumbCustom.jsx';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Modal, Tree } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, Modal, Tree ,message} from 'antd';
 import styled from "styled-components"
 
 const UlBox = styled.ul`
@@ -157,6 +157,11 @@ class IndexPage extends React.Component {
     componentWillUnmount = () => {
         localStorage.setItem('nowTab', JSON.stringify(this.state.nowTab));
     }
+    componentDidMount() {
+        this.setState({
+            nowTab: localStorage.getItem('nowTab') ? JSON.parse(localStorage.getItem('nowTab')) : []
+        })
+    }
     deleteTab = (index) => {
         let nowTab = this.state.nowTab
         nowTab.splice(index, 1)
@@ -190,15 +195,21 @@ class IndexPage extends React.Component {
             visible: false
         });
         let nowTab = this.state.nowTab
-        for (let onekey of this.state.checkedKeys) {
-            let newtab = onekey.split('-')
-            if (newtab.length == 1) {
-                nowTab.push(...this.state.tab[newtab].items)
-            } else {
-                nowTab.push(this.state.tab[newtab[0]].items[newtab[1]])
+        if (this.state.nowTab.length < 8) {
+            for (let onekey of this.state.checkedKeys) {
+                let newtab = onekey.split('-')
+                if (newtab.length == 1) {
+                    nowTab.push(...this.state.tab[newtab].items)
+                } else {
+                    nowTab.push(this.state.tab[newtab[0]].items[newtab[1]])
+                }
             }
+            this.setState({ nowTab: [...new Set(nowTab)] }, () => {
+                localStorage.setItem('nowTab', JSON.stringify(this.state.nowTab));
+            })
+        } else {
+            message.error('所选项目不得多于八条')
         }
-        this.setState({ nowTab: [...new Set(nowTab)] })
     }
     handleCancel = () => {
         this.setState({
