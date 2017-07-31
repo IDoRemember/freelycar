@@ -24,4 +24,6 @@ public interface ExpendOrderDao {
 	List<ExpendOrder> listByDateRange(Date startTime , Date endTime , int from , int pageSize);
 	
 	List<ExpendOrder> listByDateRange(Date startTime , Date endTime);
+
+	int delete(List<String> ids);
 }

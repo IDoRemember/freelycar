@@ -14,6 +14,7 @@ public class ExpendOrder {
 	private float amount;
 	private Date payDate;
 	private String comment;
+	private String reference;
 	public float getAmount() {
 		return amount;
 	}
@@ -45,5 +46,11 @@ public class ExpendOrder {
 	}
 	public void setType(String type) {
 		this.type = type;
+	}
+	public String getReference() {
+		return reference;
+	}
+	public void setReference(String reference) {
+		this.reference = reference;
 	}
 }

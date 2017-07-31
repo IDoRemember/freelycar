@@ -81,6 +81,7 @@ public class ChargeService {
 		expendOrder.setAmount(otherExpendOrder.getAmount());
 		expendOrder.setPayDate(otherExpendOrder.getCreateDate());
 		expendOrder.setType("其他支出");
+		expendOrder.setReference(otherExpendOrder.getId());
 		expendOrderDao.save(expendOrder);
 		JsonConfig config = JsonResFactory.dateConfig();
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS,net.sf.json.JSONObject.fromObject(otherExpendOrder, config)).toString();
@@ -89,7 +90,8 @@ public class ChargeService {
 	
 	public String deleteCharge(String[] ids){
 		int success = this.chargeDao.delete(Arrays.asList(ids));
-		if(success < ids.length){
+		int suc = this.expendOrderDao.delete(Arrays.asList(ids));
+		if(success < ids.length || suc < ids.length){
 			return JsonResFactory.buildOrg(RESCODE.PART_SUCCESS).toString();
 		}
 		return JsonResFactory.buildOrg(RESCODE.SUCCESS).toString();
