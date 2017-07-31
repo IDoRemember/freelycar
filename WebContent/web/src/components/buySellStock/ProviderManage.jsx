@@ -14,6 +14,7 @@ class ProviderManage extends React.Component {
         this.state = {
             visible: false,
             options: [],
+            phonecheck: '',
             pagination: {
 
             },
@@ -51,7 +52,7 @@ class ProviderManage extends React.Component {
                 dataIndex: 'phonenumber',
                 key: 'phonenumber'
             }, {
-                title: '手机号码',
+                title: '座机号码',
                 dataIndex: 'landline',
                 key: 'landline'
             }, {
@@ -155,10 +156,27 @@ class ProviderManage extends React.Component {
         })
     }
     handleOk = (e) => {
+        var reg = /^1[3|4|5|7|8][0-9]{9}$/
+        var phonenum = this.state.form.phone
+        var test = reg.test(phonenum);
+        console.log(test)
+        var phonecheck
+        if(phonenum==''){
+            phonecheck=false;
+        }else if(test){
 
+            phonecheck=false;
+        }else{
+            phonecheck=true
+        }
+        console.log(phonecheck)
         if (this.state.form.name == '') {
             this.setState({
                 errorMsg: '请输入供应商名称'
+            })
+        } else if (phonecheck) {
+            this.setState({
+                phonecheck: '手机号格式有误'
             })
         } else {
             this.setState({
@@ -283,6 +301,12 @@ class ProviderManage extends React.Component {
         })
     }
     onValueChange = (key, value) => {
+        if (key == "name") {
+            this.setState({
+                errorMsg: ''
+            })
+        }
+
         this.setState({
             form: update(this.state.form, { [key]: { $set: value } })
         })
@@ -372,6 +396,9 @@ class ProviderManage extends React.Component {
                             </Col>
                             <Col span={8}>
                                 <Input value={this.state.form.phonenumber} onChange={(e) => this.onValueChange('phonenumber', e.target.value)} />
+                            </Col>
+                            <Col span={8}>
+                                <span style={{ color: 'red' }}> {this.state.phonecheck}</span>
                             </Col>
                         </Row>
                         <Row gutter={16} style={{ marginBottom: '10px' }}>
