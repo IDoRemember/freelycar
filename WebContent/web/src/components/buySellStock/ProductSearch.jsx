@@ -59,7 +59,10 @@ class ProductSearch extends React.Component {
             }, {
                 title: '可用库存',
                 dataIndex: 'stock',
-                key: 'stock'
+                key: 'stock',
+                render: (text, record, index) => {
+                    return <span style={{ color: Number(text) == 0 ? 'red' : '' }}>{text}</span>
+                }
             }],
             data: []
         }
