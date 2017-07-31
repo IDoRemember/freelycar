@@ -189,23 +189,29 @@ class ServiceTable extends React.Component {
                     key="memberCard"
                     dataIndex="memberCard"
                     render={(text, record, index) => {
-                        let cards = [], projectInfos = [], cardOptions = []
+                        let cards = [], cardOptions = []
                         this.props.cards ? this.props.cards.map((item, index) => {
+                            for (let projectItem of item.projectInfos) {
+
+                                if (projectItem.project.id == record.projectId) {
+                                    cards.push(item)
+                                }
+                            }
+
+                        }) : []
+
+
+                        console.log()
+                        cardOptions = cards.map((item, index) => {
+                            let projectInfos = []
                             for (let projectItem of item.projectInfos) {
                                 let obj = {
                                     key: projectItem.id,
                                     name: projectItem.project.name,
                                     times: projectItem.remaining
                                 }
-                                if (projectItem.project.id == record.projectId) {
-                                    cards.push(item)
-                                }
                                 projectInfos.push(obj)
                             }
-
-                        }) : []
-                        console.log()
-                        cardOptions = cards.map((item, index) => {
                             const content = (
                                 <div style={{ width: '200px' }}>
                                     <Row gutter={16} style={{ marginBottom: '15px' }}>
@@ -227,11 +233,11 @@ class ServiceTable extends React.Component {
                                     <Row gutter={16} style={{ marginBottom: '15px' }}>
                                         <Col span={12} >剩余次数明细：</Col>
                                     </Row>
-                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={item.projectInfos} />
+                                    <Table size={'small'} pagination={false} bordered columns={columns} dataSource={projectInfos} />
                                 </div>
                             );
                             const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
-                                {item.service.name + item.service.id}
+                                {item.service.name + item.id}
                             </Popover>
                             return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
                         })
@@ -259,7 +265,7 @@ class ServiceTable extends React.Component {
                     render={(text, record, index) => {
 
                         if ((index + 1) < this.state.data.length) {
-                            return <InputNumber disabled={disabled} min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
+                            return <InputNumber disabled={this.state.data[index].cardId ? false : true} min={1} onChange={(value) => this.setData('payCardTimes', value, index)}></InputNumber>
                         }
 
                     }}
