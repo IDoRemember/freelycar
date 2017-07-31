@@ -83,7 +83,7 @@ public class ConsumOrderService {
 			log.debug(("项目(id:" + proinfo.getProjectId() + ", 名称:" + proinfo.getName() + ")" + "付款方式:"
 					+ proinfo.getPayMethod()));
 			// 如果用卡付款，根据设置的卡id与项目id查找剩余次数信息
-			if (proinfo.getPayMethod() == Constants.PROJECT_WITH_CARD) {
+			if (proinfo.getCardId() !=0 ) {
 				CardProjectRemainingInfo remain = this.cardDao.getProjectRemainingInfo(proinfo.getCardId(),
 						proinfo.getProjectId());
 				// 没有找到，卡未设置或卡中没有对应的项目信息，操作回滚

@@ -130,5 +130,16 @@ public class ProjectInfo {
 	public void setStaffs(Set<Staff> staffs) {
 		this.staffs = staffs;
 	}
+    @Override
+    public String toString() {
+        return "ProjectInfo [id=" + id + ", projectId=" + projectId + ", name="
+                + name + ", price=" + price + ", payMethod=" + payMethod
+                + ", cardId=" + cardId + ", cardName=" + cardName
+                + ", payCardTimes=" + payCardTimes + ", referWorkTime="
+                + referWorkTime + ", pricePerUnit=" + pricePerUnit
+                + ", staffs=" + staffs + ", clientName=" + clientName
+                + ", licensePlate=" + licensePlate + ", brandName=" + brandName
+                + ", createDate=" + createDate + "]";
+    }
 	
 }
