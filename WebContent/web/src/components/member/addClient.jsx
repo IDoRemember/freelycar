@@ -112,6 +112,9 @@ class AddClient extends React.Component {
     //传数据
     saveData = (e) => {
         //console.log()
+        this.setState({
+            isPop:false
+        })
         let forms = this.state.form;
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
@@ -385,7 +388,7 @@ class AddClient extends React.Component {
                     <Button type="primary" style={{ marginRight: '50px' }} size='large' onClick={this.saveData}>
                         保存
                     </Button>
-                    <Button type="primary" size='large'>
+                    <Button  size='large'>
                         <Link to={'app/member/customer'}>取消</Link>
                     </Button>
                 </div>

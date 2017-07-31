@@ -27,9 +27,7 @@ class AccountManage extends React.Component {
             passwordError: '',
             positionOptions: [
                 { id: 1, name: '超级管理员' },
-                { id: 2, name: '管理员' },
-                { id: 3, name: '技师' },
-                { id: 4, name: '财务' }],
+                { id: 2, name: '管理员' }],
             modalstate: 'add',
             form: {
                 id: '',
@@ -215,43 +213,103 @@ class AccountManage extends React.Component {
                 comment: this.state.form.comment
             }
         }
-        $.ajax({
-            url: 'api/admin/' + this.state.modalstate,
-            type: 'post',
-            contentType: 'application/json;charset=utf-8',
-            dataType: 'json',
-            data: JSON.stringify(obj),
-            success: (result) => {
-                if (result.code == "0") {
-                    if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
-                        let obj = {
-                            name: this.state.form.name.label,
-                            role: { id: this.state.form.role.key, roleName: this.state.form.role.label },
-                            account: this.state.form.account,
-                            password1: this.state.form.password,
-                            password: this.state.form.password,
-                            comment: this.state.form.comment,
-                            current: this.state.form.current
-                        }
-                        this.setState({
-                            data: update(this.state.data, { [this.state.modifyIndex]: { $merge: obj } })
-                        })
-                        message.success('修改成功', 5);
-                    } else {
-                        result.data.key = result.data.id
-                        this.setState({
-                            data: update(this.state.data, { $push: [result.data] })
-                        })
-                        message.success('增加成功', 5)
-                    }
-                } else {
-                    message.error(result.msg, 5);
-                }
+        if (this.state.form.password && this.state.form.password1) {
+            if (this.state.form.password !== this.state.form.password1) {
+                this.setState({
+                    passwordError: '两次输入的密码不一致'
+                })
             }
-        })
-        this.setState({
-            visible: false,
-        });
+        }
+        if (this.state.form.account == '') {
+            this.setState({
+                error1: '请输入账号'
+            })
+        }
+        if (this.state.form.name.key = '') {
+            this.setState({
+                error2: '请输入姓名'
+            })
+        }
+        if (this.state.form.password1 == '') {
+            this.setState({
+                error3: '请输入密码'
+            })
+        }
+        if (this.state.form.role.key == '') {
+            this.setState({
+                error4: '请输入角色'
+            })
+        }
+        if (this.state.form.password == this.state.form.password1 && this.state.form.account !== '' && this.state.form.password !== '' && this.state.form.role !== {} && this.state.form.staff !== {}) {
+            $.ajax({
+                url: 'api/admin/' + this.state.modalstate,
+                type: 'post',
+                contentType: 'application/json;charset=utf-8',
+                dataType: 'json',
+                data: JSON.stringify(obj),
+                success: (result) => {
+                    if (result.code == "0") {
+                        if ((this.state.modalstate == 'modify') && (this.state.modifyIndex >= 0)) {
+                            let obj = {
+                                name: this.state.form.name.label,
+                                role: { id: this.state.form.role.key, roleName: this.state.form.role.label },
+                                account: this.state.form.account,
+                                password1: this.state.form.password,
+                                password: this.state.form.password,
+                                comment: this.state.form.comment,
+                                current: this.state.form.current
+                            }
+                            this.setState({
+                                data: update(this.state.data, { [this.state.modifyIndex]: { $merge: obj } })
+                            })
+                            message.success('修改成功', 5);
+                        } else {
+                            result.data.key = result.data.id
+                            this.setState({
+                                visible: false,
+                                error4: '',
+                                error1: '',
+                                error2: '',
+                                error3: '',
+                                form: {
+                                    id: '',
+                                    account: '',
+                                    name: { key: '', label: '' },
+                                    role: { key: '', label: '' },
+                                    current: '',
+                                    comment: '',
+                                    password: '',
+                                    password1: ''
+                                },
+                                passwordError: '',
+                                data: update(this.state.data, { $push: [result.data] })
+                            })
+                            message.success('增加成功', 5)
+                        }
+                    } else {
+                        message.error(result.msg, 5);
+                        this.setState({
+                            visible: false,
+                            error4: '',
+                            error1: '',
+                            error2: '',
+                            error3: '',
+                            form: {
+                                id: '',
+                                account: '',
+                                name: { key: '', label: '' },
+                                role: { key: '', label: '' },
+                                current: '',
+                                comment: '',
+                                password: '',
+                                password1: ''
+                            },
+                            passwordError: ''
+                        })
+                    }
+                }
+            })
+        }
     }
 
     handleTableChange = (pagination) => {
@@ -266,6 +324,21 @@ class AccountManage extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                account: '',
+                name: { key: '', label: '' },
+                role: { key: '', label: '' },
+                current: '',
+                comment: '',
+                password: '',
+                password1: ''
+            },
+            passwordError: '',
+            error4: '',
+            error1: '',
+            error2: '',
+            error3: '',
         });
     }
     modifyInfo = (record, index) => {
@@ -368,6 +441,7 @@ class AccountManage extends React.Component {
                                 <div style={{ marginBottom: 16 }}>
                                     账号：
                                     <Input style={{ width: '140px' }} value={this.state.accountId} onChange={(e) => { this.setState({ accountId: e.target.value }) }} />
+
                                 </div>
                             </Col>
                             <Col span={5}>
@@ -390,6 +464,7 @@ class AccountManage extends React.Component {
                                     </Col>
                                     <Col span={8}>
                                         <Input value={this.state.form.account} onChange={(e) => this.setFormData('account', e.target.value)} disabled={this.state.modalstate == "modify"} />
+                                        <span style={{ color: 'red' }}>{this.state.error1}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -411,6 +486,7 @@ class AccountManage extends React.Component {
                                         >
                                             {staffOptions}
                                         </Select>
+                                        <span style={{ color: 'red' }}>{this.state.error2}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -419,6 +495,7 @@ class AccountManage extends React.Component {
                                     </Col>
                                     <Col span={8}>
                                         <Input type="password" value={this.state.form.password1} onChange={(e) => this.setFormData('password1', e.target.value)} />
+                                        <span style={{ color: 'red' }}>{this.state.error3}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }}>
@@ -448,6 +525,7 @@ class AccountManage extends React.Component {
                                         >
                                             {positionOptions}
                                         </Select>
+                                        <span style={{ color: 'red' }}>{this.state.error4}</span>
                                     </Col>
                                 </Row>
                                 <Row gutter={16} style={{ marginBottom: '10px' }} id="provider-area">
