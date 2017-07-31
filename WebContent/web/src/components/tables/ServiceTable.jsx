@@ -84,7 +84,6 @@ class ServiceTable extends React.Component {
         }, () => {
             this.props.saveInfo({ projects: this.state.data.slice(0, this.state.data.length - 1) })
         })
-
     }
     onDelete = (index) => {
         this.props.pushInventory([], this.state.data[index].id)
