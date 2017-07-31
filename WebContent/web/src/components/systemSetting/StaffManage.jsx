@@ -208,6 +208,11 @@ class StaffManage extends React.Component {
             }
         })
     }
+
+    PreFixInterge=(num,n)=>{  
+  //num代表传入的数字，n代表要保留的字符的长度  
+         return (Array(n).join(0)+num).slice(-n);  
+    }  
     render() {
         const positionOptions = this.state.positionOptions.map((item, index) => {
             return <Option key={index} value={item}>{item}</Option>
@@ -226,7 +231,7 @@ class StaffManage extends React.Component {
                 dataIndex: 'id',
                 key: 'id',
                 render: (text, record, index) => {
-                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{text}</Link></span>
+                    return <span><Link to={"/app/systemSet/staffManage/" + text}>{this.PreFixInterge(text,3)}</Link></span>
                 }
             }, {
                 title: '员工姓名',

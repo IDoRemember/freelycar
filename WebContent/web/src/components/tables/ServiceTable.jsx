@@ -5,6 +5,7 @@ import update from 'immutability-helper'
 import $ from 'jquery'
 import ProgramSearch from '../model/ProgramSearch.jsx'
 import { Link } from 'react-router';
+import PreFixInterge from '../../utils/PreFixInterge.js'
 const Option = Select.Option;
 const total = {
     key: '',
@@ -233,7 +234,7 @@ class ServiceTable extends React.Component {
                                 </div>
                             );
                             const pop = <Popover arrowPointAtCenter placement="left" content={content} title="会员卡明细" style={{ zIndex: '1000' }}>
-                                {item.service.name + item.id}
+                                {item.service.name + PreFixInterge(item.id,5)}
                             </Popover>
                             return <Option key={index} value={item.id + ''} style={{ zIndex: '100' }}>{pop}</Option>
                         })

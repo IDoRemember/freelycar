@@ -5,6 +5,7 @@ import PartsDetail from '../tables/PartsDetail.jsx';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { hashHistory } from 'react-router'
 import $ from 'jquery';
+import PreFixInterge from '../../utils/PreFixInterge.js'
 import { Row, Col, Card, Button, Input, Steps, Table, Icon } from 'antd';
 const Step = Steps.Step;
 const serviceColumns = [{
@@ -36,6 +37,9 @@ const serviceColumns = [{
     title: '会员卡号',
     dataIndex: 'CardNum',
     key: 'CardNum',
+    render:(text,record,index)=>{
+        return <span>{PreFixInterge(Number(text),5)}</span>
+    }
 }, {
     title: '抵扣卡次',
     dataIndex: 'DeductionCardTime',
@@ -85,6 +89,9 @@ const fixColumns = [{
     title: '会员卡号',
     dataIndex: 'CardNum',
     key: 'CardNum',
+        render:(text)=>{
+       return  <span>{PreFixInterge(Number(text),5)}</span>
+    }
 
 }, {
     title: '抵扣卡次',
@@ -170,24 +177,6 @@ class BeautyDetail extends React.Component {
                 finishTime: '',
                 staffs: ''
             },
-
-            // serviceData: [{
-            //     key: 1,
-            //     index: 1,
-            //     project: '洗车',
-            //     price: '20.00',
-            //     number: '20',
-            //     singleSummation: '20',
-            //     staffName: '小易',
-            //     CardNum: '123 300体验卡',
-            //     DeductionCardTime: '1',
-            // }, {
-            //     key: '',
-            //     index: '',
-            //     total: '合计',
-            //     singleSummation: '20',
-            //     DeductionCardTime: '1',
-            // }],
             partsDetailData: [{
                 key: 1,
                 index: 1,

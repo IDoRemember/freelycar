@@ -4,7 +4,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import { Link, hashHistory } from 'react-router';
 import update from 'immutability-helper'
 import $ from 'jquery';
-
+import PreFixInterge from '../../utils/PreFixInterge.js'
 
 const RadioGroup = Radio.Group;
 const radioStyle = {
@@ -166,7 +166,7 @@ class CostClose extends React.Component {
                 const html = <div key={index} style={{ marginLeft: '20px' }}>
                     <div style={{ display: 'inline-block', width: '20%' }}>会员卡号:
                             <div style={{ display: 'inline-block', marginLeft: '10px' }}>
-                            {item.cardId}
+                            {PreFixInterge(item.cardId,5)}
                         </div>
                     </div>
 

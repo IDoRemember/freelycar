@@ -5,6 +5,7 @@ import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 import CarTable from '../tables/CarTable.jsx';
 import $ from 'jquery';
 import update from 'immutability-helper';
+import PreFixInterge from '../../utils/PreFixInterge.js'
 const { MonthPicker, RangePicker } = DatePicker;
 const Option = Select.Option;
 const columns = [{
@@ -39,7 +40,10 @@ class ClientDetail extends React.Component {
             cardColumns: [{
                 title: '卡号',
                 dataIndex: 'cardNum',
-                key: 'cardNum'
+                key: 'cardNum',
+                render: (text) => {
+                    return <span>{PreFixInterge(Number(text), 5)}</span>
+                }
             }, {
                 title: '卡名称',
                 dataIndex: 'cardname',
@@ -456,11 +460,11 @@ class ClientDetail extends React.Component {
         });
     }
     cardhandleCancel = () => {
-        
-            this.setState({
-                cardvisible: false,
-            });
-        
+
+        this.setState({
+            cardvisible: false,
+        });
+
     }
     saveData = () => {
         let forms = this.state.form;
@@ -708,25 +712,25 @@ class ClientDetail extends React.Component {
                 </Modal>
                 <Modal title="会员卡详情" visible={this.state.cardvisible}
                     onOk={this.cardhandleOk} onCancel={this.cardhandleCancel}
-                    okText="确定" 
+                    okText="确定"
                     className="carddetail"
                 >
                     <div >
                         <Row gutter={16} style={{ marginBottom: '15px' }}>
-                       
+
                             <Col span={12} >卡类名称：<span>{this.state.carddetail.cardname}</span></Col>
-                             <Col span={12} >卡类属性：<span>{this.state.carddetail.cardClasses}</span></Col>
+                            <Col span={12} >卡类属性：<span>{this.state.carddetail.cardClasses}</span></Col>
                         </Row>
                         <Row gutter={16} style={{ marginBottom: '15px' }}>
-                           
-                            <Col span={12} >售卡金额：<span>{this.state.carddetail.price}</span></Col> 
+
+                            <Col span={12} >售卡金额：<span>{this.state.carddetail.price}</span></Col>
                             <Col span={12}>有效期：<span>{this.state.carddetail.validTime}年</span></Col>
                         </Row>
                         <Row gutter={16} style={{ marginBottom: '15px' }}>
-                           
+
                             <Col span={12} >剩余次数明细：</Col>
                         </Row>
-                       
+
                         <Table size={'small'} pagination={false} bordered columns={columns} dataSource={this.state.carddetail.projectInfos} />
                     </div>
                 </Modal>
