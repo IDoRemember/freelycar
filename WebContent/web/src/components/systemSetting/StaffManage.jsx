@@ -175,6 +175,15 @@ class StaffManage extends React.Component {
         })
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                name: '',
+                gender: '',
+                phone: '',
+                position: '',
+                level: '',
+                comment: ''
+            }
         });
     }
 
@@ -190,6 +199,15 @@ class StaffManage extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                name: '',
+                gender: '',
+                phone: '',
+                position: '',
+                level: '',
+                comment: ''
+            }
         });
     }
     modifyInfo = (record, index) => {

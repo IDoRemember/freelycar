@@ -251,6 +251,16 @@ class AccountManage extends React.Component {
         })
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                account: '',
+                name: { key: '', label: '' },
+                role: { key: '', label: '' },
+                current: '',
+                comment: '',
+                password: '',
+                password1: ''
+            }
         });
     }
 
@@ -266,6 +276,16 @@ class AccountManage extends React.Component {
     handleCancel = (e) => {
         this.setState({
             visible: false,
+            form: {
+                id: '',
+                account: '',
+                name: { key: '', label: '' },
+                role: { key: '', label: '' },
+                current: '',
+                comment: '',
+                password: '',
+                password1: ''
+            }
         });
     }
     modifyInfo = (record, index) => {
