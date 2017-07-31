@@ -76,7 +76,7 @@ class SiderCustom extends Component {
                 style={{ overflowY: 'auto' }}
             >
                 <div className="logo" >
-                    {/*<img src={logo} />*/}
+                    <img src={logo} />
                     <span className="logo-text">小易爱车</span>
                 </div>
                 <Menu
