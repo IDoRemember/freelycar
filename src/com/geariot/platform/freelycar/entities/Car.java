@@ -128,4 +128,13 @@ public class Car {
 	public void setType(CarType type) {
 		this.type = type;
 	}
+    @Override
+    public String toString() {
+        return "Car [id=" + id + ", client=" + client + ", insuranceStarttime="
+                + insuranceStarttime + ", insuranceEndtime=" + insuranceEndtime
+                + "]";
+    }
+    
+	
+	
 }
