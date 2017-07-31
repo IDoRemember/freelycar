@@ -96,7 +96,6 @@ class IncomeSearch extends React.Component {
         }
     }
     onTimeSelected = (dates,dateStrings) =>{
-        console.log(dates,dateStrings)
         localStorage.setItem('datastrings',dateStrings)
         if(this.state.mode == 'query') {
              $.ajax({

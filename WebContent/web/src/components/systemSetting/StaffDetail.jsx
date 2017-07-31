@@ -42,7 +42,6 @@ class AccountManage extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (result) => {
-                console.log(result);
                 let staffInfo = result.staffInfo;
                 this.setState({
                     form: update(this.state.form,

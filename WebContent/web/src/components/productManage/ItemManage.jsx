@@ -87,7 +87,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let tableDate = [];//表格显示的数据
@@ -261,7 +260,6 @@ class BeautyOrder extends React.Component {
             data: JSON.stringify(obj),
             traditional: true,
             success: (result) => {
-                console.log(result);
                 let code = result.code;
                 if (code == '0') {
                     obj.program = this.state.form.program;
@@ -335,7 +333,6 @@ class BeautyOrder extends React.Component {
 
     //修改功能
     modifyMethod = (record, index) => {
-        //console.log(record);
         let invData = [];//local varible
         let inventoryInfos = record.inventoryInfos;
         for (let item of inventoryInfos) {
@@ -388,7 +385,6 @@ class BeautyOrder extends React.Component {
             type: 'post',
             traditional: true,
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0' || code == '18') {
                     let dataSource = [...this.state.data];
@@ -398,7 +394,6 @@ class BeautyOrder extends React.Component {
                             return id !== obj.key;
                         });
                     }
-                    //console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         //pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
@@ -443,7 +438,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'post',
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     obj.key = res.data.id;
                     obj.createDate = res.data.createDate;
@@ -461,7 +455,6 @@ class BeautyOrder extends React.Component {
     //为state的form
     onValueChange2 = (key, value) => {
         if (key == 'program') {
-            console.log(value);
             this.setState({
                 form2: update(this.state.form2, { ['program']: { $set: value.label }, ['programId']: { $set: value.key } })
             })

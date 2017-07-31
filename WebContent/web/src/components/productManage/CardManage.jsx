@@ -52,7 +52,6 @@ class EditableTable extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let arr = res.data;

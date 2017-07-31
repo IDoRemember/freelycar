@@ -98,7 +98,6 @@ class FixOrder extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     this.setState({
                         optionService: res.data
@@ -112,7 +111,6 @@ class FixOrder extends React.Component {
             type: 'get',
             dataType: 'json',
             success: (res) => {
-                //console.log(res);
                 if (res.code == '0') {
                     this.setState({
                         optionInventory: res.data
@@ -162,7 +160,6 @@ class FixOrder extends React.Component {
 
 
     pushInventory = (value, projectId) => {
-        console.log(value, projectId)
         let inventoryInfos = this.state.consumOrder.inventoryInfos,
             newConsumOrder,
             sameProject = []
@@ -176,7 +173,6 @@ class FixOrder extends React.Component {
             inventoryInfos = inventoryInfos.filter((obj) => {
                 return projectId != obj.projectId;
             });
-            console.log(inventoryInfos, value)
             newConsumOrder = update(this.state.consumOrder, { inventoryInfos: { $set: inventoryInfos } })
             newConsumOrder = update(newConsumOrder, { inventoryInfos: { $push: [...value] } })
             this.setState({
@@ -188,9 +184,7 @@ class FixOrder extends React.Component {
 
     combineParts = () => {
         let dataInventory = []
-        console.log(this.state.dataService)
         for (let item of this.state.dataService) {
-            console.log(item.inventoryInfos)
             dataInventory.push(item.inventoryInfos)
         }
 
@@ -206,7 +200,6 @@ class FixOrder extends React.Component {
     }
 
     getCards = (cards) => {
-        console.log(cards)
         this.setState({
             cards: cards
         })
@@ -284,7 +277,6 @@ class FixOrder extends React.Component {
     }
 
     render() {
-        console.log(this.state.parts)
         const parts = this.state.parts.map((item, index) => {
             if (this.state.parts.length > (index + 1)) {
                 return <PartsDetail key={index} pushInventory={this.pushInventory} saveInfo={this.saveInfo} key={index} id={item.projectId} parts={item.inventoryInfos} title={item.name} optionInventory={this.state.optionInventory} programId={2} />

@@ -78,7 +78,6 @@ class CardModal extends React.Component {
         if (newProps.visible != this.props.visible) {
 
             let modifyData = newProps.modifyData;
-            console.log(modifyData);
             let projs = modifyData.projectInfos;
             if (projs) {
                 let pjs = [];
@@ -218,7 +217,6 @@ class CardModal extends React.Component {
             return false;
         }
 
-        console.log(obj);
         $.ajax({
             url: 'api/service/add',
             data: JSON.stringify(obj),
@@ -227,7 +225,6 @@ class CardModal extends React.Component {
             contentType: 'application/json; charset=utf-8',
             traditional: true,
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     //调用父类的onok
                     obj.key = res.data.id
@@ -385,7 +382,6 @@ class CardModal extends React.Component {
                     });
                 }
                 oldRows.push.apply(oldRows, selectedRows);
-                console.log(oldRows);
                 this.setState({
                     selectedRows: oldRows
                 })

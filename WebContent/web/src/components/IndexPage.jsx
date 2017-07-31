@@ -207,13 +207,11 @@ class IndexPage extends React.Component {
     }
     onSelect = (selectedKeys, info) => {
 
-        console.log('selected', selectedKeys, info);
     }
     onCheck = (checkedKeys, info) => {
         this.setState({
             checkedKeys: checkedKeys
         })
-        console.log('onCheck', checkedKeys, info, this.state.nowTab);
     }
     render() {
         let nowLi = this.state.nowTab.map((item, index) => {

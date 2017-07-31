@@ -235,7 +235,6 @@ class OtherPay extends React.Component {
                 traditional: true,
                 success: (result) => {
                     if (result.code == "0") {
-                        console.log(result.data)
                         let data = result.data
                         data['key'] = data.id
                         data.expendDate = data.expendDate ? data.expendDate.slice(0, 10) : ''

@@ -55,7 +55,6 @@ class ClientInfo extends React.Component {
                     let length = text.length;
                     for(let item of text){
                         if(indx < length-1){
-                            console.log(item)
                             carnum += item.type.brand.name +', ';
                         }else{
                             carnum += item.type.brand.name;

@@ -105,7 +105,6 @@ class BeautyOrder extends React.Component {
                             return id !== obj.key;
                         });
                     }
-                    //console.log(dataSource)
                     this.setState({
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: res.realSize } })
@@ -183,7 +182,6 @@ class BeautyOrder extends React.Component {
                 dataType: 'json',
                 data: JSON.stringify(obj),
                 success: (result) => {
-                    //console.log(result);
                     let code = result.code;
                     if (code == '0') {
                         let dt = result.data;
@@ -323,7 +321,6 @@ class BeautyOrder extends React.Component {
                 if (result.code == '0') {
                     let obj = result.data;
                     obj.key = obj.id;
-                    console.log(obj);
                     this.setState({
                         data: [...this.state.data, obj],
                         visible2: false,
@@ -403,7 +400,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 let tableDate = [];//表格显示的数据
                 if (code == '0') {
@@ -446,7 +442,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 let tableDate = [];//表格显示的数据
                 if (code == '0') {
@@ -491,7 +486,6 @@ class BeautyOrder extends React.Component {
             dataType: 'json',
             type: 'get',
             success: (res) => {
-                console.log(res);
                 let code = res.code;
                 let tableDate = [];//表格显示的数据
                 if (code == '0') {
@@ -535,7 +529,6 @@ class BeautyOrder extends React.Component {
             data: jsonData,
             type: 'get',
             success: (res) => {
-                //console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let brandItem = [];//表格显示的数据
@@ -561,7 +554,6 @@ class BeautyOrder extends React.Component {
             data: jsonData,
             type: 'get',
             success: (res) => {
-                //console.log(res);
                 let code = res.code;
                 if (code == '0') {
                     let typeItem = [];//表格显示的数据
@@ -737,7 +729,6 @@ class BeautyOrder extends React.Component {
         //表格公用的多选框
         const rowSelection = {
             onChange: (selectedRowKeys, selectedRows) => {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
                 //selectedRowKeys  key-->id
                 this.setState({
                     selectedRowKeys: selectedRowKeys
