@@ -807,7 +807,7 @@ class BeautyOrder extends React.Component {
                                         visible={this.state.visible}
                                         onOk={this.handleOk}
                                         onCancel={this.handleCancel}
-                                        width='30%' >
+                                        width='40%' >
 
                                         <Form onSubmit={this.handleSubmit} className="login-form">
                                             <FormItem
@@ -815,7 +815,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件名称"
                                             >
                                                 <Input placeholder="" style={{ width: '120px' }} value={this.state.form.name} onChange={(e) => this.onValueChange('name', e.target.value)} />
-                                                <span style={{ color: 'red' }}>{this.state.error1}</span>
+                                                <div style={{ color: 'red' }}>{this.state.error1}</div>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -829,7 +829,7 @@ class BeautyOrder extends React.Component {
                                                 >
                                                     {this.state.brandItem}
                                                 </Select>
-                                                <span style={{ color: 'red' }}>{this.state.error2}</span>
+                                                <div style={{ color: 'red' }}>{this.state.error2}</div>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -843,7 +843,7 @@ class BeautyOrder extends React.Component {
                                                 >
                                                     {this.state.typeItem}
                                                 </Select>
-                                                <span style={{ color: 'red' }}>{this.state.error3}</span>
+                                                <div style={{ color: 'red' }}>{this.state.error3}</div>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -862,7 +862,7 @@ class BeautyOrder extends React.Component {
                                                 label="配件价格"
                                             >
                                                 <Input style={{ width: '120px' }} placeholder="" value={this.state.form.price} onChange={(e) => this.onValueChange('price', e.target.value)} />
-                                                <span style={{ color: 'red' }}>{this.state.error4}</span>
+                                                <div style={{ color: 'red' }}>{this.state.error4}</div>
                                             </FormItem>
                                             <FormItem
                                                 {...formItemLayout}
@@ -870,13 +870,9 @@ class BeautyOrder extends React.Component {
                                             >
                                                 <Input style={{ width: '120px' }} placeholder="" value={this.state.form.comment} onChange={(e) => this.onValueChange('comment', e.target.value)} />
                                             </FormItem>
-
                                         </Form>
                                     </Modal>
-
-
                                 </Row>
-
                                 <Row>
                                     <Col span={24}>
                                         <Table
