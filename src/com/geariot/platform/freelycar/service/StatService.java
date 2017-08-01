@@ -41,11 +41,10 @@ public class StatService {
 	private ConsumOrderDao consumOrderDao;
 
 	public String getToday(int income, int expend, int page, int number) {
-		Date today = new Date();
 		int from = (page - 1) * number;
 		if (income == 0 && expend == 1) {
-			List<ExpendOrder> orders = expendOrderDao.listByDate(today);
-			List<ExpendOrder> list = expendOrderDao.listByDate(today, from, number);
+			List<ExpendOrder> orders = expendOrderDao.listByDate();
+			List<ExpendOrder> list = expendOrderDao.listByDate(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
@@ -66,8 +65,8 @@ public class StatService {
 			obj.put("expendStat", expendStat);
 			return obj.toString();
 		} else if (income == 1 && expend == 0) {
-			List<IncomeOrder> orders = incomeOrderDao.listByDate(today);
-			List<IncomeOrder> list = incomeOrderDao.listByDate(today, from, number);
+			List<IncomeOrder> orders = incomeOrderDao.listByDate();
+			List<IncomeOrder> list = incomeOrderDao.listByDate(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
@@ -88,8 +87,8 @@ public class StatService {
 			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		} else if (income == 1 && expend == 1) {
-			List<ExpendOrder> expendList = expendOrderDao.listByDate(today);
-			List<IncomeOrder> incomeList = incomeOrderDao.listByDate(today);
+			List<ExpendOrder> expendList = expendOrderDao.listByDate();
+			List<IncomeOrder> incomeList = incomeOrderDao.listByDate();
 			float incomeStat = 0;
 			float expendStat = 0;
 			if (expendList == null || expendList.isEmpty()) {
@@ -122,8 +121,8 @@ public class StatService {
 		}
 		int from = (page - 1) * number;
 		if (income == 0 && expend == 1) {
-			List<ExpendOrder> orders = expendOrderDao.listByMonth(month);
-			List<ExpendOrder> list = expendOrderDao.listByMonth(month, from, number);
+			List<ExpendOrder> orders = expendOrderDao.listByMonth();
+			List<ExpendOrder> list = expendOrderDao.listByMonth(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
@@ -144,8 +143,8 @@ public class StatService {
 			obj.put("expendStat", expendStat);
 			return obj.toString();
 		} else if (income == 1 && expend == 0) {
-			List<IncomeOrder> orders = incomeOrderDao.listByMonth(month);
-			List<IncomeOrder> list = incomeOrderDao.listByMonth(month, from, number);
+			List<IncomeOrder> orders = incomeOrderDao.listByMonth();
+			List<IncomeOrder> list = incomeOrderDao.listByMonth(from, number);
 			if (list == null || list.isEmpty()) {
 				return JsonResFactory.buildOrg(RESCODE.NO_RECORD).toString();
 			}
@@ -166,8 +165,8 @@ public class StatService {
 			obj.put("incomeStat", incomeStat);
 			return obj.toString();
 		} else if (income == 1 && expend == 1) {
-			List<ExpendOrder> expendList = expendOrderDao.listByMonth(month);
-			List<IncomeOrder> incomeList = incomeOrderDao.listByMonth(month);
+			List<ExpendOrder> expendList = expendOrderDao.listByMonth();
+			List<IncomeOrder> incomeList = incomeOrderDao.listByMonth();
 			float expendStat = 0;
 			if (expendList == null || expendList.isEmpty()) {
 				expendStat = 0;
@@ -341,8 +340,7 @@ public class StatService {
 	}
 	
 	public String payMethodToday() {
-		Date today = new Date();
-		List<IncomeOrder> incomeOrders = incomeOrderDao.listByDate(today);
+		List<IncomeOrder> incomeOrders = incomeOrderDao.listByDate();
 		if(incomeOrders == null || incomeOrders.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NO_INCOME).toString();
 		}
@@ -370,8 +368,7 @@ public class StatService {
 	}
 	
 	public String payMethodMonth() {
-		Date today = new Date();
-		List<IncomeOrder> incomeOrders = incomeOrderDao.listByMonth(today);
+		List<IncomeOrder> incomeOrders = incomeOrderDao.listByMonth();
 		if(incomeOrders == null || incomeOrders.isEmpty()){
 			return JsonResFactory.buildOrg(RESCODE.NO_INCOME).toString();
 		}

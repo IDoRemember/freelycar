@@ -9,15 +9,15 @@ public interface ExpendOrderDao {
 	
 	void save(ExpendOrder expendOrder);
 
-	List<ExpendOrder> listByDate(Date date , int from , int pageSize);
+	List<ExpendOrder> listByDate(int from , int pageSize);
 	
-	List<ExpendOrder> listByMonth(Date date , int from , int pageSize);
+	List<ExpendOrder> listByMonth(int from , int pageSize);
 
 	List<ExpendOrder> listByWeek(int from , int pageSize);
 	
-	List<ExpendOrder> listByDate(Date date);
+	List<ExpendOrder> listByDate();
 	
-	List<ExpendOrder> listByMonth(Date date);
+	List<ExpendOrder> listByMonth();
 
 	List<ExpendOrder> listByWeek();
 	

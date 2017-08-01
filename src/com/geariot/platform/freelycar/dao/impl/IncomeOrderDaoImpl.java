@@ -1,6 +1,5 @@
 package com.geariot.platform.freelycar.dao.impl;
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +12,7 @@ import com.geariot.platform.freelycar.dao.IncomeOrderDao;
 import com.geariot.platform.freelycar.entities.IncomeOrder;
 import com.geariot.platform.freelycar.model.ORDER_CON;
 import com.geariot.platform.freelycar.utils.Constants;
+import com.geariot.platform.freelycar.utils.DateHandler;
 import com.geariot.platform.freelycar.utils.query.QueryUtils;
 
 @Repository
@@ -39,44 +39,31 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncomeOrder> listByDate(Date date , int from , int pageSize) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.add(Calendar.DAY_OF_MONTH, 1);
-		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
+	public List<IncomeOrder> listByDate(int from , int pageSize) {
+		String hql = "from IncomeOrder where date(payDate) = curdate()";
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncomeOrder> listByMonth(Date date , int from , int pageSize) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.set(Calendar.DATE, 1);
-		cal2.add(Calendar.MONTH, 1);
-		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
+	public List<IncomeOrder> listByDate() {
+		String hql = "from IncomeOrder where date(payDate) = curdate()";
+		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IncomeOrder> listByMonth(int from , int pageSize) {
+		String hql = "from IncomeOrder where date_format(payDate,'%Y-%m') = date_format(now(),'%Y-%m')";
+		return this.getSession().createQuery(hql).setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IncomeOrder> listByMonth() {
+		String hql = "from IncomeOrder where date_format(payDate,'%Y-%m') = date_format(now(),'%Y-%m')";
+		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+	}
 	
 	/*
 	 * 完整sql查询语句：
@@ -130,46 +117,6 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<IncomeOrder> listByDate(Date date) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.add(Calendar.DAY_OF_MONTH, 1);
-		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<IncomeOrder> listByMonth(Date date) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.set(Calendar.DATE, 1);
-		cal2.add(Calendar.MONTH, 1);
-		String hql = "from IncomeOrder where payDate >= :date1 and payDate < :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
 	public List<IncomeOrder> listByWeek() {
 		String hql = "from IncomeOrder where YEARWEEK(date_format(payDate,'%Y-%m-%d')) = YEARWEEK(now())";
 		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
@@ -178,159 +125,46 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IncomeOrder> listByDateRange(Date startTime, Date endTime, int from, int pageSize) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(endTime.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate <= :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createQuery(hql)
+				.setTimestamp("date1", DateHandler.setTimeToBeginningOfDay(DateHandler.toCalendar(startTime)).getTime())
+				.setTimestamp("date2", DateHandler.setTimeToEndofDay(DateHandler.toCalendar(endTime)).getTime())
 				.setFirstResult(from).setMaxResults(pageSize).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IncomeOrder> listByDateRange(Date startTime, Date endTime) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(endTime.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
 		String hql = "from IncomeOrder where payDate >= :date1 and payDate <= :date2";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createQuery(hql)
+				.setTimestamp("date1", DateHandler.setTimeToBeginningOfDay(DateHandler.toCalendar(startTime)).getTime())
+				.setTimestamp("date2", DateHandler.setTimeToEndofDay(DateHandler.toCalendar(endTime)).getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> listByPayMethodToday() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.add(Calendar.DAY_OF_MONTH, 1);
-		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
+		String hql = "select sum(amount) , payMethod from IncomeOrder where date(payDate) = curdate() group by payMethod";
+		return this.getSession().createSQLQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> listByPayMethodMonth() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.set(Calendar.DATE, 1);
-		cal2.add(Calendar.MONTH, 1);
-		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
+		String hql = "select sum(amount) , payMethod from IncomeOrder where date_format(payDate,'%Y-%m') = date_format(now(),'%Y-%m') group by payMethod";
+		return this.getSession().createSQLQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> listByPayMethodRange(Date startTime, Date endTime) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(endTime.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
 		String hql = "select sum(amount) , payMethod from IncomeOrder where payDate >= :date1 and payDate < :date2 group by payMethod";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql)
+				.setTimestamp("date1", DateHandler.setTimeToBeginningOfDay(DateHandler.toCalendar(startTime)).getTime())
+				.setTimestamp("date2", DateHandler.setTimeToEndofDay(DateHandler.toCalendar(endTime)).getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
-
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public List<Object[]> programNameToday() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.HOUR, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.add(Calendar.DAY_OF_MONTH, 1);
-		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
-	}*/
-
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public List<Object[]> programNameMonth() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.set(Calendar.DATE, 1);
-		cal2.add(Calendar.MONTH, 1);
-		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
-	}*/
-
-	/*@SuppressWarnings("unchecked")
-	@Override
-	public List<Object[]> programNameRange(Date startTime, Date endTime) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(endTime.getTime());
-		cal2.set(Calendar.HOUR, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
-		String hql = "select sum(amount) , programName , count(*) from IncomeOrder where payDate >= :date1 and payDate < :date2 group by programName";
-		return this.getSession().createQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
-	}*/
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -363,60 +197,24 @@ public class IncomeOrderDaoImpl implements IncomeOrderDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> MemberPayToday() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.add(Calendar.DAY_OF_MONTH, 1);
-		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
+		String hql = "select sum(amount) , member from IncomeOrder where date(payDate) = curdate() group by member";
+		return this.getSession().createSQLQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> MemberPayMonth() {
-		Date date = new Date();
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(date.getTime());
-		cal1.set(Calendar.DATE, 1);
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(date.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 0);
-		cal2.set(Calendar.MINUTE, 0);
-		cal2.set(Calendar.SECOND, 0);
-		cal2.set(Calendar.DATE, 1);
-		cal2.add(Calendar.MONTH, 1);
-		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
-				.setCacheable(Constants.SELECT_CACHE).list();
+		String hql = "select sum(amount) , member from IncomeOrder where date_format(payDate,'%Y-%m') = date_format(now(),'%Y-%m') group by member";
+		return this.getSession().createSQLQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Object[]> MemberPayRange(Date startTime, Date endTime) {
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTimeInMillis(startTime.getTime());
-		cal1.set(Calendar.HOUR_OF_DAY, 0);
-		cal1.set(Calendar.MINUTE, 0);
-		cal1.set(Calendar.SECOND, 0);
-		Calendar cal2 = Calendar.getInstance();
-		cal2.setTimeInMillis(endTime.getTime());
-		cal2.set(Calendar.HOUR_OF_DAY, 23);
-		cal2.set(Calendar.MINUTE, 59);
-		cal2.set(Calendar.SECOND, 59);
 		String hql = "select sum(amount) , member from IncomeOrder where payDate >= :date1 and payDate < :date2 group by member";
-		return this.getSession().createSQLQuery(hql).setTimestamp("date1", cal1.getTime()).setTimestamp("date2", cal2.getTime())
+		return this.getSession().createSQLQuery(hql)
+				.setTimestamp("date1", DateHandler.setTimeToBeginningOfDay(DateHandler.toCalendar(startTime)).getTime())
+				.setTimestamp("date2", DateHandler.setTimeToEndofDay(DateHandler.toCalendar(endTime)).getTime())
 				.setCacheable(Constants.SELECT_CACHE).list();
 	}
 	
