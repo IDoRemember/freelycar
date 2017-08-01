@@ -117,6 +117,9 @@ class StaffManage extends React.Component {
                         data: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
+                    message.success(result.msg)
+                } else {
+                    message.error(result.msg)
                 }
             }
         })
