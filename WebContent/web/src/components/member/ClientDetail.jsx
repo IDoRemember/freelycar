@@ -392,9 +392,7 @@ class ClientDetail extends React.Component {
     }
 
     handleChange = (e) => {
-        console.log(e)
         let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist
