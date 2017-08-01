@@ -124,7 +124,9 @@ class ProductSearch extends React.Component {
                         }
                     }
                 } else {
-                    message.error(result.msg)
+                    if (result.code !== "2") {
+                        message.error(result.msg)
+                    }
                     this.setState({
                         data: [],
                         pagination: { total: 0 }

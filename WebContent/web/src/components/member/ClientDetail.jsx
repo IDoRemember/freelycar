@@ -213,7 +213,6 @@ class ClientDetail extends React.Component {
 
     //         }),
     //         success: (res) => {
-    //             console.log(res)
     //         }
     //     })
     // }
@@ -228,12 +227,10 @@ class ClientDetail extends React.Component {
 
             success: (res) => {
                 if (res.code == '0') {
-                    console.log(res)
                     var obj = res.client;
                     var objcar = obj.cars;
                     var objcard = obj.cards;
                     var objpay = res.data;
-                    // console.log(objpay)
                     let carlist = [];
                     let cardlist = [];
                     let paylist = [];
@@ -263,11 +260,9 @@ class ClientDetail extends React.Component {
                     //获取卡信息
 
                     for (let j = 0; j < objcard.length; j++) {
-                        console.log(objcard[j].service.price)
                         let projectInfo = objcard[j].projectInfos
                         let projectlist = []
                         projectInfo.map((item, index) => {
-                            //   console.log(item)
                             let projectItem = {
                                 key: index,
                                 name: item.project.name,
@@ -275,7 +270,6 @@ class ClientDetail extends React.Component {
                             }
 
                             projectlist.push(projectItem);
-                            console.log(projectlist)
                         })
 
                         let cardItem = {
@@ -315,7 +309,6 @@ class ClientDetail extends React.Component {
 
                     })
 
-                    //           console.log(objpay.length)
                     //获取消费记录
 
                     for (let k = 0; k < (objpay.length > 3 ? 3 : objpay.length); k++) {
@@ -359,7 +352,6 @@ class ClientDetail extends React.Component {
         })
     }
     onDelete = (idnum) => {
-        console.log(idnum);
         $.ajax({
             type: 'post',
             url: 'api/client/delcar',
@@ -377,13 +369,10 @@ class ClientDetail extends React.Component {
                 //    //  this.getBrandList();
                 //     let dataSource = [...this.state.carData];
                 //     //？看看返回值有没有对应的dataSource有没有被删去
-                //     console.log(result)
                 //     //过滤id    
-                //     console.log(dataSource)
                 //     dataSource = dataSource.filter((obj) => {
                 //         return idnum!== obj.idnum;
                 //     });
-                //     console.log(dataSource)
                 //     //为什么这边要加一个判断呢
 
                 //     this.setState({
@@ -397,16 +386,13 @@ class ClientDetail extends React.Component {
         })
     }
     onChange = (e) => {
-        console.log("radio change", e.target.value);
         this.setState({
             value: e.target.value,
         });
     }
 
     handleChange = (e) => {
-        console.log(e)
         let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist
@@ -422,7 +408,6 @@ class ClientDetail extends React.Component {
         this.setState({ editable: true });
     }
     onHandleChange = (e, key) => {
-        console.log(key)
         let form = this.state.form
         form[key] = e.target.value
         this.setState({
@@ -536,7 +521,6 @@ class ClientDetail extends React.Component {
     insuranceEndtimeonChange = (time) => {
          let start = this.state.form.insuranceStarttime == '' ? (new Date(time).getTime() - 1) : ((this.state.form.insuranceStarttime).getTime())
         if (new Date(time).getTime() < start) {
-            console.log("false")
             message.warning("截止时间必须大于开始时间")
         } else {
             this.setState({
@@ -545,24 +529,20 @@ class ClientDetail extends React.Component {
         }
     }
     licensetimeonChange = (time) => {
-        console.log(time);
         this.state.form.licensetime = new Date(time);
     }
     onValueChange = (key, value) => {
         this.setState({
             form: update(this.state.form, { [key]: { $set: value } })
         })
-        console.log(this.state.form.insuranceStarttime)
     }
     isnewcar = (e) => {
-        console.log(e.target.value);
         this.setState({
             carvalue: e.target.value,
         });
         this.state.form.newCar = e.target.value
     }
     TypehandleChange = (value) => {
-        console.log(`selected ${value}`);
         this.setState({
             typeId: value
         })
@@ -573,12 +553,10 @@ class ClientDetail extends React.Component {
         });
     }
     onOk = (value) => {
-        console.log('onOk: ', value);
     }
     licensePlateCheckInfo = () => {
         var licensePlatecheck = this.state.form.licensePlate;
         var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-        //   console.log(re.test(licensePlatecheck))
         if (!re.test(licensePlatecheck)) {
             this.setState({
                 licensePlateClassName: "display"

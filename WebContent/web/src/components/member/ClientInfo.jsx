@@ -147,16 +147,13 @@ class ClientInfo extends React.Component {
             data: jsonData,
             type: 'get',
             success: (res) => {
-                console.log(res);
                 if (res.code == "0") {
                     //定义一个能装10条数据的容器
                     let datalist = [];
                     //调用接口后返回的数据
                     var obj = res.data;
-                    //   console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
-                        //console.log(obj[i].cars);
                         let dataItem = {
                             key: obj[i].id,
                             id: obj[i].id,
@@ -209,10 +206,8 @@ class ClientInfo extends React.Component {
                     let datalist = [];
                     //调用接口后返回的数据
                     var obj = res.data;
-                    console.log(obj);
                     //遍历所有数据并给绑定到表格上
                     for (let i = 0; i < obj.length; i++) {
-                        //console.log(obj[i].cars);
                         let dataItem = {
                             key: obj[i].id,
                             id: obj[i].id,
@@ -239,10 +234,6 @@ class ClientInfo extends React.Component {
 
     }
 
-    //???手机号那个搜索怎么搜呢？
-    handleChange = (value) => {
-        console.log(`selected ${value}`)
-    }
 
     //这个模态框到底要不要显示新增会员数呢？
     showModal = () => {
@@ -252,7 +243,6 @@ class ClientInfo extends React.Component {
             dataType: 'json',
             data: {},
             success: (res) => {
-                console.log(res)
                 this.setState({
                     realSize: res.realSize,
                     thisMonth: res.thisMonth,
@@ -272,7 +262,6 @@ class ClientInfo extends React.Component {
     }
     //删除对应行
     onDelete = (idArray) => {
-        console.log(idArray);
         $.ajax({
             type: 'post',
             url: 'api/client/delete',
@@ -286,14 +275,12 @@ class ClientInfo extends React.Component {
                 if (result.code == "0") {
                     let dataSource = [...this.state.dataSource];
                     //？看看返回值有没有对应的dataSource有没有被删去
-                    // console.log(result)
                     //过滤id    
                     for (let id of idArray) {
                         dataSource = dataSource.filter((obj) => {
                             return id !== obj.id;
                         });
                     }
-                    //console.log(dataSource)
                     //为什么这边要加一个判断呢
 
                     this.setState({
@@ -351,7 +338,6 @@ class ClientInfo extends React.Component {
     handleTableChange = (pagination) => {
         const pager = { ...this.state.pagination };
         pager.current = pagination.current;
-        //console.log(pagination)
         this.setState({
             pagination: pager
         })

@@ -61,12 +61,10 @@ class AddClient extends React.Component {
 
 
                 })
-                console.log(this.state.option)
             }
         })
     }
     routerWillLeave = (nextLocation) => {
-        console.log(this.state.isPop)
         if (this.state.isPop) {
             return '确认要离开？';
         } else {
@@ -77,7 +75,6 @@ class AddClient extends React.Component {
     CheckInfo = () => {
         var phonecheck = this.state.form.phone;
 
-        console.log(phonecheck)
         var reg = /^1[3|4|5|7|8][0-9]{9}$/; //验证规则
 
         if (!reg.test(phonecheck)) {
@@ -96,7 +93,6 @@ class AddClient extends React.Component {
     licensePlateCheckInfo = () => {
         var licensePlatecheck = this.state.form.licensePlate;
         var re = /^[\u4e00-\u9fa5]{1}[A-Z]{1}[A-Z_0-9]{5}$/;
-        console.log(re.test(licensePlatecheck))
         if (!re.test(licensePlatecheck)) {
             this.setState({
                 licensePlateClassName: "display"
@@ -111,7 +107,6 @@ class AddClient extends React.Component {
     }
     //传数据
     saveData = (e) => {
-        //console.log()
         this.setState({
             isPop:false
         })
@@ -178,21 +173,18 @@ class AddClient extends React.Component {
 
     }
     genderonChange = (e) => {
-        console.log(e.target.value);
         this.setState({
             value: e.target.value,
         });
         this.state.form.gender = e.target.value
     }
     isnewcar = (e) => {
-        console.log(e.target.value);
         this.setState({
             carvalue: e.target.value,
         });
         this.state.form.newCar = e.target.value
     }
     TypehandleChange = (value) => {
-        console.log(`selected ${value}`);
         this.setState({
             typeId: value
         })
@@ -200,7 +192,6 @@ class AddClient extends React.Component {
 
     handleChange = (e) => {
         let typelist = this.state.option[e - 1].types;
-        console.log(this.state.option[e - 1].types)
         this.setState({
             carId: e,
             type: typelist
@@ -216,7 +207,6 @@ class AddClient extends React.Component {
     }
     insuranceStarttimeonChange = (time) => {
         let end = (this.state.form.insuranceEndtime) ? ((this.state.form.insuranceEndtime).getTime()) : (new Date(time).getTime() + 1)
-      console.log(end)
         if (new Date(time).getTime() > end) {
             message.warning("截止时间必须大于开始时间")
         } else {
@@ -236,7 +226,6 @@ class AddClient extends React.Component {
         }
     }
     licensetimeonChange = (time) => {
-        console.log(time);
         this.state.form.licenseDate = new Date(time);
     }
     onValueChange = (key, value) => {
