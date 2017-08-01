@@ -223,7 +223,6 @@ class ModifyClient extends React.Component {
             }
         }
          else if (key == 'insuranceEndtime') {
-            console.log(new Date(value).getTime())
             let endtime = new Date(value).getTime();
             let starttime = (this.state.cars[index].insuranceStarttime) ? new Date(this.state.cars[index].insuranceStarttime) : (new Date(value).getTime() - 1)
             if (starttime > endtime) {

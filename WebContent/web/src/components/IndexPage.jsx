@@ -195,7 +195,6 @@ class IndexPage extends React.Component {
             visible: false
         });
         let nowTab = this.state.nowTab
-        // console.log(this.state.nowTab.length, this.state.checkedKeys)
         if (this.state.nowTab.length < 7) {
             for (let onekey of this.state.checkedKeys) {
                 let newtab = onekey.split('-')
@@ -207,7 +206,7 @@ class IndexPage extends React.Component {
                         this.state.nowTab.map((item, index) => {
                             let same = 0
                             this.state.tab[newtab].items.map((item2, index2) => {
-                                // console.log(item, item2)
+                             
                                 if (item.text == item2.text) {
                                     same++
                                 }

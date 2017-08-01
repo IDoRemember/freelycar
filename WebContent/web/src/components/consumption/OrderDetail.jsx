@@ -298,8 +298,6 @@ class BeautyDetail extends React.Component {
                         staffString += staffList[i].name + ' 、 ';
 
                     }
-                    console.log(objservice[i].cardId)
-                    console.log(objservice[i].cardName+'--'+PreFixInterge(Number(objservice[i].cardId),5))
                     let serviceItem = {
                         key: objservice[i].id,
                         id: objservice[i].id,

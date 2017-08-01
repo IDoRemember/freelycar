@@ -73,7 +73,6 @@ class BuyCard extends React.Component {
         this.getService();
         this.getStaff();
         let uid = localStorage.getItem("userId")
-        console.log(uid)
         this.setState({
             orderMaker: uid
         })
@@ -83,7 +82,6 @@ class BuyCard extends React.Component {
         )
     }
     routerWillLeave = (nextLocation) => {
-        console.log(this.state.isPop)
         if (this.state.isPop) {
             return '确认要离开？';
         } else {
@@ -252,12 +250,9 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-        // var uid = localStorage.getItem('useId')
-        // console.log(uid)
           this.setState({
              isPop:false,
         })
-        console.log(this.state.serviceId)
         if (this.state.serviceId){
             if (this.state.haveClient == true) {
                 $.ajax({

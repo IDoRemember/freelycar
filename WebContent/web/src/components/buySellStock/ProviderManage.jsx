@@ -159,7 +159,6 @@ class ProviderManage extends React.Component {
         var reg = /^1[3|4|5|7|8][0-9]{9}$/
         var phonenum = this.state.form.phone
         var test = reg.test(phonenum);
-        console.log(test)
         var phonecheck
         if (phonenum == '') {
             phonecheck = false;
