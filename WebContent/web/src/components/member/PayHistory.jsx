@@ -102,7 +102,6 @@ class PayHistory extends React.Component {
     }
 
     handlePageChange = (p) => {
-        console.log(p.current);
         this.loadData(this.props.params.id, new Date(this.state.queryStart), new Date(this.state.queryEnd), p.current, 10);
     }
 
@@ -119,7 +118,6 @@ class PayHistory extends React.Component {
             data: jsonData,
             type: 'GET',
             success: (res) => {
-                console.log(res);
                 if (res.code == '0') {
                     var objpay = res.data;
                     let paylist = [];
@@ -151,7 +149,6 @@ class PayHistory extends React.Component {
                         paylist.push(payItem);
                     }
 
-                    console.log(res.realSize);
                     this.setState({
                         amount: res.amount,
                         payData: paylist,

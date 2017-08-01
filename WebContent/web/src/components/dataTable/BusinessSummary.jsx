@@ -48,7 +48,6 @@ class BusinessSummary extends React.Component {
             dataType: 'json',
             data: data == undefined ? {} : data,
             success: (result) => {
-                console.log(result);
                 if (result.code == "0") {
                     let pay = {};
                     pay.key = -1;
