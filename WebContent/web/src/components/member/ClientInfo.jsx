@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm,message } from 'antd';
+import { Row, Col, Card, Table, Select, InputNumber, Input, Button, Icon, DatePicker, Modal, Radio, Popconfirm, message } from 'antd';
 import BreadcrumbCustom from '../BreadcrumbCustom.jsx';
 
 import { Link } from 'react-router';
@@ -22,7 +22,7 @@ class ClientInfo extends React.Component {
             },
             selectedIds: [],
             queryValue: '',
-            type:[],
+            type: [],
             columns: [
                 {
                     title: '序号', dataIndex: 'index', key: 'index', render: (text, record, index) => {
@@ -35,34 +35,38 @@ class ClientInfo extends React.Component {
                     }
                 },
                 { title: '手机号码', dataIndex: 'phoneNumber', key: 'phoneNumber' },
-                { title: '车牌号码', dataIndex: 'cars', key: 'cars' ,render:(text,record,index)=>{
-                    let carnum = '';
-                    let indx = 0;
-                    let length = text.length;
-                    for(let item of text){
-                        if(indx < length-1){
-                            carnum += item.licensePlate +', ';
-                        }else{
-                            carnum += item.licensePlate;
+                {
+                    title: '车牌号码', dataIndex: 'cars', key: 'cars', render: (text, record, index) => {
+                        let carnum = '';
+                        let indx = 0;
+                        let length = text.length;
+                        for (let item of text) {
+                            if (indx < length - 1) {
+                                carnum += item.licensePlate + ', ';
+                            } else {
+                                carnum += item.licensePlate;
+                            }
+                            indx++;
                         }
-                        indx++;
+                        return carnum;
                     }
-                    return carnum;
-                }},
-                { title: '品牌', dataIndex: 'cars', key: 'carBrand' ,render:(text,record,index)=>{
-                    let carnum = '';
-                    let indx = 0;
-                    let length = text.length;
-                    for(let item of text){
-                        if(indx < length-1){
-                            carnum += item.type.brand.name +', ';
-                        }else{
-                            carnum += item.type.brand.name;
+                },
+                {
+                    title: '品牌', dataIndex: 'cars', key: 'carBrand', render: (text, record, index) => {
+                        let carnum = '';
+                        let indx = 0;
+                        let length = text.length;
+                        for (let item of text) {
+                            if (indx < length - 1) {
+                                carnum += item.type.brand.name + ', ';
+                            } else {
+                                carnum += item.type.brand.name;
+                            }
+                            indx++;
                         }
-                        indx++;
+                        return carnum;
                     }
-                    return carnum;
-                } },
+                },
                 { title: '是否会员', dataIndex: 'isMember', key: 'isMember' },
                 { title: '总消费次数', dataIndex: 'consumeCount', key: 'consumeCount' },
                 { title: '最近到店时间', dataIndex: 'latelyTime', key: 'latelyTime' },
@@ -73,7 +77,7 @@ class ClientInfo extends React.Component {
                                 <Link to={'app/member/memberShip/' + record.id} >
                                     <span >开卡</span>
                                 </Link>
-                                 <Link to={'app/member/modifyclient/' + record.id} >
+                                <Link to={'app/member/modifyclient/' + record.id} >
                                     <span style={{ marginLeft: '15px' }}>修改</span>
                                 </Link>
                                 <Popconfirm title="确认要删除嘛?" onConfirm={() => this.onDelete([record.id])}>
@@ -93,8 +97,8 @@ class ClientInfo extends React.Component {
         this.getName();
         this.getBrand();
     }
-    getBrand=()=>{
-          $.ajax({
+    getBrand = () => {
+        $.ajax({
             type: 'GET',
             url: 'api/car/listbrand',
             datatype: 'json',
@@ -131,9 +135,7 @@ class ClientInfo extends React.Component {
         })
     }
 
-    queryData = () => {
-        this.loadData(1, 10, this.state.clientName, this.state.clientPhone);
-    }
+
     loadData = (page, number, clientName, clientPhone) => {
         let jsonData = {};
         jsonData.name = clientName;
@@ -161,7 +163,7 @@ class ClientInfo extends React.Component {
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
                             //busNumber:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+' ,  '+obj[i].cars[1].licensePlate.substr(0,2)+'...': obj[i].cars[0].licensePlate,
-                            cars:obj[i].cars,
+                            cars: obj[i].cars,
                             carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
@@ -217,8 +219,8 @@ class ClientInfo extends React.Component {
                             customerName: obj[i].name,
                             phoneNumber: obj[i].phone,
                             //car:(obj[i].cars.length>1)?obj[i].cars[0].licensePlate+','+obj[i].cars[1].licensePlate.substring(0,2)+'...': obj[i].cars[0].licensePlate,
-                            cars:obj[i].cars,
-                      //      carBrand: obj[i].cars[0].type.brand.name,
+                            cars: obj[i].cars,
+                            //      carBrand: obj[i].cars[0].type.brand.name,
                             isMember: obj[i].cards == "" ? "否" : "是",
                             consumeCount: obj[i].consumTimes,
                             latelyTime: obj[i].lastVisit,
@@ -254,13 +256,13 @@ class ClientInfo extends React.Component {
                 this.setState({
                     realSize: res.realSize,
                     thisMonth: res.thisMonth,
-                    todayCount:res.today
+                    todayCount: res.today
                 })
             }
         })
         this.setState({
             visible: true,
-            
+
         });
     }
     hideModal = () => {
@@ -284,7 +286,7 @@ class ClientInfo extends React.Component {
                 if (result.code == "0") {
                     let dataSource = [...this.state.dataSource];
                     //？看看返回值有没有对应的dataSource有没有被删去
-                   // console.log(result)
+                    // console.log(result)
                     //过滤id    
                     for (let id of idArray) {
                         dataSource = dataSource.filter((obj) => {
@@ -298,7 +300,7 @@ class ClientInfo extends React.Component {
                         dataSource: dataSource,
                         pagination: update(this.state.pagination, { ['total']: { $set: result.realSize } })
                     });
-                    message.success('删除成功',5)
+                    message.success('删除成功', 5)
                 }
 
             }
@@ -373,22 +375,22 @@ class ClientInfo extends React.Component {
                 <BreadcrumbCustom first="会员管理" second="客户管理" />
 
                 <div style={{ display: 'inline-block', marginBottom: '25px' }}>
-            <Row>
-                    <div  style={{ marginBottom: 16,display:"inline-block",marginRight:'20px' }} >
-                       <span> 姓名：</span><Input style={{width:"120px"}} value={this.state.clientName} onChange={(e) => this.setState({ clientName: e.target.value })} />
-                    </div>
-                    
-                    <div  style={{ marginBottom: 16,display:"inline-block",marginRight:"20px" }}>
-                       <span>手机号码：</span><Input style={{width:"140px"}} value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
-                    </div>
-                      <Button style={{display:'inline-block'}} type="primary" onClick={()=>this.queryData}>查询</Button>
-                   </Row>
+                    <Row>
+                        <div style={{ marginBottom: 16, display: "inline-block", marginRight: '20px' }} >
+                            <span> 姓名：</span><Input style={{ width: "120px" }} value={this.state.clientName} onChange={(e) => this.setState({ clientName: e.target.value })} />
+                        </div>
+
+                        <div style={{ marginBottom: 16, display: "inline-block", marginRight: "20px" }}>
+                            <span>手机号码：</span><Input style={{ width: "140px" }} value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
+                        </div>
+                        <Button style={{ display: 'inline-block' }} type="primary" onClick={() => this.loadData(1, 10, this.state.clientName, this.state.clientPhone)}>查询</Button>
+                    </Row>
                     {/* <Col span={10} style={{ marginBottom: 16, marginRight: '8px', marginLeft: '26px' }}>
                       <span>手机号码：</span> <Input style={{width:"140px"}}  value={this.state.clientPhone} onChange={(e) => this.setState({ clientPhone: e.target.value })} />
                     </Col> */}
 
-                
-                  
+
+
                 </div>
 
                 <div>
