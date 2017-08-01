@@ -354,7 +354,7 @@ public class InventoryService {
 				+ startTime + "; endTime:" + endTime + ")");
 		int from = (page - 1) * number;
 		String temp = new InventoryOrderAndQueryCreator(inventoryOrderId, adminId, type).createStatement();
-		if(type == "1"){
+		if("1".equals(type)){
 			type = "0"; 
 			temp = new InventoryOrderAndQueryCreator2(inventoryOrderId, adminId, type).createStatement();
 		}
