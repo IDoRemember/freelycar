@@ -58,7 +58,9 @@ class PutInStorage extends React.Component {
                         data: data
                     });
                 } else {
-                    message.error(res.msg)
+                    if (res.code !== "2") {
+                        message.error(res.msg)
+                    }
                     this.setState({
                         data: [],
                         pagination: { total: 0 }
