@@ -17,15 +17,18 @@ class PutInStorage extends React.Component {
             option: [],
             orderNumber: '',
             orderMaker: '',
+            errormsg: false,
             adminList: []
         }
     }
     componentDidMount() {
+
         this.queryList(this.state.orderNumber, this.state.orderMaker, 1, 10)
         this.getAdminList()
     }
 
     componentWillReceiveProps() {
+
         this.queryList(this.state.orderNumber, this.state.orderMaker, 1, 10)
 
     }
@@ -88,7 +91,7 @@ class PutInStorage extends React.Component {
             data: {
                 inventoryOrderId: inventoryOrderId,
                 adminId: adminId,
-                type:'1',
+                type: '1',
                 page: page,
                 number: number
             },
@@ -105,10 +108,13 @@ class PutInStorage extends React.Component {
 
                     });
                 } else {
-                    message.error(result.msg)
+                    if(result.code !=='2'){
+                        message.error(result.msg)
+                    }
                     this.setState({
                         data: [],
-                        pagination: { total: 0 }
+                        pagination: { total: 0 },
+                        errormsg: true
                     })
                 }
             }
