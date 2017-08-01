@@ -411,6 +411,7 @@ class BuyCard extends React.Component {
                                 style={{ width: '140px', marginLeft: '10px', maxHeight: '150px' }}
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
+                                allowClear={true}
                                 onChange={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('car-brand')}
@@ -431,6 +432,7 @@ class BuyCard extends React.Component {
                                 optionFilterProp="children"
                                 value={this.state.typeId}
                                 onChange={this.TypehandleChange}
+                                allowClear={true}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
                             >
@@ -453,6 +455,7 @@ class BuyCard extends React.Component {
                         <Select
                                 style={{ width: '140px', marginLeft: '13px', maxHeight: '150px' }}
                                 optionFilterProp="children"
+                                allowClear={true}
                                 onChange={(value) => this.CardhandleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                             >
@@ -493,6 +496,7 @@ class BuyCard extends React.Component {
                                         style={{ width: '140px', marginLeft: '25px' }}
                                         placeholder="选择办卡人员"
                                         optionFilterProp="children"
+                                        allowClear={true}
                                         onChange={(value) => this.StaffhandleChange(value)}
                                         filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                         getPopupContainer={() => document.getElementById('staff')}

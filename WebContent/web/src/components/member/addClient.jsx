@@ -323,6 +323,7 @@ class AddClient extends React.Component {
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
                                 onChange={this.handleChange}
+                                allowClear={true}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('car-brand')}
                             >
@@ -339,6 +340,7 @@ class AddClient extends React.Component {
                                 style={{ width: '150px', marginLeft: '10px' }}
                                 placeholder="请选择车辆型号"
                                 optionFilterProp="children"
+                                allowClear={true}
                                 onChange={this.TypehandleChange}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('provider-area')}
