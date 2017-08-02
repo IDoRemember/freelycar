@@ -69,7 +69,7 @@ class BuyCard extends React.Component {
         });
     }
     componentDidMount() {
-        this.getCarBrand();
+        // this.getCarBrand();
         this.getService();
         this.getStaff();
         let uid = localStorage.getItem("userId")
@@ -191,7 +191,7 @@ class BuyCard extends React.Component {
         }
     }
     SaveClient = () => {
-      
+
         if (this.CheckInfo()) {
             if (this.licensePlateCheckInfo()) {
                 let clientInfos = this.state.clientInfo;
@@ -218,7 +218,7 @@ class BuyCard extends React.Component {
                         success: (res) => {
                             if (res.code == "0") {
                                 this.setState({
-                                   
+
                                     clientId: res.data.id,
                                     haveClient: true
                                 });
@@ -250,10 +250,10 @@ class BuyCard extends React.Component {
         })
     }
     SaveCard = () => {
-          this.setState({
-             isPop:false,
+        this.setState({
+            isPop: false,
         })
-        if (this.state.serviceId){
+        if (this.state.serviceId) {
             if (this.state.haveClient == true) {
                 $.ajax({
                     url: 'api/pay/buycard',
@@ -302,22 +302,21 @@ class BuyCard extends React.Component {
                 message.error('请先保存客户', 1.5);
 
             }
-        }else{
-            
-            message.error("请选择要办理的卡",1.5)
-        }
-            
-        
+        } else {
 
+            message.error("请选择要办理的卡", 1.5)
+        }
     }
 
-    getCarBrand = () => {
+    getCarBrand = (brandName) => {
         $.ajax({
             type: 'GET',
             url: '/api/car/listbrand',
             datatype: 'json',
-            contentType: 'application/json;charset=utf-8',
-            data: {},
+            // contentType: 'application/json;charset=utf-8',
+            data: {
+                brandName: brandName
+            },
             success: (res) => {
                 this.setState({
                     option: res.data,
@@ -340,7 +339,14 @@ class BuyCard extends React.Component {
     }
 
     handleChange = (e) => {
-        let typelist = this.state.option[e - 1].types;
+        console.log(e)
+        let typelist
+        this.state.option.map((item, index) => {
+            if (item.id == e) {
+                typelist = item.types
+            }
+        })
+        console.log(typelist)
         this.setState({
             carId: e,
             type: typelist,
@@ -407,7 +413,8 @@ class BuyCard extends React.Component {
                                 placeholder="请选择车辆品牌"
                                 optionFilterProp="children"
                                 allowClear={true}
-                                onChange={(value) => this.handleChange(value)}
+                                onSearch={(value) => { console.log(value); if (value.length == 2) { this.getCarBrand(value) } }}
+                                onSelect={(value) => this.handleChange(value)}
                                 filterOption={(input, option) => option.props.children.indexOf(input) >= 0}
                                 getPopupContainer={() => document.getElementById('car-brand')}
                             >
