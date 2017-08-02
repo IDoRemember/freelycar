@@ -54,7 +54,7 @@ public class CarDaoImpl implements CarDao {
 	@Override
 	public List<CarBrand> listBrand(String brandName) {
 		String hql = "from CarBrand where name like :brandName";
-		return this.getSession().createQuery(hql).setString("brandName", brandName).setCacheable(Constants.SELECT_CACHE).list();
+		return this.getSession().createQuery(hql).setString("brandName", "%"+brandName+"%").setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override
