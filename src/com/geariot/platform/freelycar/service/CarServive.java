@@ -52,8 +52,8 @@ public class CarServive {
 				net.sf.json.JSONObject.fromObject(car.getClient(), config)).toString();
 	}
 
-	public String listBrand() {
-		List<CarBrand> list = this.carDao.listBrand();
+	public String listBrand(String brandName) {
+		List<CarBrand> list = this.carDao.listBrand(brandName);
 		JsonConfig config = JsonResFactory.dateConfig(CarBrand.class);
 		net.sf.json.JSONArray array = net.sf.json.JSONArray.fromObject(list, config);
 		return JsonResFactory.buildNetWithData(RESCODE.SUCCESS, array).toString();

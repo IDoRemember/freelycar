@@ -25,8 +25,8 @@ public class CarController {
 	}
 	
 	@RequestMapping(value="/listbrand", method=RequestMethod.GET)
-	public String getBrands(){
-		return this.carService.listBrand();
+	public String getBrands(String brandName){
+		return this.carService.listBrand(brandName);
 	}
 	
 	@RequestMapping(value="/license", method=RequestMethod.GET)

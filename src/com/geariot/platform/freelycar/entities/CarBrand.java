@@ -40,8 +40,8 @@ public class CarBrand {
 		this.types = types;
 	}
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return "CarBrand [id=" + id + ", name=" + name + ", carType=" + types + "]";
-	}
+	}*/
 }

@@ -52,9 +52,9 @@ public class CarDaoImpl implements CarDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<CarBrand> listBrand() {
-		String hql = "from CarBrand";
-		return this.getSession().createQuery(hql).setCacheable(Constants.SELECT_CACHE).list();
+	public List<CarBrand> listBrand(String brandName) {
+		String hql = "from CarBrand where name like :brandName";
+		return this.getSession().createQuery(hql).setString("brandName", brandName).setCacheable(Constants.SELECT_CACHE).list();
 	}
 
 	@Override

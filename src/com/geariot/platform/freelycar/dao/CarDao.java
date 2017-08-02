@@ -16,5 +16,5 @@ public interface CarDao {
 	
 	void save(Car car);
 	
-	List<CarBrand> listBrand();
+	List<CarBrand> listBrand(String brandName);
 }

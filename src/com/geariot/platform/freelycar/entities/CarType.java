@@ -37,8 +37,8 @@ public class CarType {
 		this.type = type;
 	}
 	
-	@Override
+	/*@Override
 	public String toString() {
 		return "CarType: id:" + this.id + ", type:" + this.type;
-	}
+	}*/
 }
